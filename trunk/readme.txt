@@ -1,6 +1,6 @@
 === Plugin Name ===
-Contributors: Jacco
-Donate link: http://www.qurl.nl/
+Contributors: Qurl
+Donate link: 
 Tags: widget, dynamic, sidebar, custom
 Requires at least: 2.9.1
 Tested up to: 2.9.1
@@ -10,7 +10,7 @@ Dynamic Widgets gives you more control over your widgets. It lets you dynamicly 
 
 == Description ==
 
-Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules for the homepage, single posts, pages, categories and archives.
+Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules for the homepage, single posts, pages, categories, archives and the error 404 page.
 
 * Default widget display setting is supported for:
   - Front page
@@ -18,6 +18,7 @@ Dynamic Widgets gives you more control over your widgets. It lets you dynamicly 
   - Pages
   - Category pages
   - Archive pages
+  - 'Not Found' Error (404) Page
 * Exceptions can be created for:
   - Single post pages on Author and/or Category
   - Pages on Page Title
@@ -25,7 +26,9 @@ Dynamic Widgets gives you more control over your widgets. It lets you dynamicly 
 
 == Upgrade Notice ==
 
-This is the first version. No upgrades available yet.
+1. Deactivate Dynamic Widgets Plugin.
+2. Install the new version following the installation procedure steps 1 and 2.
+3. Re-activate the plugin. 
 
 == Installation ==
 
@@ -47,6 +50,11 @@ For the latest FAQ, please visit the [online FAQ](http://www.qurl.nl/faq/).
 * Now a button 'Create dump' appears a bit below.
 * Click that button.
 * Save the text file.
+* Remember where you saved it.
+
+= I have found a bug! Now what? =
+
+Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the procedure how to create a dump in the previous answer. After you've filed the report, I'll get back to you asap.
 
 = How do I completely remove Dynamic Widgets? =
 
@@ -59,9 +67,14 @@ For the latest FAQ, please visit the [online FAQ](http://www.qurl.nl/faq/).
 
 == Changelog ==
 
-See Release notes
+= Version 1.0.1 =
+* Added default widget display setting option for 'Not Found' Error (404) Page.
 
 == Release notes ==
+
+= Version 1.0.1 =
+No bugs found and/or reported since version 1.0.
+If you do an upgrade from version 1.0, please follow the upgrade notice.
 
 = Version 1.0 =
 * This is the first stable release. However, the road ahead might be a bumpy. Fasten your seatbelt.

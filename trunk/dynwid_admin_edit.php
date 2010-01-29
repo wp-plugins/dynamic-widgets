@@ -108,8 +108,18 @@
       unset($archive_yes_selected);
     }
   }
-?>
 
+  // Error 404
+  $e404_yes_selected = 'checked="true"';
+  $opt_e404 = $DW->getOptions($_GET['id'], 'e404');
+  if ( count($opt_e404) > 0 ) {
+  	$e404_condition = $opt_e404[0]['value'];
+  	if ( $e404_condition == '0' ) {
+  		$e404_no_selected = $e404_yes_selected;
+  		unset($e404_yes_selected);
+  	}
+  }
+?>
 
 <div id="adv"></div>
 
@@ -251,6 +261,13 @@ Show widget on archive pages?<br />
 </div>
 <input type="radio" name="archive" value="yes" id="archive-yes" <?php echo $archive_yes_selected; ?> /> <label for="archive-yes">Yes</label>
 <input type="radio" name="archive" value="no" id="archive-no" <?php echo $archive_no_selected; ?> /> <label for="archive-no">No</label>
+
+<br /><br />
+
+<b>'Not Found' Error (404) Page</b><br />
+Show widget on error 404 page?<br />
+<input type="radio" name="e404" value="yes" id="e404-yes" <?php echo $e404_yes_selected; ?> /> <label for="e404-yes">Yes</label>
+<input type="radio" name="e404" value="no" id="e404-no" <?php echo $e404_no_selected; ?> /> <label for="e404-no">No</label>
 
 <br /><br />
 

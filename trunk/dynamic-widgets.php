@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Dynamic Widgets
  * Plugin URI: http://www.qurl.nl/2010/01/dynamic-widgets-1-0/
- * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules for the homepage, single posts, pages, categories and archives.
+ * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules for the homepage, single posts, pages, categories, archives and the error 404 page.
  * Author: Jacco
- * Version: 1.0
+ * Version: 1.0.1
  * Author URI: http://www.qurl.nl/
  * Tags: widget, dynamic, sidebar, custom
  *
@@ -21,7 +21,7 @@
   // Constants
   define('DW_DB_TABLE', 'dynamic_widgets');
   define('DW_LIST_LIMIT', 20);
-  define('DW_VERSION', '1.0');
+  define('DW_VERSION', '1.0.1');
 
   // Functions
   function dynwid_add_admin_menu() {

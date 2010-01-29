@@ -87,6 +87,8 @@
         return 'category';
       } else if ( is_archive() && ! is_category() ) {
         return 'archive';
+      } else if ( is_404() ) {
+      	return 'e404';
       } else {
         return 'undef';
       }
