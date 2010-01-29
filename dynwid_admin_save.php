@@ -14,7 +14,7 @@
   }
 
   // Checking basic stuff
-  $fields = array( 'front-page', 'single', 'page', 'category', 'archive' );
+  $fields = array( 'front-page', 'single', 'page', 'category', 'archive', 'e404' );
   $work = FALSE;
   foreach ( $fields as $field ) {
     if ( $_POST[$field] == 'yes' ) {
@@ -84,5 +84,10 @@
   // Archive
   if ( $_POST['archive'] == 'no' ) {
     $DW->addSingleOption($_POST['widget_id'], 'archive');
+  }
+
+  // Error 404
+  if ( $_POST['e404'] == 'no' ) {
+  	$DW->addSingleOption($_POST['widget_id'], 'e404');
   }
 ?>
