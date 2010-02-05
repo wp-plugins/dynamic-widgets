@@ -1,6 +1,6 @@
 <?php
 /**
- * dynwid_worker.php - The worker does the actual work. 
+ * dynwid_worker.php - The worker does the actual work.
  *
  * @version $Id$
  */
@@ -10,6 +10,7 @@
     $DW = new dynWid();
   }
   $DW->message('Dynamic Widgets INIT');
+  $DW->message('User has role ' . $DW->userrole);
 
   $whereami = $DW->detectPage();
 
@@ -22,13 +23,14 @@
           $act = array();
           $opt = $DW->getOptions($widget_id, $whereami);
           $display = TRUE;
+          $role = TRUE;
 
           foreach ( $opt as $condition ) {
             if ( empty($condition['name']) && $condition['value'] == '0' ) {
               $DW->message('Default for ' . $widget_id . ' set to FALSE (rule D1)');
               $display = FALSE;
               break;
-            } else {
+            } else if ( $condition['maintype'] != 'role' ) {
               // Get default value
               if ( $condition['name'] == 'default' ) {
                 $default = $condition['value'];
@@ -44,11 +46,22 @@
                 $DW->message('Default for ' . $widget_id . ' set to TRUE (rule D3)');
                 $other = FALSE;
               }
+            } else if ( $condition['maintype'] == 'role' && $condition['name'] == 'default' ) {
+              $DW->message('Default for ' . $widget_id . ' set to FALSE (rule R1)');
+              $role = FALSE;
             }
           }
 
           // Act the condition(s) when there are options set
           if ( count($opt) > 0 ) {
+            // Check the role
+            foreach ( $opt as $condition ) {
+              if ( $condition['maintype'] == 'role' && $condition['name'] == $DW->userrole ) {
+                $DW->message('Role sets display to TRUE (rule ER1)');
+                $role = TRUE;
+              }
+            }
+
             switch ( $whereami ) {
               case 'single':
                 global $post;
@@ -113,7 +126,7 @@
             }
           }
 
-          if (! $display ) {
+          if (! $display || ! $role ) {
             $DW->message('Removed ' . $widget_id . ' from display');
             unset($DW->registered_widgets[$widget_id]);
           }

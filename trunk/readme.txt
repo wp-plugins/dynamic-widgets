@@ -1,18 +1,19 @@
 === Plugin Name ===
 Contributors: Qurl
-Donate link: 
-Tags: widget, dynamic, sidebar, custom
+Donate link:
+Tags: widget, widgets, dynamic, sidebar, custom, rules
 Requires at least: 2.9.1
 Tested up to: 2.9.1
-Stable tag: 1.0
+Stable tag: 1.1
 
 Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages.
 
 == Description ==
 
-Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules for the homepage, single posts, pages, categories, archives and the error 404 page.
+Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules by role, for the homepage, single posts, pages, categories, archives and the error 404 page.
 
 * Default widget display setting is supported for:
+  - User roles
   - Front page
   - Single post pages
   - Pages
@@ -20,15 +21,10 @@ Dynamic Widgets gives you more control over your widgets. It lets you dynamicly 
   - Archive pages
   - 'Not Found' Error (404) Page
 * Exceptions can be created for:
+  - User roles on role, including not logged in (anonymous) users
   - Single post pages on Author and/or Category
   - Pages on Page Title
-  - Category pages on Category 
-
-== Upgrade Notice ==
-
-1. Deactivate Dynamic Widgets Plugin.
-2. Install the new version following the installation procedure steps 1 and 2.
-3. Re-activate the plugin. 
+  - Category pages on Category
 
 == Installation ==
 
@@ -67,10 +63,20 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 
 == Changelog ==
 
+= Version 1.1 =
+* Added support for widget display settings based on role, including not logged in (anonymous) users.
+
 = Version 1.0.1 =
 * Added default widget display setting option for 'Not Found' Error (404) Page.
 
+== Upgrade Notice ==
+
+ Be sure to deactivate Dynamic Widgets Plugin before installing the new version following steps 1 and 2 in the installation procedure. After the install you can re-activate the plugin.
+
 == Release notes ==
+
+= Version 1.1 =
+This is the next official stable release. If you upgrade from a previous version, please follow the upgrade notice.
 
 = Version 1.0.1 =
 No bugs found and/or reported since version 1.0.

@@ -1,18 +1,18 @@
 <?php
 /**
  * Plugin Name: Dynamic Widgets
- * Plugin URI: http://www.qurl.nl/2010/01/dynamic-widgets-1-0/
- * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules for the homepage, single posts, pages, categories, archives and the error 404 page.
+ * Plugin URI: http://www.qurl.nl/2010/02/dynamic-widgets-1-1/ 
+ * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules by roles, for the homepage, single posts, pages, categories, archives and the error 404 page.
  * Author: Jacco
- * Version: 1.0.1
+ * Version: 1.1
  * Author URI: http://www.qurl.nl/
- * Tags: widget, dynamic, sidebar, custom
+ * Tags: widget, widgets, dynamic, sidebar, custom, rules
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * Released under the GPL v.2, http://www.gnu.org/copyleft/gpl.html
  *
  * @version $Id$
@@ -21,7 +21,9 @@
   // Constants
   define('DW_DB_TABLE', 'dynamic_widgets');
   define('DW_LIST_LIMIT', 20);
-  define('DW_VERSION', '1.0.1');
+  define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
+  define('DW_VERSION', '1.1');
+  define('DEBUG', FALSE);
 
   // Functions
   function dynwid_add_admin_menu() {
@@ -80,16 +82,16 @@
 	  } */
 		update_option('dynwid_version', DW_VERSION);
 	}
-	
+
 	function dynwid_uninstall() {
 		global $wpdb;
 	  $dbtable = $wpdb->prefix . DW_DB_TABLE;
-	  		
+
     // Housekeeping
 		delete_option('dynwid_version');
 		$query = "DROP TABLE " . $dbtable;
 		$wpdb->query($query);
-		
+
     // Redirect to plugins page for deactivation
 		wp_redirect( get_option('siteurl') . '/wp-admin/plugins.php' );
 		die();

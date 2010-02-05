@@ -14,7 +14,7 @@
   }
 
   // Checking basic stuff
-  $fields = array( 'front-page', 'single', 'page', 'category', 'archive', 'e404' );
+  $fields = array('role', 'front-page', 'single', 'page', 'category', 'archive', 'e404' );
   $work = FALSE;
   foreach ( $fields as $field ) {
     if ( $_POST[$field] == 'yes' ) {
@@ -23,7 +23,7 @@
     }
   }
   if (! $work ) {
-    $fields = array( 'single_actor_act', 'single_category_act', 'page_act', 'category_act' );
+    $fields = array('role_act', 'single_actor_act', 'single_category_act', 'page_act', 'category_act' );
     foreach ( $fields as $field ) {
       if ( count($_POST[$field]) > 0 ) {
         $work = TRUE;
@@ -39,6 +39,11 @@
   // Checking already set options
   if ( $DW->hasOptions($_POST['widget_id']) ) {
     $DW->resetOptions($_POST['widget_id']);
+  }
+
+  // Role
+  if ( $_POST['role'] == 'no' && count($_POST['role_act']) > 0 ) {
+    $DW->addMultiOption($_POST['widget_id'], 'role', 'no', $_POST['role_act']);
   }
 
   // Front Page

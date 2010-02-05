@@ -33,7 +33,6 @@ default:
   </p>
 </div>
 <?php } ?>
-
 <style type="text/css">
 .helpbox {
   -moz-border-radius-topleft : 6px;
@@ -52,7 +51,7 @@ default:
 <div class="helpbox">
 <strong>Static / Dynamic</strong><br />
 When a widget is <em>Static</em>, the widget uses the WordPress default. In other words, it's shown everywhere.<br />
-A widget is <em>Dynamic</em> when there are options set. E.g. not showing on the front page.<br />
+A widget is <em>Dynamic</em> when there are options set, i.e. not showing on the front page.<br />
 <br />
 
 <strong>Reset</strong><br />
@@ -126,7 +125,7 @@ For debugging purposes it is possible you're asked to create a dump. Click the '
 
 If you deceide not to use this plugin anymore (sorry to hear that!). You can cleanup all settings and data related to this plugin by clicking on the 'Uninstall' button. This process is irreversible! After the cleanup, you can deactivate the plugin.
 <br /><br />
-<div id="uninstall"> 
+<div id="uninstall">
   <form action="" method="get">
     <input type="hidden" name="action" value="dynwid_uninstall" />
     <input class="button-primary" type="submit" value="Uninstall" onclick="if ( confirm('Are you sure you want to uninstall Dynamic Widgets?') ) { return true; } return false;" />
