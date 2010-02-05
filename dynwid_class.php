@@ -13,17 +13,25 @@
     public  $registered_widgets;
     public  $sidebars;
     public  $plugin_url;
+    public  $userrole;
     private $wpdb;
 
     public function __construct() {
-      global $wp_registered_sidebars, $wp_registered_widgets, $wpdb;
+      global $current_user, $wp_registered_sidebars, $wp_registered_widgets, $wpdb;
       // $wp_registered_widget_controls
+
+      if ( is_user_logged_in() ) {
+        // @todo -c roles has type array -- are > 1 roles possible?
+        $this->userrole = $current_user->roles[0];
+      } else {
+        $this->userrole = 'anonymous';
+      }
 
       $this->firstmessage = TRUE;
       $this->registered_sidebars = $wp_registered_sidebars;
       $this->registered_widgets = &$wp_registered_widgets;
       $this->sidebars = wp_get_sidebars_widgets();
-      $this->plugin_url = WP_PLUGIN_URL . '/' . str_replace( basename( __FILE__), '', plugin_basename(__FILE__) );
+      $this->plugin_url = WP_PLUGIN_URL . '/' . str_replace( basename(__FILE__), '', plugin_basename(__FILE__) );
 
       $this->wpdb = $wpdb;
       $this->dbtable = $this->wpdb->prefix . DW_DB_TABLE;
@@ -96,11 +104,11 @@
 
     public function dump() {
     	global $wp_version;
-    	
+
     	echo "wp version: " . $wp_version . "\n";
     	echo "dw version: " . DW_VERSION . "\n";
     	echo "php version: " . phpversion() . "\n";
-    	
+
     	echo "\n";
       echo "list: \n";
       print_r($this->dynwid_list);
@@ -142,11 +150,17 @@
       $opt = array();
 
       $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
-                  WHERE widget_id LIKE '" . $widget_id . "' AND maintype LIKE '" . $maintype . "%' ORDER BY name";
+                  WHERE widget_id LIKE '" . $widget_id . "'
+                    AND (maintype LIKE '" . $maintype . "%' OR maintype = 'role')
+                  ORDER BY name";
       $results = $this->wpdb->get_results($query);
 
       foreach ( $results as $myrow ) {
-        $opt[ ] = array('widget_id' => $myrow->widget_id, 'maintype' => $myrow->maintype, 'name' => $myrow->name, 'value' => $myrow->value);
+        $opt[ ] = array('widget_id' => $myrow->widget_id,
+                        'maintype' => $myrow->maintype,
+                        'name' => $myrow->name,
+                        'value' => $myrow->value
+                  );
       }
 
       return $opt;
@@ -164,12 +178,14 @@
     }
 
     public function message($text) {
-      if ( $this->firstmessage ) {
+      if ( DEBUG ) {
+        if ( $this->firstmessage ) {
+          echo "\n";
+          $this->firstmessage = FALSE;
+        }
+        echo '<!-- ' . $text . ' //-->';
         echo "\n";
-        $this->firstmessage = FALSE;
       }
-      echo '<!-- ' . $text . ' //-->';
-      echo "\n";
     }
 
     public function resetOptions($widget_id) {

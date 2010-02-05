@@ -5,6 +5,36 @@
  * @version $Id$
  */
 
+  // Roles
+  global $wp_roles;
+  $roles = array_merge($wp_roles->role_names, array('anonymous' => 'Anonymous|User role'));
+  $jsroles = array();
+  foreach ( $roles as $rid => $role ) {
+    $roles[esc_attr($rid)] = translate_user_role($role);
+    $jsroles[ ] = '\'role_act_' . esc_attr($rid) . '\'';    // Prep for JS Array
+  }
+  if ( count($roles) > DW_LIST_LIMIT ) {
+    $role_condition_select_style = DW_LIST_STYLE;
+  }
+
+  $role_yes_selected = 'checked="true"';
+  $opt_role = $DW->getOptions($_GET['id'], 'role');
+  if ( count($opt_role) > 0 ) {
+    $role_act = array();
+    foreach ( $opt_role as $role_condition ) {
+      if ( $role_condition['name'] == 'default' || empty($role_condition['name']) ) {
+        $role_default = $role_condition['value'];
+      } else {
+        $role_act[ ] = $role_condition['name'];
+      }
+    }
+
+    if ( $role_default == '0' ) {
+      $role_no_selected = $role_yes_selected;
+      unset($role_yes_selected);
+    }
+  }
+
   // Front Page
   $frontpage_yes_selected = 'checked="true"';
   $opt_frontpage = $DW->getOptions($_GET['id'], 'front-page');
@@ -38,7 +68,7 @@
 
   $authors = get_users_of_blog();
   if ( count($authors) > DW_LIST_LIMIT ) {
-    $single_author_condition_select_style = 'style="overflow:auto;height:240px;"';
+    $single_author_condition_select_style = DW_LIST_STYLE;
   }
 
   // -- Category
@@ -71,7 +101,7 @@
 
   $pages = get_pages();
   if ( count($pages) > DW_LIST_LIMIT ) {
-    $page_condition_select_style = 'style="overflow:auto;height:240px;"';
+    $page_condition_select_style = DW_LIST_STYLE;
   }
 
   // Categories
@@ -95,7 +125,7 @@
 
   $category = get_categories( array('hide_empty' => FALSE) );
   if ( count($category) > DW_LIST_LIMIT ) {
-    $category_condition_select_style = 'style="overflow:auto;height:240px;"';
+    $category_condition_select_style = DW_LIST_STYLE;
   }
 
   // Archives
@@ -119,6 +149,7 @@
   		unset($e404_yes_selected);
   	}
   }
+
 ?>
 
 <div id="adv"></div>
@@ -146,24 +177,6 @@ label {
 }
 </style>
 
-<script type="text/javascript">
-  function tglinfo(id) {
-    var element = document.getElementById(id);
-    var display = 'd_';
-    display = display.concat(id);
-
-    if ( window[display] ) {
-      element.style.display = 'none';
-      window[display] = false;
-    } else {
-      element.style.display = 'inline';
-      window[display] = true;
-    }
-  }
-  var d_single = false;
-  var d_archive = false;
-</script>
-
 <?php if ( $_POST['dynwid_save'] == 'yes' ) { ?>
 <div class="updated fade" id="message">
   <p>
@@ -184,6 +197,24 @@ label {
 <?php wp_nonce_field('plugin-name-action_edit_' . $_GET['id']); ?>
 <input type="hidden" name="dynwid_save" value="yes" />
 <input type="hidden" name="widget_id" value="<?php echo $_GET['id']; ?>" />
+
+<b>By Role</b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="tglinfo('role')"><br />
+Show widget to everybody?
+<div id="i_role">
+<div id="role" class="infotext">
+  Setting options by role is very powerfull. It can override all other options!<br />
+  Users who are not logged in, get the <em>Anonymous</em> role.
+</div>
+</div>
+<input type="radio" name="role" value="yes" id="role-yes" <?php echo $role_yes_selected; ?> onclick="clrRoles()" /> <label for="role-yes">Yes</label>
+<input type="radio" name="role" value="no" id="role-no" <?php echo $role_no_selected; ?> onclick="swRoles(false)" /> <label for="role-no">No, only to:</label><br />
+<div id="role-select" class="condition-select" <?php echo $role_condition_select_style; ?>>
+<?php foreach ( $roles as $rid => $role ) { ?>
+<input type="checkbox" id="role_act_<?php echo $rid; ?>" name="role_act[]" value="<?php echo $rid; ?>" <?php if ( count($role_act) > 0 && in_array($rid,$role_act) ) { echo 'checked="true"'; } ?> /> <label for="role_act_<?php echo $rid; ?>"><?php echo $role; ?></label><br />
+<?php } ?>
+</div>
+
+<br /><br />
 
 <b>Front Page</b><br />
 Show widget on the front page?<br />
@@ -278,3 +309,41 @@ Show widget on error 404 page?<br />
 <input type="hidden" name="page" value="dynwid-config" />
 <input class="button-secondary" type="submit" value="Cancel" style="position:relative;top:-23px;left:80px;" />
 </form>
+
+<script type="text/javascript">
+  function clrRoles() {
+    for ( i = 0; i < chkbxs.length; i++ ) {
+      document.getElementById(chkbxs[i]).checked = false;
+    }
+    swRoles(true);
+  }
+
+  function swRoles(s) {
+  	for ( i = 0; i < chkbxs.length; i++ ) {
+      document.getElementById(chkbxs[i]).disabled = s;
+    }
+  }
+
+  function tglinfo(id) {
+    var element = document.getElementById(id);
+    var display = 'd_';
+    display = display.concat(id);
+
+    if ( window[display] ) {
+      element.style.display = 'none';
+      window[display] = false;
+    } else {
+      element.style.display = 'inline';
+      window[display] = true;
+    }
+  }
+
+  var chkbxs = new Array(<?php echo implode(', ' , $jsroles); ?>);
+  if ( document.getElementById('role-yes').checked ) {
+  	swRoles(true);
+  }
+
+  var d_role = false;
+  var d_single = false;
+  var d_archive = false;
+</script>
