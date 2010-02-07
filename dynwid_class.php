@@ -146,13 +146,21 @@
       return $name;
     }
 
-    public function getOptions($widget_id, $maintype) {
+    public function getOptions($widget_id, $maintype, $admin = TRUE) {
       $opt = array();
 
-      $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
+      if ( $admin ) {
+        $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
+                  WHERE widget_id LIKE '" . $widget_id . "'
+                    AND maintype LIKE '" . $maintype . "%'
+                  ORDER BY name";
+
+      } else {
+        $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
                   WHERE widget_id LIKE '" . $widget_id . "'
                     AND (maintype LIKE '" . $maintype . "%' OR maintype = 'role')
                   ORDER BY name";
+      }
       $results = $this->wpdb->get_results($query);
 
       foreach ( $results as $myrow ) {
