@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, widgets, dynamic, sidebar, custom, rules
 Requires at least: 2.9.1
 Tested up to: 2.9.1
-Stable tag: 1.1
+Stable tag: 1.1.1
 
 Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages.
 
@@ -63,6 +63,9 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 
 == Changelog ==
 
+= Version 1.1.1 =
+* Bugfix for unexpected default option values when using role options.
+
 = Version 1.1 =
 * Added support for widget display settings based on role, including not logged in (anonymous) users.
 
@@ -74,6 +77,9 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
  Be sure to deactivate Dynamic Widgets Plugin before installing the new version following steps 1 and 2 in the installation procedure. After the install you can re-activate the plugin.
 
 == Release notes ==
+
+= Version 1.1.1
+An unplanned release due to a bug in version 1.1. If you're using version 1.1 and using or planning to use role options, you should upgrade asap.
 
 = Version 1.1 =
 This is the next official stable release. If you upgrade from a previous version, please follow the upgrade notice.

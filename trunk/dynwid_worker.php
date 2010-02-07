@@ -21,7 +21,7 @@
         // Check if the widget has options set
         if ( in_array($widget_id,$DW->dynwid_list) ) {
           $act = array();
-          $opt = $DW->getOptions($widget_id, $whereami);
+          $opt = $DW->getOptions($widget_id, $whereami, FALSE);
           $display = TRUE;
           $role = TRUE;
 
