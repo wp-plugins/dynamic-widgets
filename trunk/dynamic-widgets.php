@@ -143,7 +143,12 @@
       if ( array_key_exists($widget_id, $DW->registered_widget_controls) ) {
         $DW->registered_widget_controls[$widget_id]['wp_callback'] = $DW->registered_widget_controls[$widget_id]['callback'];
         $DW->registered_widget_controls[$widget_id]['callback'] = 'dynwid_widget_callback';
-        $DW->registered_widget_controls[$widget_id]['params'][0]['widget_id'] = $widget_id;
+
+        if ( count($DW->registered_widget_controls[$widget_id]['params']) == 0 ) {
+          $DW->registered_widget_controls[$widget_id]['params'][ ] = array('widget_id' => $widget_id);
+        } else {
+          $DW->registered_widget_controls[$widget_id]['params'][0]['widget_id'] = $widget_id;
+        }
       }
     }
 
@@ -330,7 +335,6 @@
 	  $args = func_get_args();
 	  $widget_id = $args[0]['widget_id'];
 	  $wp_callback = $DW->registered_widget_controls[$widget_id]['wp_callback'];
-	  unset($args[0]['widget_id']);   // Cleaning up to be sure to not interfere with other functions
 
 	  // Calling original callback first
     call_user_func_array($wp_callback, $args);
