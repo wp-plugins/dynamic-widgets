@@ -1,30 +1,32 @@
 === Plugin Name ===
 Contributors: Qurl
 Donate link:
-Tags: widget, widgets, dynamic, sidebar, custom, rules
+Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
 Requires at least: 2.9.1
-Tested up to: 2.9.1
-Stable tag: 1.1.1
+Tested up to: 2.9.2
+Stable tag: 1.2
 
 Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages.
 
 == Description ==
 
-Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules by role, for the homepage, single posts, pages, categories, archives and the error 404 page.
+Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules by role, for the homepage, single posts, pages, authors, categories, archives and the error page.
 
 * Default widget display setting is supported for:
   - User roles
   - Front page
   - Single post pages
   - Pages
+  - Author pages
   - Category pages
   - Archive pages
-  - 'Not Found' Error (404) Page
+  - Error Page
 * Exceptions can be created for:
   - User roles on role, including not logged in (anonymous) users
-  - Single post pages on Author and/or Category
+  - Single post pages on Author, Categories, Tags and/or Individual posts
   - Pages on Page Title
-  - Category pages on Category
+  - Author pages on Author
+  - Category pages on Category name
 
 == Installation ==
 
@@ -39,6 +41,21 @@ Installation of this plugin is fairly easy:
 == Frequently Asked Questions ==
 
 For the latest FAQ, please visit the [online FAQ](http://www.qurl.nl/faq/).
+
+= What are the (system) requirements to use this plugin? =
+
+1. A properly working WordPress site (doh!).
+2. Your theme must have at least one dynamic sidebar.
+3. Your theme must call `wp_head()`.
+4. PHP5 is highly recommended. Read on if your host uses PHP4.
+
+= My hoster is (still) using PHP4, so what? =
+
+Start immediately looking for another hoster. YES, immediately! NOW! Pronto! PHP4 was introduced in the year 2000 and is [not supported](http://en.wikipedia.org/wiki/PHP#Release_history) anymore. As I don't have PHP4 anymore, I can only be sure for about 80% the plugin will work. Please let me know if it doesn't. I'll try to work out a solution.
+
+= I checked the "Make exception rule available to individual posts and tags" option, but nothing happens. =
+
+Did you save the options? If you did, you may try to hit the (i) icon a bit to the right and read the text which appears below.
 
 = You asked me to create a dump. How do I do that? =
 
@@ -57,19 +74,36 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 * Click at the bottom of the Widgets Overview page on the 'Advanced >' link.
 * Now a button 'Uninstall' appears a bit below.
 * Click that button.
-* Confirm you really want to uninstall the plugin. After the cleanup, you'll be redirected to the plugin page.
-* Deactivate Dynamic Widgets.
+* Confirm you really want to uninstall the plugin. After the cleanup, the plugin is deactivated automaticly.
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
 
+= Version 1.2 =
+
+* Added support for PHP4 (not fully tested).
+* Added Dynamic Widgets info and edit link in the widgets admin itself.
+* Added support for widget display setting options for Author Pages.
+* Added support for Single Posts exception rules for tags.
+* Added support for Single Posts exception rules for individual posts.
+* Bugfix for rare cases not selecting the right default option for single posts.
+* Bugfix for wrong exception rules were applied in rare cases when rules are set for a page or archive page.
+* Bugfix for displaying confusing success and error message.
+* Bugfix for not displaying checked checkboxes in MS Internet Explorer.
+* Workaround to stop showing invalid (not clean unregistered) widgets without a name.
+* Some small textual changes.
+* Moved general helpinfo to standard WordPress contextual help screen.
+
 = Version 1.1.1 =
+
 * Bugfix for unexpected default option values when using role options.
 
 = Version 1.1 =
+
 * Added support for widget display settings based on role, including not logged in (anonymous) users.
 
 = Version 1.0.1 =
+
 * Added default widget display setting option for 'Not Found' Error (404) Page.
 
 == Upgrade Notice ==
@@ -78,30 +112,14 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 
 == Release notes ==
 
-= Version 1.1.1
-An unplanned release due to a bug in version 1.1. If you're using version 1.1 and using or planning to use role options, you should upgrade asap.
+= Version 1.2 =
 
-= Version 1.1 =
-This is the next official stable release. If you upgrade from a previous version, please follow the upgrade notice.
+PHP4 support is now automatic. However, PHP4 support is not fully tested. If you encounter problems, please let me know. I'll try to work out a solution.
 
-= Version 1.0.1 =
-No bugs found and/or reported since version 1.0.
-If you do an upgrade from version 1.0, please follow the upgrade notice.
-
-= Version 1.0 =
-* This is the first stable release. However, the road ahead might be a bumpy. Fasten your seatbelt.
-* Default widget display setting is supported for:
-  - Front page
-  - Single post pages
-  - Pages
-  - Category pages
-  - Archive pages
-* Exceptions can be created for:
-  - Single post pages on Author and/or Category
-  - Pages on Page Title
-  - Category pages on Category
+Due to the addition of the Author pages option, the behavior of the Archive pages option has slightly changed. The Archive pages option does not include the Author pages anymore. If you have widgets with the Archive option set to 'No' the upgrade process to version 1.2 will automaticly set 'No' to the Author pages also to keep the old behavior. An upgrade is only triggered when a proper deactivate and activate cycle is done.
 
 == Screenshots ==
 
 1. Widgets overview page
 2. Widget Options page
+3. Widget with Dynamic Widgets info and link
