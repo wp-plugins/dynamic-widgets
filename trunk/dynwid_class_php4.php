@@ -1,23 +1,29 @@
 <?php
 /**
- * dynwid_class.php - Dynamic Widgets Class (PHP5)
+ * dynwid_class_php4.php - Dynamic Widgets Class for PHP4
+ * Needs at least PHP 4.1.0
  *
  * @version $Id$
  */
 
   class dynWid {
-    private $dbtable;
-    public  $dynwid_list;
-    private $firstmessage;
-    private $registered_sidebars;
-    public  $registered_widget_controls;
-    public  $registered_widgets;
-    public  $sidebars;
-    public  $plugin_url;
-    public  $userrole;
-    private $wpdb;
+    var $dbtable;                       /* private */
+    var $dynwid_list;
+    var $firstmessage;                  /* private */
+    var $registered_sidebars;           /* private */
+    var $registered_widget_controls;
+    var $registered_widgets;
+    var $sidebars;
+    var $plugin_url;
+    var $userrole;
+    var $wpdb;                          /* private */
 
-    public function __construct() {
+    /* Old constructor redirect to new constructor */
+		function dynWid() {
+			$this->__construct();
+		}
+
+    function __construct() {
       if ( is_user_logged_in() ) {
         $this->userrole = $GLOBALS['current_user']->roles[0];
       } else {
@@ -37,7 +43,7 @@
       $this->createList();
     }
 
-    public function addMultiOption($widget_id, $maintype, $default, $act) {
+    function addMultiOption($widget_id, $maintype, $default, $act) {
       if ( $default == 'no' ) {
         $opt_default = '0';
         $opt_act = '1';
@@ -60,7 +66,7 @@
       }
     }
 
-    public function addSingleOption($widget_id, $maintype, $value = '0') {
+    function addSingleOption($widget_id, $maintype, $value = '0') {
       $query = "INSERT INTO " . $this->dbtable . "
                     (widget_id, maintype, value)
                   VALUES
@@ -68,7 +74,8 @@
       $this->wpdb->query($query);
     }
 
-    private function createList() {
+    /* private function */
+    function createList() {
       $this->dynwid_list = array();
 
       foreach ( $this->sidebars as $sidebar_id => $widgets ) {
@@ -77,12 +84,12 @@
             if ( $this->hasOptions($widget_id) ) {
               $this->dynwid_list[ ] = $widget_id;
             }
-          } // END foreach widgets
+          }
         }
-      } // END foreach sidebars
+      }
     }
 
-    public function deleteOption($widget_id, $maintype, $name = '') {
+    function deleteOption($widget_id, $maintype, $name = '') {
       $query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" .$widget_id . "' AND maintype = '" .$maintype ."'";
       if (! empty($name) ) {
         $query .= " AND (name = '" . $name . "' OR name = 'default')";
@@ -90,7 +97,7 @@
       $this->wpdb->query($query);
     }
 
-    public function detectPage() {
+    function detectPage() {
       if ( is_front_page() ) {
         return 'front-page';
       } else if ( is_single() ) {
@@ -110,7 +117,7 @@
       }
     }
 
-    public function dump() {
+    function dump() {
     	echo "wp version: " . $GLOBALS['wp_version'] . "\n";
     	echo "dw version: " . DW_VERSION . "\n";
     	echo "php version: " . PHP_VERSION . "\n";
@@ -133,7 +140,7 @@
       echo serialize($this->getOptions('%', NULL));
     }
 
-    public function dumpOpt($opt) {
+    function dumpOpt($opt) {
       if ( DW_DEBUG && count($opt) > 0 ) {
         echo '<pre>';
         print_r($opt);
@@ -141,7 +148,7 @@
       }
     }
 
-    public function getName($id, $type = 'W') {
+    function getName($id, $type = 'W') {
       switch ( $type ) {
         case 'S':
           $lookup = $this->registered_sidebars;
@@ -167,7 +174,7 @@
       return $name;
     }
 
-    public function getOptions($widget_id, $maintype, $admin = TRUE) {
+    function getOptions($widget_id, $maintype, $admin = TRUE) {
       $opt = array();
 
       if ( $admin ) {
@@ -195,7 +202,7 @@
       return $opt;
     }
 
-    public function hasOptions($widget_id) {
+    function hasOptions($widget_id) {
       $query = "SELECT COUNT(1) AS total FROM " . $this->dbtable . "
                   WHERE widget_id = '" . $widget_id . "' AND
                         maintype != 'individual'";
@@ -208,7 +215,7 @@
       }
     }
 
-    public function message($text) {
+    function message($text) {
       if ( DW_DEBUG ) {
         if ( $this->firstmessage ) {
           echo "\n";
@@ -219,7 +226,7 @@
       }
     }
 
-    public function resetOptions($widget_id) {
+    function resetOptions($widget_id) {
       $query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "'";
       $this->wpdb->query($query);
     }
