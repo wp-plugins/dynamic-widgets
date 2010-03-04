@@ -36,13 +36,18 @@
   }
 
   // Front Page
-  $frontpage_yes_selected = 'checked="checked"';
-  $opt_frontpage = $DW->getOptions($_GET['id'], 'front-page');
-  if ( count($opt_frontpage) > 0 ) {
-    $frontpage_condition = $opt_frontpage[0]['value'];
-    if ( $frontpage_condition == '0' ) {
-      $frontpage_no_selected = $frontpage_yes_selected;
-      unset($frontpage_yes_selected);
+  if ( get_option('show_on_front') == 'page' ) {
+    $frontpage_yes_selected = 'disabled="true"';
+    $frontpage_no_selected = $frontpage_yes_selected;
+  } else {
+    $frontpage_yes_selected = 'checked="checked"';
+    $opt_frontpage = $DW->getOptions($_GET['id'], 'front-page');
+    if ( count($opt_frontpage) > 0 ) {
+      $frontpage_condition = $opt_frontpage[0]['value'];
+      if ( $frontpage_condition == '0' ) {
+        $frontpage_no_selected = $frontpage_yes_selected;
+        unset($frontpage_yes_selected);
+      }
     }
   }
 
@@ -140,6 +145,19 @@
   $pages = get_pages();
   if ( count($pages) > DW_LIST_LIMIT ) {
     $page_condition_select_style = DW_LIST_STYLE;
+  }
+
+  $static_page = array();
+  if ( get_option('show_on_front') == 'page' ) {
+    if ( get_option('page_on_front') == get_option('page_for_posts') ) {
+      $id = get_option('page_on_front');
+      $static_page[$id] = 'Front page, Posts page';
+    } else {
+      $id = get_option('page_on_front');
+      $static_page[$id] = 'Front page';
+      $id = get_option('page_for_posts');
+      $static_page[$id] = 'Posts page';
+    }
   }
 
   // Author
@@ -277,9 +295,15 @@ Show widget to everybody?
 
 <br /><br />
 
-<b>Front Page</b><br />
+<b>Front Page</b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('frontpage');" /><br />
 Show widget on the front page?<br />
 <?php $DW->dumpOpt($opt_frontpage); ?>
+<div>
+<div id="frontpage"  class="infotext">
+	This option only applies when your front page is set to display your latest posts (See Settings &gt; Reading).<br />
+	When a static page is set, you can use the options for the static pages below.
+</div>
+</div>
 <input type="radio" name="front-page" value="yes" id="front-page-yes" <?php echo $frontpage_yes_selected; ?> /> <label for="front-page-yes">Yes</label>
 <input type="radio" name="front-page" value="no" id="front-page-no" <?php echo $frontpage_no_selected; ?> /> <label for="front-page-no">No</label>
 
@@ -341,14 +365,14 @@ Show widget default on single posts?<br />
 <br /><br />
 
 <b>Pages</b><br />
-Show widget default on pages?<br />
+Show widget default on static pages?<br />
 <?php $DW->dumpOpt($opt_page); ?>
 <input type="radio" name="page" value="yes" id="page-yes" <?php echo $page_yes_selected; ?> /> <label for="page-yes">Yes</label>
 <input type="radio" name="page" value="no" id="page-no" <?php echo $page_no_selected; ?> /> <label for="page-no">No</label><br />
 Except the page(s):<br />
 <div id="page-select" class="condition-select" <?php echo $page_condition_select_style; ?>>
 <?php foreach ( $pages as $page ) { ?>
-<input type="checkbox" id="page_act_<?php echo $page->ID; ?>" name="page_act[]" value="<?php echo $page->ID; ?>" <?php echo ( count($page_act) > 0 && in_array($page->ID,$page_act) ) ? 'checked="checked"' : ''; ?> /> <label for="page_act_<?php echo $page->ID; ?>"><?php echo $page->post_title; ?></label><br />
+<input type="checkbox" id="page_act_<?php echo $page->ID; ?>" name="page_act[]" value="<?php echo $page->ID; ?>" <?php echo ( count($page_act) > 0 && in_array($page->ID,$page_act) ) ? 'checked="checked"' : ''; ?> /> <label for="page_act_<?php echo $page->ID; ?>"><?php echo $page->post_title; ?> <?php echo ( get_option('show_on_front') == 'page' && isset($static_page[$page->ID]) ? '(' . $static_page[$page->ID] . ')' : '' ) ?></label><br />
 <?php } ?>
 </div>
 

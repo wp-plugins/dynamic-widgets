@@ -98,7 +98,7 @@
     }
 
     function detectPage() {
-      if ( is_front_page() ) {
+      if ( is_front_page() && get_option('show_on_front') == 'posts' ) {
         return 'front-page';
       } else if ( is_single() ) {
         return 'single';
@@ -121,6 +121,12 @@
     	echo "wp version: " . $GLOBALS['wp_version'] . "\n";
     	echo "dw version: " . DW_VERSION . "\n";
     	echo "php version: " . PHP_VERSION . "\n";
+      echo "\n";
+      echo "front: " . get_option('show_on_front') . "\n";
+      if ( get_option('show_on_front') == 'page' ) {
+        echo "front page: " . get_option('page_on_front') . "\n";
+        echo "posts page: " . get_option('page_for_posts') . "\n";
+      }
 
     	echo "\n";
       echo "list: \n";
