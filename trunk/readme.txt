@@ -79,6 +79,12 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 
 == Changelog ==
 
+= Version 1.2.2 =
+* Added detection for posts page when front page display is set to static page.
+
+= Version 1.2.1 =
+* Added functionality when front page display is set to static page.
+
 = Version 1.2 =
 
 * Added support for PHP4 (not fully tested).

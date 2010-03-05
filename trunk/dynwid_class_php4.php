@@ -100,6 +100,8 @@
     function detectPage() {
       if ( is_front_page() && get_option('show_on_front') == 'posts' ) {
         return 'front-page';
+      } else if ( is_home() && get_option('show_on_front') == 'page' ) {
+      	return 'home';
       } else if ( is_single() ) {
         return 'single';
       } else if ( is_page() ) {
@@ -190,6 +192,9 @@
                   ORDER BY maintype, name";
 
       } else {
+      	if ( $maintype == 'home' ) {
+      		$maintype = 'page';
+      	}
         $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
                   WHERE widget_id LIKE '" . $widget_id . "'
                     AND (maintype LIKE '" . $maintype . "%' OR maintype = 'role')

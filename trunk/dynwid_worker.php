@@ -154,6 +154,16 @@
                   }
                 }
                 break;
+              
+              case 'home':
+              	if ( count($act) > 0 ) {
+              		$home_id = get_option('page_for_posts');
+              		if ( in_array($home_id, $act) ) {
+              			$display = $other;
+              			$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EH1)');
+              		}
+              	}
+              	break;
 
               case 'page':
                 if ( count($act) > 0 && is_page($act) ) {
