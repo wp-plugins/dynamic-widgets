@@ -120,13 +120,13 @@
                 /* Author AND Category */
                 if ( count($act_author) > 0 && count($act_category) > 0 ) {
                   // Use of array_intersect to be sure one value in both arrays returns true
-                  if ( in_array($post->post_author,$act_author) && (bool) array_intersect($post_category, $act_category) ) {
+                  if ( in_array($post->post_author, $act_author) && (bool) array_intersect($post_category, $act_category) ) {
                     $display = $other;
                     $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES1)');
                   }
                 /* Only Author */
                 } else if ( count($act_author) > 0 && count($act_category == 0) ) {
-                  if ( in_array($post->post_author,$act_author) ) {
+                  if ( in_array($post->post_author, $act_author) ) {
                     $display = $other;
                     $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES2)');
                   }

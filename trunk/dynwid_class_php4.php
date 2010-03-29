@@ -114,6 +114,8 @@
         return 'archive';
       } else if ( is_404() ) {
       	return 'e404';
+      } else if ( is_search() ) {
+        return 'search';
       } else {
         return 'undef';
       }
