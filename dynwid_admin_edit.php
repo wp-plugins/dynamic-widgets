@@ -229,6 +229,17 @@
   		unset($e404_yes_selected);
   	}
   }
+
+  // Search
+  $search_yes_selected = 'checked="checked"';
+  $opt_search = $DW->getOptions($_GET['id'], 'search');
+  if ( count($opt_search) > 0 ) {
+    $search_condition = $opt_search[0]['value'];
+    if ( $search_condition == '0' ) {
+      $search_no_selected = $search_yes_selected;
+      unset($search_yes_selected);
+    }
+  }
 ?>
 
 <style type="text/css">
@@ -423,6 +434,14 @@ Show widget on the error page?<br />
 <?php $DW->dumpOpt($opt_e404); ?>
 <input type="radio" name="e404" value="yes" id="e404-yes" <?php echo $e404_yes_selected; ?> /> <label for="e404-yes">Yes</label>
 <input type="radio" name="e404" value="no" id="e404-no" <?php echo $e404_no_selected; ?> /> <label for="e404-no">No</label>
+
+<br /><br />
+
+<b>Search Page</b><br />
+Show widget on the search page?<br />
+<?php $DW->dumpOpt($opt_search); ?>
+<input type="radio" name="search" value="yes" id="search-yes" <?php echo $search_yes_selected; ?> /> <label for="search-yes">Yes</label>
+<input type="radio" name="search" value="no" id="search-no" <?php echo $search_no_selected; ?> /> <label for="search-no">No</label>
 
 <br /><br />
 

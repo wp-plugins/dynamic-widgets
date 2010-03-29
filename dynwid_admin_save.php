@@ -14,7 +14,7 @@
     die();
   }
 
-  $fields = array('front-page', 'single', 'page', 'author', 'category', 'archive', 'e404');
+  $fields = array('front-page', 'single', 'page', 'author', 'category', 'archive', 'e404', 'search');
   $work = FALSE;
   foreach ( $fields as $field ) {
     if ( $_POST[$field] == 'yes' ) {
@@ -122,6 +122,11 @@
   // Error 404
   if ( $_POST['e404'] == 'no' ) {
   	$DW->addSingleOption($_POST['widget_id'], 'e404');
+  }
+
+  // Search
+  if ( $_POST['search'] == 'no' ) {
+    $DW->addSingleOption($_POST['widget_id'], 'search');
   }
 
   // Redirect to ReturnURL

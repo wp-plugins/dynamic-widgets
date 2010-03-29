@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
 Requires at least: 2.9.1
 Tested up to: 2.9.2
-Stable tag: 1.2
+Stable tag: 1.2.3
 
 Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages.
 
@@ -21,6 +21,7 @@ Dynamic Widgets gives you more control over your widgets. It lets you dynamicly 
   - Category pages
   - Archive pages
   - Error Page
+  - Search Page
 * Exceptions can be created for:
   - User roles on role, including not logged in (anonymous) users
   - Single post pages on Author, Categories, Tags and/or Individual posts
@@ -79,10 +80,16 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 
 == Changelog ==
 
+= Version 1.2.3 =
+
+* Added default widget display setting option for Search Page.
+
 = Version 1.2.2 =
-* Added detection for posts page when front page display is set to static page.
+
+* Added detection for posts page when front page display is set to static page (more or less a bugfix for 1.2.1).
 
 = Version 1.2.1 =
+
 * Added functionality when front page display is set to static page.
 
 = Version 1.2 =
@@ -115,14 +122,6 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 == Upgrade Notice ==
 
  Be sure to deactivate Dynamic Widgets Plugin before installing the new version following steps 1 and 2 in the installation procedure. After the install you can re-activate the plugin.
-
-== Release notes ==
-
-= Version 1.2 =
-
-PHP4 support is now automatic. However, PHP4 support is not fully tested. If you encounter problems, please let me know. I'll try to work out a solution.
-
-Due to the addition of the Author pages option, the behavior of the Archive pages option has slightly changed. The Archive pages option does not include the Author pages anymore. If you have widgets with the Archive option set to 'No' the upgrade process to version 1.2 will automaticly set 'No' to the Author pages also to keep the old behavior. An upgrade is only triggered when a proper deactivate and activate cycle is done.
 
 == Screenshots ==
 
