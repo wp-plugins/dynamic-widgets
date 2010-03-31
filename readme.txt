@@ -10,7 +10,7 @@ Dynamic Widgets gives you more control over your widgets. It lets you dynamicly 
 
 == Description ==
 
-Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules by role, for the homepage, single posts, pages, authors, categories, archives and the error page.
+Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules by role, for the homepage, single posts, pages, authors, categories, archives, search and the error page.
 
 * Default widget display setting is supported for:
   - User roles
@@ -79,6 +79,10 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.2.4 =
+
+* Bugfix(?) for PHP warning "Cannot use a scalar value as an array"
 
 = Version 1.2.3 =
 
