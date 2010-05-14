@@ -80,6 +80,10 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 
 == Changelog ==
 
+= Version 1.2.5 =
+
+* Bugfix for user role detection when using SPF.
+
 = Version 1.2.4 =
 
 * Bugfix(?) for PHP warning "Cannot use a scalar value as an array"
