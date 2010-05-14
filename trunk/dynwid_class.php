@@ -19,9 +19,9 @@
 
     public function __construct() {
       if ( is_user_logged_in() ) {
-        $this->userrole = $GLOBALS['current_user']->roles[0];
+				$this->userrole = $GLOBALS['current_user']->roles;
       } else {
-        $this->userrole = 'anonymous';
+        $this->userrole = array('anonymous');
       }
 
       $this->firstmessage = TRUE;

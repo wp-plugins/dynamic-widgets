@@ -6,7 +6,7 @@
  */
 
   $DW->message('Dynamic Widgets INIT');
-  $DW->message('User has role ' . $DW->userrole);
+  $DW->message('User has role(s) ' . implode(', ', $DW->userrole));
 
   $whereami = $DW->detectPage();
   $DW->message('Page is ' . $whereami);
@@ -59,7 +59,7 @@
           if ( count($opt) > 0 ) {
             // Role exceptions
             foreach ( $opt as $condition ) {
-              if ( $condition['maintype'] == 'role' && $condition['name'] == $DW->userrole ) {
+              if ( $condition['maintype'] == 'role' && in_array($condition['name'], $DW->userrole) ) {
                 $DW->message('Role set to TRUE (rule ER1)');
                 $role = TRUE;
               }
