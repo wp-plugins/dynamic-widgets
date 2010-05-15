@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules by roles, for the homepage, single posts, pages, authors, categories, archives and the error page.
  * Author: Jacco
- * Version: 1.2.5
+ * Version: 1.2.6
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
  *
@@ -23,7 +23,7 @@
   define('DW_DB_TABLE', 'dynamic_widgets');
   define('DW_LIST_LIMIT', 20);
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
-  define('DW_VERSION', '1.2.5');
+  define('DW_VERSION', '1.2.6');
 
   // Class version to use
   if ( version_compare(PHP_VERSION, '5.0.0', '<') ) {
@@ -145,9 +145,9 @@
         $DW->registered_widget_controls[$widget_id]['callback'] = 'dynwid_widget_callback';
 
         /*
-          In rare cases params seems not to be an array. Bugfix(?) for:
+          In rare cases params or params[0] seems not to be an array. Bugfix(?) for:
           Warning: Cannot use a scalar value as an array in ./wp-content/plugins/dynamic-widgets/dynamic-widgets.php on line 150
-          If the bug is not fixed, warning should now be on line 159
+          If the bug is not fixed, warning should now be on line 161
         */
         if (! is_array($DW->registered_widget_controls[$widget_id]['params']) ) {
           $DW->registered_widget_controls[$widget_id]['params'] = array();
@@ -155,6 +155,8 @@
 
         if ( count($DW->registered_widget_controls[$widget_id]['params']) == 0 ) {
           $DW->registered_widget_controls[$widget_id]['params'][ ] = array('widget_id' => $widget_id);
+        } else if (! is_array($DW->registered_widget_controls[$widget_id]['params'][0]) ) {
+          $DW->registered_widget_controls[$widget_id]['params'][0] = array('widget_id' => $widget_id);
         } else {
           $DW->registered_widget_controls[$widget_id]['params'][0]['widget_id'] = $widget_id;
         }
