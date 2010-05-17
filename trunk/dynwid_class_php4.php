@@ -25,7 +25,7 @@
 
     function __construct() {
       if ( is_user_logged_in() ) {
-				$this->userrole = $GLOBALS['current_user']->roles;
+        $this->userrole = $GLOBALS['current_user']->roles;
       } else {
         $this->userrole = array('anonymous');
       }
@@ -41,6 +41,22 @@
       $this->dbtable = $this->wpdb->prefix . DW_DB_TABLE;
 
       $this->createList();
+    }
+
+    function addDate($widget_id, $dates) {
+      $query = "INSERT INTO " . $this->dbtable . "
+                    (widget_id, maintype, name, value)
+                  VALUES
+                    ('" . $widget_id . "', 'date', 'default', '0')";
+      $this->wpdb->query($query);
+
+      foreach ( $dates as $name => $date ) {
+        $query = "INSERT INTO " . $this->dbtable . "
+                    (widget_id, maintype, name, value)
+                  VALUES
+                    ('" . $widget_id . "', 'date', '" . $name . "', '" . $date . "')";
+        $this->wpdb->query($query);
+      }
     }
 
     function addMultiOption($widget_id, $maintype, $default, $act) {
@@ -199,7 +215,7 @@
       	}
         $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
                   WHERE widget_id LIKE '" . $widget_id . "'
-                    AND (maintype LIKE '" . $maintype . "%' OR maintype = 'role')
+                    AND (maintype LIKE '" . $maintype . "%' OR maintype = 'role' OR maintype = 'date')
                   ORDER BY maintype, name";
       }
       $results = $this->wpdb->get_results($query);

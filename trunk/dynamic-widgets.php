@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Dynamic Widgets
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
- * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules by roles, for the homepage, single posts, pages, authors, categories, archives and the error page.
+ * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules by roles, dates, for the homepage, single posts, pages, authors, categories, archives, error and the search page.
  * Author: Jacco
- * Version: 1.2.6
+ * Version: 1.3
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
  *
@@ -23,7 +23,7 @@
   define('DW_DB_TABLE', 'dynamic_widgets');
   define('DW_LIST_LIMIT', 20);
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
-  define('DW_VERSION', '1.2.6');
+  define('DW_VERSION', '1.3');
 
   // Class version to use
   if ( version_compare(PHP_VERSION, '5.0.0', '<') ) {
@@ -38,6 +38,7 @@
     $DW = &$GLOBALS['DW'];
 
     $screen = add_submenu_page('themes.php', 'Dynamic Widgets', 'Dynamic Widgets', 'switch_themes', 'dynwid-config', 'dynwid_admin_page');
+    add_action('admin_print_styles-' . $screen, 'dynwid_add_admin_styles');
     add_action('admin_print_scripts-' . $screen, 'dynwid_add_admin_scripts');
 
     // Contextual help
@@ -61,7 +62,15 @@
   }
 
   function dynwid_add_admin_scripts() {
+  	$DW = &$GLOBALS['DW'];
     wp_enqueue_script('jquery');
+    wp_enqueue_script('jquery-ui-core');
+    wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'jquery_datepicker.js', array('jquery-ui-core'));
+  }
+
+  function dynwid_add_admin_styles() {
+    $DW = &$GLOBALS['DW'];
+    wp_enqueue_style('jquery-ui-smoothness', $DW->plugin_url . 'jquery-ui-smoothness.css');
   }
 
   function dynwid_add_plugin_actions($all) {
@@ -145,16 +154,19 @@
         $DW->registered_widget_controls[$widget_id]['callback'] = 'dynwid_widget_callback';
 
         /*
-          In rare cases params or params[0] seems not to be an array. Bugfix(?) for:
+          In odd cases params and/or params[0] seems not to be an array. Bugfix for:
           Warning: Cannot use a scalar value as an array in ./wp-content/plugins/dynamic-widgets/dynamic-widgets.php on line 150
-          If the bug is not fixed, warning should now be on line 161
+          If the bug is not fixed, warning should now be on line 173
         */
+          
+        /* Fixing params */
         if (! is_array($DW->registered_widget_controls[$widget_id]['params']) ) {
           $DW->registered_widget_controls[$widget_id]['params'] = array();
         }
 
         if ( count($DW->registered_widget_controls[$widget_id]['params']) == 0 ) {
           $DW->registered_widget_controls[$widget_id]['params'][ ] = array('widget_id' => $widget_id);
+        /* Fixing params[0] */
         } else if (! is_array($DW->registered_widget_controls[$widget_id]['params'][0]) ) {
           $DW->registered_widget_controls[$widget_id]['params'][0] = array('widget_id' => $widget_id);
         } else {
@@ -226,7 +238,7 @@
                 widget_id varchar(40) NOT NULL,
                 maintype varchar(20) NOT NULL,
                 `name` varchar(40) NOT NULL,
-                `value` smallint(1) NOT NULL default '1',
+                `value` longtext NOT NULL,
               PRIMARY KEY  (id),
               KEY widget_id (widget_id,maintype)
             );";
@@ -244,6 +256,14 @@
           $query = "INSERT INTO " .$dbtable . "(widget_id, maintype, value) VALUES ('" . $myrow->widget_id . "', 'author', '0')";
           $wpdb->query($query);
         }
+      }
+
+/*    1.3 > Added Date (range) support.
+      Need to change DB `value` to a LONGTEXT type
+      (not for the date of course, but for supporting next features which might need a lot of space) */
+      if ( version_compare($version, '1.3', '<') ) {
+        $query = "ALTER TABLE " . $dbtable . " CHANGE `value` `value` LONGTEXT NOT NULL";
+        $wpdb->query($query);
       }
     }
     update_option('dynwid_version', DW_VERSION);
@@ -359,6 +379,7 @@
 	    $s = array();
 	    $buffer = array(
 	                'role'        => 'Role',
+	                'date'        => 'Date',
 	                'front-page'  => 'Front Page',
 	                'single'      => 'Single Posts',
 	                'page'        => 'Pages',

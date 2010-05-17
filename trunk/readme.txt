@@ -4,16 +4,17 @@ Donate link:
 Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
 Requires at least: 2.9.1
 Tested up to: 2.9.2
-Stable tag: 1.2.3
+Stable tag: 1.3
 
 Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages.
 
 == Description ==
 
-Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules by role, for the homepage, single posts, pages, authors, categories, archives, search and the error page.
+Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules by role, dates, for the homepage, single posts, pages, authors, categories, archives, error and the search page.
 
 * Default widget display setting is supported for:
   - User roles
+  - Dates
   - Front page
   - Single post pages
   - Pages
@@ -24,6 +25,7 @@ Dynamic Widgets gives you more control over your widgets. It lets you dynamicly 
   - Search Page
 * Exceptions can be created for:
   - User roles on role, including not logged in (anonymous) users
+  - Dates on from, to or range
   - Single post pages on Author, Categories, Tags and/or Individual posts
   - Pages on Page Title
   - Author pages on Author
@@ -80,6 +82,10 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 
 == Changelog ==
 
+= Version 1.3 =
+
+* Added support for dates functionality.
+
 = Version 1.2.6 =
 
 * Another bugfix try for nasty PHP warning "Cannot use a scalar value as an array" 
@@ -131,9 +137,13 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 
 * Added default widget display setting option for 'Not Found' Error (404) Page.
 
+== Release Notes ==
+
+Because of the addition of the dates functionality the database needs to be upgraded. You're advised to make a backup of your WordPress database first. When upgrading, be sure -like always- you do a proper deactiavtion and reactivation of the plugin. Otherwise the upgrade process will not be triggered.
+
 == Upgrade Notice ==
 
- Be sure to deactivate Dynamic Widgets Plugin before installing the new version following steps 1 and 2 in the installation procedure. After the install you can re-activate the plugin.
+Be sure to deactivate Dynamic Widgets Plugin before installing the new version following steps 1 and 2 in the installation procedure. After the install you can reactivate the plugin.
 
 == Screenshots ==
 
