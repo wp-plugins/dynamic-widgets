@@ -14,6 +14,37 @@
     die();
   }
 
+  // Date check
+  if ( $_POST['date'] == 'no' ) {
+    $date_start = trim($_POST['date_start']);
+    $date_end = trim($_POST['date_end']);
+
+    if (! ereg('^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$', $date_start) && ! ereg('^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$', $date_end) ) {
+      wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
+      die();
+    }
+
+    if (! empty($date_start) ) {
+      @list($date_start_year, $date_start_month, $date_start_day ) = explode('-', $date_start);
+      if (! checkdate($date_start_month, $date_start_day, $date_start_year) ) {
+        unset($date_start);
+      }
+    }
+    if (! empty($date_end) ) {
+      @list($date_end_year, $date_end_month, $date_end_day ) = explode('-', $date_end);
+      if (! checkdate($date_end_month, $date_end_day, $date_end_year) ) {
+        unset($date_end);
+      }
+    }
+
+    if (! empty($date_start) && ! empty($date_end) ) {
+      if ( mktime(0,0,0,$date_start_month,$date_start_day,$date_start_year) > mktime(0,0,0,$date_end_month,$date_end_day, $date_end_year) ) {
+        wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=nonedate' );
+        die();
+      }
+    }
+  }
+
   $fields = array('front-page', 'single', 'page', 'author', 'category', 'archive', 'e404', 'search');
   $work = FALSE;
   foreach ( $fields as $field ) {
@@ -54,6 +85,21 @@
   // Role
   if ( $_POST['role'] == 'no' && count($_POST['role_act']) > 0 ) {
     $DW->addMultiOption($_POST['widget_id'], 'role', 'no', $_POST['role_act']);
+  }
+
+  // Date
+  if ( $_POST['date'] == 'no' ) {
+    $dates = array();
+    if ( ereg('^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$', $date_start) ) {
+      $dates['date_start'] = $date_start;
+    }
+    if ( ereg('^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$', $date_end) ) {
+      $dates['date_end'] = $date_end;
+    }
+
+    if ( count($dates) > 0 ) {
+      $DW->addDate($_POST['widget_id'], $dates);
+    }
   }
 
   // Front Page

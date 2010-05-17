@@ -6,7 +6,7 @@
  */
 
   $DW->message('Dynamic Widgets INIT');
-  $DW->message('User has role(s) ' . implode(', ', $DW->userrole));
+  $DW->message('User has role(s): ' . implode(', ', $DW->userrole));
 
   $whereami = $DW->detectPage();
   $DW->message('Page is ' . $whereami);
@@ -26,6 +26,7 @@
           $DW->message('Number of rules to check for widget ' .$widget_id . ': ' . count($opt));
           $display = TRUE;
           $role = TRUE;
+          $date = TRUE;
 
           foreach ( $opt as $condition ) {
             if ( empty($condition['name']) && $condition['value'] == '0' ) {
@@ -33,7 +34,7 @@
               $display = FALSE;
               $other = TRUE;
               break;
-            } else if ( $condition['maintype'] != 'role' ) {
+            } else if ( $condition['maintype'] != 'role' && $condition['maintype'] != 'date' ) {
               // Get default value
               if ( $condition['name'] == 'default' ) {
                 $default = $condition['value'];
@@ -52,6 +53,9 @@
             } else if ( $condition['maintype'] == 'role' && $condition['name'] == 'default' ) {
               $DW->message('Default for ' . $widget_id . ' set to FALSE (rule R1)');
               $role = FALSE;
+            } else if ( $condition['maintype'] == 'date' && $condition['name'] == 'default' ) {
+              $DW->message('Default for ' . $widget_id . ' set to FALSE (rule DT1)');
+              $date = FALSE;
             }
           }
 
@@ -59,9 +63,46 @@
           if ( count($opt) > 0 ) {
             // Role exceptions
             foreach ( $opt as $condition ) {
-              if ( $condition['maintype'] == 'role' && in_array($condition['name'], $DW->userrole) ) {
+							if ( $condition['maintype'] == 'role' && in_array($condition['name'], $DW->userrole) ) {
                 $DW->message('Role set to TRUE (rule ER1)');
                 $role = TRUE;
+              }
+            }
+
+            // Date exceptions
+            $dates = array();
+            foreach ( $opt as $condition ) {
+              if ( $condition['maintype'] == 'date' ) {
+                switch ( $condition['name'] ) {
+                  case 'date_start':
+                    $date_start = $condition['value'];
+                    break;
+
+                  case 'date_end':
+                    $date_end = $condition['value'];
+                    break;
+                }
+              }
+            }
+            $now = time();
+            if (! empty($date_end) ) {
+              @list($date_end_year, $date_end_month, $date_end_day) = explode('-', $date_end);
+              if ( mktime(23, 59, 59, $date_end_month, $date_end_day, $date_end_year) > $now ) {
+                $date = TRUE;
+                $DW->message('End date is in the future, sets Date to TRUE (rule EDT1)');
+                if (! empty($date_start) ) {
+                  @list($date_start_year, $date_start_month, $date_start_day) = explode('-', $date_start);
+                  if ( mktime(0, 0, 0, $date_start_month, $date_start_day, $date_start_year) > $now ) {
+                    $date = FALSE;
+                    $DW->message('From date is in the future, sets Date to FALSE (rule EDT2)');
+                  }
+                }
+              }
+            } else if (! empty($date_start) ) {
+              @list($date_start_year, $date_start_month, $date_start_day) = explode('-', $date_start);
+              if ( mktime(0, 0, 0, $date_start_month, $date_start_day, $date_start_year) < $now ) {
+                $date = TRUE;
+                $DW->message('From date is in the past, sets Date to TRUE (rule EDT3)');
               }
             }
 
@@ -154,7 +195,7 @@
                   }
                 }
                 break;
-              
+
               case 'home':
               	if ( count($act) > 0 ) {
               		$home_id = get_option('page_for_posts');
@@ -188,7 +229,7 @@
             } // END switch ( $whereami )
           } /* END if ( count($opt) > 0 ) */
 
-          if (! $display || ! $role ) {
+          if (! $display || ! $role || ! $date ) {
             $DW->message('Removed ' . $widget_id . ' from display');
             unset($DW->registered_widgets[$widget_id]);
           }

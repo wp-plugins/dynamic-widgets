@@ -35,6 +35,26 @@
     }
   }
 
+  // Date
+  $date_yes_selected = 'checked="checked"';
+  $opt_date = $DW->getOptions($_GET['id'], 'date');
+  if ( count($opt_date) > 0 ) {
+    foreach ( $opt_date as $value ) {
+      switch ( $value['name'] ) {
+        case 'date_start':
+          $date_start = $value['value'];
+        break;
+
+        case 'date_end':
+          $date_end = $value['value'];
+        break;
+      }
+    }
+
+    $date_no_selected = $date_yes_selected;
+    unset($date_yes_selected);
+  }
+
   // Front Page
   if ( get_option('show_on_front') == 'page' ) {
     $frontpage_yes_selected = 'disabled="true"';
@@ -277,9 +297,15 @@ label {
 <div class="error" id="message">
   <p>Dynamic does not mean static hiding of a widget. Hint: <a href="widgets.php">Remove</a> the widget from the sidebar.</p>
 </div>
+<?php } else if ( $_GET['work'] == 'nonedate' ) { ?>
+<div class="error" id="message">
+  <p>The From date can't be later than the To date.</p>
+</div>
+
 <?php } ?>
 
 <h3>Edit options for <em><?php echo $DW->getName($_GET['id']); ?></em> Widget</h3>
+<?php echo ( DW_DEBUG ) ? '<pre>ID = ' . $_GET['id'] . '</pre><br />' : ''; ?>
 
 <form action="<?php echo attribute_escape($_SERVER['REQUEST_URI']); ?>" method="post">
 <?php wp_nonce_field('plugin-name-action_edit_' . $_GET['id']); ?>
@@ -304,7 +330,36 @@ Show widget to everybody?
 <?php } ?>
 </div>
 
-<br /><br />
+<br />
+
+<b>Date</b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('date');" /><br />
+Show widget always?<br />
+<?php $DW->dumpOpt($opt_date); ?>
+<div>
+<div id="date" class="infotext">
+  Next to the above role option, the date option is also very powerfull. You've been warned!<br />
+  Enter dates in the YYYY-MM-DD format. You can also use the calender by clicking on the <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" /><br />
+  Date ranges can be made by entering a From AND a To date<br />
+  When you want the widget to be displayed from a specific date, only fill in the From date<br />
+  When you want the widget to stop displaying on a specific date, only fill in the To date.
+</div>
+</div>
+<input type="radio" name="date" value="yes" id="date-yes" <?php echo $date_yes_selected; ?> onclick="swTxt(cDate, true);" /> <label for="date-yes">Yes</label>
+<input type="radio" name="date" value="no" id="date-no" <?php echo $date_no_selected; ?> onclick="swTxt(cDate, false)" /> <label for="date-no">No, only:</label><br />
+<div id="date-select" class="condition-select">
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+  <td style="width:45px;">From</td>
+  <td><input id="date_start" type="text" name="date_start" value="<?php echo $date_start; ?>" size="10" maxlength="10" /> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" onclick="showCalendar('date_start')" /></td>
+</tr>
+<tr>
+  <td style="width:45px;">To</td>
+  <td><input id="date_end" type="text" name="date_end" value="<?php echo $date_end; ?>" size="10" maxlength="10" /> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" onclick="showCalendar('date_end')" /></td>
+</tr>
+</table>
+</div>
+
+<br />
 
 <b>Front Page</b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('frontpage');" /><br />
 Show widget on the front page?<br />
@@ -492,6 +547,24 @@ Show widget on the search page?<br />
     jQuery(div).slideToggle(400);
   }
 
+  function showCalendar(id) {
+    if ( document.getElementById('date-no').checked ) {
+      var id = '#'+id;
+      jQuery(function() {
+  		  jQuery(id).datepicker({
+  		    dateFormat: 'yy-mm-dd',
+  		    minDate: new Date(<?php echo date('Y, n - 1, j'); ?>),
+  		    onClose: function() { jQuery(id).datepicker('destroy') }
+  		  });
+        jQuery(id).datepicker('show');
+    	});
+    } else {
+      document.getElementById('date-no').checked = true;
+      swTxt(cDate, false);
+      showCalendar(id);
+    }
+  }
+
   function swChb(c, s) {
   	for ( i = 0; i < c.length; i++ ) {
   	  if ( s == true ) {
@@ -501,13 +574,26 @@ Show widget on the search page?<br />
     }
   }
 
+  function swTxt(c, s) {
+  	for ( i = 0; i < c.length; i++ ) {
+  	  if ( s == true ) {
+  	    document.getElementById(c[i]).value = '';
+  	  }
+      document.getElementById(c[i]).disabled = s;
+    }
+  }
+
   var cAuthors = new Array(<?php echo implode(', ', $js_author_array); ?>);
   var cCat = new Array(<?php echo implode(', ', $js_category_array); ?>);
   var cRole = new Array(<?php echo implode(', ' , $jsroles); ?>);
+  var cDate =  new Array('date_start', 'date_end');
   var icount = <?php echo $js_count; ?>;
 
   if ( document.getElementById('role-yes').checked ) {
   	swChb(cRole, true);
+  }
+  if ( document.getElementById('date-yes').checked ) {
+  	swTxt(cDate, true);
   }
   if ( document.getElementById('individual').checked ) {
     swChb(cAuthors, true);

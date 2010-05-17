@@ -37,6 +37,22 @@
       $this->createList();
     }
 
+    public function addDate($widget_id, $dates) {
+      $query = "INSERT INTO " . $this->dbtable . "
+                    (widget_id, maintype, name, value)
+                  VALUES
+                    ('" . $widget_id . "', 'date', 'default', '0')";
+      $this->wpdb->query($query);
+
+      foreach ( $dates as $name => $date ) {
+        $query = "INSERT INTO " . $this->dbtable . "
+                    (widget_id, maintype, name, value)
+                  VALUES
+                    ('" . $widget_id . "', 'date', '" . $name . "', '" . $date . "')";
+        $this->wpdb->query($query);
+      }
+    }
+
     public function addMultiOption($widget_id, $maintype, $default, $act) {
       if ( $default == 'no' ) {
         $opt_default = '0';
@@ -192,7 +208,7 @@
       	}
         $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
                   WHERE widget_id LIKE '" . $widget_id . "'
-                    AND (maintype LIKE '" . $maintype . "%' OR maintype = 'role')
+                    AND (maintype LIKE '" . $maintype . "%' OR maintype = 'role' OR maintype = 'date')
                   ORDER BY maintype, name";
       }
       $results = $this->wpdb->get_results($query);
