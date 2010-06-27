@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules by roles, dates, for the homepage, single posts, pages, authors, categories, archives, error and the search page.
  * Author: Jacco
- * Version: 1.3
+ * Version: 1.3.1
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
  *
@@ -23,7 +23,8 @@
   define('DW_DB_TABLE', 'dynamic_widgets');
   define('DW_LIST_LIMIT', 20);
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
-  define('DW_VERSION', '1.3');
+  define('DW_VERSION', '1.3.1');
+  define('DW_VERSION_URL_CHECK', 'http://www.qurl.nl/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 
   // Class version to use
   if ( version_compare(PHP_VERSION, '5.0.0', '<') ) {
@@ -158,7 +159,7 @@
           Warning: Cannot use a scalar value as an array in ./wp-content/plugins/dynamic-widgets/dynamic-widgets.php on line 150
           If the bug is not fixed, warning should now be on line 173
         */
-          
+
         /* Fixing params */
         if (! is_array($DW->registered_widget_controls[$widget_id]['params']) ) {
           $DW->registered_widget_controls[$widget_id]['params'] = array();
@@ -209,6 +210,16 @@
     require_once(dirname(__FILE__) . '/dynwid_admin.php');
   }
 
+  function dynwid_check_version($plugin_data, $r) {
+    $check = wp_remote_fopen(DW_VERSION_URL_CHECK . $r->new_version);
+
+    if ( $check && ! empty($check) ) {
+      echo '<div style="font-weight:normal;">';
+      echo $check;
+      echo '</div>';
+    }
+  }
+
   function dynwid_init() {
     $GLOBALS['DW'] = new dynWid();
 
@@ -221,6 +232,7 @@
 			add_action('admin_menu', 'dynwid_add_admin_menu');
   	  add_action('edit_tag_form_fields', 'dynwid_add_tag_page');
   	  add_action('edited_term', 'dynwid_save_tagdata');
+  	  add_action('in_plugin_update_message-' . plugin_basename(__FILE__), 'dynwid_check_version', 10, 2);
 			add_action('plugin_action_links_' . plugin_basename(__FILE__), 'dynwid_add_plugin_actions');
   	  add_action('save_post', 'dynwid_save_postdata');
   	  add_action('sidebar_admin_setup', 'dynwid_add_widget_control');
