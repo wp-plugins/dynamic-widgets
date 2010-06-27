@@ -12,7 +12,7 @@
   $DW->message('Page is ' . $whereami);
   if ( $whereami == 'single' ) {
     $post = $GLOBALS['post'];
-    $DW->message('post_id = ' .$post->ID);
+    $DW->message('post_id = ' . $post->ID);
   }
 
   foreach ( $DW->sidebars as $sidebar_id => $widgets ) {

@@ -75,6 +75,25 @@
 
 <a href="#" onclick="jQuery('#un').slideToggle('fast'); return false;">Advanced &gt;</a>
 <div id="un" style="display:none">
+<br /> <strong>wp_head() check: </strong>
+<?php
+  $c = $DW->checkWPhead();
+  switch ( $c ) {
+    case 0:
+      echo '<span style="color:red">wp_head() is NOT called (at the most obvious place)</span>';
+      break;
+
+    case 1:
+      echo '<span style="color:green">wp_head() is called</span>';
+      break;
+
+    case 2:
+      echo '<span style="color:orange">Unable to determine if wp_head() is called</span>';
+      break;
+  }
+?>
+.<br />
+
 <br />
 For debugging purposes it is possible you're asked to create a dump. Click the 'Create dump' button and save the text file.
 <br /><br />

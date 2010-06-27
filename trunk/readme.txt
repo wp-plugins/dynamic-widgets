@@ -3,8 +3,8 @@ Contributors: Qurl
 Donate link:
 Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
 Requires at least: 2.9.1
-Tested up to: 2.9.2
-Stable tag: 1.3
+Tested up to: 3.0
+Stable tag: 1.3.1
 
 Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages.
 
@@ -82,6 +82,10 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 
 == Changelog ==
 
+= Version 1.3.1
+
+* Maintenance release for WordPress 3.0 support.
+
 = Version 1.3 =
 
 * Added support for dates functionality.
@@ -136,10 +140,6 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 = Version 1.0.1 =
 
 * Added default widget display setting option for 'Not Found' Error (404) Page.
-
-== Release Notes ==
-
-Because of the addition of the dates functionality the database needs to be upgraded. You're advised to make a backup of your WordPress database first. When upgrading, be sure -like always- you do a proper deactiavtion and reactivation of the plugin. Otherwise the upgrade process will not be triggered.
 
 == Upgrade Notice ==
 

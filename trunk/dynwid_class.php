@@ -84,6 +84,24 @@
       $this->wpdb->query($query);
     }
 
+    public function checkWPhead() {
+      $ct = current_theme_info();
+      $headerfile = $ct->template_dir . '/header.php';
+      if ( file_exists($headerfile) ) {
+        $buffer = file_get_contents($headerfile);
+        if ( strpos($buffer, 'wp_head()') ) {
+          // wp_head() found
+          return 1;
+        } else {
+          // wp_head() not found
+          return 0;
+        }
+      } else {
+        // wp_head() unable to determine
+        return 2;
+      }
+    }
+
     private function createList() {
       $this->dynwid_list = array();
 
@@ -132,6 +150,7 @@
 
     public function dump() {
     	echo "wp version: " . $GLOBALS['wp_version'] . "\n";
+      echo "wp_head: " . $this->checkWPhead() . "\n";
     	echo "dw version: " . DW_VERSION . "\n";
     	echo "php version: " . PHP_VERSION . "\n";
       echo "\n";
