@@ -23,7 +23,7 @@
   define('DW_DB_TABLE', 'dynamic_widgets');
   define('DW_LIST_LIMIT', 20);
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
-  define('DW_VERSION', '1.3.1');
+  define('DW_VERSION', '1.3.2');
   define('DW_VERSION_URL_CHECK', 'http://www.qurl.nl/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 
   // Class version to use

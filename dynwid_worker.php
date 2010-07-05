@@ -9,6 +9,7 @@
   $DW->message('User has role(s): ' . implode(', ', $DW->userrole));
 
   $whereami = $DW->detectPage();
+  $DW->dwList($whereami);
   $DW->message('Page is ' . $whereami);
   if ( $whereami == 'single' ) {
     $post = $GLOBALS['post'];
@@ -23,7 +24,7 @@
         if ( in_array($widget_id, $DW->dynwid_list) ) {
           $act = array();
           $opt = $DW->getOptions($widget_id, $whereami, FALSE);
-          $DW->message('Number of rules to check for widget ' .$widget_id . ': ' . count($opt));
+          $DW->message('Number of rules to check for widget ' . $widget_id . ': ' . count($opt));
           $display = TRUE;
           $role = TRUE;
           $date = TRUE;

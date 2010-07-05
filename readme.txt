@@ -82,7 +82,11 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 
 == Changelog ==
 
-= Version 1.3.1
+= Version 1.3.2 =
+
+* Added an internal filter when checking for widget options to make the plugin faster.
+
+= Version 1.3.1 =
 
 * Maintenance release for WordPress 3.0 support.
 
@@ -92,7 +96,7 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 
 = Version 1.2.6 =
 
-* Another bugfix try for nasty PHP warning "Cannot use a scalar value as an array" 
+* Another bugfix try for nasty PHP warning "Cannot use a scalar value as an array".
 
 = Version 1.2.5 =
 
