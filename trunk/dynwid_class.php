@@ -34,7 +34,7 @@
       $this->wpdb = $GLOBALS['wpdb'];
       $this->dbtable = $this->wpdb->prefix . DW_DB_TABLE;
 
-      $this->createList();
+      // $this->createList();
     }
 
     public function addDate($widget_id, $dates) {
@@ -183,6 +183,21 @@
         echo '<pre>';
         print_r($opt);
         echo '</pre>';
+      }
+    }
+
+    // replacement for createList() to make the worker faster
+    public function dwList($whereami) {
+      $this->dynwid_list = array();
+      if ( $whereami == 'home' ) {
+        $whereami = 'page';
+      }
+
+      $query = "SELECT widget_id FROM " . $this->dbtable . "
+                  WHERE maintype LIKE '" . $whereami . "%' OR maintype = 'role' OR maintype = 'date'";
+      $results = $this->wpdb->get_results($query);
+      foreach ( $results as $myrow ) {
+        $this->dynwid_list[ ] = $myrow->widget_id;
       }
     }
 
