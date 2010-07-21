@@ -4,13 +4,13 @@ Donate link:
 Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
 Requires at least: 2.9.1
 Tested up to: 3.0
-Stable tag: 1.3.1
+Stable tag: 1.3.3
 
 Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages.
 
 == Description ==
 
-Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules by role, dates, for the homepage, single posts, pages, authors, categories, archives, error and the search page.
+Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules by role, dates, for the homepage, single posts, pages, authors, categories, archives, error page, search page and custom post types.
 
 * Default widget display setting is supported for:
   - User roles
@@ -23,6 +23,7 @@ Dynamic Widgets gives you more control over your widgets. It lets you dynamicly 
   - Archive pages
   - Error Page
   - Search Page
+  - Custom Post Types (since WordPress 3.0)
 * Exceptions can be created for:
   - User roles on role, including not logged in (anonymous) users
   - Dates on from, to or range
@@ -30,6 +31,7 @@ Dynamic Widgets gives you more control over your widgets. It lets you dynamicly 
   - Pages on Page Title
   - Author pages on Author
   - Category pages on Category name
+  - Custom Posts Type on Custom post name (since WordPress 3.0)
 
 == Installation ==
 
@@ -56,6 +58,10 @@ For the latest FAQ, please visit the [online FAQ](http://www.qurl.nl/faq/).
 
 Start immediately looking for another hoster. YES, immediately! NOW! Pronto! PHP4 was introduced in the year 2000 and is [not supported](http://en.wikipedia.org/wiki/PHP#Release_history) anymore. As I don't have PHP4 anymore, I can only be sure for about 80% the plugin will work. Please let me know if it doesn't. I'll try to work out a solution.
 
+= Does the plugin work on WordPress 3.0 MU? =
+
+Yes, but only if you activate the plugin on a per site base. Network Activation is not supported.
+
 = I checked the "Make exception rule available to individual posts and tags" option, but nothing happens. =
 
 Did you save the options? If you did, you may try to hit the (i) icon a bit to the right and read the text which appears below.
@@ -81,6 +87,12 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.3.3 =
+
+* Added Custom Post Types support for WordPress 3.0.
+* Added WPML support for static pages, category pages, category in single posts and custom post types.
+* Bugfix for not resetting checked count when enabling individual posts with authors and/or category set.
 
 = Version 1.3.2 =
 

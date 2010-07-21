@@ -16,6 +16,7 @@
     public  $plugin_url;
     public  $userrole;
     private $wpdb;
+    public  $wpml;		// WPML Plugin support
 
     public function __construct() {
       if ( is_user_logged_in() ) {
@@ -33,6 +34,9 @@
 
       $this->wpdb = $GLOBALS['wpdb'];
       $this->dbtable = $this->wpdb->prefix . DW_DB_TABLE;
+
+			// WPML Plugin support
+      $this->wpml = FALSE;
 
       // $this->createList();
     }
@@ -163,6 +167,7 @@
     	echo "\n";
       echo "list: \n";
       $list = array();
+      $this->createList();
       foreach ( $this->dynwid_list as $widget_id ) {
         $list[$widget_id] = strip_tags($this->getName($widget_id));
       }
@@ -285,6 +290,20 @@
     public function resetOptions($widget_id) {
       $query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "'";
       $this->wpdb->query($query);
+    }
+
+    // WPML Plugin support
+    public function wpml_get_id($content_id, $content_type = 'post_page') {
+      $language_code = wpml_get_default_language();
+      $lang = wpml_get_content_translation($content_type, $content_id, $language_code);
+
+      if ( is_array($lang) ) {
+        $id = $lang[$language_code];
+      } else {
+        $id = 0;
+      }
+
+      return $id;
     }
   }
 ?>
