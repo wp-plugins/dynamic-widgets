@@ -5,6 +5,12 @@
  * @version $Id$
  */
 
+	// WPML Plugin support
+	if ( defined('ICL_PLUGIN_PATH') && file_exists(ICL_PLUGIN_PATH . DW_WPML_API) ) {
+		$DW->wpml = TRUE;
+		$wpml_icon = '<img src="' . $DW->plugin_url . DW_WPML_ICON . '" alt="WMPL" title="Dynamic Widgets syncs with other languages of these pages via WPML" />';
+	}
+
   // Roles
   $wp_roles = $GLOBALS['wp_roles'];
   $roles = array_merge($wp_roles->role_names, array('anonymous' => 'Anonymous|User role'));
@@ -416,7 +422,7 @@ Show widget default on single posts?<br />
   </td>
   <td style="width:10px"></td>
   <td valign="top">
-    Except the posts in category:
+    Except the posts in category: <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?>
     <?php $DW->dumpOpt($opt_single_category); ?>
     <div id="single-category-select" class="condition-select" <?php echo $category_condition_select_style; ?>>
     <?php foreach ( $category as $cat ) { ?>
@@ -430,7 +436,7 @@ Show widget default on single posts?<br />
 
 <br /><br />
 
-<b>Pages</b><br />
+<b>Pages</b> <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?><br />
 Show widget default on static pages?<br />
 <?php $DW->dumpOpt($opt_page); ?>
 <input type="radio" name="page" value="yes" id="page-yes" <?php echo $page_yes_selected; ?> /> <label for="page-yes">Yes</label>
@@ -457,7 +463,7 @@ Except the author(s):<br />
 
 <br /><br />
 
-<b>Category Pages</b><br />
+<b>Category Pages</b> <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?><br />
 Show widget default on category pages?<br />
 <?php $DW->dumpOpt($opt_category); ?>
 <input type="radio" name="category" value="yes" id="category-yes" <?php echo $category_yes_selected; ?> /> <label for="category-yes">Yes</label>
@@ -500,6 +506,65 @@ Show widget on the search page?<br />
 
 <br /><br />
 
+<?php
+  /* WordPress 3.0 and higher: Custom Post Types */
+  if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
+    $args = array(
+              'public'   => TRUE,
+              '_builtin' => FALSE
+            );
+    $post_types = get_post_types($args, 'objects', 'and');
+
+    foreach ( $post_types as $ctid ) {
+      // Prepare
+      $custom_yes_selected = 'checked="checked"';
+      $opt_custom = $DW->getOptions($_GET['id'], key($post_types));
+      if ( count($opt_custom) > 0 ) {
+        $custom_act = array();
+        foreach ( $opt_custom as $custom_condition ) {
+          if ( $custom_condition['name'] == 'default' || empty($custom_condition['name']) ) {
+            $custom_default = $custom_condition['value'];
+          } else {
+            $custom_act[ ] = $custom_condition['name'];
+          }
+        }
+
+        if ( $custom_default == '0' ) {
+          $custom_no_selected = $custom_yes_selected;
+          unset($custom_yes_selected);
+        }
+      }
+
+      $loop = new WP_Query( array('post_type' => key($post_types)) );
+      if ( $loop->post_count > DW_LIST_LIMIT ) {
+        $custom_condition_select_style = DW_LIST_STYLE;
+      }
+
+      // Output
+      echo '<input type="hidden" name="post_types[]" value="' . key($post_types) . '" />';
+      echo '<b>Custom Post Type <em>' . $ctid->label . '</em></b> ' . ( $DW->wpml ? $wpml_icon : '' ) . '<br />';
+      echo 'Show widget on ' . $ctid->label . '?<br />';
+      $DW->dumpOpt($opt_custom);
+      echo '<input type="radio" name="' . key($post_types) . '" value="yes" id="' . key($post_types) . '-yes" ' . $custom_yes_selected . ' /> <label for="' . key($post_types) . '-yes">Yes</label> ';
+      echo '<input type="radio" name="' . key($post_types) . '" value="no" id="' . key($post_types) . '-no" ' . $custom_no_selected . ' /> <label for="' . key($post_types) . '-no">No</label><br />';
+
+      echo 'Except for:<br />';
+      echo '<div id="' . key($post_types) . '-select" class="condition-select" ' . $custom_condition_select_style . '>';
+
+      while ( $loop->have_posts() ) : $loop->the_post();
+        echo '<input type="checkbox" id="' . key($post_types) . '_act_' . $loop->post->ID . '" name="' . key($post_types) . '_act[]" value="' . $loop->post->ID . '" ';
+        echo ( count($custom_act) > 0 && in_array($loop->post->ID,$custom_act) ) ? 'checked="checked"' : '';
+        echo ' /> <label for="' . key($post_types) . '_act_' . $loop->post->ID . '">';
+        the_title();
+        echo '</label><br />';
+      endwhile;
+      echo '</div>';
+
+      echo '<br /><br />';
+    }
+  } // end version compare >= WP 3.0
+?>
+
 <input class="button-primary" type="submit" value="Save" />
 </form>
 
@@ -522,6 +587,7 @@ Show widget on the search page?<br />
       if ( confirm('Are you sure you want to enable the exception rule for individual posts and tags?\nThis will remove the exceptions set for Author and/or Category on single posts for this widget.\nOk = Yes; No = Cancel') ) {
         swChb(cAuthors, true);
         swChb(cCat, true);
+        icount = 0;
       } else {
         document.getElementById('individual').checked = false;
       }

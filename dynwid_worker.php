@@ -6,15 +6,45 @@
  */
 
   $DW->message('Dynamic Widgets INIT');
+
+  // WPML Plugin Support
+  if ( defined('ICL_PLUGIN_PATH') ) {
+    $wpml_api = ICL_PLUGIN_PATH . DW_WPML_API;
+
+    if ( file_exists($wpml_api) ) {
+      require_once($wpml_api);
+
+      $wpmlang = wpml_get_default_language();
+      $curlang = wpml_get_current_language();
+
+      if ( $wpmlang != $curlang ) {
+      	$DW->wpml = TRUE;
+      	$DW->message('WPML enabled, default language: ' . $wpmlang);
+      }
+    }
+  }
+
   $DW->message('User has role(s): ' . implode(', ', $DW->userrole));
 
+  $custom_post_type = FALSE;
   $whereami = $DW->detectPage();
-  $DW->dwList($whereami);
   $DW->message('Page is ' . $whereami);
   if ( $whereami == 'single' ) {
     $post = $GLOBALS['post'];
     $DW->message('post_id = ' . $post->ID);
+
+    /* WordPress 3.0 and higher: Custom Post Types */
+    if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
+      $post_type = get_post_type($post);
+      $DW->message('Post Type = ' . $post_type);
+      if ( $post_type != 'post' ) {
+        $custom_post_type = TRUE;
+        $whereami = $post_type;
+        $DW->message('Custom Post Type detected, page changed to ' . $whereami);
+      }
+    }
   }
+  $DW->dwList($whereami);
 
   foreach ( $DW->sidebars as $sidebar_id => $widgets ) {
     // Only processing active sidebars with widgets
@@ -110,124 +140,170 @@
             // For debug messages
             $e = ( $other ) ? 'TRUE' : 'FALSE';
 
-            // Display exceptions
-            switch ( $whereami ) {
-              case 'single':
-                $act_author = array();
-                $act_category = array();
-                $act_post = array();
-                $act_tag = array();
-                $post_category = array();
-                $post_tag = array();
-
-                // Get the categories from the post
-                $categories = get_the_category();
-                foreach ( $categories as $category ) {
-                  $post_category[ ] = $category->cat_ID;
+            // Display exceptions (custom post type)
+            if ( $custom_post_type ) {
+              // Custom Post Type behaves the same as a single post
+              if ( count($act) > 0 ) {
+                $id = $post->ID;
+                $DW->message('PostID: ' . $id);
+                if ( $DW->wpml ) {
+                  $id = $DW->wpml_get_id($id, 'post_' . $post_type);
+                  $DW->message('WPML ObjectID: ' . $id);
                 }
 
-                // Get the tags form the post
-                if ( has_tag() ) {
-                  $tags = get_the_tags();
-                  foreach ( $tags as $tag ) {
-                    $post_tag[ ] = $tag->term_id;
-                  }
-                } else {
-                  $tags = array();
+                if ( in_array($id, $act) ) {
+                  $display = $other;
+                  $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP1)');
                 }
+              }
+            } else {
+              // no custom post type
+              switch ( $whereami ) {
+                case 'single':
+                  $act_author = array();
+                  $act_category = array();
+                  $act_post = array();
+                  $act_tag = array();
+                  $post_category = array();
+                  $post_tag = array();
 
-                // Split out the conditions
-                foreach ( $opt as $condition ) {
-                  if ( $condition['name'] != 'default' ) {
-                    switch ( $condition['maintype'] ) {
-                      case 'single-author':
-                        $act_author[ ] = $condition['name'];
-                      break;
-
-                      case 'single-category':
-                        $act_category[ ] = $condition['name'];
-                      break;
-
-                      case 'single-tag':
-                        $act_tag[ ] = $condition['name'];
-                      break;
-
-                      case 'single-post':
-                        $act_post[ ] = $condition['name'];
-                      break;
-                    } // END switch
+                  // Get the categories from the post
+                  $categories = get_the_category();
+                  foreach ( $categories as $category ) {
+                    $id =  $category->cat_ID;
+                    if ( $DW->wpml ) {
+                      $id = $DW->wpml_get_id($id, 'tax_category');
+                    }
+                    $post_category[ ] = $id;
                   }
-                }
 
-                /* Author AND Category */
-                if ( count($act_author) > 0 && count($act_category) > 0 ) {
-                  // Use of array_intersect to be sure one value in both arrays returns true
-                  if ( in_array($post->post_author, $act_author) && (bool) array_intersect($post_category, $act_category) ) {
-                    $display = $other;
-                    $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES1)');
+                  // Get the tags form the post
+                  if ( has_tag() ) {
+                    $tags = get_the_tags();
+                    foreach ( $tags as $tag ) {
+                      $post_tag[ ] = $tag->term_id;
+                    }
+                  } else {
+                    $tags = array();
                   }
-                /* Only Author */
-                } else if ( count($act_author) > 0 && count($act_category == 0) ) {
-                  if ( in_array($post->post_author, $act_author) ) {
-                    $display = $other;
-                    $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES2)');
-                  }
-                /* Only Category */
-                } else if ( count($act_author) == 0 && count($act_category) > 0 ) {
-                  if ( (bool) array_intersect($post_category, $act_category) ) {
-                    $display = $other;
-                    $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES3)');
-                  }
-                /* None or individual checked - individual is not included in the $opt */
-                } else {
-                  /* Tags */
-                  if ( count($act_tag) > 0 ) {
-                    if ( (bool) array_intersect($post_tag, $act_tag) ) {
-                      $display = $other;
-                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES4)');
+
+                  // Split out the conditions
+                  foreach ( $opt as $condition ) {
+                    if ( $condition['name'] != 'default' ) {
+                      switch ( $condition['maintype'] ) {
+                        case 'single-author':
+                          $act_author[ ] = $condition['name'];
+                          break;
+
+                        case 'single-category':
+                          $act_category[ ] = $condition['name'];
+                          break;
+
+                        case 'single-tag':
+                          $act_tag[ ] = $condition['name'];
+                          break;
+
+                        case 'single-post':
+                          $act_post[ ] = $condition['name'];
+                          break;
+                      } // END switch
                     }
                   }
-                  /* Posts */
-                  if ( count($act_post) > 0 ) {
-                    if ( in_array($post->ID,$act_post) ) {
+
+                  /* Author AND Category */
+                  if ( count($act_author) > 0 && count($act_category) > 0 ) {
+                    // Use of array_intersect to be sure one value in both arrays returns true
+                    if ( in_array($post->post_author, $act_author) && (bool) array_intersect($post_category, $act_category) ) {
                       $display = $other;
-                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES5)');
+                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES1)');
+                    }
+                    /* Only Author */
+                  } else if ( count($act_author) > 0 && count($act_category == 0) ) {
+                    if ( in_array($post->post_author, $act_author) ) {
+                      $display = $other;
+                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES2)');
+                    }
+                    /* Only Category */
+                  } else if ( count($act_author) == 0 && count($act_category) > 0 ) {
+                    if ( (bool) array_intersect($post_category, $act_category) ) {
+                      $display = $other;
+                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES3)');
+                    }
+                    /* None or individual checked - individual is not included in the $opt */
+                  } else {
+                    /* Tags */
+                    if ( count($act_tag) > 0 ) {
+                      if ( (bool) array_intersect($post_tag, $act_tag) ) {
+                        $display = $other;
+                        $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES4)');
+                      }
+                    }
+                    /* Posts */
+                    if ( count($act_post) > 0 ) {
+                      if ( in_array($post->ID, $act_post) ) {
+                        $display = $other;
+                        $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES5)');
+                      }
                     }
                   }
-                }
-                break;
+                  break;
 
-              case 'home':
-              	if ( count($act) > 0 ) {
-              		$home_id = get_option('page_for_posts');
-              		if ( in_array($home_id, $act) ) {
-              			$display = $other;
-              			$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EH1)');
-              		}
-              	}
-              	break;
+                case 'home':
+                  if ( count($act) > 0 ) {
+                    $home_id = get_option('page_for_posts');
+                    if ( $DW->wpml ) {
+                      $home_id = $DW->wpml_get_id($home_id);
+                      $DW->message('WPML ObjectID: ' . $home_id);
+                    }
 
-              case 'page':
-                if ( count($act) > 0 && is_page($act) ) {
-                  $display = $other;
-                  $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP1)');
-                }
-                break;
+                    if ( in_array($home_id, $act) ) {
+                      $display = $other;
+                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EH1)');
+                    }
+                  }
+                  break;
 
-              case 'author':
-                if ( count($act) > 0 && is_author($act) ) {
-                  $display = $other;
-                  $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EA1)');
-                }
-                break;
+                case 'page':
+                  if ( count($act) > 0 ) {
+                    $post = $GLOBALS['post'];
+                    $id = $post->ID;
+                    if ( $DW->wpml ) {
+                      $id = $DW->wpml_get_id($id);
+                      $DW->message('WPML ObjectID: ' . $id);
+                    }
 
-              case 'category':
-                if ( count($act) > 0 && is_category($act) ) {
-                  $display = $other;
-                  $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EC1)');
-                }
-                break;
-            } // END switch ( $whereami )
+                    if ( in_array($id, $act) ) {
+                      $display = $other;
+                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP1)');
+                    }
+                  }
+                  break;
+
+                case 'author':
+                  if ( count($act) > 0 && is_author($act) ) {
+                    $display = $other;
+                    $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EA1)');
+                  }
+                  break;
+
+                case 'category':
+                  if ( count($act) > 0 ) {
+                    $category = get_the_category();
+                    $id = $category[0]->cat_ID;
+                    $DW->message('CatID: ' . $id);
+                    if ( $DW->wpml ) {
+                      $id = $DW->wpml_get_id($id, 'tax_category');
+                      $DW->message('WPML ObjectID: ' . $id);
+                    }
+
+                    if ( in_array($id, $act) ) {
+                      $display = $other;
+                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EC1)');
+                    }
+                  }
+                  break;
+              } // END switch ( $whereami )
+            } // END if/else ( $custom_post_type )
           } /* END if ( count($opt) > 0 ) */
 
           if (! $display || ! $role || ! $date ) {

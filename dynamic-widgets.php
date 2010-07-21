@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Dynamic Widgets
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
- * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules by roles, dates, for the homepage, single posts, pages, authors, categories, archives, error and the search page.
+ * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules by roles, dates, for the homepage, single posts, pages, authors, categories, archives, error page, search page and custom post types.
  * Author: Jacco
- * Version: 1.3.1
+ * Version: 1.3.3
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
  *
@@ -18,15 +18,24 @@
  * @version $Id$
  */
 
+/*
+   WPML Plugin support via API
+   Using functions  wpml_get_default_language() > dynwid_worker.php
+                    wpml_get_current_language() > dynwid_worker.php, dynwid_class.php, dynwid_class_php4.php
+                    wpml_get_content_translation() > dynwid_class.php, dynwid_class_php4.php
+*/
+
   // Constants
   define('DW_DEBUG', FALSE);
   define('DW_DB_TABLE', 'dynamic_widgets');
   define('DW_LIST_LIMIT', 20);
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
-  define('DW_VERSION', '1.3.2');
+  define('DW_VERSION', '1.3.3');
   define('DW_VERSION_URL_CHECK', 'http://www.qurl.nl/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
+	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
+	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
 
-  // Class version to use
+	// Class version to use
   if ( version_compare(PHP_VERSION, '5.0.0', '<') ) {
     define('DW_CLASSFILE', 'dynwid_class_php4.php');
   } else {
@@ -35,6 +44,46 @@
   require_once(dirname(__FILE__) . '/' . DW_CLASSFILE);
 
   // Functions
+	function dynwid_activate() {
+		$wpdb = $GLOBALS['wpdb'];
+		$dbtable = $wpdb->prefix . DW_DB_TABLE;
+
+		$query = "CREATE TABLE IF NOT EXISTS " . $dbtable . " (
+                id int(11) NOT NULL auto_increment,
+                widget_id varchar(40) NOT NULL,
+                maintype varchar(20) NOT NULL,
+                `name` varchar(40) NOT NULL,
+                `value` longtext NOT NULL,
+              PRIMARY KEY  (id),
+              KEY widget_id (widget_id,maintype)
+            );";
+		$wpdb->query($query);
+
+		// Version check
+		$version = get_option('dynwid_version');
+		if ( $version !== FALSE ) {
+/*    1.2 > Added support for widget display setting options for Author Pages.
+   Need to apply archive rule to author also to keep same behavior. */
+			if ( version_compare($version, '1.2', '<') ) {
+				$query = "SELECT widget_id FROM " . $dbtable . " WHERE maintype = 'archive'";
+				$results = $wpdb->get_results($query);
+				foreach ( $results as $myrow ) {
+					$query = "INSERT INTO " .$dbtable . "(widget_id, maintype, value) VALUES ('" . $myrow->widget_id . "', 'author', '0')";
+					$wpdb->query($query);
+				}
+			}
+
+/*    1.3 > Added Date (range) support.
+   Need to change DB `value` to a LONGTEXT type
+   (not for the date of course, but for supporting next features which might need a lot of space) */
+			if ( version_compare($version, '1.3', '<') ) {
+				$query = "ALTER TABLE " . $dbtable . " CHANGE `value` `value` LONGTEXT NOT NULL";
+				$wpdb->query($query);
+			}
+		}
+		update_option('dynwid_version', DW_VERSION);
+	}
+
   function dynwid_add_admin_menu() {
     $DW = &$GLOBALS['DW'];
 
@@ -242,43 +291,16 @@
   }
 
 	function dynwid_install() {
-		$wpdb = $GLOBALS['wpdb'];
-    $dbtable = $wpdb->prefix . DW_DB_TABLE;
-
-    $query = "CREATE TABLE IF NOT EXISTS " . $dbtable . " (
-                id int(11) NOT NULL auto_increment,
-                widget_id varchar(40) NOT NULL,
-                maintype varchar(20) NOT NULL,
-                `name` varchar(40) NOT NULL,
-                `value` longtext NOT NULL,
-              PRIMARY KEY  (id),
-              KEY widget_id (widget_id,maintype)
-            );";
-    $wpdb->query($query);
-
-    // Version check
-    $version = get_option('dynwid_version');
-    if ( $version !== FALSE ) {
-/*    1.2 > Added support for widget display setting options for Author Pages.
-      Need to apply archive rule to author also to keep same behavior. */
-      if ( version_compare($version, '1.2', '<') ) {
-        $query = "SELECT widget_id FROM " . $dbtable . " WHERE maintype = 'archive'";
-        $results = $wpdb->get_results($query);
-        foreach ( $results as $myrow ) {
-          $query = "INSERT INTO " .$dbtable . "(widget_id, maintype, value) VALUES ('" . $myrow->widget_id . "', 'author', '0')";
-          $wpdb->query($query);
-        }
-      }
-
-/*    1.3 > Added Date (range) support.
-      Need to change DB `value` to a LONGTEXT type
-      (not for the date of course, but for supporting next features which might need a lot of space) */
-      if ( version_compare($version, '1.3', '<') ) {
-        $query = "ALTER TABLE " . $dbtable . " CHANGE `value` `value` LONGTEXT NOT NULL";
-        $wpdb->query($query);
-      }
-    }
-    update_option('dynwid_version', DW_VERSION);
+		if ( function_exists('is_multisite') ) {
+			if ( is_multisite() && $_GET['networkwide'] == '1' ) {
+				$plugin = plugin_basename(__FILE__);
+				deactivate_plugins($plugin);
+			} else {
+				dynwid_activate();
+			}
+		} else {
+			dynwid_activate();
+		}
 	}
 
 	function dynwid_save_postdata($post_id) {
@@ -401,6 +423,19 @@
 	                'e404'        => 'Error Page',
 	                'search'      => 'Search page'
 	              );
+
+      // Adding Custom Post Types to $buffer
+	    if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
+	      $args = array(
+	                'public'   => TRUE,
+	                '_builtin' => FALSE
+	              );
+	      $post_types = get_post_types($args, 'objects', 'and');
+	      foreach ( $post_types as $ctid ) {
+	        $buffer[key($post_types)] = $ctid->label;
+	      }
+      }
+
 	    $opt = $DW->getOptions($widget_id, NULL);
 	    foreach ( $opt as $widget ) {
 	      $type = $widget['maintype'];
@@ -418,7 +453,9 @@
 	    $last = count($s) - 1;
 	    for ( $i = 0; $i < $last; $i++ ) {
 	      $type = $s[$i];
-	      $string .= $buffer[$type];
+	      if (! empty($buffer[$type]) ) {
+	        $string .= $buffer[$type];
+	      }
 	      $string .= ( ($last - 1) == $i ) ? ' and ' : ', ';
 	    }
 	    $type = $s[$last];

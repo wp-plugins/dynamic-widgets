@@ -74,6 +74,29 @@
       $work = TRUE;
     }
   }
+
+  // Custom Types (WP >= 3.0)
+  if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
+    if (! $work  ) {
+      foreach ( $_POST['post_types'] as $type ) {
+        if ( $_POST[$type] == 'yes' ) {
+          $work = TRUE;
+          break;
+        }
+      }
+    }
+
+    if (! $work ) {
+      foreach ( $_POST['post_types'] as $type ) {
+        $field = $type . '_act';
+        if ( count($_POST[$field]) > 0 ) {
+          $work = TRUE;
+          break;
+        }
+      }
+    }
+  }
+
   if (! $work ) {
     wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
     die();
@@ -173,6 +196,18 @@
   // Search
   if ( $_POST['search'] == 'no' ) {
     $DW->addSingleOption($_POST['widget_id'], 'search');
+  }
+
+  // Custom Types (WP >= 3.0)
+  if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
+    foreach ( $_POST['post_types'] as $type ) {
+      $act_field = $type . '_act';
+      if ( count($_POST[$act_field]) > 0 ) {
+        $DW->addMultiOption($_POST['widget_id'], $type, $_POST[$type], $_POST[$act_field]);
+      } else if ( $_POST[$type] == 'no' ) {
+        $DW->addSingleOption($_POST['widget_id'], $type);
+      }
+    }
   }
 
   // Redirect to ReturnURL
