@@ -7,7 +7,7 @@
 
   // Security - nonce
   check_admin_referer('plugin-name-action_edit_' . $_POST['widget_id']);
-  
+
   // Checking basic stuff
   if ( $_POST['role'] == 'no' && count($_POST['role_act']) == 0 ) {
     wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
@@ -19,7 +19,7 @@
     $date_start = trim($_POST['date_start']);
     $date_end = trim($_POST['date_end']);
 
-    if (! ereg('^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$', $date_start) && ! ereg('^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$', $date_end) ) {
+    if (! preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $date_start) && ! preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $date_end) ) {
       wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
       die();
     }
@@ -76,7 +76,7 @@
   }
 
   // Custom Types (WP >= 3.0)
-  if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
+  if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') && isset($_POST['post_types']) ) {
     if (! $work  ) {
       foreach ( $_POST['post_types'] as $type ) {
         if ( $_POST[$type] == 'yes' ) {
@@ -113,10 +113,10 @@
   // Date
   if ( $_POST['date'] == 'no' ) {
     $dates = array();
-    if ( ereg('^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$', $date_start) ) {
+    if ( preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $date_start) ) {
       $dates['date_start'] = $date_start;
     }
-    if ( ereg('^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$', $date_end) ) {
+    if ( preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $date_end) ) {
       $dates['date_end'] = $date_end;
     }
 
