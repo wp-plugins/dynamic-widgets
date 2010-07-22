@@ -7,7 +7,7 @@
 
   // Security - nonce
   check_admin_referer('plugin-name-action_edit_' . $_POST['widget_id']);
-
+  
   // Checking basic stuff
   if ( $_POST['role'] == 'no' && count($_POST['role_act']) == 0 ) {
     wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
@@ -199,7 +199,7 @@
   }
 
   // Custom Types (WP >= 3.0)
-  if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
+  if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') && isset($_POST['post_types']) ) {
     foreach ( $_POST['post_types'] as $type ) {
       $act_field = $type . '_act';
       if ( count($_POST[$act_field]) > 0 ) {

@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
 Requires at least: 2.9.1
 Tested up to: 3.0
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 
 Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages.
 
@@ -87,6 +87,10 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.3.4 =
+
+* Bugfix for minor flaw "Invalid argument supplied for foreach() in dynwid_admin_save.php on line 203"
 
 = Version 1.3.3 =
 
