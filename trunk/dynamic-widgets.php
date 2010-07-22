@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules by roles, dates, for the homepage, single posts, pages, authors, categories, archives, error page, search page and custom post types.
  * Author: Jacco
- * Version: 1.3.3
+ * Version: 1.3.4
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
  *
@@ -30,7 +30,7 @@
   define('DW_DB_TABLE', 'dynamic_widgets');
   define('DW_LIST_LIMIT', 20);
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
-  define('DW_VERSION', '1.3.3');
+  define('DW_VERSION', '1.3.4');
   define('DW_VERSION_URL_CHECK', 'http://www.qurl.nl/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
