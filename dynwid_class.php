@@ -198,7 +198,7 @@
         $whereami = 'page';
       }
 
-      $query = "SELECT widget_id FROM " . $this->dbtable . "
+      $query = "SELECT DISTINCT widget_id FROM " . $this->dbtable . "
                   WHERE maintype LIKE '" . $whereami . "%' OR maintype = 'role' OR maintype = 'date'";
       $results = $this->wpdb->get_results($query);
       foreach ( $results as $myrow ) {
