@@ -5,55 +5,15 @@
  * @version $Id$
  */
 
-  $DW->message('Dynamic Widgets INIT');
-
-  // WPML Plugin Support
-  if ( defined('ICL_PLUGIN_PATH') ) {
-    $wpml_api = ICL_PLUGIN_PATH . DW_WPML_API;
-
-    if ( file_exists($wpml_api) ) {
-      require_once($wpml_api);
-
-      $wpmlang = wpml_get_default_language();
-      $curlang = wpml_get_current_language();
-
-      if ( $wpmlang != $curlang ) {
-      	$DW->wpml = TRUE;
-      	$DW->message('WPML enabled, default language: ' . $wpmlang);
-      }
-    }
-  }
-
-  $DW->message('User has role(s): ' . implode(', ', $DW->userrole));
-
-  $custom_post_type = FALSE;
-  $whereami = $DW->detectPage();
-  $DW->message('Page is ' . $whereami);
-  if ( $whereami == 'single' ) {
-    $post = $GLOBALS['post'];
-    $DW->message('post_id = ' . $post->ID);
-
-    /* WordPress 3.0 and higher: Custom Post Types */
-    if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
-      $post_type = get_post_type($post);
-      $DW->message('Post Type = ' . $post_type);
-      if ( $post_type != 'post' ) {
-        $custom_post_type = TRUE;
-        $whereami = $post_type;
-        $DW->message('Custom Post Type detected, page changed to ' . $whereami);
-      }
-    }
-  }
-  $DW->dwList($whereami);
-
-  foreach ( $DW->sidebars as $sidebar_id => $widgets ) {
+  foreach ( $sidebars as $sidebar_id => $widgets ) {
     // Only processing active sidebars with widgets
     if ( $sidebar_id != 'wp_inactive_widgets' && count($widgets) > 0 ) {
-      foreach ( $widgets as $widget_id ) {
+      foreach ( $widgets as $widget_key => $widget_id ) {
         // Check if the widget has options set
         if ( in_array($widget_id, $DW->dynwid_list) ) {
           $act = array();
-          $opt = $DW->getOptions($widget_id, $whereami, FALSE);
+        	$DW->message('WhereAmI = ' . $DW->whereami);
+          $opt = $DW->getOptions($widget_id, $DW->whereami, FALSE);
           $DW->message('Number of rules to check for widget ' . $widget_id . ': ' . count($opt));
           $display = TRUE;
           $role = TRUE;
@@ -141,7 +101,7 @@
             $e = ( $other ) ? 'TRUE' : 'FALSE';
 
             // Display exceptions (custom post type)
-            if ( $custom_post_type ) {
+            if ( $DW->custom_post_type ) {
               // Custom Post Type behaves the same as a single post
               if ( count($act) > 0 ) {
                 $id = $post->ID;
@@ -158,7 +118,7 @@
               }
             } else {
               // no custom post type
-              switch ( $whereami ) {
+              switch ( $DW->whereami ) {
                 case 'single':
                   $act_author = array();
                   $act_category = array();
@@ -302,13 +262,17 @@
                     }
                   }
                   break;
-              } // END switch ( $whereami )
-            } // END if/else ( $custom_post_type )
+              } // END switch ( $DW->whereami )
+            } // END if/else ( $DW->custom_post_type )
           } /* END if ( count($opt) > 0 ) */
 
           if (! $display || ! $role || ! $date ) {
-            $DW->message('Removed ' . $widget_id . ' from display');
-            unset($DW->registered_widgets[$widget_id]);
+            $DW->message('Removed ' . $widget_id . ' from display, SID = ' . $sidebar_id . ' / WID = ' . $widget_id . ' / KID = ' . $widget_key);
+          	if ( DW_OLD_METHOD ) {
+          		unset($DW->registered_widgets[$widget_id]);
+          	} else {
+          		unset($sidebars[$sidebar_id][$widget_key]);
+          	}
           }
         } // END if ( in_array($widget_id, $DW->dynwid_list) )
       } // END foreach ( $widgets as $widget_id )

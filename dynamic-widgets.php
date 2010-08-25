@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules by roles, dates, for the homepage, single posts, pages, authors, categories, archives, error page, search page and custom post types.
  * Author: Jacco
- * Version: 1.3.4
+ * Version: 1.3.5
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
  *
@@ -30,7 +30,8 @@
   define('DW_DB_TABLE', 'dynamic_widgets');
   define('DW_LIST_LIMIT', 20);
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
-  define('DW_VERSION', '1.3.4');
+  define('DW_OLD_METHOD', get_option('dynwid_old_method'));
+  define('DW_VERSION', '1.3.5');
   define('DW_VERSION_URL_CHECK', 'http://www.qurl.nl/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -269,6 +270,22 @@
     }
   }
 
+  function dynwid_filter_init() {
+  	$DW = &$GLOBALS['DW'];
+  	require(dirname(__FILE__) . '/dynwid_init_worker.php');
+  }
+
+  function dynwid_filter_widgets() {
+  	$DW = &$GLOBALS['DW'];
+
+  	dynwid_filter_init();
+  	if ( DW_OLD_METHOD ) {
+  		dynwid_worker($DW->sidebars);
+  	} else {
+  		add_filter('sidebars_widgets', 'dynwid_worker');
+  	}
+  }
+
   function dynwid_init() {
     $GLOBALS['DW'] = new dynWid();
 
@@ -279,14 +296,14 @@
   	  }
 
 			add_action('admin_menu', 'dynwid_add_admin_menu');
-  	  add_action('edit_tag_form_fields', 'dynwid_add_tag_page');
-  	  add_action('edited_term', 'dynwid_save_tagdata');
-  	  add_action('in_plugin_update_message-' . plugin_basename(__FILE__), 'dynwid_check_version', 10, 2);
+	 		add_action('edit_tag_form_fields', 'dynwid_add_tag_page');
+	 		add_action('edited_term', 'dynwid_save_tagdata');
+	 		add_action('in_plugin_update_message-' . plugin_basename(__FILE__), 'dynwid_check_version', 10, 2);
 			add_action('plugin_action_links_' . plugin_basename(__FILE__), 'dynwid_add_plugin_actions');
-  	  add_action('save_post', 'dynwid_save_postdata');
-  	  add_action('sidebar_admin_setup', 'dynwid_add_widget_control');
+	 	  add_action('save_post', 'dynwid_save_postdata');
+	 	  add_action('sidebar_admin_setup', 'dynwid_add_widget_control');
 		} else {
-			add_action('wp_head', 'dynwid_worker');
+			add_action('wp_head', 'dynwid_filter_widgets');
 		}
   }
 
@@ -469,9 +486,11 @@
 	  echo '</p>';
 	}
 
-	function dynwid_worker() {
+	function dynwid_worker($sidebars) {
 	  $DW = &$GLOBALS['DW'];
-	  require_once(dirname(__FILE__) . '/dynwid_worker.php');
+	  require(dirname(__FILE__) . '/dynwid_worker.php');
+
+		return $sidebars;
 	}
 
   // Hooks
