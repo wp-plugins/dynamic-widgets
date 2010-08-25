@@ -17,6 +17,18 @@
 </div>
 <?php
   }
+  if ( $_GET['action'] == 'dynwid_set_method' ) {
+  	if ( $_GET['oldmethod'] == 'on' ) {
+  		update_option('dynwid_old_method', TRUE);
+  	} else {
+  		update_option('dynwid_old_method', FALSE);
+  	}
+?>
+<div class="updated fade" id="message">
+	<p><strong>Method set to <?php echo ( get_option('dynwid_old_method') ? '\'OLD\'' : '\'FILTER\'' ); ?>.</strong></p>
+</div>
+<?php
+  }
 
   foreach ( $DW->sidebars as $sidebar_id => $widgets ) {
     if ( count($widgets) > 0 ) {
@@ -93,6 +105,15 @@
   }
 ?>
 .<br />
+
+<br />
+<div id="method">
+	<form id="dynwid_method" action="" method="get">
+		<input type="hidden" name="page" value="dynwid-config" />
+		<input type="hidden" name="action" value="dynwid_set_method" />
+		<input type="checkbox" id="oldmethod" name="oldmethod" <?php echo ( get_option('dynwid_old_method') ? 'checked="checked"' : '' ) ?> onchange="document.getElementById('dynwid_method').submit();" /> <label for="oldmethod">Use 'OLD' method</label>
+</form>
+</div>
 
 <br />
 For debugging purposes it is possible you're asked to create a dump. Click the 'Create dump' button and save the text file.

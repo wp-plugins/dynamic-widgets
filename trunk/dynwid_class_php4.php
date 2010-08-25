@@ -7,6 +7,7 @@
  */
 
   class dynWid {
+  	var $custom_post_type;
     var $dbtable;                       /* private */
     var $dynwid_list;
     var $firstmessage;                  /* private */
@@ -16,6 +17,7 @@
     var $sidebars;
     var $plugin_url;
     var $userrole;
+  	var $whereami;
     var $wpdb;                          /* private */
     var $wpml;                          /* WPML Plugin support */
 
@@ -31,6 +33,7 @@
         $this->userrole = array('anonymous');
       }
 
+    	$this->custom_post_type = FALSE;
       $this->firstmessage = TRUE;
       $this->registered_sidebars = $GLOBALS['wp_registered_sidebars'];
       $this->registered_widget_controls = &$GLOBALS['wp_registered_widget_controls'];
@@ -43,8 +46,6 @@
 
       // WPML Plugin support
       $this->wpml = FALSE;
-
-      // $this->createList();
     }
 
     function addDate($widget_id, $dates) {
