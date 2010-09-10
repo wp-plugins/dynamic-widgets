@@ -3,14 +3,14 @@ Contributors: Qurl
 Donate link:
 Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
 Requires at least: 2.9.1
-Tested up to: 3.0
-Stable tag: 1.3.4
+Tested up to: 3.0.1
+Stable tag: 1.3.5
 
 Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages.
 
 == Description ==
 
-Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules by role, dates, for the homepage, single posts, pages, authors, categories, archives, error page, search page and custom post types.
+Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules with just a few mouse clicks by role, dates, for the homepage, single posts, pages, authors, categories, archives, error page, search page and custom post types.
 
 * Default widget display setting is supported for:
   - User roles
@@ -66,6 +66,14 @@ Yes, but only if you activate the plugin on a per site base. Network Activation 
 
 Did you save the options? If you did, you may try to hit the (i) icon a bit to the right and read the text which appears below.
 
+= The plugin slows down the loading of a page dramatically. Can you do something about it? =
+
+Try setting the plugin to the 'OLD' method. You can do this by clicking on the 'Advanced >' link at the bottom of the Widgets Overview page and check the box next to 'Use OLD method'. See if that helps. Setting the plugin using the 'OLD' method comes with a downside unfortunately. It may leave you behind with a visible empty sidebar.
+
+= I want in Page X the sidebar becomes empty, but instead several widgets are shown in that sidebar. Am I doing something wrong? =
+
+Your theme probably uses a 'default display widgets policy'. When a sidebar becomes empty, the theme detects this and places widgets by default in it. The plugin can't do anything about that. Ask the theme creator how to fix this.
+
 = You asked me to create a dump. How do I do that? =
 
 * Click at the bottom of the Widgets Overview page on the 'Advanced >' link.
@@ -86,7 +94,18 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 * Confirm you really want to uninstall the plugin. After the cleanup, the plugin is deactivated automaticly.
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
+== Release notes ==
+
+Starting with version 1.3.5 Dynamic Widgets is using a new method for removing widgets from the sidebar(s). This new method, called FILTER, is more in line with the way WordPress provides access for plugins to it's system. However this method comes with a downside. Due to it's nature it might slow down the process of removing widgets when you have and use many sidebars. For this, there is the OLD method. The OLD method uses the previous method before version 1.3.5. Downside of that method is it may leave you behind with a visible empty sidebar. There is a way to prevent this, but for that you have to have some PHP programming knowledge. Ask me for an example script if you need it. If you are using the standard WP Twenty Ten theme, you probably want to have a look at the [Twenty Ten Weaver](http://wpweaver.info/themes/twenty-ten-weaver/) theme. Bruce from WP Weaver fixed the empty sidebar with the help of this example script. So you don't need to fix it yourself.
+
+You can switch to the OLD method by clicking on the 'Advanced >' link in the Dynamic Widgets overview page and checking 'Use OLD method'.
+
 == Changelog ==
+
+= Version 1.3.5 =
+
+* Added support for themes which use the WP function is_active_sidebar() when the method is set to FILTER (default).
+* Bugfix by removing a possible unnecessary loop for dynamic widget options.
 
 = Version 1.3.4 =
 
