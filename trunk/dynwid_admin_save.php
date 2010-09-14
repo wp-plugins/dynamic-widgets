@@ -233,7 +233,7 @@
     $q[ ] = 'dynwid_save=yes';
     $q[ ] = 'widget_id=' . $_POST['widget_id'];
 
-    wp_redirect( get_option('siteurl') . $script_url . '?' . implode('&', $q) );
+    wp_redirect( $script_url . '?' . implode('&', $q) );
     die();
   }
 ?>

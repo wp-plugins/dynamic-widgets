@@ -313,7 +313,7 @@ label {
 <h3>Edit options for <em><?php echo $DW->getName($_GET['id']); ?></em> Widget</h3>
 <?php echo ( DW_DEBUG ) ? '<pre>ID = ' . $_GET['id'] . '</pre><br />' : ''; ?>
 
-<form action="<?php echo attribute_escape($_SERVER['REQUEST_URI']); ?>" method="post">
+<form action="<?php echo trailingslashit(admin_url()) . 'themes.php?page=dynwid-config'; ?>" method="post">
 <?php wp_nonce_field('plugin-name-action_edit_' . $_GET['id']); ?>
 <input type="hidden" name="dynwid_save" value="yes" />
 <input type="hidden" name="widget_id" value="<?php echo $_GET['id']; ?>" />
@@ -568,8 +568,8 @@ Show widget on the search page?<br />
 <input class="button-primary" type="submit" value="Save" />
 </form>
 
-<?php $url = (! empty($_GET['returnurl']) ) ? $_GET['returnurl'] : 'themes.php?page=dynwid-config'; ?>
-<input class="button-secondary" type="submit" value="Return" style="position:relative;top:-23px;left:80px;" onclick="location.href='<?php echo $url; ?>'" />
+<?php $url = (! empty($_GET['returnurl']) ) ? urldecode($_GET['returnurl']) : trailingslashit(admin_url()) . 'themes.php?page=dynwid-config'; ?>
+<input class="button-secondary" type="button" value="Return" style="position:relative;top:-23px;left:80px;" onclick="location.href='<?php echo $url; ?>'" />
 
 <script type="text/javascript">
   function chkInPosts() {
