@@ -423,7 +423,7 @@
 
 	  // Now adding the dynwid text & link
 	  echo '<p><b>Dynamic Widgets</b><br />';
-	  echo 'This widget is <a title="Edit Dynamic Widgets Options" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=' . urlencode($_SERVER['REQUEST_URI']) . '">';
+	  echo 'This widget is <a title="Edit Dynamic Widgets Options" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=' . urlencode(trailingslashit(admin_url()) . 'widgets.php') . '">';
 	  echo ( $DW->hasOptions($widget_id) ) ? 'dynamic' : 'static';
 	  echo '</a>.';
 	  if ( $DW->hasOptions($widget_id) ) {
