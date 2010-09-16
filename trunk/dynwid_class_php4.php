@@ -20,6 +20,7 @@
   	var $whereami;
     var $wpdb;                          /* private */
     var $wpml;                          /* WPML Plugin support */
+    var $wpsc;														/* WPSC/WPEC Plugin support */
 
     /* Old constructor redirect to new constructor */
 		function dynWid() {
@@ -46,6 +47,9 @@
 
       // WPML Plugin support
       $this->wpml = FALSE;
+
+    	// WPSC/WPEC Plugin support
+    	$this->wpsc = FALSE;
     }
 
     function addDate($widget_id, $dates) {
@@ -298,20 +302,6 @@
     function resetOptions($widget_id) {
       $query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "'";
       $this->wpdb->query($query);
-    }
-
-    // WPML Plugin support
-    function wpml_get_id($content_id, $content_type = 'post_page') {
-      $language_code = wpml_get_default_language();
-      $lang = wpml_get_content_translation($content_type, $content_id, $language_code);
-
-      if ( is_array($lang) ) {
-        $id = $lang[$language_code];
-      } else {
-        $id = 0;
-      }
-
-      return $id;
     }
   }
 ?>
