@@ -20,17 +20,26 @@
 
 /*
    WPML Plugin support via API
+   Using constants	ICL_PLUGIN_PATH > dynwid_admin_edit.php
    Using functions  wpml_get_default_language() > dynwid_worker.php
-                    wpml_get_current_language() > dynwid_worker.php, dynwid_class.php, dynwid_class_php4.php
-                    wpml_get_content_translation() > dynwid_class.php, dynwid_class_php4.php
+                    wpml_get_current_language() > dynwid_worker.php, wpml.php
+                    wpml_get_content_translation() > wpml.php
+*/
+
+/*
+  WPSC/WPEC Plugin support
+ 	Using constants		WPSC_TABLE_PRODUCT_CATEGORIES	> dynwid_admin_edit.php, dynwid_init_worker.php, wpsc.php
+ 	Using vars 				$wpsc_query > dynwid_init_worker.php, wpsc.php
 */
 
   // Constants
   define('DW_DEBUG', FALSE);
   define('DW_DB_TABLE', 'dynamic_widgets');
+  define('DW_L10N_DOMAIN', 'dynamic-widgets');
   define('DW_LIST_LIMIT', 20);
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
   define('DW_OLD_METHOD', get_option('dynwid_old_method'));
+  define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_VERSION', '1.3.5');
   define('DW_VERSION_URL_CHECK', 'http://www.qurl.nl/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
@@ -94,14 +103,14 @@
 
     // Contextual help
     if ( $_GET['action'] == 'edit' ) {
-      $help  = 'Widgets are always displayed by default (The \'<em>Yes</em>\' selection).<br />';
-      $help .= 'Click on the <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" /> next to the options for more info.';
+      $help  = __('Widgets are always displayed by default', DW_L10N_DOMAIN) . ' (' . __('The') . ' \'<em>' . __('Yes') .'</em>\' ' . __('selection', DW_L10N_DOMAIN) . ').<br />';
+      $help .= __('Click on the', DW_L10N_DOMAIN) . ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" /> ' . __('next to the options for more info', DW_L10N_DOMAIN) . '.';
     } else {
-      $help  = '<p><strong>Static / Dynamic</strong><br />';
-      $help .= 'When a widget is <em>Static</em>, the widget uses the WordPress default. In other words, it\'s shown everywhere.<br />';
-      $help .= 'A widget is <em>Dynamic</em> when there are options set, i.e. not showing on the front page.</p>';
-      $help .= '<p><strong>Reset</strong><br />';
-      $help .= 'Reset makes the widget return to <em>Static</em>.</p>';
+      $help  = '<p><strong>' . __('Static', DW_L10N_DOMAIN) . ' / ' . __('Dynamic', DW_L10N_DOMAIN) . '</strong><br />';
+      $help .= __('When a widget is', DW_L10N_DOMAIN) . ' <em>' . __('Static', DW_L10N_DOMAIN) . '</em>, ' . __('the widget uses the WordPress default. In other words, it\'s shown everywhere', DW_L10N_DOMAIN) . '.<br />';
+      $help .=  __('A widget is', DW_L10N_DOMAIN) . ' <em>' . __('Dynamic', DW_L10N_DOMAIN) . '</em> ' . __('when there are options set, i.e. not showing on the front page.', DW_L10N_DOMAIN) . '</p>';
+      $help .= '<p><strong>' . __('Reset', DW_L10N_DOMAIN) . '</strong><br />';
+      $help .= __('Reset makes the widget return to', DW_L10N_DOMAIN) . ' <em>' . __('Static', DW_L10N_DOMAIN) . '</em>.</p>';
     }
     add_contextual_help($screen, $help);
 
@@ -295,6 +304,8 @@
   	    require_once(dirname(__FILE__) . '/dynwid_admin_save.php');
   	  }
 
+  		load_plugin_textdomain(DW_L10N_DOMAIN, FALSE, dirname(plugin_basename(__FILE__)) . '/locale');
+
 			add_action('admin_menu', 'dynwid_add_admin_menu');
 	 		add_action('edit_tag_form_fields', 'dynwid_add_tag_page');
 	 		add_action('edited_term', 'dynwid_save_tagdata');
@@ -423,22 +434,23 @@
 
 	  // Now adding the dynwid text & link
 	  echo '<p><b>Dynamic Widgets</b><br />';
-	  echo 'This widget is <a title="Edit Dynamic Widgets Options" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=' . urlencode(trailingslashit(admin_url()) . 'widgets.php') . '">';
-	  echo ( $DW->hasOptions($widget_id) ) ? 'dynamic' : 'static';
+	  echo __('This widget is', DW_L10N_DOMAIN) . ' <a title="Edit Dynamic Widgets Options" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=' . urlencode(trailingslashit(admin_url()) . 'widgets.php') . '">';
+	  echo ( $DW->hasOptions($widget_id) ) ? strtolower(__('Dynamic', DW_L10N_DOMAIN)) : strtolower(__('Static', DW_L10N_DOMAIN));
 	  echo '</a>.';
 	  if ( $DW->hasOptions($widget_id) ) {
 	    $s = array();
 	    $buffer = array(
-	                'role'        => 'Role',
-	                'date'        => 'Date',
-	                'front-page'  => 'Front Page',
-	                'single'      => 'Single Posts',
-	                'page'        => 'Pages',
-	                'author'      => 'Author Pages',
-	                'category'    => 'Category Pages',
-	                'archive'     => 'Archive Pages',
-	                'e404'        => 'Error Page',
-	                'search'      => 'Search page'
+	                'role'        => __('Role'),
+	                'date'        => __('Date'),
+	                'front-page'  => __('Front Page', DW_L10N_DOMAIN),
+	                'single'      => __('Single Posts', DW_L10N_DOMAIN),
+	                'page'        => __('Pages'),
+	                'author'      => __('Author Pages', DW_L10N_DOMAIN),
+	                'category'    => __('Category Pages', DW_L10N_DOMAIN),
+	                'archive'     => __('Archive Pages', DW_L10N_DOMAIN),
+	                'e404'        => __('Error Page', DW_L10N_DOMAIN),
+	                'search'      => __('Search page', DW_L10N_DOMAIN),
+	                'wpsc'				=> __('WPSC Category', DW_L10N_DOMAIN)
 	              );
 
       // Adding Custom Post Types to $buffer
@@ -473,14 +485,14 @@
 	      if (! empty($buffer[$type]) ) {
 	        $string .= $buffer[$type];
 	      }
-	      $string .= ( ($last - 1) == $i ) ? ' and ' : ', ';
+	      $string .= ( ($last - 1) == $i ) ? ' ' . __('and', DW_L10N_DOMAIN) . ' ' : ', ';
 	    }
 	    $type = $s[$last];
 	    $string .= $buffer[$type];
 
-	    $output  = '<br /><small>Option';
-	    $output .= ( count($opt) > 1 ) ? 's' : '';
-      $output .= ' set for ' . $string . '.</small>';
+	    $output  = '<br /><small>';
+	    $output .= ( count($opt) > 1 ) ? __('Options set for', DW_L10N_DOMAIN) : __('Option set for', DW_L10N_DOMAIN);
+      $output .= ' ' . $string . '.</small>';
 	    echo $output;
 	  }
 	  echo '</p>';
@@ -488,6 +500,9 @@
 
 	function dynwid_worker($sidebars) {
 	  $DW = &$GLOBALS['DW'];
+		if ( $DW->wpsc ) {
+			$wpsc_query = &$GLOBALS['wpsc_query'];
+		}
 	  require(dirname(__FILE__) . '/dynwid_worker.php');
 
 		return $sidebars;

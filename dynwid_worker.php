@@ -107,7 +107,7 @@
                 $id = $post->ID;
                 $DW->message('PostID: ' . $id);
                 if ( $DW->wpml ) {
-                  $id = $DW->wpml_get_id($id, 'post_' . $post_type);
+                  $id = dw_wpml_get_id($id, 'post_' . $post_type);
                   $DW->message('WPML ObjectID: ' . $id);
                 }
 
@@ -132,7 +132,7 @@
                   foreach ( $categories as $category ) {
                     $id =  $category->cat_ID;
                     if ( $DW->wpml ) {
-                      $id = $DW->wpml_get_id($id, 'tax_category');
+                      $id = dw_wpml_get_id($id, 'tax_category');
                     }
                     $post_category[ ] = $id;
                   }
@@ -212,7 +212,7 @@
                   if ( count($act) > 0 ) {
                     $home_id = get_option('page_for_posts');
                     if ( $DW->wpml ) {
-                      $home_id = $DW->wpml_get_id($home_id);
+                      $home_id = dw_wpml_get_id($home_id);
                       $DW->message('WPML ObjectID: ' . $home_id);
                     }
 
@@ -228,7 +228,7 @@
                     $post = $GLOBALS['post'];
                     $id = $post->ID;
                     if ( $DW->wpml ) {
-                      $id = $DW->wpml_get_id($id);
+                      $id = dw_wpml_get_id($id);
                       $DW->message('WPML ObjectID: ' . $id);
                     }
 
@@ -252,7 +252,7 @@
                     $id = $category[0]->cat_ID;
                     $DW->message('CatID: ' . $id);
                     if ( $DW->wpml ) {
-                      $id = $DW->wpml_get_id($id, 'tax_category');
+                      $id = dw_wpml_get_id($id, 'tax_category');
                       $DW->message('WPML ObjectID: ' . $id);
                     }
 
@@ -262,6 +262,16 @@
                     }
                   }
                   break;
+
+              	case 'wpsc':
+              		if ( count($act) > 0 ) {
+              			if ( is_dw_wpsc_category($act) ) {
+              				$display = $other;
+              				$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EWPSC1)');
+              			}
+              		}
+              		break;
+
               } // END switch ( $DW->whereami )
             } // END if/else ( $DW->custom_post_type )
           } /* END if ( count($opt) > 0 ) */

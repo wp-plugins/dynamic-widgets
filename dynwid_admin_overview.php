@@ -12,7 +12,7 @@
 ?>
 <div class="updated fade" id="message">
   <p>
-    <strong>Widget options have been reset to default.</strong><br />
+    <strong><?php _e('Widget options have been reset to default.', DW_L10N_DOMAIN); ?></strong><br />
   </p>
 </div>
 <?php
@@ -56,21 +56,21 @@
   ?>
   <tr>
     <td class="name">
-      <p class="row-title"><a title="Edit this widget options" href="themes.php?page=dynwid-config&amp;action=edit&amp;id=<?php echo $widget_id; ?>"><?php echo $name; ?></a></p>
+      <p class="row-title"><a title="<?php _e('Edit this widget options', DW_L10N_DOMAIN); ?>" href="themes.php?page=dynwid-config&amp;action=edit&amp;id=<?php echo $widget_id; ?>"><?php echo $name; ?></a></p>
       <div class="row-actions">
        <span class="edit">
-          <a title="Edit this widget options" href="themes.php?page=dynwid-config&amp;action=edit&amp;id=<?php echo $widget_id; ?>">Edit</a>
+          <a title="Edit this widget options" href="themes.php?page=dynwid-config&amp;action=edit&amp;id=<?php echo $widget_id; ?>"><?php _e('Edit'); ?></a>
         </span>
         <?php if ( $DW->hasOptions($widget_id) ) { ?>
         <span class="delete">
         <?php $href = wp_nonce_url('themes.php?page=dynwid-config&amp;action=reset&amp;id=' . $widget_id, 'plugin-name-action_reset_' . $widget_id); ?>
-          | <a class="submitdelete" title="Reset widget to Static" onclick="if ( confirm('You are about to reset this widget \'<?php echo strip_tags($DW->getName($widget_id)); ?>\'\n \'Cancel\' to stop, \'OK\' to reset.') ) { return true;}return false;" href="<?php echo $href; ?>">Reset</a>
+          | <a class="submitdelete" title="<?php _e('Reset widget to Static', DW_L10N_DOMAIN); ?>" onclick="if ( confirm('You are about to reset this widget \'<?php echo strip_tags($DW->getName($widget_id)); ?>\'\n \'Cancel\' to stop, \'OK\' to reset.') ) { return true;}return false;" href="<?php echo $href; ?>">Reset</a>
         </span>
         <?php } ?>
       </div>
     </td>
     <td>
-      <?php echo ( $DW->hasOptions($widget_id) ) ? 'Dynamic' : 'Static'; ?>
+      <?php echo ( $DW->hasOptions($widget_id) ) ? __('Dynamic', DW_L10N_DOMAIN) : __('Static', DW_L10N_DOMAIN); ?>
     </td>
   </tr>
   <?php   } // END if (! empty($name) ) ?>
@@ -85,7 +85,7 @@
 
 <div class="clear"><br /><br /></div>
 
-<a href="#" onclick="jQuery('#un').slideToggle('fast'); return false;">Advanced &gt;</a>
+<a href="#" onclick="jQuery('#un').slideToggle('fast'); return false;"><?php _e('Advanced'); ?> &gt;</a>
 <div id="un" style="display:none">
 <br /> <strong>wp_head() check: </strong>
 <?php

@@ -22,6 +22,7 @@
 			if ( $wpmlang != $curlang ) {
 				$DW->wpml = TRUE;
 				$DW->message('WPML enabled, default language: ' . $wpmlang);
+				require_once(DW_PLUGIN . 'wpml.php');
 			}
 		}
 	}
@@ -31,6 +32,7 @@
 	$custom_post_type = FALSE;
 	$DW->whereami = $DW->detectPage();
 	$DW->message('Page is ' . $DW->whereami);
+
 	if ( $DW->whereami == 'single' ) {
 		$post = $GLOBALS['post'];
 		$DW->message('post_id = ' . $post->ID);
@@ -46,6 +48,22 @@
 			}
 		}
 	}
+
+	if ( $DW->whereami == 'page' ) {
+		// WPSC/WPEC Plugin Support
+		if ( defined('WPSC_TABLE_PRODUCT_CATEGORIES') ) {
+			$wpsc_query = &$GLOBALS['wpsc_query'];
+
+			if ( $wpsc_query->category > 0 ) {
+				$DW->wpsc = TRUE;
+				$DW->whereami = 'wpsc';
+				$DW->message('WPSC detected, page changed to ' . $DW->whereami . ', category: ' . $wpsc_query->category);
+
+				require_once(DW_PLUGIN . 'wpsc.php');
+			}
+		}
+	}
+
 	$DW->dwList($DW->whereami);
 
 ?>

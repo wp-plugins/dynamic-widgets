@@ -19,6 +19,7 @@
   	public  $whereami;
     private $wpdb;
     public  $wpml;		// WPML Plugin support
+    public  $wpsc;		// WPSC/WPEC Plugin support
 
     public function __construct() {
       if ( is_user_logged_in() ) {
@@ -40,6 +41,9 @@
 
 			// WPML Plugin support
       $this->wpml = FALSE;
+
+    	// WPSC/WPEC Plugin support
+    	$this->wpsc = FALSE;
     }
 
     public function addDate($widget_id, $dates) {
@@ -291,20 +295,6 @@
     public function resetOptions($widget_id) {
       $query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "'";
       $this->wpdb->query($query);
-    }
-
-    // WPML Plugin support
-    public function wpml_get_id($content_id, $content_type = 'post_page') {
-      $language_code = wpml_get_default_language();
-      $lang = wpml_get_content_translation($content_type, $content_id, $language_code);
-
-      if ( is_array($lang) ) {
-        $id = $lang[$language_code];
-      } else {
-        $id = 0;
-      }
-
-      return $id;
     }
   }
 ?>

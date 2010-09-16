@@ -11,9 +11,15 @@
 		$wpml_icon = '<img src="' . $DW->plugin_url . DW_WPML_ICON . '" alt="WMPL" title="Dynamic Widgets syncs with other languages of these pages via WPML" />';
 	}
 
+	// WPSC/WPEC Plugin support (http://getshopped.org)
+	if ( defined('WPSC_TABLE_PRODUCT_CATEGORIES') ) {
+		$DW->wpsc = TRUE;
+		require_once(DW_PLUGIN . 'wpsc.php');
+	}
+
   // Roles
   $wp_roles = $GLOBALS['wp_roles'];
-  $roles = array_merge($wp_roles->role_names, array('anonymous' => 'Anonymous|User role'));
+  $roles = array_merge($wp_roles->role_names, array('anonymous' => __('Anonymous') . '|User role'));
   $jsroles = array();
   foreach ( $roles as $rid => $role ) {
     $roles[esc_attr($rid)] = translate_user_role($role);
@@ -266,6 +272,33 @@
       unset($search_yes_selected);
     }
   }
+
+  // WPSC/WPEC
+  if ( $DW->wpsc ) {
+  	// Categories
+  	$wpsc_yes_selected = 'checked="checked"';
+  	$opt_wpsc = $DW->getOptions($_GET['id'], 'wpsc');
+  	if ( count($opt_wpsc) > 0 ) {
+    	$wpsc_act = array();
+    	foreach ( $opt_wpsc as $wpsc_condition ) {
+      	if ( $wpsc_condition['name'] == 'default' || empty($wpsc_condition['name']) ) {
+        	$wpsc_default = $wpsc_condition['value'];
+      	} else {
+        	$wpsc_act[ ] = $wpsc_condition['name'];
+      	}
+    	}
+
+    	if ( $wpsc_default == '0' ) {
+      	$wpsc_no_selected = $wpsc_yes_selected;
+      	unset($wpsc_yes_selected);
+    	}
+  	}
+
+  	$wpsc = dw_wpsc_get_categories();
+  	if ( count($wpsc) > DW_LIST_LIMIT ) {
+    	$wpsc_condition_select_style = DW_LIST_STYLE;
+  	}
+  }
 ?>
 
 <style type="text/css">
@@ -296,7 +329,7 @@ label {
 <?php if ( $_POST['dynwid_save'] == 'yes' ) { ?>
 <div class="updated fade" id="message">
   <p>
-    <strong>Widget options saved.</strong> <a href="themes.php?page=dynwid-config">Return</a> to Dynamic Widgets overview.
+    <strong><?php _e('Widget options saved.'); ?></strong> <a href="themes.php?page=dynwid-config">Return</a> to Dynamic Widgets overview.
   </p>
 </div>
 <?php } else if ( $_GET['work'] == 'none' ) { ?>
@@ -310,17 +343,17 @@ label {
 
 <?php } ?>
 
-<h3>Edit options for <em><?php echo $DW->getName($_GET['id']); ?></em> Widget</h3>
+<h3><?php _e('Edit options for', DW_L10N_DOMAIN); ?> <em><?php echo $DW->getName($_GET['id']); ?></em> <?php _e('Widget'); ?></h3>
 <?php echo ( DW_DEBUG ) ? '<pre>ID = ' . $_GET['id'] . '</pre><br />' : ''; ?>
 
-<form action="<?php echo trailingslashit(admin_url()) . 'themes.php?page=dynwid-config'; ?>" method="post">
+<form action="<?php echo trailingslashit(admin_url()) . 'themes.php?page=dynwid-config&action=edit&id=' . $_GET['id']; ?>" method="post">
 <?php wp_nonce_field('plugin-name-action_edit_' . $_GET['id']); ?>
 <input type="hidden" name="dynwid_save" value="yes" />
 <input type="hidden" name="widget_id" value="<?php echo $_GET['id']; ?>" />
 <input type="hidden" name="returnurl" value="<?php echo urldecode($_GET['returnurl']); ?>" />
 
-<b>Role</b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('role');" /><br />
-Show widget to everybody?
+<b><?php _e('Role'); ?></b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('role');" /><br />
+<?php _e('Show widget to everybody?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_role); ?>
 <div>
 <div id="role" class="infotext">
@@ -328,8 +361,8 @@ Show widget to everybody?
   Users who are not logged in, get the <em>Anonymous</em> role.
 </div>
 </div>
-<input type="radio" name="role" value="yes" id="role-yes" <?php echo $role_yes_selected; ?> onclick="swChb(cRole, true);" /> <label for="role-yes">Yes</label>
-<input type="radio" name="role" value="no" id="role-no" <?php echo $role_no_selected; ?> onclick="swChb(cRole, false)" /> <label for="role-no">No, only to:</label><br />
+<input type="radio" name="role" value="yes" id="role-yes" <?php echo $role_yes_selected; ?> onclick="swChb(cRole, true);" /> <label for="role-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="role" value="no" id="role-no" <?php echo $role_no_selected; ?> onclick="swChb(cRole, false)" /> <label for="role-no"><?php _e('No'); ?>, <?php _e('only to', DW_L10N_DOMAIN); ?>:</label><br />
 <div id="role-select" class="condition-select" <?php echo $role_condition_select_style; ?>>
 <?php foreach ( $roles as $rid => $role ) { ?>
 <input type="checkbox" id="role_act_<?php echo $rid; ?>" name="role_act[]" value="<?php echo $rid; ?>" <?php echo ( count($role_act) > 0 && in_array($rid,$role_act) ) ? 'checked="checked"' : ''; ?> /> <label for="role_act_<?php echo $rid; ?>"><?php echo $role; ?></label><br />
@@ -338,8 +371,8 @@ Show widget to everybody?
 
 <br />
 
-<b>Date</b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('date');" /><br />
-Show widget always?<br />
+<b><?php _e('Date'); ?></b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('date');" /><br />
+<?php _e('Show widget always?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_date); ?>
 <div>
 <div id="date" class="infotext">
@@ -350,16 +383,16 @@ Show widget always?<br />
   When you want the widget to stop displaying on a specific date, only fill in the To date.
 </div>
 </div>
-<input type="radio" name="date" value="yes" id="date-yes" <?php echo $date_yes_selected; ?> onclick="swTxt(cDate, true);" /> <label for="date-yes">Yes</label>
-<input type="radio" name="date" value="no" id="date-no" <?php echo $date_no_selected; ?> onclick="swTxt(cDate, false)" /> <label for="date-no">No, only:</label><br />
+<input type="radio" name="date" value="yes" id="date-yes" <?php echo $date_yes_selected; ?> onclick="swTxt(cDate, true);" /> <label for="date-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="date" value="no" id="date-no" <?php echo $date_no_selected; ?> onclick="swTxt(cDate, false)" /> <label for="date-no"><?php _e('No'); ?>, <?php _e('only', DW_L10N_DOMAIN); ?>:</label><br />
 <div id="date-select" class="condition-select">
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-  <td style="width:45px;">From</td>
+  <td style="width:45px;"><?php _e('From', DW_L10N_DOMAIN); ?></td>
   <td><input id="date_start" type="text" name="date_start" value="<?php echo $date_start; ?>" size="10" maxlength="10" /> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" onclick="showCalendar('date_start')" /></td>
 </tr>
 <tr>
-  <td style="width:45px;">To</td>
+  <td style="width:45px;"><?php _e('To', DW_L10N_DOMAIN); ?></td>
   <td><input id="date_end" type="text" name="date_end" value="<?php echo $date_end; ?>" size="10" maxlength="10" /> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" onclick="showCalendar('date_end')" /></td>
 </tr>
 </table>
@@ -367,8 +400,8 @@ Show widget always?<br />
 
 <br />
 
-<b>Front Page</b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('frontpage');" /><br />
-Show widget on the front page?<br />
+<b><?php _e('Front Page', DW_L10N_DOMAIN); ?></b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('frontpage');" /><br />
+<?php _e('Show widget on the front page?', DW_L10N_DOMAIN) ?><br />
 <?php $DW->dumpOpt($opt_frontpage); ?>
 <div>
 <div id="frontpage"  class="infotext">
@@ -376,13 +409,13 @@ Show widget on the front page?<br />
 	When a static page is set, you can use the options for the static pages below.
 </div>
 </div>
-<input type="radio" name="front-page" value="yes" id="front-page-yes" <?php echo $frontpage_yes_selected; ?> /> <label for="front-page-yes">Yes</label>
-<input type="radio" name="front-page" value="no" id="front-page-no" <?php echo $frontpage_no_selected; ?> /> <label for="front-page-no">No</label>
+<input type="radio" name="front-page" value="yes" id="front-page-yes" <?php echo $frontpage_yes_selected; ?> /> <label for="front-page-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="front-page" value="no" id="front-page-no" <?php echo $frontpage_no_selected; ?> /> <label for="front-page-no"><?php _e('No'); ?></label>
 
 <br /><br />
 
-<b>Single Posts</b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('single')" /><br />
-Show widget default on single posts?<br />
+<b><?php _e('Single Posts'); ?></b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('single')" /><br />
+<?php _e('Show widget default on single posts?', DW_L10N_DOMAIN) ?><br />
 <?php $DW->dumpOpt($opt_single); ?>
 <div>
 <div id="single" class="infotext">
@@ -390,11 +423,11 @@ Show widget default on single posts?<br />
   If you want to use the rules in a logical OR condition. Add the same widget again and apply the other rule to that.
 </div>
 </div>
-<input type="radio" name="single" value="yes" id="single-yes" <?php echo $single_yes_selected; ?> /> <label for="single-yes">Yes</label>
-<input type="radio" name="single" value="no" id="single-no" <?php echo $single_no_selected; ?> /> <label for="single-no">No</label><br />
+<input type="radio" name="single" value="yes" id="single-yes" <?php echo $single_yes_selected; ?> /> <label for="single-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="single" value="no" id="single-no" <?php echo $single_no_selected; ?> /> <label for="single-no"><?php _e('No'); ?></label><br />
 <?php $DW->dumpOpt($opt_individual); ?>
 <input type="checkbox" id="individual" name="individual" value="1" <?php echo ( $individual ) ? 'checked="checked"' : ''; ?> onclick="chkInPosts()" />
-<label for="individual">Make exception rule available to individual posts and tags. <?php echo $count_individual; ?></label>
+<label for="individual"><?php _e('Make exception rule available to individual posts and tags.', DW_L10N_DOMAIN) ?> <?php echo $count_individual; ?></label>
 <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('individual_post_tag')" />
 <div>
 <div id="individual_post_tag" class="infotext">
@@ -411,7 +444,7 @@ Show widget default on single posts?<br />
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
   <td valign="top">
-    Except the posts by author:
+    <?php _e('Except the posts by author', DW_L10N_DOMAIN); ?>:
     <?php $DW->dumpOpt($opt_single_author); ?>
     <div id="single-author-select" class="condition-select" <?php echo $author_condition_select_style; ?>>
     <?php foreach ( $authors as $author ) { ?>
@@ -422,7 +455,7 @@ Show widget default on single posts?<br />
   </td>
   <td style="width:10px"></td>
   <td valign="top">
-    Except the posts in category: <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?>
+    <?php _e('Except the posts in category', DW_L10N_DOMAIN); ?>: <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?>
     <?php $DW->dumpOpt($opt_single_category); ?>
     <div id="single-category-select" class="condition-select" <?php echo $category_condition_select_style; ?>>
     <?php foreach ( $category as $cat ) { ?>
@@ -436,12 +469,12 @@ Show widget default on single posts?<br />
 
 <br /><br />
 
-<b>Pages</b> <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?><br />
-Show widget default on static pages?<br />
+<b><?php _e('Pages'); ?></b> <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?><br />
+<?php _e('Show widget default on static pages?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_page); ?>
-<input type="radio" name="page" value="yes" id="page-yes" <?php echo $page_yes_selected; ?> /> <label for="page-yes">Yes</label>
-<input type="radio" name="page" value="no" id="page-no" <?php echo $page_no_selected; ?> /> <label for="page-no">No</label><br />
-Except the page(s):<br />
+<input type="radio" name="page" value="yes" id="page-yes" <?php echo $page_yes_selected; ?> /> <label for="page-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="page" value="no" id="page-no" <?php echo $page_no_selected; ?> /> <label for="page-no"><?php _e('No'); ?></label><br />
+<?php _e('Except the page(s)', DW_L10N_DOMAIN); ?>:<br />
 <div id="page-select" class="condition-select" <?php echo $page_condition_select_style; ?>>
 <?php foreach ( $pages as $page ) { ?>
 <input type="checkbox" id="page_act_<?php echo $page->ID; ?>" name="page_act[]" value="<?php echo $page->ID; ?>" <?php echo ( count($page_act) > 0 && in_array($page->ID,$page_act) ) ? 'checked="checked"' : ''; ?> /> <label for="page_act_<?php echo $page->ID; ?>"><?php echo $page->post_title; ?> <?php echo ( get_option('show_on_front') == 'page' && isset($static_page[$page->ID]) ? '(' . $static_page[$page->ID] . ')' : '' ) ?></label><br />
@@ -450,12 +483,12 @@ Except the page(s):<br />
 
 <br /><br />
 
-<b>Author Pages</b><br />
-Show widget default on author pages?<br />
+<b><?php _e('Author Pages', DW_L10N_DOMAIN); ?></b><br />
+<?php _e('Show widget default on author pages?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_author); ?>
-<input type="radio" name="author" value="yes" id="author-yes" <?php echo $author_yes_selected; ?> /> <label for="author-yes">Yes</label>
-<input type="radio" name="author" value="no" id="author-no" <?php echo $author_no_selected; ?> /> <label for="author-no">No</label><br />
-Except the author(s):<br />
+<input type="radio" name="author" value="yes" id="author-yes" <?php echo $author_yes_selected; ?> /> <label for="author-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="author" value="no" id="author-no" <?php echo $author_no_selected; ?> /> <label for="author-no"><?php _e('No'); ?></label><br />
+<?php _e('Except the author(s)', DW_L10N_DOMAIN); ?>:<br />
 <div id="author-select" class="condition-select" <?php echo $author_condition_select_style; ?>>
 <?php foreach ( $authors as $author ) { ?>
 <input type="checkbox" id="author_act_<?php echo $author->ID; ?>" name="author_act[]" value="<?php echo $author->ID; ?>" <?php echo ( count($author_act) > 0 && in_array($author->ID,$author_act) ) ? 'checked="checked"' : ''; ?> /> <label for="author_act_<?php echo $author->ID; ?>"><?php echo $author->display_name; ?></label><br />
@@ -463,12 +496,12 @@ Except the author(s):<br />
 
 <br /><br />
 
-<b>Category Pages</b> <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?><br />
-Show widget default on category pages?<br />
+<b><?php _e('Category Pages', DW_L10N_DOMAIN); ?></b> <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?><br />
+<?php _e('Show widget default on category pages?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_category); ?>
-<input type="radio" name="category" value="yes" id="category-yes" <?php echo $category_yes_selected; ?> /> <label for="category-yes">Yes</label>
-<input type="radio" name="category" value="no" id="category-no" <?php echo $category_no_selected; ?> /> <label for="category-no">No</label><br />
-Except the categories:<br />
+<input type="radio" name="category" value="yes" id="category-yes" <?php echo $category_yes_selected; ?> /> <label for="category-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="category" value="no" id="category-no" <?php echo $category_no_selected; ?> /> <label for="category-no"><?php _e('No'); ?></label><br />
+<?php _e('Except the categories', DW_L10N_DOMAIN); ?>:<br />
 <div id="category-select" class="condition-select" <?php echo $category_condition_select_style; ?>>
 <?php foreach ( $category as $cat ) { ?>
 <input type="checkbox" id="cat_act_<?php echo $cat->cat_ID; ?>" name="category_act[]" value="<?php echo $cat->cat_ID; ?>" <?php echo ( count($category_act) > 0 && in_array($cat->cat_ID,$category_act) ) ? 'checked="checked"' : ''; ?> /> <label for="cat_act_<?php echo $cat->cat_ID; ?>"><?php echo $cat->name; ?></label><br />
@@ -477,32 +510,32 @@ Except the categories:<br />
 
 <br /><br />
 
-<b>Archive Pages</b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('archive')" /><br />
-Show widget on archive pages?<br />
+<b><?php _e('Archive Pages', DW_L10N_DOMAIN); ?></b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('archive')" /><br />
+<?php _e('Show widget on archive pages', DW_L10N_DOMAIN); ?>?<br />
 <?php $DW->dumpOpt($opt_archive); ?>
 <div>
 <div id="archive" class="infotext">
-  This option does not include Author and Category Pages.
+  <?php _e('This option does not include Author and Category Pages.'); ?>
 </div>
 </div>
-<input type="radio" name="archive" value="yes" id="archive-yes" <?php echo $archive_yes_selected; ?> /> <label for="archive-yes">Yes</label>
-<input type="radio" name="archive" value="no" id="archive-no" <?php echo $archive_no_selected; ?> /> <label for="archive-no">No</label>
+<input type="radio" name="archive" value="yes" id="archive-yes" <?php echo $archive_yes_selected; ?> /> <label for="archive-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="archive" value="no" id="archive-no" <?php echo $archive_no_selected; ?> /> <label for="archive-no"><?php _e('No'); ?></label>
 
 <br /><br />
 
-<b>Error Page</b><br />
-Show widget on the error page?<br />
+<b><?php _e('Error Page', DW_L10N_DOMAIN); ?></b><br />
+<?php _e('Show widget on the error page?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_e404); ?>
-<input type="radio" name="e404" value="yes" id="e404-yes" <?php echo $e404_yes_selected; ?> /> <label for="e404-yes">Yes</label>
-<input type="radio" name="e404" value="no" id="e404-no" <?php echo $e404_no_selected; ?> /> <label for="e404-no">No</label>
+<input type="radio" name="e404" value="yes" id="e404-yes" <?php echo $e404_yes_selected; ?> /> <label for="e404-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="e404" value="no" id="e404-no" <?php echo $e404_no_selected; ?> /> <label for="e404-no"><?php _e('No'); ?></label>
 
 <br /><br />
 
-<b>Search Page</b><br />
-Show widget on the search page?<br />
+<b><?php _e('Search Page', DW_L10N_DOMAIN); ?></b><br />
+<?php _e('Show widget on the search page?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_search); ?>
-<input type="radio" name="search" value="yes" id="search-yes" <?php echo $search_yes_selected; ?> /> <label for="search-yes">Yes</label>
-<input type="radio" name="search" value="no" id="search-no" <?php echo $search_no_selected; ?> /> <label for="search-no">No</label>
+<input type="radio" name="search" value="yes" id="search-yes" <?php echo $search_yes_selected; ?> /> <label for="search-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="search" value="no" id="search-no" <?php echo $search_no_selected; ?> /> <label for="search-no"><?php _e('No'); ?></label>
 
 <br /><br />
 
@@ -542,13 +575,13 @@ Show widget on the search page?<br />
 
       // Output
       echo '<input type="hidden" name="post_types[]" value="' . key($post_types) . '" />';
-      echo '<b>Custom Post Type <em>' . $ctid->label . '</em></b> ' . ( $DW->wpml ? $wpml_icon : '' ) . '<br />';
-      echo 'Show widget on ' . $ctid->label . '?<br />';
+      echo '<b>' . __('Custom Post Type') . ' <em>' . $ctid->label . '</em></b> ' . ( $DW->wpml ? $wpml_icon : '' ) . '<br />';
+      echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $ctid->label . '?<br />';
       $DW->dumpOpt($opt_custom);
-      echo '<input type="radio" name="' . key($post_types) . '" value="yes" id="' . key($post_types) . '-yes" ' . $custom_yes_selected . ' /> <label for="' . key($post_types) . '-yes">Yes</label> ';
-      echo '<input type="radio" name="' . key($post_types) . '" value="no" id="' . key($post_types) . '-no" ' . $custom_no_selected . ' /> <label for="' . key($post_types) . '-no">No</label><br />';
+      echo '<input type="radio" name="' . key($post_types) . '" value="yes" id="' . key($post_types) . '-yes" ' . $custom_yes_selected . ' /> <label for="' . key($post_types) . '-yes">' . __('Yes') . '</label> ';
+      echo '<input type="radio" name="' . key($post_types) . '" value="no" id="' . key($post_types) . '-no" ' . $custom_no_selected . ' /> <label for="' . key($post_types) . '-no">' . __('No') . '</label><br />';
 
-      echo 'Except for:<br />';
+      echo __('Except for') . ':<br />';
       echo '<div id="' . key($post_types) . '-select" class="condition-select" ' . $custom_condition_select_style . '>';
 
       while ( $loop->have_posts() ) : $loop->the_post();
@@ -563,13 +596,30 @@ Show widget on the search page?<br />
       echo '<br /><br />';
     }
   } // end version compare >= WP 3.0
+
+  if ( $DW->wpsc ) {
+?>
+<b><?php _e('WPSC Category', DW_L10N_DOMAIN); ?></b><br />
+<?php _e('Show widget default on WPSC categories?', DW_L10N_DOMAIN); ?><br />
+<?php $DW->dumpOpt($opt_wpsc); ?>
+<input type="radio" name="wpsc" value="yes" id="wpsc-yes" <?php echo $wpsc_yes_selected; ?> /> <label for="wpsc-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="wpsc" value="no" id="wpsc-no" <?php echo $wpsc_no_selected; ?> /> <label for="wpsc-no"><?php _e('No'); ?></label><br />
+<?php _e('Except the categories', DW_L10N_DOMAIN); ?>:<br />
+<div id="wpsc-select" class="condition-select" <?php echo $wpsc_condition_select_style; ?>>
+<?php foreach ( $wpsc as $id => $cat ) { ?>
+<input type="checkbox" id="wpsc_act_<?php echo $id; ?>" name="wpsc_act[]" value="<?php echo $id; ?>" <?php echo ( count($wpsc_act) > 0 && in_array($id, $wpsc_act) ) ? 'checked="checked"' : ''; ?> /> <label for="wpsc_act_<?php echo $id; ?>"><?php echo $cat; ?></label><br />
+<?php } ?>
+</div>
+<br /><br />
+<?php
+  } // DW->wpsc
 ?>
 
-<input class="button-primary" type="submit" value="Save" />
+<input class="button-primary" type="submit" value="<?php _e('Save'); ?>" />
 </form>
 
 <?php $url = (! empty($_GET['returnurl']) ) ? urldecode($_GET['returnurl']) : trailingslashit(admin_url()) . 'themes.php?page=dynwid-config'; ?>
-<input class="button-secondary" type="button" value="Return" style="position:relative;top:-23px;left:80px;" onclick="location.href='<?php echo $url; ?>'" />
+<input class="button-secondary" type="button" value="<?php _e('Return', DW_L10N_DOMAIN); ?>" style="position:relative;top:-23px;left:80px;" onclick="location.href='<?php echo $url; ?>'" />
 
 <script type="text/javascript">
   function chkInPosts() {

@@ -210,6 +210,13 @@
     }
   }
 
+  // WPSC/WPEC Plugin support
+	if ( isset($_POST['wpsc_act']) && count($_POST['wpsc_act']) > 0 ) {
+		$DW->addMultiOption($_POST['widget_id'], 'wpsc', $_POST['wpsc'], $_POST['wpsc_act']);
+	} else if ( $_POST['wpsc'] == 'no' ) {
+		$DW->addSingleOption($_POST['widget_id'], 'wpsc');
+	}
+
   // Redirect to ReturnURL
   if (! empty($_POST['returnurl']) ) {
     $q = array();
