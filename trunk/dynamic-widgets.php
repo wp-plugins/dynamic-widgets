@@ -102,7 +102,7 @@
     add_action('admin_print_scripts-' . $screen, 'dynwid_add_admin_scripts');
 
     // Contextual help
-    if ( $_GET['action'] == 'edit' ) {
+    if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
       $help  = __('Widgets are always displayed by default', DW_L10N_DOMAIN) . ' (' . __('The') . ' \'<em>' . __('Yes') .'</em>\' ' . __('selection', DW_L10N_DOMAIN) . ').<br />';
       $help .= __('Click on the', DW_L10N_DOMAIN) . ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" /> ' . __('next to the options for more info', DW_L10N_DOMAIN) . '.';
     } else {
@@ -236,7 +236,7 @@
     }
 
     // Notifying user when options are saved and returned to ./wp-admin/widgets.php
-    if ( $_GET['dynwid_save'] == 'yes' ) {
+    if ( isset($_GET['dynwid_save']) && $_GET['dynwid_save'] == 'yes' ) {
       add_action('sidebar_admin_page', 'dynwid_add_widget_page');
     }
   }
@@ -299,7 +299,7 @@
     $GLOBALS['DW'] = new dynWid();
 
   	if ( is_admin() ) {
-  	  if ( $_POST['dynwid_save'] == 'yes' ) {
+  	  if ( isset($_POST['dynwid_save']) && $_POST['dynwid_save'] == 'yes' ) {
   	    $DW = &$GLOBALS['DW'];
   	    require_once(dirname(__FILE__) . '/dynwid_admin_save.php');
   	  }
@@ -320,7 +320,7 @@
 
 	function dynwid_install() {
 		if ( function_exists('is_multisite') ) {
-			if ( is_multisite() && $_GET['networkwide'] == '1' ) {
+			if ( is_multisite() && isset($_GET['networkwide']) && $_GET['networkwide'] == '1' ) {
 				$plugin = plugin_basename(__FILE__);
 				deactivate_plugins($plugin);
 			} else {

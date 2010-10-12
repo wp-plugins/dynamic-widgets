@@ -5,7 +5,6 @@
  *
  *
  * @version $Id$
- * @copyright 2010
  */
 
 	function dw_wpml_get_id($content_id, $content_type = 'post_page') {

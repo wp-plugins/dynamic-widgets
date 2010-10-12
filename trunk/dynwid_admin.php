@@ -11,14 +11,12 @@
 
 <?php
   // Actions
-  switch ( $_GET['action'] ) {
-    case 'edit':
-      require_once(dirname(__FILE__) . '/dynwid_admin_edit.php');
-      break;
-
-    default:
-      require_once(dirname(__FILE__) . '/dynwid_admin_overview.php');
+  if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
+  	$dw_admin_script = '/dynwid_admin_edit.php';
+  } else {
+  	$dw_admin_script = '/dynwid_admin_overview.php';
   }
+  require_once(dirname(__FILE__) . $dw_admin_script);
 ?>
 
 <!-- Footer //-->
