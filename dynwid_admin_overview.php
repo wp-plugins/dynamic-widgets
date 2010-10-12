@@ -6,7 +6,7 @@
  */
 
   // Special case: Reset action needs to go back to overview.
-  if ( $_GET['action'] == 'reset' ) {
+  if ( isset($_GET['action']) && $_GET['action'] == 'reset' ) {
     check_admin_referer('plugin-name-action_reset_' . $_GET['id']);
     $DW->resetOptions($_GET['id']);
 ?>
@@ -17,7 +17,7 @@
 </div>
 <?php
   }
-  if ( $_GET['action'] == 'dynwid_set_method' ) {
+  if ( isset($_GET['action']) && $_GET['action'] == 'dynwid_set_method' ) {
   	if ( $_GET['oldmethod'] == 'on' ) {
   		update_option('dynwid_old_method', TRUE);
   	} else {

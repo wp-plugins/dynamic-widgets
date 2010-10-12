@@ -85,7 +85,7 @@
 
   // Single Post
   $single_yes_selected = 'checked="checked"';
-  $single_condition == '1';
+  $single_condition = '1';
   $opt_single = $DW->getOptions($_GET['id'], 'single');
   if ( count($opt_single) > 0 ) {
     foreach ( $opt_single as $widget ) {
@@ -326,17 +326,17 @@ label {
 }
 </style>
 
-<?php if ( $_POST['dynwid_save'] == 'yes' ) { ?>
+<?php if ( isset($_POST['dynwid_save']) && $_POST['dynwid_save'] == 'yes' ) { ?>
 <div class="updated fade" id="message">
   <p>
     <strong><?php _e('Widget options saved.'); ?></strong> <a href="themes.php?page=dynwid-config">Return</a> to Dynamic Widgets overview.
   </p>
 </div>
-<?php } else if ( $_GET['work'] == 'none' ) { ?>
+<?php } else if ( isset($_GET['work']) && $_GET['work'] == 'none' ) { ?>
 <div class="error" id="message">
   <p>Dynamic does not mean static hiding of a widget. Hint: <a href="widgets.php">Remove</a> the widget from the sidebar.</p>
 </div>
-<?php } else if ( $_GET['work'] == 'nonedate' ) { ?>
+<?php } else if ( isset($_GET['work']) && $_GET['work'] == 'nonedate' ) { ?>
 <div class="error" id="message">
   <p>The From date can't be later than the To date.</p>
 </div>
@@ -350,7 +350,7 @@ label {
 <?php wp_nonce_field('plugin-name-action_edit_' . $_GET['id']); ?>
 <input type="hidden" name="dynwid_save" value="yes" />
 <input type="hidden" name="widget_id" value="<?php echo $_GET['id']; ?>" />
-<input type="hidden" name="returnurl" value="<?php echo urldecode($_GET['returnurl']); ?>" />
+<input type="hidden" name="returnurl" value="<?php echo ( isset($_GET['returnurl']) ? urldecode($_GET['returnurl']) : '' ); ?>" />
 
 <b><?php _e('Role'); ?></b> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('role');" /><br />
 <?php _e('Show widget to everybody?', DW_L10N_DOMAIN); ?><br />
@@ -361,11 +361,11 @@ label {
   Users who are not logged in, get the <em>Anonymous</em> role.
 </div>
 </div>
-<input type="radio" name="role" value="yes" id="role-yes" <?php echo $role_yes_selected; ?> onclick="swChb(cRole, true);" /> <label for="role-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="role" value="no" id="role-no" <?php echo $role_no_selected; ?> onclick="swChb(cRole, false)" /> <label for="role-no"><?php _e('No'); ?>, <?php _e('only to', DW_L10N_DOMAIN); ?>:</label><br />
-<div id="role-select" class="condition-select" <?php echo $role_condition_select_style; ?>>
+<input type="radio" name="role" value="yes" id="role-yes" <?php echo ( isset($role_yes_selected) ? $role_yes_selected : '' ); ?> onclick="swChb(cRole, true);" /> <label for="role-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="role" value="no" id="role-no" <?php echo ( isset($role_no_selected) ? $role_no_selected : '' ); ?> onclick="swChb(cRole, false)" /> <label for="role-no"><?php _e('No'); ?>, <?php _e('only to', DW_L10N_DOMAIN); ?>:</label><br />
+<div id="role-select" class="condition-select" <?php echo ( isset($role_condition_select_style) ? $role_condition_select_style : '' ); ?>>
 <?php foreach ( $roles as $rid => $role ) { ?>
-<input type="checkbox" id="role_act_<?php echo $rid; ?>" name="role_act[]" value="<?php echo $rid; ?>" <?php echo ( count($role_act) > 0 && in_array($rid,$role_act) ) ? 'checked="checked"' : ''; ?> /> <label for="role_act_<?php echo $rid; ?>"><?php echo $role; ?></label><br />
+<input type="checkbox" id="role_act_<?php echo $rid; ?>" name="role_act[]" value="<?php echo $rid; ?>" <?php echo ( isset($role_act) && count($role_act) > 0 && in_array($rid, $role_act) ) ? 'checked="checked"' : ''; ?> /> <label for="role_act_<?php echo $rid; ?>"><?php echo $role; ?></label><br />
 <?php } ?>
 </div>
 
@@ -383,17 +383,17 @@ label {
   When you want the widget to stop displaying on a specific date, only fill in the To date.
 </div>
 </div>
-<input type="radio" name="date" value="yes" id="date-yes" <?php echo $date_yes_selected; ?> onclick="swTxt(cDate, true);" /> <label for="date-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="date" value="no" id="date-no" <?php echo $date_no_selected; ?> onclick="swTxt(cDate, false)" /> <label for="date-no"><?php _e('No'); ?>, <?php _e('only', DW_L10N_DOMAIN); ?>:</label><br />
+<input type="radio" name="date" value="yes" id="date-yes" <?php echo ( isset($date_yes_selected) ? $date_yes_selected : '' ); ?> onclick="swTxt(cDate, true);" /> <label for="date-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="date" value="no" id="date-no" <?php echo ( isset($date_no_selected) ? $date_no_selected : '' ); ?> onclick="swTxt(cDate, false)" /> <label for="date-no"><?php _e('No'); ?>, <?php _e('only', DW_L10N_DOMAIN); ?>:</label><br />
 <div id="date-select" class="condition-select">
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
   <td style="width:45px;"><?php _e('From', DW_L10N_DOMAIN); ?></td>
-  <td><input id="date_start" type="text" name="date_start" value="<?php echo $date_start; ?>" size="10" maxlength="10" /> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" onclick="showCalendar('date_start')" /></td>
+  <td><input id="date_start" type="text" name="date_start" value="<?php echo ( isset($date_start) ? $date_start : '' ); ?>" size="10" maxlength="10" /> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" onclick="showCalendar('date_start')" /></td>
 </tr>
 <tr>
   <td style="width:45px;"><?php _e('To', DW_L10N_DOMAIN); ?></td>
-  <td><input id="date_end" type="text" name="date_end" value="<?php echo $date_end; ?>" size="10" maxlength="10" /> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" onclick="showCalendar('date_end')" /></td>
+  <td><input id="date_end" type="text" name="date_end" value="<?php echo ( isset($date_end) ? $date_end : '' ); ?>" size="10" maxlength="10" /> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" onclick="showCalendar('date_end')" /></td>
 </tr>
 </table>
 </div>
@@ -409,8 +409,8 @@ label {
 	When a static page is set, you can use the options for the static pages below.
 </div>
 </div>
-<input type="radio" name="front-page" value="yes" id="front-page-yes" <?php echo $frontpage_yes_selected; ?> /> <label for="front-page-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="front-page" value="no" id="front-page-no" <?php echo $frontpage_no_selected; ?> /> <label for="front-page-no"><?php _e('No'); ?></label>
+<input type="radio" name="front-page" value="yes" id="front-page-yes" <?php echo ( isset($frontpage_yes_selected) ? $frontpage_yes_selected : '' ); ?> /> <label for="front-page-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="front-page" value="no" id="front-page-no" <?php echo ( isset($frontpage_no_selected) ? $frontpage_no_selected : '' ); ?> /> <label for="front-page-no"><?php _e('No'); ?></label>
 
 <br /><br />
 
@@ -423,11 +423,11 @@ label {
   If you want to use the rules in a logical OR condition. Add the same widget again and apply the other rule to that.
 </div>
 </div>
-<input type="radio" name="single" value="yes" id="single-yes" <?php echo $single_yes_selected; ?> /> <label for="single-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="single" value="no" id="single-no" <?php echo $single_no_selected; ?> /> <label for="single-no"><?php _e('No'); ?></label><br />
+<input type="radio" name="single" value="yes" id="single-yes" <?php echo ( isset($single_yes_selected) ? $single_yes_selected : '' ); ?> /> <label for="single-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="single" value="no" id="single-no" <?php echo ( isset($single_no_selected) ? $single_no_selected : '' ); ?> /> <label for="single-no"><?php _e('No'); ?></label><br />
 <?php $DW->dumpOpt($opt_individual); ?>
 <input type="checkbox" id="individual" name="individual" value="1" <?php echo ( $individual ) ? 'checked="checked"' : ''; ?> onclick="chkInPosts()" />
-<label for="individual"><?php _e('Make exception rule available to individual posts and tags.', DW_L10N_DOMAIN) ?> <?php echo $count_individual; ?></label>
+<label for="individual"><?php _e('Make exception rule available to individual posts and tags.', DW_L10N_DOMAIN) ?> <?php echo ( isset($count_individual) ? $count_individual : '' ); ?></label>
 <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('individual_post_tag')" />
 <div>
 <div id="individual_post_tag" class="infotext">
@@ -446,10 +446,10 @@ label {
   <td valign="top">
     <?php _e('Except the posts by author', DW_L10N_DOMAIN); ?>:
     <?php $DW->dumpOpt($opt_single_author); ?>
-    <div id="single-author-select" class="condition-select" <?php echo $author_condition_select_style; ?>>
+    <div id="single-author-select" class="condition-select" <?php echo ( isset($author_condition_select_style) ? $author_condition_select_style : '' ); ?>>
     <?php foreach ( $authors as $author ) { ?>
     <?php $js_author_array[ ] = '\'single_author_act_' . $author->ID . '\''; ?>
-    <input type="checkbox" id="single_author_act_<?php echo $author->ID; ?>" name="single_author_act[]" value="<?php echo $author->ID; ?>" <?php echo ( count($single_author_act) > 0 && in_array($author->ID,$single_author_act) ) ? 'checked="checked"' : '';  ?> onclick="ci('single_author_act_<?php echo $author->ID; ?>')" /> <label for="single_author_act_<?php echo $author->ID; ?>"><?php echo $author->display_name; ?></label><br />
+    <input type="checkbox" id="single_author_act_<?php echo $author->ID; ?>" name="single_author_act[]" value="<?php echo $author->ID; ?>" <?php echo ( isset($single_author_act) && count($single_author_act) > 0 && in_array($author->ID,$single_author_act) ) ? 'checked="checked"' : '';  ?> onclick="ci('single_author_act_<?php echo $author->ID; ?>')" /> <label for="single_author_act_<?php echo $author->ID; ?>"><?php echo $author->display_name; ?></label><br />
     <?php } ?>
     </div>
   </td>
@@ -457,10 +457,10 @@ label {
   <td valign="top">
     <?php _e('Except the posts in category', DW_L10N_DOMAIN); ?>: <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?>
     <?php $DW->dumpOpt($opt_single_category); ?>
-    <div id="single-category-select" class="condition-select" <?php echo $category_condition_select_style; ?>>
+    <div id="single-category-select" class="condition-select" <?php echo ( isset($category_condition_select_style) ? $category_condition_select_style : '' ); ?>>
     <?php foreach ( $category as $cat ) { ?>
     <?php $js_category_array[ ] = '\'single_cat_act_' . $cat->cat_ID . '\''; ?>
-    <input type="checkbox" id="single_cat_act_<?php echo $cat->cat_ID; ?>" name="single_category_act[]" value="<?php echo $cat->cat_ID; ?>" <?php echo ( count($single_category_act) > 0 && in_array($cat->cat_ID,$single_category_act) ) ? 'checked="checked"' : ''; ?> onclick="ci('single_cat_act_<?php echo $cat->cat_ID; ?>')" /> <label for="single_cat_act_<?php echo $cat->cat_ID; ?>"><?php echo $cat->name; ?></label><br />
+    <input type="checkbox" id="single_cat_act_<?php echo $cat->cat_ID; ?>" name="single_category_act[]" value="<?php echo $cat->cat_ID; ?>" <?php echo ( isset($single_category_act) && count($single_category_act) > 0 && in_array($cat->cat_ID,$single_category_act) ) ? 'checked="checked"' : ''; ?> onclick="ci('single_cat_act_<?php echo $cat->cat_ID; ?>')" /> <label for="single_cat_act_<?php echo $cat->cat_ID; ?>"><?php echo $cat->name; ?></label><br />
     <?php } ?>
     </div>
   </td>
@@ -472,12 +472,12 @@ label {
 <b><?php _e('Pages'); ?></b> <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?><br />
 <?php _e('Show widget default on static pages?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_page); ?>
-<input type="radio" name="page" value="yes" id="page-yes" <?php echo $page_yes_selected; ?> /> <label for="page-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="page" value="no" id="page-no" <?php echo $page_no_selected; ?> /> <label for="page-no"><?php _e('No'); ?></label><br />
+<input type="radio" name="page" value="yes" id="page-yes" <?php echo ( isset($page_yes_selected) ? $page_yes_selected : '' ); ?> /> <label for="page-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="page" value="no" id="page-no" <?php echo ( isset($page_no_selected) ? $page_no_selected : '' ); ?> /> <label for="page-no"><?php _e('No'); ?></label><br />
 <?php _e('Except the page(s)', DW_L10N_DOMAIN); ?>:<br />
-<div id="page-select" class="condition-select" <?php echo $page_condition_select_style; ?>>
+<div id="page-select" class="condition-select" <?php echo ( isset($page_condition_select_style) ? $page_condition_select_style : '' ); ?>>
 <?php foreach ( $pages as $page ) { ?>
-<input type="checkbox" id="page_act_<?php echo $page->ID; ?>" name="page_act[]" value="<?php echo $page->ID; ?>" <?php echo ( count($page_act) > 0 && in_array($page->ID,$page_act) ) ? 'checked="checked"' : ''; ?> /> <label for="page_act_<?php echo $page->ID; ?>"><?php echo $page->post_title; ?> <?php echo ( get_option('show_on_front') == 'page' && isset($static_page[$page->ID]) ? '(' . $static_page[$page->ID] . ')' : '' ) ?></label><br />
+<input type="checkbox" id="page_act_<?php echo $page->ID; ?>" name="page_act[]" value="<?php echo $page->ID; ?>" <?php echo ( isset($page_act) && count($page_act) > 0 && in_array($page->ID,$page_act) ) ? 'checked="checked"' : ''; ?> /> <label for="page_act_<?php echo $page->ID; ?>"><?php echo $page->post_title; ?> <?php echo ( get_option('show_on_front') == 'page' && isset($static_page[$page->ID]) ? '(' . $static_page[$page->ID] . ')' : '' ) ?></label><br />
 <?php } ?>
 </div>
 
@@ -486,12 +486,12 @@ label {
 <b><?php _e('Author Pages', DW_L10N_DOMAIN); ?></b><br />
 <?php _e('Show widget default on author pages?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_author); ?>
-<input type="radio" name="author" value="yes" id="author-yes" <?php echo $author_yes_selected; ?> /> <label for="author-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="author" value="no" id="author-no" <?php echo $author_no_selected; ?> /> <label for="author-no"><?php _e('No'); ?></label><br />
+<input type="radio" name="author" value="yes" id="author-yes" <?php echo ( isset($author_yes_selected) ? $author_yes_selected : '' ); ?> /> <label for="author-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="author" value="no" id="author-no" <?php echo ( isset($author_no_selected) ? $author_no_selected : '' ); ?> /> <label for="author-no"><?php _e('No'); ?></label><br />
 <?php _e('Except the author(s)', DW_L10N_DOMAIN); ?>:<br />
-<div id="author-select" class="condition-select" <?php echo $author_condition_select_style; ?>>
+<div id="author-select" class="condition-select" <?php echo ( isset($author_condition_select_style) ? $author_condition_select_style : '' ); ?>>
 <?php foreach ( $authors as $author ) { ?>
-<input type="checkbox" id="author_act_<?php echo $author->ID; ?>" name="author_act[]" value="<?php echo $author->ID; ?>" <?php echo ( count($author_act) > 0 && in_array($author->ID,$author_act) ) ? 'checked="checked"' : ''; ?> /> <label for="author_act_<?php echo $author->ID; ?>"><?php echo $author->display_name; ?></label><br />
+<input type="checkbox" id="author_act_<?php echo $author->ID; ?>" name="author_act[]" value="<?php echo $author->ID; ?>" <?php echo ( isset($author_act) && count($author_act) > 0 && in_array($author->ID,$author_act) ) ? 'checked="checked"' : ''; ?> /> <label for="author_act_<?php echo $author->ID; ?>"><?php echo $author->display_name; ?></label><br />
 <?php } ?></div>
 
 <br /><br />
@@ -499,12 +499,12 @@ label {
 <b><?php _e('Category Pages', DW_L10N_DOMAIN); ?></b> <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?><br />
 <?php _e('Show widget default on category pages?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_category); ?>
-<input type="radio" name="category" value="yes" id="category-yes" <?php echo $category_yes_selected; ?> /> <label for="category-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="category" value="no" id="category-no" <?php echo $category_no_selected; ?> /> <label for="category-no"><?php _e('No'); ?></label><br />
+<input type="radio" name="category" value="yes" id="category-yes" <?php echo ( isset($category_yes_selected) ? $category_yes_selected : '' ); ?> /> <label for="category-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="category" value="no" id="category-no" <?php echo ( isset($category_no_selected) ? $category_no_selected : '' ); ?> /> <label for="category-no"><?php _e('No'); ?></label><br />
 <?php _e('Except the categories', DW_L10N_DOMAIN); ?>:<br />
-<div id="category-select" class="condition-select" <?php echo $category_condition_select_style; ?>>
+<div id="category-select" class="condition-select" <?php echo ( isset($category_condition_select_style) ? $category_condition_select_style : '' ); ?>>
 <?php foreach ( $category as $cat ) { ?>
-<input type="checkbox" id="cat_act_<?php echo $cat->cat_ID; ?>" name="category_act[]" value="<?php echo $cat->cat_ID; ?>" <?php echo ( count($category_act) > 0 && in_array($cat->cat_ID,$category_act) ) ? 'checked="checked"' : ''; ?> /> <label for="cat_act_<?php echo $cat->cat_ID; ?>"><?php echo $cat->name; ?></label><br />
+<input type="checkbox" id="cat_act_<?php echo $cat->cat_ID; ?>" name="category_act[]" value="<?php echo $cat->cat_ID; ?>" <?php echo ( isset($category_act) && count($category_act) > 0 && in_array($cat->cat_ID,$category_act) ) ? 'checked="checked"' : ''; ?> /> <label for="cat_act_<?php echo $cat->cat_ID; ?>"><?php echo $cat->name; ?></label><br />
 <?php } ?>
 </div>
 
@@ -518,24 +518,24 @@ label {
   <?php _e('This option does not include Author and Category Pages.'); ?>
 </div>
 </div>
-<input type="radio" name="archive" value="yes" id="archive-yes" <?php echo $archive_yes_selected; ?> /> <label for="archive-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="archive" value="no" id="archive-no" <?php echo $archive_no_selected; ?> /> <label for="archive-no"><?php _e('No'); ?></label>
+<input type="radio" name="archive" value="yes" id="archive-yes" <?php echo ( isset($archive_yes_selected) ? $archive_yes_selected : '' ); ?> /> <label for="archive-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="archive" value="no" id="archive-no" <?php echo ( isset($archive_no_selected) ? $archive_no_selected : '' ); ?> /> <label for="archive-no"><?php _e('No'); ?></label>
 
 <br /><br />
 
 <b><?php _e('Error Page', DW_L10N_DOMAIN); ?></b><br />
 <?php _e('Show widget on the error page?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_e404); ?>
-<input type="radio" name="e404" value="yes" id="e404-yes" <?php echo $e404_yes_selected; ?> /> <label for="e404-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="e404" value="no" id="e404-no" <?php echo $e404_no_selected; ?> /> <label for="e404-no"><?php _e('No'); ?></label>
+<input type="radio" name="e404" value="yes" id="e404-yes" <?php echo ( isset($e404_yes_selected) ? $e404_yes_selected : '' ); ?> /> <label for="e404-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="e404" value="no" id="e404-no" <?php echo ( isset($e404_no_selected) ? $e404_no_selected : '' ); ?> /> <label for="e404-no"><?php _e('No'); ?></label>
 
 <br /><br />
 
 <b><?php _e('Search Page', DW_L10N_DOMAIN); ?></b><br />
 <?php _e('Show widget on the search page?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_search); ?>
-<input type="radio" name="search" value="yes" id="search-yes" <?php echo $search_yes_selected; ?> /> <label for="search-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="search" value="no" id="search-no" <?php echo $search_no_selected; ?> /> <label for="search-no"><?php _e('No'); ?></label>
+<input type="radio" name="search" value="yes" id="search-yes" <?php echo ( isset($search_yes_selected) ? $search_yes_selected : '' ); ?> /> <label for="search-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="search" value="no" id="search-no" <?php echo ( isset($search_no_selected) ? $search_no_selected : '' ); ?> /> <label for="search-no"><?php _e('No'); ?></label>
 
 <br /><br />
 
@@ -578,11 +578,11 @@ label {
       echo '<b>' . __('Custom Post Type') . ' <em>' . $ctid->label . '</em></b> ' . ( $DW->wpml ? $wpml_icon : '' ) . '<br />';
       echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $ctid->label . '?<br />';
       $DW->dumpOpt($opt_custom);
-      echo '<input type="radio" name="' . key($post_types) . '" value="yes" id="' . key($post_types) . '-yes" ' . $custom_yes_selected . ' /> <label for="' . key($post_types) . '-yes">' . __('Yes') . '</label> ';
-      echo '<input type="radio" name="' . key($post_types) . '" value="no" id="' . key($post_types) . '-no" ' . $custom_no_selected . ' /> <label for="' . key($post_types) . '-no">' . __('No') . '</label><br />';
+      echo '<input type="radio" name="' . key($post_types) . '" value="yes" id="' . key($post_types) . '-yes" ' . ( isset($custom_yes_selected) ? $custom_yes_selected : '' ) . ' /> <label for="' . key($post_types) . '-yes">' . __('Yes') . '</label> ';
+      echo '<input type="radio" name="' . key($post_types) . '" value="no" id="' . key($post_types) . '-no" ' . ( isset($custom_no_selected) ? $custom_no_selected : '' ) . ' /> <label for="' . key($post_types) . '-no">' . __('No') . '</label><br />';
 
       echo __('Except for') . ':<br />';
-      echo '<div id="' . key($post_types) . '-select" class="condition-select" ' . $custom_condition_select_style . '>';
+      echo '<div id="' . key($post_types) . '-select" class="condition-select" ' . ( isset($custom_condition_select_style) ? $custom_condition_select_style : '' ) . '>';
 
       while ( $loop->have_posts() ) : $loop->the_post();
         echo '<input type="checkbox" id="' . key($post_types) . '_act_' . $loop->post->ID . '" name="' . key($post_types) . '_act[]" value="' . $loop->post->ID . '" ';
@@ -602,10 +602,10 @@ label {
 <b><?php _e('WPSC Category', DW_L10N_DOMAIN); ?></b><br />
 <?php _e('Show widget default on WPSC categories?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_wpsc); ?>
-<input type="radio" name="wpsc" value="yes" id="wpsc-yes" <?php echo $wpsc_yes_selected; ?> /> <label for="wpsc-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="wpsc" value="no" id="wpsc-no" <?php echo $wpsc_no_selected; ?> /> <label for="wpsc-no"><?php _e('No'); ?></label><br />
+<input type="radio" name="wpsc" value="yes" id="wpsc-yes" <?php echo ( isset($wpsc_yes_selected) ? $wpsc_yes_selected : '' ); ?> /> <label for="wpsc-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="wpsc" value="no" id="wpsc-no" <?php echo ( isset($wpsc_no_selected) ? $wpsc_no_selected : '' ); ?> /> <label for="wpsc-no"><?php _e('No'); ?></label><br />
 <?php _e('Except the categories', DW_L10N_DOMAIN); ?>:<br />
-<div id="wpsc-select" class="condition-select" <?php echo $wpsc_condition_select_style; ?>>
+<div id="wpsc-select" class="condition-select" <?php echo ( isset($wpsc_condition_select_style) ? $wpsc_condition_select_style : '' ); ?>>
 <?php foreach ( $wpsc as $id => $cat ) { ?>
 <input type="checkbox" id="wpsc_act_<?php echo $id; ?>" name="wpsc_act[]" value="<?php echo $id; ?>" <?php echo ( count($wpsc_act) > 0 && in_array($id, $wpsc_act) ) ? 'checked="checked"' : ''; ?> /> <label for="wpsc_act_<?php echo $id; ?>"><?php echo $cat; ?></label><br />
 <?php } ?>

@@ -231,7 +231,7 @@
 
       $name = $lookup[$id]['name'];
 
-      if ( $type == 'W' ) {
+      if ( $type == 'W' && isset($lookup[$id]['params'][0]['number']) ) {
         // Retrieve optional set title
         $number = $lookup[$id]['params'][0]['number'];
         $option_name = $lookup[$id]['callback'][0]->option_name;

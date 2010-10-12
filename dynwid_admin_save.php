@@ -136,7 +136,7 @@
   }
 
   // -- Author
-  if ( count($_POST['single_author_act']) > 0 ) {
+  if ( isset($_POST['single_author_act']) && count($_POST['single_author_act']) > 0 ) {
     if ( $_POST['single'] == 'yes' ) {
       $DW->addSingleOption($_POST['widget_id'], 'single', '1');
     }
@@ -144,7 +144,7 @@
   }
 
   // -- Category
-  if ( count($_POST['single_category_act']) > 0 ) {
+  if ( isset($_POST['single_category_act']) && count($_POST['single_category_act']) > 0 ) {
     if ( $_POST['single'] == 'yes' && count($_POST['single_author_act']) == 0 ) {
       $DW->addSingleOption($_POST['widget_id'], 'single', '1');
     }
@@ -152,7 +152,7 @@
   }
 
   // -- Individual / Posts / Tag
-  if ( $_POST['individual'] == '1' ) {
+  if ( isset($_POST['individual']) && $_POST['individual'] == '1' ) {
     $DW->addSingleOption($_POST['widget_id'], 'individual', '1');
     if ( count($_POST['single_post_act']) > 0 ) {
       $DW->addMultiOption($_POST['widget_id'], 'single-post', $_POST['single'], $_POST['single_post_act']);
@@ -163,21 +163,21 @@
   }
 
   // Pages
-  if ( count($_POST['page_act']) > 0 ) {
+  if ( isset($_POST['page_act']) && count($_POST['page_act']) > 0 ) {
     $DW->addMultiOption($_POST['widget_id'], 'page', $_POST['page'], $_POST['page_act']);
   } else if ( $_POST['page'] == 'no' ) {
     $DW->addSingleOption($_POST['widget_id'], 'page');
   }
 
   // Author
-  if ( count($_POST['author_act']) > 0 ) {
+  if ( isset($_POST['author_act']) && count($_POST['author_act']) > 0 ) {
     $DW->addMultiOption($_POST['widget_id'], 'author', $_POST['author'], $_POST['author_act']);
   } else if ( $_POST['author'] == 'no' ) {
     $DW->addSingleOption($_POST['widget_id'], 'author');
   }
 
   // Categories
-  if ( count($_POST['category_act']) > 0 ) {
+  if ( isset($_POST['category_act']) && count($_POST['category_act']) > 0 ) {
     $DW->addMultiOption($_POST['widget_id'], 'category', $_POST['category'], $_POST['category_act']);
   } else if ( $_POST['category'] == 'no' ) {
     $DW->addSingleOption($_POST['widget_id'], 'category');
@@ -213,7 +213,7 @@
   // WPSC/WPEC Plugin support
 	if ( isset($_POST['wpsc_act']) && count($_POST['wpsc_act']) > 0 ) {
 		$DW->addMultiOption($_POST['widget_id'], 'wpsc', $_POST['wpsc'], $_POST['wpsc_act']);
-	} else if ( $_POST['wpsc'] == 'no' ) {
+	} else if ( isset($_POST['wpsc']) && $_POST['wpsc'] == 'no' ) {
 		$DW->addSingleOption($_POST['widget_id'], 'wpsc');
 	}
 
