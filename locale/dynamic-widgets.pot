@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dynamic Widgets\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-11 22:18+0100\n"
-"PO-Revision-Date: 2010-09-11 22:18+0100\n"
-"Last-Translator: Jacco\n"
+"POT-Creation-Date: 2010-10-14 18:53+0100\n"
+"PO-Revision-Date: 2010-10-14 18:53+0100\n"
+"Last-Translator: Jacco <jacco@qurl.nl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,205 +16,292 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 
 # WordPress MO
-#: ../dynwid_admin_edit.php:16
+#: ../dynwid_admin_edit.php:22
 msgid "Anonymous"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:299
+#: ../dynwid_admin_edit.php:332
 msgid "Widget options saved."
 msgstr ""
 
-#: ../dynwid_admin_edit.php:313
+#: ../dynwid_admin_edit.php:332
+#: ../dynwid_admin_edit.php:629
+msgid "Return"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:332
+msgid "to Dynamic Widgets overview"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:337
+msgid "Dynamic does not mean static hiding of a widget."
+msgstr ""
+
+#: ../dynwid_admin_edit.php:337
+msgid "Hint"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:337
+msgid "Remove"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:337
+msgid "the widget from the sidebar"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:341
+msgid "The From date can't be later than the To date."
+msgstr ""
+
+#: ../dynwid_admin_edit.php:346
 msgid "Edit options for"
 msgstr ""
 
 # WordPress MO
-#: ../dynwid_admin_edit.php:313
+#: ../dynwid_admin_edit.php:346
 msgid "Widget"
 msgstr ""
 
 # WordPress MO
-#: ../dynwid_admin_edit.php:322
-#: ../dynamic-widgets.php:435
+#: ../dynwid_admin_edit.php:355
+#: ../dynamic-widgets.php:444
 msgid "Role"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:323
+#: ../dynwid_admin_edit.php:356
 msgid "Show widget to everybody?"
 msgstr ""
 
+#: ../dynwid_admin_edit.php:360
+msgid ""
+"Setting options by role is very powerfull. It can override all other options!<br />\n"
+"\t\t\t\t\t\tUsers who are not logged in, get the <em>Anonymous</em> role."
+msgstr ""
+
 # WordPress MO
-#: ../dynwid_admin_edit.php:331
-#: ../dynwid_admin_edit.php:353
-#: ../dynwid_admin_edit.php:379
-#: ../dynwid_admin_edit.php:393
-#: ../dynwid_admin_edit.php:442
-#: ../dynwid_admin_edit.php:456
-#: ../dynwid_admin_edit.php:469
-#: ../dynwid_admin_edit.php:488
+#: ../dynwid_admin_edit.php:364
+#: ../dynwid_admin_edit.php:387
+#: ../dynwid_admin_edit.php:414
+#: ../dynwid_admin_edit.php:429
+#: ../dynwid_admin_edit.php:482
 #: ../dynwid_admin_edit.php:496
-#: ../dynwid_admin_edit.php:504
-#: ../dynwid_admin_edit.php:548
-#: ../dynamic-widgets.php:98
+#: ../dynwid_admin_edit.php:509
+#: ../dynwid_admin_edit.php:528
+#: ../dynwid_admin_edit.php:536
+#: ../dynwid_admin_edit.php:544
+#: ../dynwid_admin_edit.php:588
+#: ../dynwid_admin_edit.php:612
+#: ../dynamic-widgets.php:107
 msgid "Yes"
 msgstr ""
 
 # WordPress MO
-#: ../dynwid_admin_edit.php:332
-#: ../dynwid_admin_edit.php:354
-#: ../dynwid_admin_edit.php:380
-#: ../dynwid_admin_edit.php:394
-#: ../dynwid_admin_edit.php:443
-#: ../dynwid_admin_edit.php:457
-#: ../dynwid_admin_edit.php:470
-#: ../dynwid_admin_edit.php:489
+#: ../dynwid_admin_edit.php:365
+#: ../dynwid_admin_edit.php:388
+#: ../dynwid_admin_edit.php:415
+#: ../dynwid_admin_edit.php:430
+#: ../dynwid_admin_edit.php:483
 #: ../dynwid_admin_edit.php:497
-#: ../dynwid_admin_edit.php:505
-#: ../dynwid_admin_edit.php:549
+#: ../dynwid_admin_edit.php:510
+#: ../dynwid_admin_edit.php:529
+#: ../dynwid_admin_edit.php:537
+#: ../dynwid_admin_edit.php:545
+#: ../dynwid_admin_edit.php:589
+#: ../dynwid_admin_edit.php:613
 msgid "No"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:332
+#: ../dynwid_admin_edit.php:365
 msgid "only to"
 msgstr ""
 
 # WordPress MO
-#: ../dynwid_admin_edit.php:341
-#: ../dynamic-widgets.php:436
+#: ../dynwid_admin_edit.php:374
+#: ../dynamic-widgets.php:445
 msgid "Date"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:342
+#: ../dynwid_admin_edit.php:375
 msgid "Show widget always?"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:354
+#: ../dynwid_admin_edit.php:379
+msgid "Next to the above role option, the date option is also very powerfull. You've been warned!"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:380
+msgid "Enter dates in the YYYY-MM-DD format. You can also use the calender by clicking on the"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:381
+msgid ""
+"Date ranges can be made by entering a From AND a To date<br />\n"
+"  \t\t\t\t\tWhen you want the widget to be displayed from a specific date, only fill in the From date<br />\n"
+"  \t\t\t\t\tWhen you want the widget to stop displaying on a specific date, only fill in the To date.\n"
+"  \t\t\t\t"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:388
 msgid "only"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:358
+#: ../dynwid_admin_edit.php:392
 msgid "From"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:362
+#: ../dynwid_admin_edit.php:396
 msgid "To"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:370
-#: ../dynamic-widgets.php:437
+#: ../dynwid_admin_edit.php:404
+#: ../dynamic-widgets.php:446
 msgid "Front Page"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:371
+#: ../dynwid_admin_edit.php:405
 msgid "Show widget on the front page?"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:384
-#: ../dynamic-widgets.php:438
+#: ../dynwid_admin_edit.php:409
+msgid ""
+"This option only applies when your front page is set to display your latest posts (See Settings &gt; Reading).<br />\n"
+"\t\t\t\t\t\tWhen a static page is set, you can use the options for the static pages below.\n"
+"\t\t\t\t\t"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:419
+#: ../dynamic-widgets.php:447
 msgid "Single Posts"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:385
+#: ../dynwid_admin_edit.php:420
 msgid "Show widget default on single posts?"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:397
+#: ../dynwid_admin_edit.php:424
+msgid ""
+"When you use an author <b>AND</b> a category exception, both rules in the condition must be met. Otherwise the exception rule won't be applied.\n"
+"  \t\t\t\t\tIf you want to use the rules in a logical OR condition. Add the same widget again and apply the other rule to that.\n"
+"  \t\t\t\t\t"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:433
 msgid "Make exception rule available to individual posts and tags."
 msgstr ""
 
-#: ../dynwid_admin_edit.php:414
+#: ../dynwid_admin_edit.php:437
+msgid ""
+"When you enable this option, you have the ability to apply the exception rule for <em>Single Posts</em> to tags and individual posts.\n"
+"\t\t\t\t\t\tYou can set the exception rule for tags in the single Edit Tag Panel (go to <a href=\"edit-tags.php?taxonomy=post_tag\">Post Tags</a>,\n"
+"\t\t\t\t\t\tclick a tag), For individual posts in the <a href=\"post-new.php\">New</a> or <a href=\"edit.php\">Edit</a> Posts panel.\n"
+"\t\t\t\t\t\tException rules for tags and individual posts in any combination work independantly, but will always be counted as one exception.<br />\n"
+"  \t\t\t\t\tPlease note when exception rules are set for Author and/or Category, these will be removed.\n"
+"  \t\t\t\t"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:454
 msgid "Except the posts by author"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:425
+#: ../dynwid_admin_edit.php:465
 msgid "Except the posts in category"
 msgstr ""
 
 # WordPress MO
-#: ../dynwid_admin_edit.php:439
-#: ../dynamic-widgets.php:439
+#: ../dynwid_admin_edit.php:479
+#: ../dynamic-widgets.php:448
 msgid "Pages"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:440
+#: ../dynwid_admin_edit.php:480
 msgid "Show widget default on static pages?"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:444
+#: ../dynwid_admin_edit.php:484
 msgid "Except the page(s)"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:453
-#: ../dynamic-widgets.php:440
+#: ../dynwid_admin_edit.php:493
+#: ../dynamic-widgets.php:449
 msgid "Author Pages"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:454
+#: ../dynwid_admin_edit.php:494
 msgid "Show widget default on author pages?"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:458
+#: ../dynwid_admin_edit.php:498
 msgid "Except the author(s)"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:466
-#: ../dynamic-widgets.php:441
+#: ../dynwid_admin_edit.php:506
+#: ../dynamic-widgets.php:450
 msgid "Category Pages"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:467
+#: ../dynwid_admin_edit.php:507
 msgid "Show widget default on category pages?"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:471
+#: ../dynwid_admin_edit.php:511
+#: ../dynwid_admin_edit.php:614
 msgid "Except the categories"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:480
-#: ../dynamic-widgets.php:442
+#: ../dynwid_admin_edit.php:520
+#: ../dynamic-widgets.php:451
 msgid "Archive Pages"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:481
+#: ../dynwid_admin_edit.php:521
 msgid "Show widget on archive pages"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:485
+#: ../dynwid_admin_edit.php:525
 msgid "This option does not include Author and Category Pages."
 msgstr ""
 
-#: ../dynwid_admin_edit.php:493
-#: ../dynamic-widgets.php:443
+#: ../dynwid_admin_edit.php:533
+#: ../dynamic-widgets.php:452
 msgid "Error Page"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:494
+#: ../dynwid_admin_edit.php:534
 msgid "Show widget on the error page?"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:501
+#: ../dynwid_admin_edit.php:541
 msgid "Search Page"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:502
+#: ../dynwid_admin_edit.php:542
 msgid "Show widget on the search page?"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:545
+#: ../dynwid_admin_edit.php:585
 msgid "Custom Post Type"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:546
+#: ../dynwid_admin_edit.php:586
 msgid "Show widget on"
 msgstr ""
 
-# WordPress MO
-#: ../dynwid_admin_edit.php:568
-msgid "Save"
+#: ../dynwid_admin_edit.php:591
+msgid "Except for"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:572
-msgid "Return"
+#: ../dynwid_admin_edit.php:609
+#: ../dynamic-widgets.php:454
+msgid "WPSC Category"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:610
+msgid "Show widget default on WPSC categories?"
+msgstr ""
+
+# WordPress MO
+#: ../dynwid_admin_edit.php:625
+msgid "Save"
 msgstr ""
 
 #: ../dynwid_admin_overview.php:15
@@ -235,16 +322,17 @@ msgid "Reset widget to Static"
 msgstr ""
 
 #: ../dynwid_admin_overview.php:73
-#: ../dynamic-widgets.php:101
-#: ../dynamic-widgets.php:430
+#: ../dynamic-widgets.php:110
+#: ../dynamic-widgets.php:112
+#: ../dynamic-widgets.php:439
 msgid "Dynamic"
 msgstr ""
 
 #: ../dynwid_admin_overview.php:73
-#: ../dynamic-widgets.php:101
-#: ../dynamic-widgets.php:102
-#: ../dynamic-widgets.php:105
-#: ../dynamic-widgets.php:430
+#: ../dynamic-widgets.php:110
+#: ../dynamic-widgets.php:111
+#: ../dynamic-widgets.php:114
+#: ../dynamic-widgets.php:439
 msgid "Static"
 msgstr ""
 
@@ -252,72 +340,72 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-#: ../dynamic-widgets.php:98
+#: ../dynamic-widgets.php:107
 msgid "Widgets are always displayed by default"
 msgstr ""
 
-#: ../dynamic-widgets.php:98
+#: ../dynamic-widgets.php:107
 msgid "The"
 msgstr ""
 
-#: ../dynamic-widgets.php:98
+#: ../dynamic-widgets.php:107
 msgid "selection"
 msgstr ""
 
-#: ../dynamic-widgets.php:99
+#: ../dynamic-widgets.php:108
 msgid "Click on the"
 msgstr ""
 
-#: ../dynamic-widgets.php:99
+#: ../dynamic-widgets.php:108
 msgid "next to the options for more info"
 msgstr ""
 
-#: ../dynamic-widgets.php:102
+#: ../dynamic-widgets.php:111
 msgid "When a widget is"
 msgstr ""
 
-#: ../dynamic-widgets.php:102
+#: ../dynamic-widgets.php:111
 msgid "the widget uses the WordPress default. In other words, it's shown everywhere"
 msgstr ""
 
-#: ../dynamic-widgets.php:103
+#: ../dynamic-widgets.php:112
 msgid "A widget is"
 msgstr ""
 
-#: ../dynamic-widgets.php:103
+#: ../dynamic-widgets.php:112
 msgid "when there are options set, i.e. not showing on the front page."
 msgstr ""
 
-#: ../dynamic-widgets.php:104
+#: ../dynamic-widgets.php:113
 msgid "Reset"
 msgstr ""
 
-#: ../dynamic-widgets.php:105
+#: ../dynamic-widgets.php:114
 msgid "Reset makes the widget return to"
 msgstr ""
 
 # WordPress MO
-#: ../dynamic-widgets.php:130
+#: ../dynamic-widgets.php:139
 msgid "Settings"
 msgstr ""
 
-#: ../dynamic-widgets.php:429
+#: ../dynamic-widgets.php:438
 msgid "This widget is"
 msgstr ""
 
-#: ../dynamic-widgets.php:444
+#: ../dynamic-widgets.php:453
 msgid "Search page"
 msgstr ""
 
-#: ../dynamic-widgets.php:479
+#: ../dynamic-widgets.php:489
 msgid "and"
 msgstr ""
 
-#: ../dynamic-widgets.php:485
+#: ../dynamic-widgets.php:495
 msgid "Options set for"
 msgstr ""
 
-#: ../dynamic-widgets.php:485
+#: ../dynamic-widgets.php:495
 msgid "Option set for"
 msgstr ""
 
