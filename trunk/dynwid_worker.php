@@ -248,8 +248,7 @@
 
                 case 'category':
                   if ( count($act) > 0 ) {
-                    $category = get_the_category();
-                    $id = $category[0]->cat_ID;
+                    $id = get_query_var('cat');
                     $DW->message('CatID: ' . $id);
                     if ( $DW->wpml ) {
                       $id = dw_wpml_get_id($id, 'tax_category');
