@@ -27,9 +27,9 @@
 */
 
 /*
-  WPSC/WPEC Plugin support
- 	Using constants		WPSC_TABLE_PRODUCT_CATEGORIES	> dynwid_admin_edit.php, dynwid_init_worker.php, wpsc.php
- 	Using vars 				$wpsc_query > dynwid_init_worker.php, wpsc.php
+	 WPSC/WPEC Plugin support
+ 	 Using constants	WPSC_TABLE_PRODUCT_CATEGORIES	> dynwid_admin_edit.php, dynwid_init_worker.php, wpsc.php
+ 	 Using vars 			$wpsc_query > dynwid_init_worker.php, wpsc.php
 */
 
   // Constants
@@ -40,8 +40,9 @@
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
   define('DW_OLD_METHOD', get_option('dynwid_old_method'));
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
+  define('DW_URL', 'http://www.qurl.nl');
   define('DW_VERSION', '1.3.5');
-  define('DW_VERSION_URL_CHECK', 'http://www.qurl.nl/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
+  define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
 
@@ -73,7 +74,7 @@
 		$version = get_option('dynwid_version');
 		if ( $version !== FALSE ) {
 /*    1.2 > Added support for widget display setting options for Author Pages.
-   Need to apply archive rule to author also to keep same behavior. */
+   		Need to apply archive rule to author also to keep same behavior. */
 			if ( version_compare($version, '1.2', '<') ) {
 				$query = "SELECT widget_id FROM " . $dbtable . " WHERE maintype = 'archive'";
 				$results = $wpdb->get_results($query);
@@ -84,8 +85,8 @@
 			}
 
 /*    1.3 > Added Date (range) support.
-   Need to change DB `value` to a LONGTEXT type
-   (not for the date of course, but for supporting next features which might need a lot of space) */
+   		Need to change DB `value` to a LONGTEXT type
+   		(not for the date of course, but for supporting next features which might need a lot of space) */
 			if ( version_compare($version, '1.3', '<') ) {
 				$query = "ALTER TABLE " . $dbtable . " CHANGE `value` `value` LONGTEXT NOT NULL";
 				$wpdb->query($query);
@@ -215,8 +216,7 @@
 
         /*
           In odd cases params and/or params[0] seems not to be an array. Bugfix for:
-          Warning: Cannot use a scalar value as an array in ./wp-content/plugins/dynamic-widgets/dynamic-widgets.php on line 150
-          If the bug is not fixed, warning should now be on line 173
+          Warning: Cannot use a scalar value as an array in ./wp-content/plugins/dynamic-widgets/dynamic-widgets.php
         */
 
         /* Fixing params */

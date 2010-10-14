@@ -7,6 +7,7 @@
  */
 
 	$DW->message('Dynamic Widgets INIT');
+	echo "\n" . '<!-- Dynamic Widgets v' . DW_VERSION . ' //-->' . "\n";
 
 	// WPML Plugin Support
 	if ( defined('ICL_PLUGIN_PATH') ) {

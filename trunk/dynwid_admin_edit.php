@@ -69,7 +69,7 @@
 
   // Front Page
   if ( get_option('show_on_front') == 'page' ) {
-    $frontpage_yes_selected = 'disabled="true"';
+    $frontpage_yes_selected = 'disabled="disabled"';
     $frontpage_no_selected = $frontpage_yes_selected;
   } else {
     $frontpage_yes_selected = 'checked="checked"';
@@ -329,16 +329,16 @@ label {
 <?php if ( isset($_POST['dynwid_save']) && $_POST['dynwid_save'] == 'yes' ) { ?>
 <div class="updated fade" id="message">
   <p>
-    <strong><?php _e('Widget options saved.'); ?></strong> <a href="themes.php?page=dynwid-config">Return</a> to Dynamic Widgets overview.
+    <strong><?php _e('Widget options saved.'); ?></strong> <a href="themes.php?page=dynwid-config"><?php _e('Return', DW_L10N_DOMAIN); ?></a> <?php _e('to Dynamic Widgets overview', DW_L10N_DOMAIN); ?>.
   </p>
 </div>
 <?php } else if ( isset($_GET['work']) && $_GET['work'] == 'none' ) { ?>
 <div class="error" id="message">
-  <p>Dynamic does not mean static hiding of a widget. Hint: <a href="widgets.php">Remove</a> the widget from the sidebar.</p>
+  <p><?php echo __('Dynamic does not mean static hiding of a widget.', DW_L10N_DOMAIN) . ' ' . __('Hint', DW_L10N_DOMAIN) . ': '; ?><a href="widgets.php"><?php _e('Remove', DW_L10N_DOMAIN); ?></a> <?php _e('the widget from the sidebar', DW_L10N_DOMAIN); ?>.</p>
 </div>
 <?php } else if ( isset($_GET['work']) && $_GET['work'] == 'nonedate' ) { ?>
 <div class="error" id="message">
-  <p>The From date can't be later than the To date.</p>
+  <p><?php _e('The From date can\'t be later than the To date.', DW_L10N_DOMAIN); ?></p>
 </div>
 
 <?php } ?>
@@ -357,8 +357,8 @@ label {
 <?php $DW->dumpOpt($opt_role); ?>
 <div>
 <div id="role" class="infotext">
-  Setting options by role is very powerfull. It can override all other options!<br />
-  Users who are not logged in, get the <em>Anonymous</em> role.
+  <?php _e('Setting options by role is very powerfull. It can override all other options!<br />
+						Users who are not logged in, get the <em>Anonymous</em> role.', DW_L10N_DOMAIN); ?>
 </div>
 </div>
 <input type="radio" name="role" value="yes" id="role-yes" <?php echo ( isset($role_yes_selected) ? $role_yes_selected : '' ); ?> onclick="swChb(cRole, true);" /> <label for="role-yes"><?php _e('Yes'); ?></label>
@@ -376,11 +376,12 @@ label {
 <?php $DW->dumpOpt($opt_date); ?>
 <div>
 <div id="date" class="infotext">
-  Next to the above role option, the date option is also very powerfull. You've been warned!<br />
-  Enter dates in the YYYY-MM-DD format. You can also use the calender by clicking on the <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" /><br />
-  Date ranges can be made by entering a From AND a To date<br />
-  When you want the widget to be displayed from a specific date, only fill in the From date<br />
-  When you want the widget to stop displaying on a specific date, only fill in the To date.
+  <?php _e('Next to the above role option, the date option is also very powerfull. You\'ve been warned!', DW_L10N_DOMAIN); ?><br />
+  <?php _e('Enter dates in the YYYY-MM-DD format. You can also use the calender by clicking on the'); ?> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" /><br />
+  <?php _e('Date ranges can be made by entering a From AND a To date<br />
+  					When you want the widget to be displayed from a specific date, only fill in the From date<br />
+  					When you want the widget to stop displaying on a specific date, only fill in the To date.
+  				', DW_L10N_DOMAIN); ?>
 </div>
 </div>
 <input type="radio" name="date" value="yes" id="date-yes" <?php echo ( isset($date_yes_selected) ? $date_yes_selected : '' ); ?> onclick="swTxt(cDate, true);" /> <label for="date-yes"><?php _e('Yes'); ?></label>
@@ -405,8 +406,9 @@ label {
 <?php $DW->dumpOpt($opt_frontpage); ?>
 <div>
 <div id="frontpage"  class="infotext">
-	This option only applies when your front page is set to display your latest posts (See Settings &gt; Reading).<br />
-	When a static page is set, you can use the options for the static pages below.
+	<?php _e('This option only applies when your front page is set to display your latest posts (See Settings &gt; Reading).<br />
+						When a static page is set, you can use the options for the static pages below.
+					', DW_L10N_DOMAIN); ?>
 </div>
 </div>
 <input type="radio" name="front-page" value="yes" id="front-page-yes" <?php echo ( isset($frontpage_yes_selected) ? $frontpage_yes_selected : '' ); ?> /> <label for="front-page-yes"><?php _e('Yes'); ?></label>
@@ -419,8 +421,9 @@ label {
 <?php $DW->dumpOpt($opt_single); ?>
 <div>
 <div id="single" class="infotext">
-  When you use an author <b>AND</b> a category exception, both rules in the condition must be met. Otherwise the exception rule won't be applied.
-  If you want to use the rules in a logical OR condition. Add the same widget again and apply the other rule to that.
+  <?php _e('When you use an author <b>AND</b> a category exception, both rules in the condition must be met. Otherwise the exception rule won\'t be applied.
+  					If you want to use the rules in a logical OR condition. Add the same widget again and apply the other rule to that.
+  					', DW_L10N_DOMAIN); ?>
 </div>
 </div>
 <input type="radio" name="single" value="yes" id="single-yes" <?php echo ( isset($single_yes_selected) ? $single_yes_selected : '' ); ?> /> <label for="single-yes"><?php _e('Yes'); ?></label>
@@ -431,8 +434,12 @@ label {
 <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('individual_post_tag')" />
 <div>
 <div id="individual_post_tag" class="infotext">
-  When you enable this option, you have the ability to apply the exception rule for <em>Single Posts</em> to tags and individual posts. You can set the exception rule for tags in the single Edit Tag Panel (go to <a href="edit-tags.php?taxonomy=post_tag">Post Tags</a>, click a tag), For individual posts in the <a href="post-new.php">New</a> or <a href="edit.php">Edit</a> Posts panel. Exception rules for tags and individual posts in any combination work independantly, but will always be counted as one exception.<br />
-  Please note when exception rules are set for Author and/or Category, these will be removed.
+  <?php _e('When you enable this option, you have the ability to apply the exception rule for <em>Single Posts</em> to tags and individual posts.
+						You can set the exception rule for tags in the single Edit Tag Panel (go to <a href="edit-tags.php?taxonomy=post_tag">Post Tags</a>,
+						click a tag), For individual posts in the <a href="post-new.php">New</a> or <a href="edit.php">Edit</a> Posts panel.
+						Exception rules for tags and individual posts in any combination work independantly, but will always be counted as one exception.<br />
+  					Please note when exception rules are set for Author and/or Category, these will be removed.
+  				', DW_L10N_DOMAIN); ?>
 </div>
 </div>
 <?php foreach ( $single_post_act as $singlepost ) { ?>
