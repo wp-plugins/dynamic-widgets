@@ -40,6 +40,7 @@
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
   define('DW_OLD_METHOD', get_option('dynwid_old_method'));
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
+  define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
   define('DW_VERSION', '1.3.5');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
@@ -99,27 +100,30 @@
     $DW = &$GLOBALS['DW'];
 
     $screen = add_submenu_page('themes.php', 'Dynamic Widgets', 'Dynamic Widgets', 'switch_themes', 'dynwid-config', 'dynwid_admin_page');
-    add_action('admin_print_styles-' . $screen, 'dynwid_add_admin_styles');
-    add_action('admin_print_scripts-' . $screen, 'dynwid_add_admin_scripts');
 
-    // Contextual help
-    if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
-      $help  = __('Widgets are always displayed by default', DW_L10N_DOMAIN) . ' (' . __('The') . ' \'<em>' . __('Yes') .'</em>\' ' . __('selection', DW_L10N_DOMAIN) . ').<br />';
-      $help .= __('Click on the', DW_L10N_DOMAIN) . ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" /> ' . __('next to the options for more info', DW_L10N_DOMAIN) . '.';
-    } else {
-      $help  = '<p><strong>' . __('Static', DW_L10N_DOMAIN) . ' / ' . __('Dynamic', DW_L10N_DOMAIN) . '</strong><br />';
-      $help .= __('When a widget is', DW_L10N_DOMAIN) . ' <em>' . __('Static', DW_L10N_DOMAIN) . '</em>, ' . __('the widget uses the WordPress default. In other words, it\'s shown everywhere', DW_L10N_DOMAIN) . '.<br />';
-      $help .=  __('A widget is', DW_L10N_DOMAIN) . ' <em>' . __('Dynamic', DW_L10N_DOMAIN) . '</em> ' . __('when there are options set, i.e. not showing on the front page.', DW_L10N_DOMAIN) . '</p>';
-      $help .= '<p><strong>' . __('Reset', DW_L10N_DOMAIN) . '</strong><br />';
-      $help .= __('Reset makes the widget return to', DW_L10N_DOMAIN) . ' <em>' . __('Static', DW_L10N_DOMAIN) . '</em>.</p>';
-    }
-    add_contextual_help($screen, $help);
+  	if ( $DW->enabled ) {
+  		add_action('admin_print_styles-' . $screen, 'dynwid_add_admin_styles');
+  		add_action('admin_print_scripts-' . $screen, 'dynwid_add_admin_scripts');
 
-    // Only show meta box in posts panel when there are widgets enabled.
-    $opt = $DW->getOptions('%','individual');
-    if ( count($opt) > 0 ) {
-      add_meta_box('dynwid', 'Dynamic Widgets', 'dynwid_add_post_control', 'post', 'side', 'low');
-    }
+  		// Contextual help
+  		if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
+  			$help  = __('Widgets are always displayed by default', DW_L10N_DOMAIN) . ' (' . __('The') . ' \'<em>' . __('Yes') .'</em>\' ' . __('selection', DW_L10N_DOMAIN) . ').<br />';
+  			$help .= __('Click on the', DW_L10N_DOMAIN) . ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" /> ' . __('next to the options for more info', DW_L10N_DOMAIN) . '.';
+  		} else {
+  			$help  = '<p><strong>' . __('Static', DW_L10N_DOMAIN) . ' / ' . __('Dynamic', DW_L10N_DOMAIN) . '</strong><br />';
+  			$help .= __('When a widget is', DW_L10N_DOMAIN) . ' <em>' . __('Static', DW_L10N_DOMAIN) . '</em>, ' . __('the widget uses the WordPress default. In other words, it\'s shown everywhere', DW_L10N_DOMAIN) . '.<br />';
+  			$help .=  __('A widget is', DW_L10N_DOMAIN) . ' <em>' . __('Dynamic', DW_L10N_DOMAIN) . '</em> ' . __('when there are options set, i.e. not showing on the front page.', DW_L10N_DOMAIN) . '</p>';
+  			$help .= '<p><strong>' . __('Reset', DW_L10N_DOMAIN) . '</strong><br />';
+  			$help .= __('Reset makes the widget return to', DW_L10N_DOMAIN) . ' <em>' . __('Static', DW_L10N_DOMAIN) . '</em>.</p>';
+  		}
+  		add_contextual_help($screen, $help);
+
+  		// Only show meta box in posts panel when there are widgets enabled.
+  		$opt = $DW->getOptions('%','individual');
+  		if ( count($opt) > 0 ) {
+  			add_meta_box('dynwid', 'Dynamic Widgets', 'dynwid_add_post_control', 'post', 'side', 'low');
+  		}
+  	}
   }
 
   function dynwid_add_admin_scripts() {
@@ -297,24 +301,28 @@
 
   function dynwid_init() {
     $GLOBALS['DW'] = new dynWid();
+  	$DW = &$GLOBALS['DW'];
 
   	if ( is_admin() ) {
   	  if ( isset($_POST['dynwid_save']) && $_POST['dynwid_save'] == 'yes' ) {
-  	    $DW = &$GLOBALS['DW'];
   	    require_once(dirname(__FILE__) . '/dynwid_admin_save.php');
   	  }
 
   		load_plugin_textdomain(DW_L10N_DOMAIN, FALSE, dirname(plugin_basename(__FILE__)) . '/locale');
 
 			add_action('admin_menu', 'dynwid_add_admin_menu');
-	 		add_action('edit_tag_form_fields', 'dynwid_add_tag_page');
-	 		add_action('edited_term', 'dynwid_save_tagdata');
-	 		add_action('in_plugin_update_message-' . plugin_basename(__FILE__), 'dynwid_check_version', 10, 2);
-			add_action('plugin_action_links_' . plugin_basename(__FILE__), 'dynwid_add_plugin_actions');
-	 	  add_action('save_post', 'dynwid_save_postdata');
-	 	  add_action('sidebar_admin_setup', 'dynwid_add_widget_control');
+  		if ( $DW->enabled ) {
+  			add_action('edit_tag_form_fields', 'dynwid_add_tag_page');
+  			add_action('edited_term', 'dynwid_save_tagdata');
+  			add_action('in_plugin_update_message-' . plugin_basename(__FILE__), 'dynwid_check_version', 10, 2);
+  			add_action('plugin_action_links_' . plugin_basename(__FILE__), 'dynwid_add_plugin_actions');
+  			add_action('save_post', 'dynwid_save_postdata');
+  			add_action('sidebar_admin_setup', 'dynwid_add_widget_control');
+  		}
 		} else {
-			add_action('wp_head', 'dynwid_filter_widgets');
+			if ( $DW->enabled ) {
+				add_action('wp_head', 'dynwid_filter_widgets');
+			}
 		}
   }
 
@@ -408,7 +416,10 @@
 	  $dbtable = $wpdb->prefix . DW_DB_TABLE;
 
     // Housekeeping
+		delete_option('dynwid_housekeeping_lastrun');
+		delete_option('dynwid_old_method');
 		delete_option('dynwid_version');
+
 		$query = "DROP TABLE IF EXISTS " . $dbtable;
 		$wpdb->query($query);
 

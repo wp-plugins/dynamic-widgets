@@ -10,13 +10,26 @@
 <h2>Dynamic Widgets</h2>
 
 <?php
-  // Actions
-  if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
-  	$dw_admin_script = '/dynwid_admin_edit.php';
-  } else {
-  	$dw_admin_script = '/dynwid_admin_overview.php';
-  }
-  require_once(dirname(__FILE__) . $dw_admin_script);
+	if ( $DW->enabled ) {
+		// Actions
+		if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
+			$dw_admin_script = '/dynwid_admin_edit.php';
+		} else {
+			$dw_admin_script = '/dynwid_admin_overview.php';
+
+			// Do some housekeeping
+			$lastrun = get_option('dynwid_housekeeping_lastrun');
+			if ( time() - $lastrun > DW_TIME_LIMIT ) {
+				$DW->housekeeping();
+				update_option('dynwid_housekeeping_lastrun', time());
+			}
+		}
+		require_once(dirname(__FILE__) . $dw_admin_script);
+	} else {
+		echo '<div class="error" id="message"><p>';
+		echo 'Oops! Something went terrible wrong. Please reinstall Dynamic Widgets.';
+		echo '</p></div>';
+	}
 ?>
 
 <!-- Footer //-->

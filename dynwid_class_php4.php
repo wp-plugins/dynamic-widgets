@@ -9,6 +9,7 @@
   class dynWid {
   	var $custom_post_type;
     var $dbtable;                       /* private */
+  	var $enabled;
     var $dynwid_list;
     var $firstmessage;                  /* private */
     var $registered_sidebars;           /* private */
@@ -20,7 +21,7 @@
   	var $whereami;
     var $wpdb;                          /* private */
     var $wpml;                          /* WPML Plugin support */
-    var $wpsc;														/* WPSC/WPEC Plugin support */
+    var $wpsc;													/* WPSC/WPEC Plugin support */
 
     /* Old constructor redirect to new constructor */
 		function dynWid() {
@@ -42,8 +43,17 @@
       $this->sidebars = wp_get_sidebars_widgets();
       $this->plugin_url = WP_PLUGIN_URL . '/' . str_replace( basename(__FILE__), '', plugin_basename(__FILE__) );
 
-      $this->wpdb = $GLOBALS['wpdb'];
-      $this->dbtable = $this->wpdb->prefix . DW_DB_TABLE;
+    	// DB init
+    	$this->wpdb = $GLOBALS['wpdb'];
+    	$this->dbtable = $this->wpdb->prefix . DW_DB_TABLE;
+    	$query = "SHOW TABLES LIKE '" . $this->dbtable . "'";
+    	$result = $this->wpdb->get_var($query);
+
+    	if ( is_null($result) ) {
+    		$this->enabled = FALSE;
+    	} else {
+    		$this->enabled = TRUE;
+    	}
 
       // WPML Plugin support
       $this->wpml = FALSE;
@@ -287,6 +297,18 @@
         return FALSE;
       }
     }
+
+  	function housekeeping() {
+  		$widgets = array_keys($this->registered_widgets);
+
+  		$query = "SELECT DISTINCT widget_id FROM " . $this->dbtable;
+  		$results = $this->wpdb->get_results($query);
+  		foreach ( $results as $myrow ) {
+  			if (! in_array($myrow->widget_id, $widgets) ) {
+  				$this->resetOptions($myrow->widget_id);
+  			}
+  		}
+  	}
 
     function message($text) {
       if ( DW_DEBUG ) {
