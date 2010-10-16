@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dynamic Widgets\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-14 18:53+0100\n"
-"PO-Revision-Date: 2010-10-14 18:53+0100\n"
-"Last-Translator: Jacco <jacco@qurl.nl>\n"
+"POT-Creation-Date: 2010-10-16 21:05+0100\n"
+"PO-Revision-Date: 2010-10-16 21:06+0100\n"
+"Last-Translator: Jacco\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -64,7 +64,7 @@ msgstr ""
 
 # WordPress MO
 #: ../dynwid_admin_edit.php:355
-#: ../dynamic-widgets.php:444
+#: ../dynamic-widgets.php:564
 msgid "Role"
 msgstr ""
 
@@ -91,7 +91,7 @@ msgstr ""
 #: ../dynwid_admin_edit.php:544
 #: ../dynwid_admin_edit.php:588
 #: ../dynwid_admin_edit.php:612
-#: ../dynamic-widgets.php:107
+#: ../dynamic-widgets.php:118
 msgid "Yes"
 msgstr ""
 
@@ -117,7 +117,7 @@ msgstr ""
 
 # WordPress MO
 #: ../dynwid_admin_edit.php:374
-#: ../dynamic-widgets.php:445
+#: ../dynamic-widgets.php:565
 msgid "Date"
 msgstr ""
 
@@ -154,7 +154,7 @@ msgid "To"
 msgstr ""
 
 #: ../dynwid_admin_edit.php:404
-#: ../dynamic-widgets.php:446
+#: ../dynamic-widgets.php:566
 msgid "Front Page"
 msgstr ""
 
@@ -170,7 +170,7 @@ msgid ""
 msgstr ""
 
 #: ../dynwid_admin_edit.php:419
-#: ../dynamic-widgets.php:447
+#: ../dynamic-widgets.php:567
 msgid "Single Posts"
 msgstr ""
 
@@ -209,7 +209,7 @@ msgstr ""
 
 # WordPress MO
 #: ../dynwid_admin_edit.php:479
-#: ../dynamic-widgets.php:448
+#: ../dynamic-widgets.php:568
 msgid "Pages"
 msgstr ""
 
@@ -222,7 +222,7 @@ msgid "Except the page(s)"
 msgstr ""
 
 #: ../dynwid_admin_edit.php:493
-#: ../dynamic-widgets.php:449
+#: ../dynamic-widgets.php:569
 msgid "Author Pages"
 msgstr ""
 
@@ -235,7 +235,7 @@ msgid "Except the author(s)"
 msgstr ""
 
 #: ../dynwid_admin_edit.php:506
-#: ../dynamic-widgets.php:450
+#: ../dynamic-widgets.php:570
 msgid "Category Pages"
 msgstr ""
 
@@ -249,7 +249,7 @@ msgid "Except the categories"
 msgstr ""
 
 #: ../dynwid_admin_edit.php:520
-#: ../dynamic-widgets.php:451
+#: ../dynamic-widgets.php:571
 msgid "Archive Pages"
 msgstr ""
 
@@ -262,7 +262,7 @@ msgid "This option does not include Author and Category Pages."
 msgstr ""
 
 #: ../dynwid_admin_edit.php:533
-#: ../dynamic-widgets.php:452
+#: ../dynamic-widgets.php:572
 msgid "Error Page"
 msgstr ""
 
@@ -291,7 +291,7 @@ msgid "Except for"
 msgstr ""
 
 #: ../dynwid_admin_edit.php:609
-#: ../dynamic-widgets.php:454
+#: ../dynamic-widgets.php:574
 msgid "WPSC Category"
 msgstr ""
 
@@ -304,8 +304,30 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+#: ../dynwid_admin.php:16
+msgid "<b>WARNING</b> STRICT sql mode in effect. Dynamic Widgets might not work correctly. Please disable STRICT sql mode."
+msgstr ""
+
+#: ../dynwid_admin.php:36
+msgid "Oops! Something went terrible wrong. Please reinstall Dynamic Widgets."
+msgstr ""
+
+#: ../dynwid_admin.php:44
+#: ../dynwid_admin_overview.php:28
+msgid "OLD"
+msgstr ""
+
+#: ../dynwid_admin.php:44
+#: ../dynwid_admin_overview.php:28
+msgid "FILTER"
+msgstr ""
+
 #: ../dynwid_admin_overview.php:15
 msgid "Widget options have been reset to default."
+msgstr ""
+
+#: ../dynwid_admin_overview.php:28
+msgid "Method set to"
 msgstr ""
 
 #: ../dynwid_admin_overview.php:59
@@ -322,17 +344,17 @@ msgid "Reset widget to Static"
 msgstr ""
 
 #: ../dynwid_admin_overview.php:73
-#: ../dynamic-widgets.php:110
-#: ../dynamic-widgets.php:112
-#: ../dynamic-widgets.php:439
+#: ../dynamic-widgets.php:121
+#: ../dynamic-widgets.php:123
+#: ../dynamic-widgets.php:559
 msgid "Dynamic"
 msgstr ""
 
 #: ../dynwid_admin_overview.php:73
-#: ../dynamic-widgets.php:110
-#: ../dynamic-widgets.php:111
-#: ../dynamic-widgets.php:114
-#: ../dynamic-widgets.php:439
+#: ../dynamic-widgets.php:121
+#: ../dynamic-widgets.php:122
+#: ../dynamic-widgets.php:125
+#: ../dynamic-widgets.php:559
 msgid "Static"
 msgstr ""
 
@@ -340,72 +362,72 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-#: ../dynamic-widgets.php:107
+#: ../dynamic-widgets.php:118
 msgid "Widgets are always displayed by default"
 msgstr ""
 
-#: ../dynamic-widgets.php:107
+#: ../dynamic-widgets.php:118
 msgid "The"
 msgstr ""
 
-#: ../dynamic-widgets.php:107
+#: ../dynamic-widgets.php:118
 msgid "selection"
 msgstr ""
 
-#: ../dynamic-widgets.php:108
+#: ../dynamic-widgets.php:119
 msgid "Click on the"
 msgstr ""
 
-#: ../dynamic-widgets.php:108
+#: ../dynamic-widgets.php:119
 msgid "next to the options for more info"
 msgstr ""
 
-#: ../dynamic-widgets.php:111
+#: ../dynamic-widgets.php:122
 msgid "When a widget is"
 msgstr ""
 
-#: ../dynamic-widgets.php:111
+#: ../dynamic-widgets.php:122
 msgid "the widget uses the WordPress default. In other words, it's shown everywhere"
 msgstr ""
 
-#: ../dynamic-widgets.php:112
+#: ../dynamic-widgets.php:123
 msgid "A widget is"
 msgstr ""
 
-#: ../dynamic-widgets.php:112
+#: ../dynamic-widgets.php:123
 msgid "when there are options set, i.e. not showing on the front page."
 msgstr ""
 
-#: ../dynamic-widgets.php:113
+#: ../dynamic-widgets.php:124
 msgid "Reset"
 msgstr ""
 
-#: ../dynamic-widgets.php:114
+#: ../dynamic-widgets.php:125
 msgid "Reset makes the widget return to"
 msgstr ""
 
 # WordPress MO
-#: ../dynamic-widgets.php:139
+#: ../dynamic-widgets.php:165
 msgid "Settings"
 msgstr ""
 
-#: ../dynamic-widgets.php:438
+#: ../dynamic-widgets.php:558
 msgid "This widget is"
 msgstr ""
 
-#: ../dynamic-widgets.php:453
+#: ../dynamic-widgets.php:573
 msgid "Search page"
 msgstr ""
 
-#: ../dynamic-widgets.php:489
+#: ../dynamic-widgets.php:609
 msgid "and"
 msgstr ""
 
-#: ../dynamic-widgets.php:495
+#: ../dynamic-widgets.php:615
 msgid "Options set for"
 msgstr ""
 
-#: ../dynamic-widgets.php:495
+#: ../dynamic-widgets.php:615
 msgid "Option set for"
 msgstr ""
 

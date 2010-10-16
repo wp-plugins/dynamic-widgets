@@ -56,6 +56,10 @@
   require_once(dirname(__FILE__) . '/' . DW_CLASSFILE);
 
   // Functions
+	/**
+	 * dynwid_activate() Activate the plugin
+	 * @since 1.3.3
+	 */
 	function dynwid_activate() {
 		$wpdb = $GLOBALS['wpdb'];
 		$dbtable = $wpdb->prefix . DW_DB_TABLE;
@@ -96,6 +100,10 @@
 		update_option('dynwid_version', DW_VERSION);
 	}
 
+  /**
+   * dynwid_add_admin_menu() Add plugin link to admin menu
+   * @since 1.0
+   */
   function dynwid_add_admin_menu() {
     $DW = &$GLOBALS['DW'];
 
@@ -126,6 +134,10 @@
   	}
   }
 
+  /**
+   * dynwid_add_admin_scripts() Enqueue jQuery UI scripts to admin page
+   * @since 1.3
+   */
   function dynwid_add_admin_scripts() {
   	$DW = &$GLOBALS['DW'];
     wp_enqueue_script('jquery');
@@ -133,11 +145,21 @@
     wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'jquery_datepicker.js', array('jquery-ui-core'));
   }
 
+  /**
+   * dynwid_add_admin_styles() Enqueue CSS to admin page
+   * @since 1.3
+   */
   function dynwid_add_admin_styles() {
     $DW = &$GLOBALS['DW'];
     wp_enqueue_style('jquery-ui-smoothness', $DW->plugin_url . 'jquery-ui-smoothness.css');
   }
 
+  /**
+   * dynwid_add_plugin_actions() Add settings link in WP plugin overview
+   * @param array $all
+   * @return array
+   * @since 1.0
+   */
   function dynwid_add_plugin_actions($all) {
     $links = array();
 	  $links[ ] = '<a href="themes.php?page=dynwid-config">' . __('Settings') . '</a>';
@@ -145,6 +167,10 @@
     return array_merge($links, $all);
   }
 
+  /**
+   * dynwid_add_post_control() Add control widget to post screen
+   * @since 1.2
+   */
   function dynwid_add_post_control() {
     $post = $GLOBALS['post'];
     $DW = &$GLOBALS['DW'];
@@ -171,6 +197,10 @@
     }
   }
 
+  /**
+   * dynwid_add_tag_page() Add row to WP tags admin
+   * @since 1.2
+   */
   function dynwid_add_tag_page() {
     $DW = &$GLOBALS['DW'];
 
@@ -205,6 +235,10 @@
     }
   }
 
+  /**
+   * dynwid_add_widget_control() Preparation for callback hook into WP widgets admin
+   * @since 1.2
+   */
   function dynwid_add_widget_control() {
     $DW = &$GLOBALS['DW'];
 
@@ -245,6 +279,10 @@
     }
   }
 
+  /**
+   * dynwid_add_widget_page() Save success message for WP widgets admin
+	 * @since 1.2
+   */
   function dynwid_add_widget_page() {
     $DW = &$GLOBALS['DW'];
 
@@ -257,6 +295,10 @@
     echo '</div>';
   }
 
+  /**
+   * dynwid_admin_dump() Dump function
+   * @since 1.0
+   */
   function dynwid_admin_dump() {
     $DW = &$GLOBALS['DW'];
 
@@ -268,11 +310,21 @@
     die();
   }
 
+  /**
+   * dynwid_admin_page() Admin pages
+   * @since 1.0
+   */
   function dynwid_admin_page() {
     $DW = &$GLOBALS['DW'];
     require_once(dirname(__FILE__) . '/dynwid_admin.php');
   }
 
+  /**
+   * dynwid_check_version() Displays changelog with latest version compared to installed version
+   * @param mixed $plugin_data
+   * @param object $r
+   * @since 1.3.1
+   */
   function dynwid_check_version($plugin_data, $r) {
     $check = wp_remote_fopen(DW_VERSION_URL_CHECK . $r->new_version);
 
@@ -283,11 +335,19 @@
     }
   }
 
+  /**
+   * dynwid_filter_init() Init of the worker
+   * @since 1.3.5
+   */
   function dynwid_filter_init() {
   	$DW = &$GLOBALS['DW'];
   	require(dirname(__FILE__) . '/dynwid_init_worker.php');
   }
 
+  /**
+   * dynwid_filter_widgets() Worker
+   * @since 1.3.5
+   */
   function dynwid_filter_widgets() {
   	$DW = &$GLOBALS['DW'];
 
@@ -299,6 +359,10 @@
   	}
   }
 
+  /**
+   * dynwid_init() Init of the plugin
+   * @since 1.0
+   */
   function dynwid_init() {
     $GLOBALS['DW'] = new dynWid();
   	$DW = &$GLOBALS['DW'];
@@ -326,6 +390,10 @@
 		}
   }
 
+	/**
+	 * dynwid_install() Installation
+	 * @since 1.3.1
+	 */
 	function dynwid_install() {
 		if ( function_exists('is_multisite') ) {
 			if ( is_multisite() && isset($_GET['networkwide']) && $_GET['networkwide'] == '1' ) {
@@ -339,6 +407,11 @@
 		}
 	}
 
+	/**
+	 * dynwid_save_postdata() Save of options via post screen
+	 * @param int $post_id
+	 * @since 1.2
+	 */
 	function dynwid_save_postdata($post_id) {
 	  $DW = &$GLOBALS['DW'];
 
@@ -376,6 +449,11 @@
 	  } // END if array_key_exists
 	}
 
+	/**
+	 * dynwid_save_tagdata() Save of tagdata
+	 * @param int $term_id
+	 * @since 1.2
+	 */
 	function dynwid_save_tagdata($term_id) {
 	  // Only act when tag is updated via 'edit', NOT via 'quick edit'
 	  if ( $_POST['action'] == 'editedtag' ) {
@@ -411,6 +489,34 @@
 	  } // END if action
 	}
 
+	/**
+	 * dynwid_sql_mode() Internal check for STRICT sql mode
+	 * @since 1.3.6
+	 */
+	function dynwid_sql_mode() {
+		$wpdb = $GLOBALS['wpdb'];
+		$strict_mode = array('STRICT_TRANS_TABLES', 'STRICT_ALL_TABLES');
+
+		$query = "SELECT @@GLOBAL.sql_mode";
+		$result = $wpdb->get_var($query);
+		$sql_global = explode(',', $result);
+
+		$query = "SELECT @@SESSION.sql_mode";
+		$result =  $wpdb->get_var($query);
+		$sql_session = explode(',', $result);
+
+		$sqlmode = array_merge($sql_global, $sql_session);
+		if ( (bool) array_intersect($sql_session, $strict_mode) ) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	 * dynwid_uninstall() Uninstall
+	 * @since 1.0
+	 */
 	function dynwid_uninstall() {
 		$wpdb = $GLOBALS['wpdb'];
 	  $dbtable = $wpdb->prefix . DW_DB_TABLE;
@@ -433,6 +539,10 @@
     die();
 	}
 
+	/**
+	 * dynwid_widget_callback() Callback function for hooking into WP widgets admin
+	 * @since 1.2
+	 */
 	function dynwid_widget_callback() {
 	  $DW = &$GLOBALS['DW'];
 
@@ -509,6 +619,13 @@
 	  echo '</p>';
 	}
 
+	/**
+	 * dynwid_worker() Worker process
+	 *
+	 * @param array $sidebars
+	 * @return array
+	 * @since 1.0
+	 */
 	function dynwid_worker($sidebars) {
 	  $DW = &$GLOBALS['DW'];
 		if ( $DW->wpsc ) {

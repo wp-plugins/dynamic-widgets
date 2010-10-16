@@ -25,7 +25,7 @@
   	}
 ?>
 <div class="updated fade" id="message">
-	<p><strong>Method set to <?php echo ( get_option('dynwid_old_method') ? '\'OLD\'' : '\'FILTER\'' ); ?>.</strong></p>
+	<p><strong <?php echo __('Method set to', DW_L10N_DOMAIN) . ( get_option('dynwid_old_method') ? '\''. __('OLD', DW_L10N_DOMAIN) .'\'' : '\'' . __('FILTER', DW_L10N_DOMAIN) . '\'' ); ?>.</strong></p>
 </div>
 <?php
   }

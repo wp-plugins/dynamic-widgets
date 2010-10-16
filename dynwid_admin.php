@@ -11,6 +11,12 @@
 
 <?php
 	if ( $DW->enabled ) {
+		if ( dynwid_sql_mode() ) {
+			echo '<div class="error" id="message"><p>';
+			_e('<b>WARNING</b> STRICT sql mode in effect. Dynamic Widgets might not work correctly. Please disable STRICT sql mode.', DW_L10N_DOMAIN);
+			echo '</p></div>';
+		}
+
 		// Actions
 		if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
 			$dw_admin_script = '/dynwid_admin_edit.php';
@@ -27,7 +33,7 @@
 		require_once(dirname(__FILE__) . $dw_admin_script);
 	} else {
 		echo '<div class="error" id="message"><p>';
-		echo 'Oops! Something went terrible wrong. Please reinstall Dynamic Widgets.';
+		_e('Oops! Something went terrible wrong. Please reinstall Dynamic Widgets.', DW_L10N_DOMAIN);
 		echo '</p></div>';
 	}
 ?>
@@ -35,7 +41,7 @@
 <!-- Footer //-->
 <div class="clear"><br /><br /></div>
 <div><small>
-  <a href="<?php echo DW_URL; ?>/dynamic-widgets/" target="_blank">Dynamic Widgets</a> v<?php echo DW_VERSION; ?> (<?php echo ( DW_CLASSFILE == 'dynwid_class_php4.php' ? 'PHP4' : 'PHP5' ) . ', ' . ( DW_OLD_METHOD ? 'OLD'  : 'FILTER' ); ?>)
+  <a href="<?php echo DW_URL; ?>/dynamic-widgets/" target="_blank">Dynamic Widgets</a> v<?php echo DW_VERSION; ?> (<?php echo ( DW_CLASSFILE == 'dynwid_class_php4.php' ? 'PHP4' : 'PHP5' ) . ', ' . ( DW_OLD_METHOD ? __('OLD', DW_L10N_DOMAIN)  : __('FILTER', DW_L10N_DOMAIN) ); ?>)
 </small></div>
 
 </div> <!-- /wrap //-->

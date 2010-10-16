@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dynamic Widgets NL\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-14 18:53+0100\n"
+"POT-Creation-Date: 2010-10-16 21:05+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Jacco <jacco@qurl.nl>\n"
+"Last-Translator: Jacco\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -58,7 +58,7 @@ msgid "Widget"
 msgstr "Widget"
 
 #: ../dynwid_admin_edit.php:355
-#: ../dynamic-widgets.php:444
+#: ../dynamic-widgets.php:564
 msgid "Role"
 msgstr "Rol"
 
@@ -86,7 +86,7 @@ msgstr ""
 #: ../dynwid_admin_edit.php:544
 #: ../dynwid_admin_edit.php:588
 #: ../dynwid_admin_edit.php:612
-#: ../dynamic-widgets.php:107
+#: ../dynamic-widgets.php:118
 msgid "Yes"
 msgstr "Ja"
 
@@ -110,7 +110,7 @@ msgid "only to"
 msgstr "alleen aan"
 
 #: ../dynwid_admin_edit.php:374
-#: ../dynamic-widgets.php:445
+#: ../dynamic-widgets.php:565
 msgid "Date"
 msgstr "Datum"
 
@@ -151,7 +151,7 @@ msgid "To"
 msgstr "Tot"
 
 #: ../dynwid_admin_edit.php:404
-#: ../dynamic-widgets.php:446
+#: ../dynamic-widgets.php:566
 msgid "Front Page"
 msgstr "Startpagina"
 
@@ -170,7 +170,7 @@ msgstr ""
 "\t\t\t\t\t"
 
 #: ../dynwid_admin_edit.php:419
-#: ../dynamic-widgets.php:447
+#: ../dynamic-widgets.php:567
 msgid "Single Posts"
 msgstr "Berichten"
 
@@ -217,7 +217,7 @@ msgid "Except the posts in category"
 msgstr "Behalve de berichten in de categorie"
 
 #: ../dynwid_admin_edit.php:479
-#: ../dynamic-widgets.php:448
+#: ../dynamic-widgets.php:568
 msgid "Pages"
 msgstr "Pagina's"
 
@@ -230,7 +230,7 @@ msgid "Except the page(s)"
 msgstr "Behalve de pagina('s)"
 
 #: ../dynwid_admin_edit.php:493
-#: ../dynamic-widgets.php:449
+#: ../dynamic-widgets.php:569
 msgid "Author Pages"
 msgstr "Auteur pagina's"
 
@@ -243,7 +243,7 @@ msgid "Except the author(s)"
 msgstr "Behalve van"
 
 #: ../dynwid_admin_edit.php:506
-#: ../dynamic-widgets.php:450
+#: ../dynamic-widgets.php:570
 msgid "Category Pages"
 msgstr "Categorie pagina's"
 
@@ -257,7 +257,7 @@ msgid "Except the categories"
 msgstr "Behalve de categoriën"
 
 #: ../dynwid_admin_edit.php:520
-#: ../dynamic-widgets.php:451
+#: ../dynamic-widgets.php:571
 msgid "Archive Pages"
 msgstr "Archief pagina's"
 
@@ -270,7 +270,7 @@ msgid "This option does not include Author and Category Pages."
 msgstr "Deze optie bevat niet auteurs en categorie pagina's"
 
 #: ../dynwid_admin_edit.php:533
-#: ../dynamic-widgets.php:452
+#: ../dynamic-widgets.php:572
 msgid "Error Page"
 msgstr "Foutmeldings pagina"
 
@@ -299,7 +299,7 @@ msgid "Except for"
 msgstr "Behalve voor"
 
 #: ../dynwid_admin_edit.php:609
-#: ../dynamic-widgets.php:454
+#: ../dynamic-widgets.php:574
 msgid "WPSC Category"
 msgstr "WPSC Categorie"
 
@@ -311,9 +311,31 @@ msgstr "Toon de widget standaard in de WPSC categoriën?"
 msgid "Save"
 msgstr "Opslaan"
 
+#: ../dynwid_admin.php:16
+msgid "<b>WARNING</b> STRICT sql mode in effect. Dynamic Widgets might not work correctly. Please disable STRICT sql mode."
+msgstr "<b>LET OP</b> STRICT sql mode gedecteerd. Dynamic Widgets werkt mogelijk niet correct. U wordt aangeraden STRICT sql mode uit te schakelen."
+
+#: ../dynwid_admin.php:36
+msgid "Oops! Something went terrible wrong. Please reinstall Dynamic Widgets."
+msgstr "Oeps! Er is een onhelstelbare fout opgetreden. U wordt aangeraden om Dynamic Widgets opnieuw te installeren."
+
+#: ../dynwid_admin.php:44
+#: ../dynwid_admin_overview.php:28
+msgid "OLD"
+msgstr "OUD"
+
+#: ../dynwid_admin.php:44
+#: ../dynwid_admin_overview.php:28
+msgid "FILTER"
+msgstr ""
+
 #: ../dynwid_admin_overview.php:15
 msgid "Widget options have been reset to default."
 msgstr "De widget opties zijn hersteld naar standaard"
+
+#: ../dynwid_admin_overview.php:28
+msgid "Method set to"
+msgstr "Methode is nu"
 
 #: ../dynwid_admin_overview.php:59
 msgid "Edit this widget options"
@@ -328,17 +350,17 @@ msgid "Reset widget to Static"
 msgstr "Zet de widget terug naar statisch"
 
 #: ../dynwid_admin_overview.php:73
-#: ../dynamic-widgets.php:110
-#: ../dynamic-widgets.php:112
-#: ../dynamic-widgets.php:439
+#: ../dynamic-widgets.php:121
+#: ../dynamic-widgets.php:123
+#: ../dynamic-widgets.php:559
 msgid "Dynamic"
 msgstr "Dyamisch"
 
 #: ../dynwid_admin_overview.php:73
-#: ../dynamic-widgets.php:110
-#: ../dynamic-widgets.php:111
-#: ../dynamic-widgets.php:114
-#: ../dynamic-widgets.php:439
+#: ../dynamic-widgets.php:121
+#: ../dynamic-widgets.php:122
+#: ../dynamic-widgets.php:125
+#: ../dynamic-widgets.php:559
 msgid "Static"
 msgstr "Statisch"
 
@@ -346,71 +368,71 @@ msgstr "Statisch"
 msgid "Advanced"
 msgstr "Geavanceerd"
 
-#: ../dynamic-widgets.php:107
+#: ../dynamic-widgets.php:118
 msgid "Widgets are always displayed by default"
 msgstr "Widgets worden standaard altijd getoond"
 
-#: ../dynamic-widgets.php:107
+#: ../dynamic-widgets.php:118
 msgid "The"
 msgstr "De"
 
-#: ../dynamic-widgets.php:107
+#: ../dynamic-widgets.php:118
 msgid "selection"
 msgstr "selectie"
 
-#: ../dynamic-widgets.php:108
+#: ../dynamic-widgets.php:119
 msgid "Click on the"
 msgstr "Klik op de"
 
-#: ../dynamic-widgets.php:108
+#: ../dynamic-widgets.php:119
 msgid "next to the options for more info"
 msgstr "bij de opties voor meer informatie"
 
-#: ../dynamic-widgets.php:111
+#: ../dynamic-widgets.php:122
 msgid "When a widget is"
 msgstr "Wanneer een widget"
 
-#: ../dynamic-widgets.php:111
+#: ../dynamic-widgets.php:122
 msgid "the widget uses the WordPress default. In other words, it's shown everywhere"
 msgstr "de widget staat op de standaard instelling. Met andere woorden, deze wordt overal getoond"
 
-#: ../dynamic-widgets.php:112
+#: ../dynamic-widgets.php:123
 msgid "A widget is"
 msgstr "Een widget is"
 
-#: ../dynamic-widgets.php:112
+#: ../dynamic-widgets.php:123
 msgid "when there are options set, i.e. not showing on the front page."
 msgstr "als er opties gewijzigd zijn, bijvoorbeeld niet tonen op de startpagina."
 
-#: ../dynamic-widgets.php:113
+#: ../dynamic-widgets.php:124
 msgid "Reset"
 msgstr "Herstellen"
 
-#: ../dynamic-widgets.php:114
+#: ../dynamic-widgets.php:125
 msgid "Reset makes the widget return to"
 msgstr "Herstellen zorgt ervoor dat de widget teruggezet wordt naar"
 
-#: ../dynamic-widgets.php:139
+#: ../dynamic-widgets.php:165
 msgid "Settings"
 msgstr "Instellingen"
 
-#: ../dynamic-widgets.php:438
+#: ../dynamic-widgets.php:558
 msgid "This widget is"
 msgstr "Deze widget is"
 
-#: ../dynamic-widgets.php:453
+#: ../dynamic-widgets.php:573
 msgid "Search page"
 msgstr "Zoek pagina"
 
-#: ../dynamic-widgets.php:489
+#: ../dynamic-widgets.php:609
 msgid "and"
 msgstr "en"
 
-#: ../dynamic-widgets.php:495
+#: ../dynamic-widgets.php:615
 msgid "Options set for"
 msgstr "Opties voor"
 
-#: ../dynamic-widgets.php:495
+#: ../dynamic-widgets.php:615
 msgid "Option set for"
 msgstr "Optie voor"
 
