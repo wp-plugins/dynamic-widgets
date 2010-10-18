@@ -84,7 +84,7 @@
 				$query = "SELECT widget_id FROM " . $dbtable . " WHERE maintype = 'archive'";
 				$results = $wpdb->get_results($query);
 				foreach ( $results as $myrow ) {
-					$query = "INSERT INTO " .$dbtable . "(widget_id, maintype, value) VALUES ('" . $myrow->widget_id . "', 'author', '0')";
+					$query = "INSERT INTO " . $dbtable . "(widget_id, maintype, value) VALUES ('" . $myrow->widget_id . "', 'author', '0')";
 					$wpdb->query($query);
 				}
 			}
@@ -464,7 +464,7 @@
 	    }
 
 	    // Housekeeping
-	    $opt = $DW->getOptions('%','individual');
+	    $opt = $DW->getOptions('%', 'individual');
 	    foreach ( $opt as $widget ) {
 	      $DW->deleteOption($widget['widget_id'], 'single-tag', $term_id);
 	    }
