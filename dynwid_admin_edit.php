@@ -554,11 +554,11 @@ label {
               '_builtin' => FALSE
             );
     $post_types = get_post_types($args, 'objects', 'and');
-
-    foreach ( $post_types as $ctid ) {
+    
+    foreach ( $post_types as $type => $ctid ) {
       // Prepare
       $custom_yes_selected = 'checked="checked"';
-      $opt_custom = $DW->getOptions($_GET['id'], key($post_types));
+      $opt_custom = $DW->getOptions($_GET['id'], $type);
       if ( count($opt_custom) > 0 ) {
         $custom_act = array();
         foreach ( $opt_custom as $custom_condition ) {
@@ -575,26 +575,26 @@ label {
         }
       }
 
-      $loop = new WP_Query( array('post_type' => key($post_types)) );
+      $loop = new WP_Query( array('post_type' => $type) );
       if ( $loop->post_count > DW_LIST_LIMIT ) {
         $custom_condition_select_style = DW_LIST_STYLE;
       }
 
       // Output
-      echo '<input type="hidden" name="post_types[]" value="' . key($post_types) . '" />';
+      echo '<input type="hidden" name="post_types[]" value="' . $type . '" />';
       echo '<b>' . __('Custom Post Type') . ' <em>' . $ctid->label . '</em></b> ' . ( $DW->wpml ? $wpml_icon : '' ) . '<br />';
       echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $ctid->label . '?<br />';
       $DW->dumpOpt($opt_custom);
-      echo '<input type="radio" name="' . key($post_types) . '" value="yes" id="' . key($post_types) . '-yes" ' . ( isset($custom_yes_selected) ? $custom_yes_selected : '' ) . ' /> <label for="' . key($post_types) . '-yes">' . __('Yes') . '</label> ';
-      echo '<input type="radio" name="' . key($post_types) . '" value="no" id="' . key($post_types) . '-no" ' . ( isset($custom_no_selected) ? $custom_no_selected : '' ) . ' /> <label for="' . key($post_types) . '-no">' . __('No') . '</label><br />';
+      echo '<input type="radio" name="' . $type . '" value="yes" id="' . $type . '-yes" ' . ( isset($custom_yes_selected) ? $custom_yes_selected : '' ) . ' /> <label for="' . $type . '-yes">' . __('Yes') . '</label> ';
+      echo '<input type="radio" name="' . $type . '" value="no" id="' . $type . '-no" ' . ( isset($custom_no_selected) ? $custom_no_selected : '' ) . ' /> <label for="' . $type . '-no">' . __('No') . '</label><br />';
 
       echo __('Except for') . ':<br />';
-      echo '<div id="' . key($post_types) . '-select" class="condition-select" ' . ( isset($custom_condition_select_style) ? $custom_condition_select_style : '' ) . '>';
+      echo '<div id="' . $type . '-select" class="condition-select" ' . ( isset($custom_condition_select_style) ? $custom_condition_select_style : '' ) . '>';
 
       while ( $loop->have_posts() ) : $loop->the_post();
-        echo '<input type="checkbox" id="' . key($post_types) . '_act_' . $loop->post->ID . '" name="' . key($post_types) . '_act[]" value="' . $loop->post->ID . '" ';
+        echo '<input type="checkbox" id="' . $type . '_act_' . $loop->post->ID . '" name="' . $type . '_act[]" value="' . $loop->post->ID . '" ';
         echo ( count($custom_act) > 0 && in_array($loop->post->ID,$custom_act) ) ? 'checked="checked"' : '';
-        echo ' /> <label for="' . key($post_types) . '_act_' . $loop->post->ID . '">';
+        echo ' /> <label for="' . $type . '_act_' . $loop->post->ID . '">';
         the_title();
         echo '</label><br />';
       endwhile;
