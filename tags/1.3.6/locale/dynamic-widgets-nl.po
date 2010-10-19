@@ -1,0 +1,438 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Dynamic Widgets NL\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-10-16 21:05+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Jacco\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NETHERLANDS\n"
+
+#: ../dynwid_admin_edit.php:22
+msgid "Anonymous"
+msgstr "Anoniem"
+
+#: ../dynwid_admin_edit.php:332
+msgid "Widget options saved."
+msgstr "Widget opties bewaard"
+
+#: ../dynwid_admin_edit.php:332
+#: ../dynwid_admin_edit.php:629
+msgid "Return"
+msgstr "Terug"
+
+#: ../dynwid_admin_edit.php:332
+msgid "to Dynamic Widgets overview"
+msgstr "naar Dynamic Widgets overzicht"
+
+#: ../dynwid_admin_edit.php:337
+msgid "Dynamic does not mean static hiding of a widget."
+msgstr "Dynamisch houdt niet in het statisch verbergen van een widget."
+
+#: ../dynwid_admin_edit.php:337
+msgid "Hint"
+msgstr "Hint"
+
+#: ../dynwid_admin_edit.php:337
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: ../dynwid_admin_edit.php:337
+msgid "the widget from the sidebar"
+msgstr "de widget in de sidebar"
+
+#: ../dynwid_admin_edit.php:341
+msgid "The From date can't be later than the To date."
+msgstr "The 'van' datum kan niet later zijn dan de 'tot' datum."
+
+#: ../dynwid_admin_edit.php:346
+msgid "Edit options for"
+msgstr "Wijzig de opties voor"
+
+#: ../dynwid_admin_edit.php:346
+msgid "Widget"
+msgstr "Widget"
+
+#: ../dynwid_admin_edit.php:355
+#: ../dynamic-widgets.php:564
+msgid "Role"
+msgstr "Rol"
+
+#: ../dynwid_admin_edit.php:356
+msgid "Show widget to everybody?"
+msgstr "Toon de widget aan iedereen?"
+
+#: ../dynwid_admin_edit.php:360
+msgid ""
+"Setting options by role is very powerfull. It can override all other options!<br />\n"
+"\t\t\t\t\t\tUsers who are not logged in, get the <em>Anonymous</em> role."
+msgstr ""
+"De rol opties zijn zeer bijzonder. Ze kunnen alle andere opties overstijgen!<br />\n"
+"\t\t\t\t\t\tGebruikers die niet ingelogd zijn, krijgen de <em>anonieme</em> rol."
+
+#: ../dynwid_admin_edit.php:364
+#: ../dynwid_admin_edit.php:387
+#: ../dynwid_admin_edit.php:414
+#: ../dynwid_admin_edit.php:429
+#: ../dynwid_admin_edit.php:482
+#: ../dynwid_admin_edit.php:496
+#: ../dynwid_admin_edit.php:509
+#: ../dynwid_admin_edit.php:528
+#: ../dynwid_admin_edit.php:536
+#: ../dynwid_admin_edit.php:544
+#: ../dynwid_admin_edit.php:588
+#: ../dynwid_admin_edit.php:612
+#: ../dynamic-widgets.php:118
+msgid "Yes"
+msgstr "Ja"
+
+#: ../dynwid_admin_edit.php:365
+#: ../dynwid_admin_edit.php:388
+#: ../dynwid_admin_edit.php:415
+#: ../dynwid_admin_edit.php:430
+#: ../dynwid_admin_edit.php:483
+#: ../dynwid_admin_edit.php:497
+#: ../dynwid_admin_edit.php:510
+#: ../dynwid_admin_edit.php:529
+#: ../dynwid_admin_edit.php:537
+#: ../dynwid_admin_edit.php:545
+#: ../dynwid_admin_edit.php:589
+#: ../dynwid_admin_edit.php:613
+msgid "No"
+msgstr "Nee"
+
+#: ../dynwid_admin_edit.php:365
+msgid "only to"
+msgstr "alleen aan"
+
+#: ../dynwid_admin_edit.php:374
+#: ../dynamic-widgets.php:565
+msgid "Date"
+msgstr "Datum"
+
+#: ../dynwid_admin_edit.php:375
+msgid "Show widget always?"
+msgstr "Altijd de widget tonen?"
+
+#: ../dynwid_admin_edit.php:379
+msgid "Next to the above role option, the date option is also very powerfull. You've been warned!"
+msgstr "Net zoals de bovenstaande opties, is de datum opties zeer bijzonder. U bent gewaarschuwd!"
+
+#: ../dynwid_admin_edit.php:380
+msgid "Enter dates in the YYYY-MM-DD format. You can also use the calender by clicking on the"
+msgstr "Voer datum in volgens hets JJJJ-MM-DD formaat. U kunt ook de kalander gebruiken door te klikken op"
+
+#: ../dynwid_admin_edit.php:381
+msgid ""
+"Date ranges can be made by entering a From AND a To date<br />\n"
+"  \t\t\t\t\tWhen you want the widget to be displayed from a specific date, only fill in the From date<br />\n"
+"  \t\t\t\t\tWhen you want the widget to stop displaying on a specific date, only fill in the To date.\n"
+"  \t\t\t\t"
+msgstr ""
+"Datum periodes kunnen worden gemaakt door het invoeren van een 'van' en een 'tot' datum<br />\n"
+"  \t\t\t\t\tWanneer u de widget vanaf een bepaalde datum wilt tonen, vul dan alleen de 'van' datum in<br />\n"
+"  \t\t\t\t\tWanneer u de widget vanaf een bepaalde datum niet meer wilt tonen, vul dan alleen de 'tot' datum in.\n"
+"  \t\t\t\t"
+
+#: ../dynwid_admin_edit.php:388
+msgid "only"
+msgstr "alleen"
+
+#: ../dynwid_admin_edit.php:392
+msgid "From"
+msgstr "Van"
+
+#: ../dynwid_admin_edit.php:396
+msgid "To"
+msgstr "Tot"
+
+#: ../dynwid_admin_edit.php:404
+#: ../dynamic-widgets.php:566
+msgid "Front Page"
+msgstr "Startpagina"
+
+#: ../dynwid_admin_edit.php:405
+msgid "Show widget on the front page?"
+msgstr "De widget op de startpagina tonen?"
+
+#: ../dynwid_admin_edit.php:409
+msgid ""
+"This option only applies when your front page is set to display your latest posts (See Settings &gt; Reading).<br />\n"
+"\t\t\t\t\t\tWhen a static page is set, you can use the options for the static pages below.\n"
+"\t\t\t\t\t"
+msgstr ""
+"Deze optie werkt alleen als de hoofdpagina de laatste posts toont (Zie Instellingen &gt; Lezen).<br />\n"
+"\t\t\t\t\t\tWanneer deze optie op statische pagina staat, kunt u gebruik maken van de onderstaande pagina opties.\n"
+"\t\t\t\t\t"
+
+#: ../dynwid_admin_edit.php:419
+#: ../dynamic-widgets.php:567
+msgid "Single Posts"
+msgstr "Berichten"
+
+#: ../dynwid_admin_edit.php:420
+msgid "Show widget default on single posts?"
+msgstr "De widget bij de berichten tonen?"
+
+#: ../dynwid_admin_edit.php:424
+msgid ""
+"When you use an author <b>AND</b> a category exception, both rules in the condition must be met. Otherwise the exception rule won't be applied.\n"
+"  \t\t\t\t\tIf you want to use the rules in a logical OR condition. Add the same widget again and apply the other rule to that.\n"
+"  \t\t\t\t\t"
+msgstr ""
+"Wanneer u een auteur <b>EN</b> een categorie uitzondering gebruikt, worden beide regels gecontroleerd.\n"
+"  \t\t\t\t\tAls u de regels in een logische OR wilt gebruiken kunt u de widget opnieuw toevoegen en daarop dan de andere regel toepassen.\n"
+"  \t\t\t\t\t"
+
+#: ../dynwid_admin_edit.php:433
+msgid "Make exception rule available to individual posts and tags."
+msgstr "Maak de uitzonderings regel beschikbaar voor individuele berichten en tags"
+
+#: ../dynwid_admin_edit.php:437
+msgid ""
+"When you enable this option, you have the ability to apply the exception rule for <em>Single Posts</em> to tags and individual posts.\n"
+"\t\t\t\t\t\tYou can set the exception rule for tags in the single Edit Tag Panel (go to <a href=\"edit-tags.php?taxonomy=post_tag\">Post Tags</a>,\n"
+"\t\t\t\t\t\tclick a tag), For individual posts in the <a href=\"post-new.php\">New</a> or <a href=\"edit.php\">Edit</a> Posts panel.\n"
+"\t\t\t\t\t\tException rules for tags and individual posts in any combination work independantly, but will always be counted as one exception.<br />\n"
+"  \t\t\t\t\tPlease note when exception rules are set for Author and/or Category, these will be removed.\n"
+"  \t\t\t\t"
+msgstr ""
+"Wanneer u deze optie aan zet, heeft u de gelegenheid om uitzonderings regels te gebruiken in individuele posts en tags.\n"
+"\t\t\t\t\t\tU kunt de uitzonderingsregel vinden in het wijzigen Tag Paneel (ga naar <a href=\"edit-tags.php?taxonomy=post_tag\">Post Tags</a>,\n"
+"\t\t\t\t\t\tklik op een tag), Voor individuele posts in het <a href=\"post-new.php\">Nieuw</a> of <a href=\"edit.php\">Wijzig</a> Posts paneel.\n"
+"\t\t\t\t\t\tUitzonderings regels voor tags en individuele posts werken onafhankelijk van elkaar, maar worden altijd geteld als een enkele uitzondering.<br />\n"
+"  \t\t\t\t\tLet er op dat uitzonderings regels voor auteur en categorie worden verwijderd.\n"
+"  \t\t\t\t"
+
+#: ../dynwid_admin_edit.php:454
+msgid "Except the posts by author"
+msgstr "Behalve de berichten van"
+
+#: ../dynwid_admin_edit.php:465
+msgid "Except the posts in category"
+msgstr "Behalve de berichten in de categorie"
+
+#: ../dynwid_admin_edit.php:479
+#: ../dynamic-widgets.php:568
+msgid "Pages"
+msgstr "Pagina's"
+
+#: ../dynwid_admin_edit.php:480
+msgid "Show widget default on static pages?"
+msgstr "Toon de widget op pagina's?"
+
+#: ../dynwid_admin_edit.php:484
+msgid "Except the page(s)"
+msgstr "Behalve de pagina('s)"
+
+#: ../dynwid_admin_edit.php:493
+#: ../dynamic-widgets.php:569
+msgid "Author Pages"
+msgstr "Auteur pagina's"
+
+#: ../dynwid_admin_edit.php:494
+msgid "Show widget default on author pages?"
+msgstr "Toon de widget op auteurs pagina's?"
+
+#: ../dynwid_admin_edit.php:498
+msgid "Except the author(s)"
+msgstr "Behalve van"
+
+#: ../dynwid_admin_edit.php:506
+#: ../dynamic-widgets.php:570
+msgid "Category Pages"
+msgstr "Categorie pagina's"
+
+#: ../dynwid_admin_edit.php:507
+msgid "Show widget default on category pages?"
+msgstr "Toon de widget standaard op de categorie pagina's?"
+
+#: ../dynwid_admin_edit.php:511
+#: ../dynwid_admin_edit.php:614
+msgid "Except the categories"
+msgstr "Behalve de categoriën"
+
+#: ../dynwid_admin_edit.php:520
+#: ../dynamic-widgets.php:571
+msgid "Archive Pages"
+msgstr "Archief pagina's"
+
+#: ../dynwid_admin_edit.php:521
+msgid "Show widget on archive pages"
+msgstr "Toon de widget op archief pagina's"
+
+#: ../dynwid_admin_edit.php:525
+msgid "This option does not include Author and Category Pages."
+msgstr "Deze optie bevat niet auteurs en categorie pagina's"
+
+#: ../dynwid_admin_edit.php:533
+#: ../dynamic-widgets.php:572
+msgid "Error Page"
+msgstr "Foutmeldings pagina"
+
+#: ../dynwid_admin_edit.php:534
+msgid "Show widget on the error page?"
+msgstr "Toon de widget op de foutmeldings pagina?"
+
+#: ../dynwid_admin_edit.php:541
+msgid "Search Page"
+msgstr "Zoek pagina"
+
+#: ../dynwid_admin_edit.php:542
+msgid "Show widget on the search page?"
+msgstr "Toon de widget op de zoekpagina?"
+
+#: ../dynwid_admin_edit.php:585
+msgid "Custom Post Type"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:586
+msgid "Show widget on"
+msgstr "Toon de widget op"
+
+#: ../dynwid_admin_edit.php:591
+msgid "Except for"
+msgstr "Behalve voor"
+
+#: ../dynwid_admin_edit.php:609
+#: ../dynamic-widgets.php:574
+msgid "WPSC Category"
+msgstr "WPSC Categorie"
+
+#: ../dynwid_admin_edit.php:610
+msgid "Show widget default on WPSC categories?"
+msgstr "Toon de widget standaard in de WPSC categoriën?"
+
+#: ../dynwid_admin_edit.php:625
+msgid "Save"
+msgstr "Opslaan"
+
+#: ../dynwid_admin.php:16
+msgid "<b>WARNING</b> STRICT sql mode in effect. Dynamic Widgets might not work correctly. Please disable STRICT sql mode."
+msgstr "<b>LET OP</b> STRICT sql mode gedecteerd. Dynamic Widgets werkt mogelijk niet correct. U wordt aangeraden STRICT sql mode uit te schakelen."
+
+#: ../dynwid_admin.php:36
+msgid "Oops! Something went terrible wrong. Please reinstall Dynamic Widgets."
+msgstr "Oeps! Er is een onhelstelbare fout opgetreden. U wordt aangeraden om Dynamic Widgets opnieuw te installeren."
+
+#: ../dynwid_admin.php:44
+#: ../dynwid_admin_overview.php:28
+msgid "OLD"
+msgstr "OUD"
+
+#: ../dynwid_admin.php:44
+#: ../dynwid_admin_overview.php:28
+msgid "FILTER"
+msgstr ""
+
+#: ../dynwid_admin_overview.php:15
+msgid "Widget options have been reset to default."
+msgstr "De widget opties zijn hersteld naar standaard"
+
+#: ../dynwid_admin_overview.php:28
+msgid "Method set to"
+msgstr "Methode is nu"
+
+#: ../dynwid_admin_overview.php:59
+msgid "Edit this widget options"
+msgstr "Wijzig de widget opties voor"
+
+#: ../dynwid_admin_overview.php:62
+msgid "Edit"
+msgstr "Wijzig"
+
+#: ../dynwid_admin_overview.php:67
+msgid "Reset widget to Static"
+msgstr "Zet de widget terug naar statisch"
+
+#: ../dynwid_admin_overview.php:73
+#: ../dynamic-widgets.php:121
+#: ../dynamic-widgets.php:123
+#: ../dynamic-widgets.php:559
+msgid "Dynamic"
+msgstr "Dyamisch"
+
+#: ../dynwid_admin_overview.php:73
+#: ../dynamic-widgets.php:121
+#: ../dynamic-widgets.php:122
+#: ../dynamic-widgets.php:125
+#: ../dynamic-widgets.php:559
+msgid "Static"
+msgstr "Statisch"
+
+#: ../dynwid_admin_overview.php:88
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+#: ../dynamic-widgets.php:118
+msgid "Widgets are always displayed by default"
+msgstr "Widgets worden standaard altijd getoond"
+
+#: ../dynamic-widgets.php:118
+msgid "The"
+msgstr "De"
+
+#: ../dynamic-widgets.php:118
+msgid "selection"
+msgstr "selectie"
+
+#: ../dynamic-widgets.php:119
+msgid "Click on the"
+msgstr "Klik op de"
+
+#: ../dynamic-widgets.php:119
+msgid "next to the options for more info"
+msgstr "bij de opties voor meer informatie"
+
+#: ../dynamic-widgets.php:122
+msgid "When a widget is"
+msgstr "Wanneer een widget"
+
+#: ../dynamic-widgets.php:122
+msgid "the widget uses the WordPress default. In other words, it's shown everywhere"
+msgstr "de widget staat op de standaard instelling. Met andere woorden, deze wordt overal getoond"
+
+#: ../dynamic-widgets.php:123
+msgid "A widget is"
+msgstr "Een widget is"
+
+#: ../dynamic-widgets.php:123
+msgid "when there are options set, i.e. not showing on the front page."
+msgstr "als er opties gewijzigd zijn, bijvoorbeeld niet tonen op de startpagina."
+
+#: ../dynamic-widgets.php:124
+msgid "Reset"
+msgstr "Herstellen"
+
+#: ../dynamic-widgets.php:125
+msgid "Reset makes the widget return to"
+msgstr "Herstellen zorgt ervoor dat de widget teruggezet wordt naar"
+
+#: ../dynamic-widgets.php:165
+msgid "Settings"
+msgstr "Instellingen"
+
+#: ../dynamic-widgets.php:558
+msgid "This widget is"
+msgstr "Deze widget is"
+
+#: ../dynamic-widgets.php:573
+msgid "Search page"
+msgstr "Zoek pagina"
+
+#: ../dynamic-widgets.php:609
+msgid "and"
+msgstr "en"
+
+#: ../dynamic-widgets.php:615
+msgid "Options set for"
+msgstr "Opties voor"
+
+#: ../dynamic-widgets.php:615
+msgid "Option set for"
+msgstr "Optie voor"
+
