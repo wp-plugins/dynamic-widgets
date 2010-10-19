@@ -4,7 +4,7 @@ Donate link:
 Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
 Requires at least: 2.9.1
 Tested up to: 3.0.1
-Stable tag: 1.3.5
+Stable tag: 1.3.6
 
 Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages.
 
@@ -24,6 +24,8 @@ Dynamic Widgets gives you more control over your widgets. It lets you dynamicly 
   - Error Page
   - Search Page
   - Custom Post Types (since WordPress 3.0)
+  - WP Shopping Cart / WP E-Commerce Categories
+
 * Exceptions can be created for:
   - User roles on role, including not logged in (anonymous) users
   - Dates on from, to or range
@@ -32,6 +34,11 @@ Dynamic Widgets gives you more control over your widgets. It lets you dynamicly 
   - Author pages on Author
   - Category pages on Category name
   - Custom Posts Type on Custom post name (since WordPress 3.0)
+  - WP Shopping Cart / WP E-Commerce Categories on Category name
+
+* Plugin support for:
+  - WP MultiLingual (WPML)
+  - WP Shopping Cart / WP E-Commerce (WPSC / WPEC)
 
 == Installation ==
 
@@ -45,7 +52,7 @@ Installation of this plugin is fairly easy:
 
 == Frequently Asked Questions ==
 
-For the latest FAQ, please visit the [online FAQ](http://www.qurl.nl/faq/).
+For the latest FAQ, please visit the [online FAQ](http://www.qurl.nl/dynamic-widgets/faq/).
 
 = What are the (system) requirements to use this plugin? =
 
@@ -57,6 +64,10 @@ For the latest FAQ, please visit the [online FAQ](http://www.qurl.nl/faq/).
 = My hoster is (still) using PHP4, so what? =
 
 Start immediately looking for another hoster. YES, immediately! NOW! Pronto! PHP4 was introduced in the year 2000 and is [not supported](http://en.wikipedia.org/wiki/PHP#Release_history) anymore. As I don't have PHP4 anymore, I can only be sure for about 80% the plugin will work. Please let me know if it doesn't. I'll try to work out a solution.
+
+= I'm not sure my theme is calling `wp_head()`. Can I check? =
+
+Yes, you can. In the Dynamic Widgets Overview page, click the 'Advanced >' link at the bottom. You should see if `wp_head()` is called in your theme. It is possible Dynamic Widgets can't detect if the theme is calling `wp_head()`. Please contact the author of the theme to ask for it. You can also of course just try Dynamic Widgets to see if it works.
 
 = Does the plugin work on WordPress 3.0 MU? =
 
@@ -84,7 +95,7 @@ Your theme probably uses a 'default display widgets policy'. When a sidebar beco
 
 = I have found a bug! Now what? =
 
-Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the procedure how to create a dump in the previous answer. After you've filed the report, I'll get back to you asap.
+Please file a [bugreport](http://www.qurl.nl/dynamic-widgets/bugreport/). Please note the procedure how to create a dump in the previous answer. After you've filed the report, I'll get back to you asap.
 
 = How do I completely remove Dynamic Widgets? =
 
@@ -96,11 +107,21 @@ Please file a [bugreport](http://www.qurl.nl/bugreport/). Please note the proced
 
 == Release notes ==
 
-Starting with version 1.3.5 Dynamic Widgets is using a new method for removing widgets from the sidebar(s). This new method, called FILTER, is more in line with the way WordPress provides access for plugins to it's system. However this method comes with a downside. Due to it's nature it might slow down the process of removing widgets when you have and use many sidebars. For this, there is the OLD method. The OLD method uses the previous method before version 1.3.5. Downside of that method is it may leave you behind with a visible empty sidebar. There is a way to prevent this, but for that you have to have some PHP programming knowledge. Ask me for an example script if you need it. If you are using the standard WP Twenty Ten theme, you probably want to have a look at the [Twenty Ten Weaver](http://wpweaver.info/themes/twenty-ten-weaver/) theme. Bruce from WP Weaver fixed the empty sidebar with the help of this example script. So you don't need to fix it yourself.
-
-You can switch to the OLD method by clicking on the 'Advanced >' link in the Dynamic Widgets overview page and checking 'Use OLD method'.
+With version 1.3.6 of Dynamic Widgets I've implemented l10n support. Not all text strings are already in the POT file which you can find in the `locale` directory. The first text strings I have already translated into Dutch. You're invited to add another translation. When you have a finished translation PO and MO file, please send it to me, so I can include it into the repository.
 
 == Changelog ==
+
+= Version 1.3.6 =
+
+* Added l10n support.
+* Added Dutch language files (locale: nl)
+* Added support for WP Shopping Cart / WP E-Commerce Categories.
+* Bugfix for error 404 (file not found) when saving options.
+* Bugfix for unexpected behavior in subsequent category pages.
+* Bugfix for unexpected behavior in single post when using individual exception rules.
+* Bugfix for unexpected behavior in Custom Post Types.
+* Bugfix for incorrect use and display of Custom Post Types in Widget Edit Options screen.
+* Removed several PHP notices.
 
 = Version 1.3.5 =
 
