@@ -7,7 +7,7 @@
 ?>
 
 <div class="wrap">
-<h2>Dynamic Widgets</h2>
+<h2><?php _e('Dynamic Widgets', DW_L10N_DOMAIN); ?></h2>
 
 <?php
 	if ( $DW->enabled ) {

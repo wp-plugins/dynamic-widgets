@@ -126,7 +126,7 @@
   }
 
   // Front Page
-  if ( $_POST['front-page'] == 'no' ) {
+  if ( isset($_POST['front-page']) && $_POST['front-page'] == 'no' ) {
     $DW->addSingleOption($_POST['widget_id'], 'front-page');
   }
 
