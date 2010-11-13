@@ -59,12 +59,12 @@
       <p class="row-title"><a title="<?php _e('Edit this widget options', DW_L10N_DOMAIN); ?>" href="themes.php?page=dynwid-config&amp;action=edit&amp;id=<?php echo $widget_id; ?>"><?php echo $name; ?></a></p>
       <div class="row-actions">
        <span class="edit">
-          <a title="Edit this widget options" href="themes.php?page=dynwid-config&amp;action=edit&amp;id=<?php echo $widget_id; ?>"><?php _e('Edit'); ?></a>
+          <a title="<?php _e('Edit this widget options', DW_L10N_DOMAIN); ?>" href="themes.php?page=dynwid-config&amp;action=edit&amp;id=<?php echo $widget_id; ?>"><?php _e('Edit'); ?></a>
         </span>
         <?php if ( $DW->hasOptions($widget_id) ) { ?>
         <span class="delete">
         <?php $href = wp_nonce_url('themes.php?page=dynwid-config&amp;action=reset&amp;id=' . $widget_id, 'plugin-name-action_reset_' . $widget_id); ?>
-          | <a class="submitdelete" title="<?php _e('Reset widget to Static', DW_L10N_DOMAIN); ?>" onclick="if ( confirm('You are about to reset this widget \'<?php echo strip_tags($DW->getName($widget_id)); ?>\'\n \'Cancel\' to stop, \'OK\' to reset.') ) { return true;}return false;" href="<?php echo $href; ?>">Reset</a>
+          | <a class="submitdelete" title="<?php _e('Reset widget to Static', DW_L10N_DOMAIN); ?>" onclick="if ( confirm('You are about to reset this widget \'<?php echo strip_tags($DW->getName($widget_id)); ?>\'\n \'Cancel\' to stop, \'OK\' to reset.') ) { return true;}return false;" href="<?php echo $href; ?>"><?php _e('Reset', DW_L10N_DOMAIN); ?></a>
         </span>
         <?php } ?>
       </div>

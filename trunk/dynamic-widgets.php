@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Dynamic Widgets
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
- * Description: Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on pages by excluding or including rules by roles, dates, for the homepage, single posts, pages, authors, categories, archives, error page, search page and custom post types.
+ * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages.
  * Author: Jacco
  * Version: 1.3.6
  * Author URI: http://www.qurl.nl/
@@ -115,8 +115,9 @@
 
   		// Contextual help
   		if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
-  			$help  = __('Widgets are always displayed by default', DW_L10N_DOMAIN) . ' (' . __('The') . ' \'<em>' . __('Yes') .'</em>\' ' . __('selection', DW_L10N_DOMAIN) . ').<br />';
-  			$help .= __('Click on the', DW_L10N_DOMAIN) . ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" /> ' . __('next to the options for more info', DW_L10N_DOMAIN) . '.';
+  			$help  = __('Widgets are always displayed by default', DW_L10N_DOMAIN) . ' (' . __('The \'<em>Yes</em>\' selection', DW_L10N_DOMAIN) . ')'  . '<br />';
+  			$help .= __('Click on the', DW_L10N_DOMAIN) . ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" /> ' . __('next to the options for more info', DW_L10N_DOMAIN) . '.<br />';
+  			$help .= __('The') . ' <span class="hasoptions">*</span> ' . __('next to a section means it has options set.', DW_L10N_DOMAIN);
   		} else {
   			$help  = '<p><strong>' . __('Static', DW_L10N_DOMAIN) . ' / ' . __('Dynamic', DW_L10N_DOMAIN) . '</strong><br />';
   			$help .= __('When a widget is', DW_L10N_DOMAIN) . ' <em>' . __('Static', DW_L10N_DOMAIN) . '</em>, ' . __('the widget uses the WordPress default. In other words, it\'s shown everywhere', DW_L10N_DOMAIN) . '.<br />';
@@ -129,7 +130,7 @@
   		// Only show meta box in posts panel when there are widgets enabled.
   		$opt = $DW->getOptions('%','individual');
   		if ( count($opt) > 0 ) {
-  			add_meta_box('dynwid', 'Dynamic Widgets', 'dynwid_add_post_control', 'post', 'side', 'low');
+  			add_meta_box('dynwid', __('Dynamic Widgets', DW_L10N_DOMAIN), 'dynwid_add_post_control', 'post', 'side', 'low');
   		}
   	}
   }
@@ -143,6 +144,7 @@
     wp_enqueue_script('jquery');
     wp_enqueue_script('jquery-ui-core');
     wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'jquery_datepicker.js', array('jquery-ui-core'));
+    wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'jquery.ui.accordion.min.js', array('jquery-ui-core'));
   }
 
   /**
@@ -151,7 +153,10 @@
    */
   function dynwid_add_admin_styles() {
     $DW = &$GLOBALS['DW'];
-    wp_enqueue_style('jquery-ui-smoothness', $DW->plugin_url . 'jquery-ui-smoothness.css');
+    wp_enqueue_style('jquery-ui-core', $DW->plugin_url . 'jquery.ui.core.css');
+    wp_enqueue_style('jquery-ui-smoothness', $DW->plugin_url . 'jquery.ui.theme.smoothness.css', array('jquery-ui-core'));
+    wp_enqueue_style('jquery-ui-accordion', $DW->plugin_url . 'jquery.ui.accordion.css', array('jquery-ui-core', 'jquery-ui-smoothness'));
+    wp_enqueue_style('jquery-ui-datepicker', $DW->plugin_url . 'jquery.ui.datepicker.css', array('jquery-ui-core', 'jquery-ui-smoothness'));
   }
 
   /**
@@ -176,7 +181,7 @@
     $DW = &$GLOBALS['DW'];
 
     $opt = $DW->getOptions('%','individual');
-    echo '<strong>Apply exception rule to widgets:</strong><br /><br />';
+    echo '<strong>' . __('Apply exception rule to widgets:', DW_L10N_DOMAIN) . '</strong><br /><br />';
     foreach ( $opt as $widget ) {
       $single_condition = '1';
       $checked = '';
@@ -209,7 +214,7 @@
     if ( count($opt) > 0 ) {
 
       echo '<tr class="form-field">';
-      echo '<th scope="row" valign="top"><label for="dynamic-widgets">Dynamic Widgets</label></th>';
+      echo '<th scope="row" valign="top"><label for="dynamic-widgets">' . __('Dynamic Widgets', DW_L10N_DOMAIN) . '</label></th>';
       echo '<td>';
       foreach ( $opt as $widget ) {
         $single_condition = '1';
@@ -290,7 +295,7 @@
 
     echo '<div class="updated fade" id="message">';
     echo '<p>';
-    echo '<strong>Dynamic Widgets Options saved</strong> for ' . $name;
+    echo '<strong>' . __('Dynamic Widgets Options saved', DW_L10N_DOMAIN) . '</strong> ' . __('for', DW_L10N_DOMAIN) . $name;
     echo '</p>';
     echo '</div>';
   }
@@ -554,38 +559,16 @@
     call_user_func_array($wp_callback, $args);
 
 	  // Now adding the dynwid text & link
-	  echo '<p><b>Dynamic Widgets</b><br />';
+	  echo '<p>Dynamic Widgets: ';
+		echo '<a style="text-decoration:none;" title="Edit Dynamic Widgets Options" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=' . urlencode(trailingslashit(admin_url()) . 'widgets.php') . '">';
+		echo ( $DW->hasOptions($widget_id) ) ? __('Dynamic', DW_L10N_DOMAIN) : __('Static', DW_L10N_DOMAIN);
+		echo '</a>';
+ /* echo '<br />';
 	  echo __('This widget is', DW_L10N_DOMAIN) . ' <a title="Edit Dynamic Widgets Options" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=' . urlencode(trailingslashit(admin_url()) . 'widgets.php') . '">';
 	  echo ( $DW->hasOptions($widget_id) ) ? strtolower(__('Dynamic', DW_L10N_DOMAIN)) : strtolower(__('Static', DW_L10N_DOMAIN));
-	  echo '</a>.';
+	  echo '</a>.'; */
 	  if ( $DW->hasOptions($widget_id) ) {
 	    $s = array();
-	    $buffer = array(
-	                'role'        => __('Role'),
-	                'date'        => __('Date'),
-	                'front-page'  => __('Front Page', DW_L10N_DOMAIN),
-	                'single'      => __('Single Posts', DW_L10N_DOMAIN),
-	                'page'        => __('Pages'),
-	                'author'      => __('Author Pages', DW_L10N_DOMAIN),
-	                'category'    => __('Category Pages', DW_L10N_DOMAIN),
-	                'archive'     => __('Archive Pages', DW_L10N_DOMAIN),
-	                'e404'        => __('Error Page', DW_L10N_DOMAIN),
-	                'search'      => __('Search page', DW_L10N_DOMAIN),
-	                'wpsc'				=> __('WPSC Category', DW_L10N_DOMAIN)
-	              );
-
-      // Adding Custom Post Types to $buffer
-	    if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
-	      $args = array(
-	                'public'   => TRUE,
-	                '_builtin' => FALSE
-	              );
-	      $post_types = get_post_types($args, 'objects', 'and');
-	      foreach ( $post_types as $ctid ) {
-	        $buffer[key($post_types)] = $ctid->label;
-	      }
-      }
-
 	    $opt = $DW->getOptions($widget_id, NULL);
 	    foreach ( $opt as $widget ) {
 	      $type = $widget['maintype'];
@@ -603,13 +586,13 @@
 	    $last = count($s) - 1;
 	    for ( $i = 0; $i < $last; $i++ ) {
 	      $type = $s[$i];
-	      if (! empty($buffer[$type]) ) {
-	        $string .= $buffer[$type];
+	      if (! empty($DW->dwoptions[$type]) ) {
+	        $string .= $DW->dwoptions[$type];
 	      }
 	      $string .= ( ($last - 1) == $i ) ? ' ' . __('and', DW_L10N_DOMAIN) . ' ' : ', ';
 	    }
 	    $type = $s[$last];
-	    $string .= $buffer[$type];
+	    $string .= $DW->dwoptions[$type];
 
 	    $output  = '<br /><small>';
 	    $output .= ( count($opt) > 1 ) ? __('Options set for', DW_L10N_DOMAIN) : __('Option set for', DW_L10N_DOMAIN);

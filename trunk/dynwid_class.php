@@ -8,6 +8,7 @@
   class dynWid {
   	public	$custom_post_type;
     private $dbtable;
+  	public  $dwoptions;
     public  $dynwid_list;
   	public  $enabled;
     private $firstmessage;
@@ -36,6 +37,32 @@
       $this->registered_widgets = &$GLOBALS['wp_registered_widgets'];
       $this->sidebars = wp_get_sidebars_widgets();
       $this->plugin_url = WP_PLUGIN_URL . '/' . str_replace( basename(__FILE__), '', plugin_basename(__FILE__) );
+
+    	$this->dwoptions = array(
+	    	'role'        => __('Role'),
+	    	'date'        => __('Date'),
+	    	'front-page'  => __('Front Page', DW_L10N_DOMAIN),
+	    	'single'      => __('Single Posts', DW_L10N_DOMAIN),
+	    	'page'        => __('Pages'),
+	    	'author'      => __('Author Pages', DW_L10N_DOMAIN),
+	    	'category'    => __('Category Pages', DW_L10N_DOMAIN),
+	    	'archive'     => __('Archive Pages', DW_L10N_DOMAIN),
+	    	'e404'        => __('Error Page', DW_L10N_DOMAIN),
+	    	'search'      => __('Search page', DW_L10N_DOMAIN),
+	    	'wpsc'				=> __('WPSC Category', DW_L10N_DOMAIN)
+	    );
+
+    	// Adding Custom Post Types to $this->dwoptions
+    	if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
+    		$args = array(
+    		          'public'   => TRUE,
+    		          '_builtin' => FALSE
+    		        );
+    		$post_types = get_post_types($args, 'objects', 'and');
+    		foreach ( $post_types as $ctid ) {
+    			$this->dwoptions[key($post_types)] = $ctid->label;
+    		}
+    	}
 
     	// DB init
       $this->wpdb = $GLOBALS['wpdb'];
