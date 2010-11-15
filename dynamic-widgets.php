@@ -19,18 +19,22 @@
  */
 
 /*
+   Thanks to Alexis Nomine for the contributions of the French (fr_FR) language files, several L10N fixes and change of the edit options UI.
+ */
+
+/*
    WPML Plugin support via API
    Using constants	ICL_PLUGIN_PATH > dynwid_admin_edit.php
    Using functions  wpml_get_default_language() > dynwid_worker.php
                     wpml_get_current_language() > dynwid_worker.php, wpml.php
                     wpml_get_content_translation() > wpml.php
-*/
+ */
 
 /*
 	 WPSC/WPEC Plugin support
  	 Using constants	WPSC_TABLE_PRODUCT_CATEGORIES	> dynwid_admin_edit.php, dynwid_init_worker.php, wpsc.php
  	 Using vars 			$wpsc_query > dynwid_init_worker.php, wpsc.php
-*/
+ */
 
   // Constants
   define('DW_DEBUG', FALSE);
@@ -361,7 +365,7 @@
   		dynwid_worker($DW->sidebars);
   	} else {
   		add_filter('sidebars_widgets', 'dynwid_worker');
-  	}
+ 		}
   }
 
   /**
@@ -563,10 +567,6 @@
 		echo '<a style="text-decoration:none;" title="Edit Dynamic Widgets Options" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=' . urlencode(trailingslashit(admin_url()) . 'widgets.php') . '">';
 		echo ( $DW->hasOptions($widget_id) ) ? __('Dynamic', DW_L10N_DOMAIN) : __('Static', DW_L10N_DOMAIN);
 		echo '</a>';
- /* echo '<br />';
-	  echo __('This widget is', DW_L10N_DOMAIN) . ' <a title="Edit Dynamic Widgets Options" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=' . urlencode(trailingslashit(admin_url()) . 'widgets.php') . '">';
-	  echo ( $DW->hasOptions($widget_id) ) ? strtolower(__('Dynamic', DW_L10N_DOMAIN)) : strtolower(__('Static', DW_L10N_DOMAIN));
-	  echo '</a>.'; */
 	  if ( $DW->hasOptions($widget_id) ) {
 	    $s = array();
 	    $opt = $DW->getOptions($widget_id, NULL);
@@ -611,10 +611,22 @@
 	 */
 	function dynwid_worker($sidebars) {
 	  $DW = &$GLOBALS['DW'];
-		if ( $DW->wpsc ) {
-			$wpsc_query = &$GLOBALS['wpsc_query'];
+
+		if ( $DW->listmade ) {
+			$DW->message('Dynamic Widgets removelist already created');
+			if ( count($DW->removelist) > 0 ) {
+				foreach ( $DW->removelist as $sidebar_id => $widgets ){
+					foreach ( $widgets as $widget_key ){
+						unset($sidebars[$sidebar_id][$widget_key]);
+					}
+				}
+			}
+		} else {
+			if ( $DW->wpsc ) {
+				$wpsc_query = &$GLOBALS['wpsc_query'];
+			}
+			require(dirname(__FILE__) . '/dynwid_worker.php');
 		}
-	  require(dirname(__FILE__) . '/dynwid_worker.php');
 
 		return $sidebars;
 	}

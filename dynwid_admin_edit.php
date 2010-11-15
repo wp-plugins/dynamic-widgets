@@ -322,7 +322,7 @@ label {
   font-style : italic;
 }
 
-h4{
+h4 {
 	text-indent : 30px;
 }
 
@@ -330,12 +330,12 @@ h4{
 	color : #ff0000;
 }
 
-#dynwid{
+#dynwid {
 	font-family : 'Lucida Grande', Verdana, Arial, 'Bitstream Vera Sans', sans-serif;
 	font-size : 13px;
 }
 
-.ui-datepicker{
+.ui-datepicker {
 	font-size : 10px;
 }
 </style>
@@ -372,10 +372,10 @@ h4{
 <?php _e('Show widget to everybody?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('role');" /><br />
 <?php $DW->dumpOpt($opt_role); ?>
 <div>
-<div id="role" class="infotext">
+	<div id="role" class="infotext">
   <?php _e('Setting options by role is very powerfull. It can override all other options!<br />
 						Users who are not logged in, get the <em>Anonymous</em> role.', DW_L10N_DOMAIN); ?>
-</div>
+	</div>
 </div>
 <input type="radio" name="role" value="yes" id="role-yes" <?php echo ( isset($role_yes_selected) ? $role_yes_selected : '' ); ?> onclick="swChb(cRole, true);" /> <label for="role-yes"><?php _e('Yes'); ?></label>
 <input type="radio" name="role" value="no" id="role-no" <?php echo ( isset($role_no_selected) ? $role_no_selected : '' ); ?> onclick="swChb(cRole, false)" /> <label for="role-no"><?php _e('No'); ?>, <?php _e('only to', DW_L10N_DOMAIN); ?>:</label><br />
@@ -392,14 +392,14 @@ h4{
 <?php _e('Show widget always?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('date');" /><br />
 <?php $DW->dumpOpt($opt_date); ?>
 <div>
-<div id="date" class="infotext">
+	<div id="date" class="infotext">
   <?php _e('Next to the above role option, the date option is also very powerfull. You\'ve been warned!', DW_L10N_DOMAIN); ?><br />
   <?php _e('Enter dates in the YYYY-MM-DD format. You can also use the calender by clicking on the', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" /><br />
   <?php _e('Date ranges can be made by entering a From AND a To date<br />
   					When you want the widget to be displayed from a specific date, only fill in the From date<br />
   					When you want the widget to stop displaying on a specific date, only fill in the To date.
   				', DW_L10N_DOMAIN); ?>
-</div>
+	</div>
 </div>
 <input type="radio" name="date" value="yes" id="date-yes" <?php echo ( isset($date_yes_selected) ? $date_yes_selected : '' ); ?> onclick="swTxt(cDate, true);" /> <label for="date-yes"><?php _e('Yes'); ?></label>
 <input type="radio" name="date" value="no" id="date-no" <?php echo ( isset($date_no_selected) ? $date_no_selected : '' ); ?> onclick="swTxt(cDate, false)" /> <label for="date-no"><?php _e('No'); ?>, <?php _e('only', DW_L10N_DOMAIN); ?>:</label><br />
@@ -424,11 +424,11 @@ h4{
 <?php _e('Show widget on the front page?', DW_L10N_DOMAIN) ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('frontpage');" /><br />
 <?php $DW->dumpOpt($opt_frontpage); ?>
 <div>
-<div id="frontpage"  class="infotext">
+	<div id="frontpage"  class="infotext">
 	<?php _e('This option only applies when your front page is set to display your latest posts (See Settings &gt; Reading).<br />
 						When a static page is set, you can use the options for the static pages below.
 					', DW_L10N_DOMAIN); ?>
-</div>
+	</div>
 </div>
 <input type="radio" name="front-page" value="yes" id="front-page-yes" <?php echo ( isset($frontpage_yes_selected) ? $frontpage_yes_selected : '' ); ?> /> <label for="front-page-yes"><?php _e('Yes'); ?></label>
 <input type="radio" name="front-page" value="no" id="front-page-no" <?php echo ( isset($frontpage_no_selected) ? $frontpage_no_selected : '' ); ?> /> <label for="front-page-no"><?php _e('No'); ?></label>
@@ -441,11 +441,11 @@ h4{
 <?php _e('Show widget default on single posts?', DW_L10N_DOMAIN) ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('single')" /><br />
 <?php $DW->dumpOpt($opt_single); ?>
 <div>
-<div id="single" class="infotext">
+	<div id="single" class="infotext">
   <?php _e('When you use an author <b>AND</b> a category exception, both rules in the condition must be met. Otherwise the exception rule won\'t be applied.
   					If you want to use the rules in a logical OR condition. Add the same widget again and apply the other rule to that.
   					', DW_L10N_DOMAIN); ?>
-</div>
+	</div>
 </div>
 <input type="radio" name="single" value="yes" id="single-yes" <?php echo ( isset($single_yes_selected) ? $single_yes_selected : '' ); ?> /> <label for="single-yes"><?php _e('Yes'); ?></label>
 <input type="radio" name="single" value="no" id="single-no" <?php echo ( isset($single_no_selected) ? $single_no_selected : '' ); ?> /> <label for="single-no"><?php _e('No'); ?></label><br />
@@ -454,14 +454,14 @@ h4{
 <label for="individual"><?php _e('Make exception rule available to individual posts and tags.', DW_L10N_DOMAIN) ?> <?php echo ( isset($count_individual) ? $count_individual : '' ); ?></label>
 <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('individual_post_tag')" />
 <div>
-<div id="individual_post_tag" class="infotext">
+	<div id="individual_post_tag" class="infotext">
   <?php _e('When you enable this option, you have the ability to apply the exception rule for <em>Single Posts</em> to tags and individual posts.
 						You can set the exception rule for tags in the single Edit Tag Panel (go to <a href="edit-tags.php?taxonomy=post_tag">Post Tags</a>,
 						click a tag), For individual posts in the <a href="post-new.php">New</a> or <a href="edit.php">Edit</a> Posts panel.
 						Exception rules for tags and individual posts in any combination work independantly, but will always be counted as one exception.<br />
   					Please note when exception rules are set for Author and/or Category, these will be removed.
   				', DW_L10N_DOMAIN); ?>
-</div>
+	</div>
 </div>
 <?php foreach ( $single_post_act as $singlepost ) { ?>
 <input type="hidden" name="single_post_act[]" value="<?php echo $singlepost; ?>" />
@@ -654,11 +654,16 @@ h4{
 </div><!-- end dynwid -->
 
 <br />
-<input class="button-primary" type="submit" value="<?php _e('Save'); ?>" />
+<div style="float:left">
+<input class="button-primary" type="submit" value="<?php _e('Save'); ?>" /> &nbsp;&nbsp;
+</div>
+<?php $url = (! empty($_GET['returnurl']) ) ? urldecode($_GET['returnurl']) : trailingslashit(admin_url()) . 'themes.php?page=dynwid-config'; ?>
+<div style="float:left">
+<input class="button-secondary" type="button" value="<?php _e('Return', DW_L10N_DOMAIN); ?>" onclick="location.href='<?php echo $url; ?>'" />
+</div>
+
 </form>
 
-<?php $url = (! empty($_GET['returnurl']) ) ? urldecode($_GET['returnurl']) : trailingslashit(admin_url()) . 'themes.php?page=dynwid-config'; ?>
-<input class="button-secondary" type="button" value="<?php _e('Return', DW_L10N_DOMAIN); ?>" style="position:relative;top:-23px;left:80px;" onclick="location.href='<?php echo $url; ?>'" />
 
 <script type="text/javascript">
   function chkInPosts() {
@@ -758,7 +763,7 @@ h4{
   jQuery(document).ready(function($) {
 		$('#dynwid').accordion({
 			header: 'h4',
-			autoHeight: false
+			autoHeight: false,
 		});
 	});
 </script>

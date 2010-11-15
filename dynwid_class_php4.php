@@ -13,9 +13,11 @@
   	var $dwoptions;
     var $dynwid_list;
     var $firstmessage;                  /* private */
-    var $registered_sidebars;           /* private */
+    var $listmade;
+		var $registered_sidebars;           /* private */
     var $registered_widget_controls;
     var $registered_widgets;
+  	var $removelist;
     var $sidebars;
     var $plugin_url;
     var $userrole;
@@ -38,9 +40,11 @@
 
     	$this->custom_post_type = FALSE;
       $this->firstmessage = TRUE;
+    	$this->listmade = FALSE;
       $this->registered_sidebars = $GLOBALS['wp_registered_sidebars'];
       $this->registered_widget_controls = &$GLOBALS['wp_registered_widget_controls'];
       $this->registered_widgets = &$GLOBALS['wp_registered_widgets'];
+    	$this->removelist = array();
       $this->sidebars = wp_get_sidebars_widgets();
       $this->plugin_url = WP_PLUGIN_URL . '/' . str_replace( basename(__FILE__), '', plugin_basename(__FILE__) );
 

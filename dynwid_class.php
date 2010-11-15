@@ -12,9 +12,11 @@
     public  $dynwid_list;
   	public  $enabled;
     private $firstmessage;
+  	public  $listmade;
     private $registered_sidebars;
     public  $registered_widget_controls;
     public  $registered_widgets;
+  	public  $removelist;
     public  $sidebars;
     public  $plugin_url;
     public  $userrole;
@@ -32,9 +34,11 @@
 
     	$this->custom_post_type = FALSE;
       $this->firstmessage = TRUE;
+    	$this->listmade = FALSE;
       $this->registered_sidebars = $GLOBALS['wp_registered_sidebars'];
       $this->registered_widget_controls = &$GLOBALS['wp_registered_widget_controls'];
       $this->registered_widgets = &$GLOBALS['wp_registered_widgets'];
+    	$this->removelist = array();
       $this->sidebars = wp_get_sidebars_widgets();
       $this->plugin_url = WP_PLUGIN_URL . '/' . str_replace( basename(__FILE__), '', plugin_basename(__FILE__) );
 
