@@ -5,6 +5,9 @@
  * @version $Id$
  */
 
+	$DW->message('Worker START');
+	$DW->message('WhereAmI = ' . $DW->whereami);
+
   foreach ( $sidebars as $sidebar_id => $widgets ) {
     // Only processing active sidebars with widgets
     if ( $sidebar_id != 'wp_inactive_widgets' && count($widgets) > 0 ) {
@@ -12,7 +15,6 @@
         // Check if the widget has options set
         if ( in_array($widget_id, $DW->dynwid_list) ) {
           $act = array();
-        	$DW->message('WhereAmI = ' . $DW->whereami);
           $opt = $DW->getOptions($widget_id, $DW->whereami, FALSE);
           $DW->message('Number of rules to check for widget ' . $widget_id . ': ' . count($opt));
           $display = TRUE;
@@ -53,49 +55,53 @@
           // Act the condition(s) when there are options set
           if ( count($opt) > 0 ) {
             // Role exceptions
-            foreach ( $opt as $condition ) {
-							if ( $condition['maintype'] == 'role' && in_array($condition['name'], $DW->userrole) ) {
-                $DW->message('Role set to TRUE (rule ER1)');
-                $role = TRUE;
-              }
-            }
+          	if (! $role ) {
+          		foreach ( $opt as $condition ) {
+          			if ( $condition['maintype'] == 'role' && in_array($condition['name'], $DW->userrole) ) {
+          				$DW->message('Role set to TRUE (rule ER1)');
+          				$role = TRUE;
+          			}
+          		}
+          	}
 
             // Date exceptions
-            $dates = array();
-            foreach ( $opt as $condition ) {
-              if ( $condition['maintype'] == 'date' ) {
-                switch ( $condition['name'] ) {
-                  case 'date_start':
-                    $date_start = $condition['value'];
-                    break;
+						if (! $date ) {
+							$dates = array();
+							foreach ( $opt as $condition ) {
+								if ( $condition['maintype'] == 'date' ) {
+									switch ( $condition['name'] ) {
+										case 'date_start':
+											$date_start = $condition['value'];
+											break;
 
-                  case 'date_end':
-                    $date_end = $condition['value'];
-                    break;
-                }
-              }
-            }
-            $now = time();
-            if (! empty($date_end) ) {
-              @list($date_end_year, $date_end_month, $date_end_day) = explode('-', $date_end);
-              if ( mktime(23, 59, 59, $date_end_month, $date_end_day, $date_end_year) > $now ) {
-                $date = TRUE;
-                $DW->message('End date is in the future, sets Date to TRUE (rule EDT1)');
-                if (! empty($date_start) ) {
-                  @list($date_start_year, $date_start_month, $date_start_day) = explode('-', $date_start);
-                  if ( mktime(0, 0, 0, $date_start_month, $date_start_day, $date_start_year) > $now ) {
-                    $date = FALSE;
-                    $DW->message('From date is in the future, sets Date to FALSE (rule EDT2)');
-                  }
-                }
-              }
-            } else if (! empty($date_start) ) {
-              @list($date_start_year, $date_start_month, $date_start_day) = explode('-', $date_start);
-              if ( mktime(0, 0, 0, $date_start_month, $date_start_day, $date_start_year) < $now ) {
-                $date = TRUE;
-                $DW->message('From date is in the past, sets Date to TRUE (rule EDT3)');
-              }
-            }
+										case 'date_end':
+											$date_end = $condition['value'];
+											break;
+									}
+								}
+							}
+							$now = time();
+							if (! empty($date_end) ) {
+								@list($date_end_year, $date_end_month, $date_end_day) = explode('-', $date_end);
+								if ( mktime(23, 59, 59, $date_end_month, $date_end_day, $date_end_year) > $now ) {
+									$date = TRUE;
+									$DW->message('End date is in the future, sets Date to TRUE (rule EDT1)');
+									if (! empty($date_start) ) {
+										@list($date_start_year, $date_start_month, $date_start_day) = explode('-', $date_start);
+										if ( mktime(0, 0, 0, $date_start_month, $date_start_day, $date_start_year) > $now ) {
+											$date = FALSE;
+											$DW->message('From date is in the future, sets Date to FALSE (rule EDT2)');
+										}
+									}
+								}
+							} else if (! empty($date_start) ) {
+								@list($date_start_year, $date_start_month, $date_start_day) = explode('-', $date_start);
+								if ( mktime(0, 0, 0, $date_start_month, $date_start_day, $date_start_year) < $now ) {
+									$date = TRUE;
+									$DW->message('From date is in the past, sets Date to TRUE (rule EDT3)');
+								}
+							}
+						}
 
             // For debug messages
             $e = ( $other ) ? 'TRUE' : 'FALSE';
@@ -283,6 +289,10 @@
           		unset($DW->registered_widgets[$widget_id]);
           	} else {
           		unset($sidebars[$sidebar_id][$widget_key]);
+          		if (! isset($DW->removelist[$sidebar_id])  ) {
+          			$DW->removelist[$sidebar_id] = array();
+          		}
+          		$DW->removelist[$sidebar_id][ ] = $widget_key;
           	}
           }
         } // END if ( in_array($widget_id, $DW->dynwid_list) )
@@ -290,5 +300,6 @@
     } // END if ( $sidebar_id != 'wp_inactive_widgets' && count($widgets) > 0 )
   } // END foreach ( $DW->sidebars as $sidebar_id => $widgets )
 
+  $DW->listmade = TRUE;
   $DW->message('Dynamic Widgets END');
 ?>
