@@ -18,10 +18,12 @@
 
 			$wpmlang = wpml_get_default_language();
 			$curlang = wpml_get_current_language();
+			$wpml = TRUE;
+			$DW->message('WPML language: ' . $curlang);
 
 			if ( $wpmlang != $curlang ) {
 				$DW->wpml = TRUE;
-				$DW->message('WPML enabled, default language: ' . $wpmlang);
+				$DW->message('WPML enabled');
 				require_once(DW_PLUGIN . 'wpml.php');
 			}
 		}
