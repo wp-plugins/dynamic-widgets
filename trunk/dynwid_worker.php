@@ -8,6 +8,16 @@
 	$DW->message('Worker START');
 	$DW->message('WhereAmI = ' . $DW->whereami);
 
+	// WPML Plugin support
+	if ( defined('ICL_PLUGIN_PATH') ) {
+		$wpml_api = ICL_PLUGIN_PATH . DW_WPML_API;
+
+		if ( file_exists($wpml_api) ) {
+			require_once($wpml_api);
+			$curlang = wpml_get_current_language();
+		}
+	}
+
   foreach ( $sidebars as $sidebar_id => $widgets ) {
     // Only processing active sidebars with widgets
     if ( $sidebar_id != 'wp_inactive_widgets' && count($widgets) > 0 ) {
@@ -27,7 +37,7 @@
               $display = FALSE;
               $other = TRUE;
               break;
-            } else if ( $condition['maintype'] != 'role' && $condition['maintype'] != 'date' ) {
+            } else if (! in_array($condition['maintype'], $DW->overrule_maintype) ) {
               // Get default value
               if ( $condition['name'] == 'default' ) {
                 $default = $condition['value'];
@@ -49,6 +59,9 @@
             } else if ( $condition['maintype'] == 'date' && $condition['name'] == 'default' ) {
               $DW->message('Default for ' . $widget_id . ' set to FALSE (rule DT1)');
               $date = FALSE;
+            } else if ( $condition['maintype'] == 'wpml' && $condition['name'] == 'default' ) {
+            	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) $condition['value'] ? 'TRUE' : 'FALSE' ) . ' (rule DML1)');
+            	$wpml = (bool) $condition['value'];
             }
           }
 
@@ -102,6 +115,20 @@
 								}
 							}
 						}
+
+          	// WPML
+          	if ( isset($curlang) ) {
+          		foreach ( $opt as $condition ) {
+          			if ( $condition['maintype'] == 'wpml' && $condition['name'] == $curlang ) {
+          				(bool) $wpml_tmp = $condition['value'];
+          			}
+          		}
+
+          		if ( isset($wpml_tmp) && $wpml_tmp != $wpml ) {
+          			$DW->message('Exception triggered for WPML language, sets display to ' . ( $wpml_tmp ? 'TRUE' : 'FALSE' ) . ' (rule EML1)');
+          			$wpml = $wpml_tmp;
+          		}
+          	}
 
             // For debug messages
             $e = ( $other ) ? 'TRUE' : 'FALSE';
@@ -274,7 +301,7 @@
               		if ( count($act) > 0 ) {
               			if ( is_dw_wpsc_category($act) ) {
               				$display = $other;
-              				$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EWPSC1)');
+              				$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ESC1)');
               			}
               		}
               		break;
@@ -283,7 +310,7 @@
             } // END if/else ( $DW->custom_post_type )
           } /* END if ( count($opt) > 0 ) */
 
-          if (! $display || ! $role || ! $date ) {
+          if (! $display || ! $role || ! $date || ! $wpml ) {
             $DW->message('Removed ' . $widget_id . ' from display, SID = ' . $sidebar_id . ' / WID = ' . $widget_id . ' / KID = ' . $widget_key);
           	if ( DW_OLD_METHOD ) {
           		unset($DW->registered_widgets[$widget_id]);

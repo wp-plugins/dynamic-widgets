@@ -13,6 +13,7 @@
   	public  $enabled;
     private $firstmessage;
   	public  $listmade;
+		public  $overrule_maintype;
     private $registered_sidebars;
     public  $registered_widget_controls;
     public  $registered_widgets;
@@ -35,6 +36,7 @@
     	$this->custom_post_type = FALSE;
       $this->firstmessage = TRUE;
     	$this->listmade = FALSE;
+    	$this->overrule_maintype = array('date', 'role', 'wpml');
       $this->registered_sidebars = $GLOBALS['wp_registered_sidebars'];
       $this->registered_widget_controls = &$GLOBALS['wp_registered_widget_controls'];
       $this->registered_widgets = &$GLOBALS['wp_registered_widgets'];
@@ -45,6 +47,7 @@
     	$this->dwoptions = array(
 	    	'role'        => __('Role'),
 	    	'date'        => __('Date'),
+	    	'wpml'				=> __('Language', DW_L10N_DOMAIN),
 	    	'front-page'  => __('Front Page', DW_L10N_DOMAIN),
 	    	'single'      => __('Single Posts', DW_L10N_DOMAIN),
 	    	'page'        => __('Pages'),
@@ -245,7 +248,7 @@
       }
 
       $query = "SELECT DISTINCT widget_id FROM " . $this->dbtable . "
-                  WHERE maintype LIKE '" . $whereami . "%' OR maintype = 'role' OR maintype = 'date'";
+                  WHERE maintype LIKE '" . $whereami . "%' OR maintype = 'role' OR maintype = 'date' OR maintype = 'wpml'";
       $results = $this->wpdb->get_results($query);
       foreach ( $results as $myrow ) {
         $this->dynwid_list[ ] = $myrow->widget_id;
@@ -293,7 +296,7 @@
       	}
         $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
                   WHERE widget_id LIKE '" . $widget_id . "'
-                    AND (maintype LIKE '" . $maintype . "%' OR maintype = 'role' OR maintype = 'date')
+                    AND (maintype LIKE '" . $maintype . "%' OR maintype = 'role' OR maintype = 'date' OR maintype = 'wpml')
                   ORDER BY maintype, name";
       }
       $results = $this->wpdb->get_results($query);

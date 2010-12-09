@@ -9,6 +9,8 @@
 	if ( defined('ICL_PLUGIN_PATH') && file_exists(ICL_PLUGIN_PATH . DW_WPML_API) ) {
 		$DW->wpml = TRUE;
 		$wpml_icon = '<img src="' . $DW->plugin_url . DW_WPML_ICON . '" alt="WMPL" title="Dynamic Widgets syncs with other languages of these pages via WPML" />';
+		$wpml_api = ICL_PLUGIN_PATH . DW_WPML_API;
+		require_once($wpml_api);
 	}
 
 	// WPSC/WPEC Plugin support (http://getshopped.org)
@@ -270,6 +272,32 @@
     }
   }
 
+  // WPML
+  if ( $DW->wpml ) {
+  	$wpml_yes_selected = 'checked="checked"';
+  	$opt_wpml = $DW->getOptions($_GET['id'], 'wpml');
+  	if ( count($opt_wpml) > 0 ) {
+  		$wpml_act = array();
+  		foreach ( $opt_wpml as $wpml_condition ) {
+  			if ( $wpml_condition['name'] == 'default' || empty($wpml_condition['name']) ) {
+  				$wpml_default = $wpml_condition['value'];
+  			} else {
+  				$wpml_act[ ] = $wpml_condition['name'];
+  			}
+  		}
+
+  		if ( $wpml_default == '0' ) {
+  			$wpml_no_selected = $wpml_yes_selected;
+  			unset($wpml_yes_selected);
+  		}
+  	}
+
+  	$wpml_langs = wpml_get_active_languages();
+  	if ( count($wpml_langs) > DW_LIST_LIMIT ) {
+  		$wpml_condition_select_style = DW_LIST_STYLE;
+  	}
+  }
+
   // WPSC/WPEC
   if ( $DW->wpsc ) {
   	// Categories
@@ -384,7 +412,6 @@ h4 {
 <input type="checkbox" id="role_act_<?php echo $rid; ?>" name="role_act[]" value="<?php echo $rid; ?>" <?php echo ( isset($role_act) && count($role_act) > 0 && in_array($rid, $role_act) ) ? 'checked="checked"' : ''; ?> /> <label for="role_act_<?php echo $rid; ?>"><?php echo $role; ?></label><br />
 <?php } ?>
 </div>
-
 </div><!-- end dynwid_conf -->
 
 <h4><b><?php _e('Date'); ?></b><?php echo ( count($opt_date) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
@@ -415,8 +442,28 @@ h4 {
 </tr>
 </table>
 </div>
-
 </div><!-- end dynwid_conf -->
+
+<?php if ( $DW->wpml ) { /* WPML */ ?>
+<h4><b><?php _e('Language (WPML)', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_wpml) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
+<div class="dynwid_conf">
+<?php _e('Show widget default on all languages?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('wpml');" /><br /><br />
+<?php $DW->dumpOpt($opt_wpml); ?>
+<div>
+	<div id="wpml" class="infotext">
+	<?php _e('Using this option can override all other options.'); ?><br />
+	</div>
+</div>
+<input type="radio" name="wpml" value="yes" id="wpml-yes" <?php echo ( isset($wpml_yes_selected) ? $wpml_yes_selected : '' ); ?> /> <label for="wpml-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="wpml" value="no" id="wpml-no" <?php echo ( isset($wpml_no_selected) ? $wpml_no_selected : '' ); ?> /> <label for="wpml-no"><?php _e('No'); ?></label><br />
+<?php _e('Except the languages', DW_L10N_DOMAIN); ?>:<br />
+<div id="wpml-select" class="condition-select" <?php echo ( isset($wpml_condition_select_style) ? $wpml_condition_select_style : '' ); ?>>
+<?php foreach ( $wpml_langs as $code => $lang ) { ?>
+	<input type="checkbox" id="wpml_act_<?php echo $lang['code']; ?>" name="wpml_act[]" value="<?php echo $lang['code']; ?>" <?php echo ( count($wpml_act) > 0 && in_array($lang['code'], $wpml_act) ) ? 'checked="checked"' : ''; ?> /> <label for="wpml_act_<?php echo $lang['code']; ?>"><?php echo $lang['display_name']; ?></label><br />
+<?php } ?>
+</div>
+</div><!-- end dynwid_conf -->
+<?php } ?>
 
 <?php if ( get_option('show_on_front') != 'page' ) { ?>
 <h4><b><?php _e('Front Page', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_frontpage) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
@@ -432,7 +479,6 @@ h4 {
 </div>
 <input type="radio" name="front-page" value="yes" id="front-page-yes" <?php echo ( isset($frontpage_yes_selected) ? $frontpage_yes_selected : '' ); ?> /> <label for="front-page-yes"><?php _e('Yes'); ?></label>
 <input type="radio" name="front-page" value="no" id="front-page-no" <?php echo ( isset($frontpage_no_selected) ? $frontpage_no_selected : '' ); ?> /> <label for="front-page-no"><?php _e('No'); ?></label>
-
 </div><!-- end dynwid_conf -->
 <?php } ?>
 
@@ -494,7 +540,6 @@ h4 {
   </td>
 </tr>
 </table>
-
 </div><!-- end dynwid_conf -->
 
 <h4><b><?php _e('Pages'); ?></b> <?php echo ( count($opt_page) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . ( $DW->wpml ? $wpml_icon : '' ); ?></h4>
@@ -523,7 +568,6 @@ h4 {
 <?php foreach ( $authors as $author ) { ?>
 <input type="checkbox" id="author_act_<?php echo $author->ID; ?>" name="author_act[]" value="<?php echo $author->ID; ?>" <?php echo ( isset($author_act) && count($author_act) > 0 && in_array($author->ID,$author_act) ) ? 'checked="checked"' : ''; ?> /> <label for="author_act_<?php echo $author->ID; ?>"><?php echo $author->display_name; ?></label><br />
 <?php } ?></div>
-
 </div><!-- end dynwid_conf -->
 
 <h4><b><?php _e('Category Pages', DW_L10N_DOMAIN); ?></b> <?php echo ( count($opt_category) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . ( $DW->wpml ? $wpml_icon : '' ); ?></h4>
@@ -538,7 +582,6 @@ h4 {
 <input type="checkbox" id="cat_act_<?php echo $cat->cat_ID; ?>" name="category_act[]" value="<?php echo $cat->cat_ID; ?>" <?php echo ( isset($category_act) && count($category_act) > 0 && in_array($cat->cat_ID,$category_act) ) ? 'checked="checked"' : ''; ?> /> <label for="cat_act_<?php echo $cat->cat_ID; ?>"><?php echo $cat->name; ?></label><br />
 <?php } ?>
 </div>
-
 </div><!-- end dynwid_conf -->
 
 <h4><b><?php _e('Archive Pages', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_archive) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
@@ -561,7 +604,6 @@ h4 {
 <?php $DW->dumpOpt($opt_e404); ?>
 <input type="radio" name="e404" value="yes" id="e404-yes" <?php echo ( isset($e404_yes_selected) ? $e404_yes_selected : '' ); ?> /> <label for="e404-yes"><?php _e('Yes'); ?></label>
 <input type="radio" name="e404" value="no" id="e404-no" <?php echo ( isset($e404_no_selected) ? $e404_no_selected : '' ); ?> /> <label for="e404-no"><?php _e('No'); ?></label>
-
 </div><!-- end dynwid_conf -->
 
 <h4><b><?php _e('Search Page', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_search) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
@@ -570,7 +612,6 @@ h4 {
 <?php $DW->dumpOpt($opt_search); ?>
 <input type="radio" name="search" value="yes" id="search-yes" <?php echo ( isset($search_yes_selected) ? $search_yes_selected : '' ); ?> /> <label for="search-yes"><?php _e('Yes'); ?></label>
 <input type="radio" name="search" value="no" id="search-no" <?php echo ( isset($search_no_selected) ? $search_no_selected : '' ); ?> /> <label for="search-no"><?php _e('No'); ?></label>
-
 </div><!-- end dynwid_conf -->
 
 <?php
@@ -628,11 +669,11 @@ h4 {
         echo '</label><br />';
       endwhile;
       echo '</div>';
-
       echo '</div><!-- end dynwid_conf -->';
     }
   } // end version compare >= WP 3.0
 
+	// WPEC
   if ( $DW->wpsc ) {
 ?>
 <h4><b><?php _e('WPSC Category', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_wpsc) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
@@ -651,6 +692,7 @@ h4 {
 <?php
   } // DW->wpsc
 ?>
+
 </div><!-- end dynwid -->
 
 <br />
@@ -675,7 +717,7 @@ h4 {
         swChb(cAuthors, false);
         swChb(cCat, false);
       } else {
-        document.getElementById('individual').checked = true;
+        jQuery('#individual').attr('checked', true);
       }
     } else if ( icount > 0 && document.getElementById('individual').checked ) {
       if ( confirm('Are you sure you want to enable the exception rule for individual posts and tags?\nThis will remove the exceptions set for Author and/or Category on single posts for this widget.\nOk = Yes; No = Cancel') ) {
@@ -683,9 +725,9 @@ h4 {
         swChb(cCat, true);
         icount = 0;
       } else {
-        document.getElementById('individual').checked = false;
+        jQuery('#individual').attr('checked', false);
       }
-    } else if ( document.getElementById('individual').checked ) {
+    } else if ( jQuery('#individual').attr('checked') ) {
         swChb(cAuthors, true);
         swChb(cCat, true);
     } else {
@@ -695,7 +737,7 @@ h4 {
   }
 
   function ci(id) {
-    if ( document.getElementById(id).checked ) {
+    if ( jQuery('#'+id).attr('checked') ) {
       icount++;
     } else {
       icount--;
@@ -719,7 +761,7 @@ h4 {
         jQuery(id).datepicker('show');
     	});
     } else {
-      document.getElementById('date-no').checked = true;
+      jQuery('#date-no').attr('checked', true);
       swTxt(cDate, false);
       showCalendar(id);
     }
@@ -728,18 +770,18 @@ h4 {
   function swChb(c, s) {
   	for ( i = 0; i < c.length; i++ ) {
   	  if ( s == true ) {
-  	    document.getElementById(c[i]).checked = false;
+  	    jQuery('#'+c[i]).attr('checked', false);
   	  }
-      document.getElementById(c[i]).disabled = s;
+      jQuery('#'+c[i]).attr('disabled', s);
     }
   }
 
   function swTxt(c, s) {
   	for ( i = 0; i < c.length; i++ ) {
   	  if ( s == true ) {
-  	    document.getElementById(c[i]).value = '';
+  	    jQuery('#'+c[i]).val('');
   	  }
-      document.getElementById(c[i]).disabled = s;
+      jQuery('#'+c[i]).attr('disabled', s);
     }
   }
 
@@ -749,19 +791,19 @@ h4 {
   var cDate =  new Array('date_start', 'date_end');
   var icount = <?php echo $js_count; ?>;
 
-  if ( document.getElementById('role-yes').checked ) {
+  if ( jQuery('#role-yes').attr('checked') ) {
   	swChb(cRole, true);
   }
-  if ( document.getElementById('date-yes').checked ) {
+  if ( jQuery('#date-yes').attr('checked') ) {
   	swTxt(cDate, true);
   }
-  if ( document.getElementById('individual').checked ) {
+  if ( jQuery('#individual').attr('checked') ) {
     swChb(cAuthors, true);
     swChb(cCat, true);
   }
 
-  jQuery(document).ready(function($) {
-		$('#dynwid').accordion({
+  jQuery(document).ready(function() {
+		jQuery('#dynwid').accordion({
 			header: 'h4',
 			autoHeight: false,
 		});

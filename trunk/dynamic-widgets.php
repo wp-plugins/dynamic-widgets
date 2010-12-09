@@ -24,10 +24,11 @@
 
 /*
    WPML Plugin support via API
-   Using constants	ICL_PLUGIN_PATH > dynwid_admin_edit.php
-   Using functions  wpml_get_default_language() > dynwid_worker.php
-                    wpml_get_current_language() > dynwid_worker.php, wpml.php
+   Using constants	ICL_PLUGIN_PATH > dynwid_admin_edit.php, dynwid_init_worker.php, dynwid_worker.php
+   Using functions  wpml_get_default_language() > dynwid_init_worker.php
+                    wpml_get_current_language() > dynwid_init_worker.php, dynwid_worker.php, wpml.php
                     wpml_get_content_translation() > wpml.php
+   									wpml_get_active_languages() > dynwid_admin_edit.php
  */
 
 /*
