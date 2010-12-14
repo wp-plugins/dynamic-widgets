@@ -30,6 +30,7 @@
           $display = TRUE;
           $role = TRUE;
           $date = TRUE;
+        	$wpml = TRUE;
 
           foreach ( $opt as $condition ) {
             if ( empty($condition['name']) && $condition['value'] == '0' ) {
