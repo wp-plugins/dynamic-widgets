@@ -319,6 +319,23 @@
       return $opt;
     }
 
+		function getParents($type, $arr, $id) {
+			if ( $type == 'page' ) {
+				$obj = get_page($id);
+			} else {
+				$obj = get_post($id);
+			}
+
+			if ( $obj->post_parent > 0 ) {
+				$arr[ ] = $obj->post_parent;
+				$a = &$arr;
+				$a = $this->getParents($type, $a, $obj->post_parent);
+			}
+
+			return $arr;
+		}
+
+
     function hasOptions($widget_id) {
       $query = "SELECT COUNT(1) AS total FROM " . $this->dbtable . "
                   WHERE widget_id = '" . $widget_id . "' AND
