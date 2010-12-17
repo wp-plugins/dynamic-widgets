@@ -160,17 +160,30 @@
   if ( count($opt_page) > 0 ) {
     $page_act = array();
     foreach ( $opt_page as $page_condition ) {
-      if ( $page_condition['name'] == 'default' || empty($page_condition['name']) ) {
-        $page_default = $page_condition['value'];
-      } else {
-        $page_act[ ] = $page_condition['name'];
-      }
+    	if ( $page_condition['maintype'] == 'page' ) {
+    		if ( $page_condition['name'] == 'default' || empty($page_condition['name']) ) {
+    			$page_default = $page_condition['value'];
+    		} else {
+    			$page_act[ ] = $page_condition['name'];
+    		}
+    	}
     }
 
     if ( $page_default == '0' ) {
       $page_no_selected = $page_yes_selected;
       unset($page_yes_selected);
     }
+
+  	// -- Childs
+  	$opt_page_childs = $DW->getOptions($_GET['id'], 'page-childs');
+  	if ( count($opt_page_childs) > 0 ) {
+  		$page_childs_act = array();
+  		foreach ( $opt_page_childs as $child_condition ) {
+  			if ( $child_condition['name'] != 'default' ) {
+  				$page_childs_act[ ] = $child_condition['name'];
+  			}
+  		}
+  	}
   }
 
   $pages = get_pages();
@@ -178,7 +191,7 @@
     $page_condition_select_style = DW_LIST_STYLE;
   }
 
-  $static_page = array();
+	$static_page = array();
   if ( get_option('show_on_front') == 'page' ) {
     if ( get_option('page_on_front') == get_option('page_for_posts') ) {
       $id = get_option('page_on_front');
@@ -544,15 +557,72 @@ h4 {
 
 <h4><b><?php _e('Pages'); ?></b> <?php echo ( count($opt_page) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . ( $DW->wpml ? $wpml_icon : '' ); ?></h4>
 <div class="dynwid_conf">
-<?php _e('Show widget default on static pages?', DW_L10N_DOMAIN); ?><br />
+<?php _e('Show widget default on static pages?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('pages');" /><br />
 <?php $DW->dumpOpt($opt_page); ?>
+<div>
+	<div id="pages" class="infotext">
+	<?php
+		$childs_infotext = __('Checking the "All childs" option, makes the exception rule apply
+				to the parent and all items under it in all levels. Also future items
+				under the parent. It\'s not possible to apply an exception rule to
+				"All childs" without the parent.', DW_L10N_DOMAIN);
+		echo $childs_infotext;
+	?>
+	</div>
+</div>
 <input type="radio" name="page" value="yes" id="page-yes" <?php echo ( isset($page_yes_selected) ? $page_yes_selected : '' ); ?> /> <label for="page-yes"><?php _e('Yes'); ?></label>
 <input type="radio" name="page" value="no" id="page-no" <?php echo ( isset($page_no_selected) ? $page_no_selected : '' ); ?> /> <label for="page-no"><?php _e('No'); ?></label><br />
 <?php _e('Except the page(s)', DW_L10N_DOMAIN); ?>:<br />
 <div id="page-select" class="condition-select" <?php echo ( isset($page_condition_select_style) ? $page_condition_select_style : '' ); ?>>
-<?php foreach ( $pages as $page ) { ?>
-<input type="checkbox" id="page_act_<?php echo $page->ID; ?>" name="page_act[]" value="<?php echo $page->ID; ?>" <?php echo ( isset($page_act) && count($page_act) > 0 && in_array($page->ID,$page_act) ) ? 'checked="checked"' : ''; ?> /> <label for="page_act_<?php echo $page->ID; ?>"><?php echo $page->post_title; ?> <?php echo ( get_option('show_on_front') == 'page' && isset($static_page[$page->ID]) ? '(' . $static_page[$page->ID] . ')' : '' ) ?></label><br />
-<?php } ?>
+<div style="position:relative;left:-15px">
+<?php
+	function getPageChilds($arr, $id, $i) {
+		$pg = get_pages('child_of=' . $id);
+		foreach ($pg as $p ) {
+			if (! in_array($p->ID, $i) ) {
+				$i[ ] = $p->ID;
+				$arr[$p->ID] = array();
+				$a = &$arr[$p->ID];
+				$a = getPageChilds($a, $p->ID, &$i);
+			}
+		}
+		return $arr;
+	}
+	$pagemap = getPageChilds(array(), 0, array());
+
+	// Creating childmap
+	function childPageMap($arr, $id) {
+		$pg = get_pages('child_of=' . $id);
+		foreach ($pg as $p ) {
+			$i[ ] = $p->ID;
+			$arr[$p->ID] = array();
+			$a = &$arr[$p->ID];
+			$a = childPageMap($a, $p->ID);
+		}
+		return $arr;
+	}
+	$childmap = childPageMap(array(), 0);
+
+	function prtPgs($pages, $childmap, $page_act, $page_childs_act) {
+		foreach ( $pages as $pid => $childs ) {
+			$page = get_page($pid);
+
+			echo '<div style="position:relative;left:15px;">';
+			echo '<input type="checkbox" id="page_act_' . $page->ID . '" name="page_act[]" value="' . $page->ID . '" ' . ( isset($page_act) && count($page_act) > 0 && in_array($page->ID, $page_act) ? 'checked="checked"' : '' ) . ' onchange="chkChild(' . $pid . ')" /> <label for="page_act_' . $page->ID . '">' . $page->post_title . ' ' . ( get_option('show_on_front') == 'page' && isset($static_page[$page->ID]) ? '(' . $static_page[$page->ID] . ')' : '' ) . '</label><br />';
+
+			echo '<div style="position:relative;left:15px;">';
+			echo '<input type="checkbox" id="child_' . $pid . '" name="page_childs_act[]" value="' . $pid . '" ' . ( isset($page_childs_act) && count($page_childs_act) > 0 && in_array($pid, $page_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(' . $pid . ')" /> <label for="child_' . $pid . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></label><br />';
+			echo '</div>';
+
+			if ( count($childs) > 0 ) {
+				prtPgs($childs, $childmap, $page_act, $page_childs_act);
+			}
+			echo '</div>';
+		}
+	}
+	prtPgs($pagemap, $childmap, $page_act, $page_childs_act);
+?>
+</div>
 </div>
 
 </div><!-- end dynwid_conf -->
@@ -617,6 +687,50 @@ h4 {
 <?php
   /* WordPress 3.0 and higher: Custom Post Types */
   if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
+  	function getCPostChilds($type, $arr, $id, $i) {
+  		$post = get_posts('post_type=' . $type . '&post_parent=' . $id);
+  		foreach ($post as $p ) {
+  			if (! in_array($p->ID, $i) ) {
+  				$i[ ] = $p->ID;
+  				$arr[$p->ID] = array();
+  				$a = &$arr[$p->ID];
+  				$a = getCPostChilds($type, $a, $p->ID, &$i);
+  			}
+  		}
+  		return $arr;
+  	}
+
+  	function childCPostMap($type, $arr, $id) {
+  		$post = get_posts('post_type=' . $type . '&post_parent=' . $id);
+  		foreach ($post as $p ) {
+  			$i[ ] = $p->ID;
+  			$arr[$p->ID] = array();
+  			$a = &$arr[$p->ID];
+  			$a = childCPostMap($type, $a, $p->ID);
+  		}
+  		return $arr;
+  	}
+
+  	function prtCPost($type, $ctid, $posts, $childmap, $posts_act, $posts_childs_act) {
+  		foreach ( $posts as $pid => $childs ) {
+  			$post = get_post($pid);
+
+  			echo '<div style="position:relative;left:15px;">';
+  			echo '<input type="checkbox" id="' . $type . '_act_' . $post->ID . '" name="' . $type . '_act[]" value="' . $post->ID . '" ' . ( isset($posts_act) && count($posts_act) > 0 && in_array($post->ID, $posts_act) ? 'checked="checked"' : '' ) . ' onchange="chkCPChild(\'' . $type . '\',' . $pid . ')" /> <label for="' . $type . '_act_' . $post->ID . '">' . $post->post_title . '</label><br />';
+
+  			if ( $ctid->hierarchical ) {
+  				echo '<div style="position:relative;left:15px;">';
+  				echo '<input type="checkbox" id="' . $type . '_child_' . $pid . '" name="' . $type . '_childs_act[]" value="' . $pid . '" ' . ( isset($posts_childs_act) && count($posts_childs_act) > 0 && in_array($pid, $posts_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkCPParent(\'' . $type . '\',' . $pid . ')" /> <label for="' . $type . '_child_' . $pid . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></label><br />';
+  				echo '</div>';
+  			}
+
+  			if ( count($childs) > 0 ) {
+  				prtCPost($type, $ctid, $childs, $childmap, $posts_act, $posts_childs_act);
+  			}
+  			echo '</div>';
+  		}
+  	}
+
     $args = array(
               'public'   => TRUE,
               '_builtin' => FALSE
@@ -629,18 +743,34 @@ h4 {
       $opt_custom = $DW->getOptions($_GET['id'], $type);
       if ( count($opt_custom) > 0 ) {
         $custom_act = array();
+      	$custom_childs_act = array();
+
         foreach ( $opt_custom as $custom_condition ) {
-          if ( $custom_condition['name'] == 'default' || empty($custom_condition['name']) ) {
-            $custom_default = $custom_condition['value'];
-          } else {
-            $custom_act[ ] = $custom_condition['name'];
-          }
-        }
+        	if ( $custom_condition['maintype'] == $type ) {
+         	 if ( $custom_condition['name'] == 'default' || empty($custom_condition['name']) ) {
+          	  $custom_default = $custom_condition['value'];
+          	} else {
+            	$custom_act[ ] = $custom_condition['name'];
+          	}
+       	 	}
+      	}
 
         if ( $custom_default == '0' ) {
           $custom_no_selected = $custom_yes_selected;
           unset($custom_yes_selected);
         }
+
+	    	// -- Childs
+      	if ( $ctid->hierarchical ) {
+      		$opt_custom_childs = $DW->getOptions($_GET['id'], $type . '-childs');
+      		if ( count($opt_custom_childs) > 0 ) {
+      			foreach ( $opt_custom_childs as $child_condition ) {
+      				if ( $child_condition['name'] != 'default' ) {
+      					$custom_childs_act[ ] = $child_condition['name'];
+      				}
+      			}
+      		}
+      	}
       }
 
       $loop = new WP_Query( array('post_type' => $type) );
@@ -648,26 +778,34 @@ h4 {
         $custom_condition_select_style = DW_LIST_STYLE;
       }
 
-      // Output
+    	$cpmap = getCPostChilds($type, array(), 0, array());
+    	$childmap = childCPostMap($type, array(), 0);
 
+      // Output
       echo '<h4><b>' . __('Custom Post Type') . ' <em>' . $ctid->label . '</em></b> ' . ( count($opt_custom) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . ( $DW->wpml ? $wpml_icon : '' ) . '</h4>';
       echo '<div class="dynwid_conf">';
-      echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $ctid->label . '?<br />';
+      echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $ctid->label . '? ' . ( $ctid->hierarchical ? '<img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $type . '\');" />' : '' ) . '<br />';
       echo '<input type="hidden" name="post_types[]" value="' . $type . '" />';
       $DW->dumpOpt($opt_custom);
-      echo '<input type="radio" name="' . $type . '" value="yes" id="' . $type . '-yes" ' . ( isset($custom_yes_selected) ? $custom_yes_selected : '' ) . ' /> <label for="' . $type . '-yes">' . __('Yes') . '</label> ';
+
+    	if ( $ctid->hierarchical ) {
+    		echo '<div>';
+    		echo '<div id="custom_' . $type . '" class="infotext">';
+    		echo $childs_infotext;
+    		echo '</div>';
+    		echo '</div>';
+    	}
+
+			echo '<input type="radio" name="' . $type . '" value="yes" id="' . $type . '-yes" ' . ( isset($custom_yes_selected) ? $custom_yes_selected : '' ) . ' /> <label for="' . $type . '-yes">' . __('Yes') . '</label> ';
       echo '<input type="radio" name="' . $type . '" value="no" id="' . $type . '-no" ' . ( isset($custom_no_selected) ? $custom_no_selected : '' ) . ' /> <label for="' . $type . '-no">' . __('No') . '</label><br />';
 
       echo __('Except for') . ':<br />';
       echo '<div id="' . $type . '-select" class="condition-select" ' . ( isset($custom_condition_select_style) ? $custom_condition_select_style : '' ) . '>';
 
-      while ( $loop->have_posts() ) : $loop->the_post();
-        echo '<input type="checkbox" id="' . $type . '_act_' . $loop->post->ID . '" name="' . $type . '_act[]" value="' . $loop->post->ID . '" ';
-        echo ( count($custom_act) > 0 && in_array($loop->post->ID,$custom_act) ) ? 'checked="checked"' : '';
-        echo ' /> <label for="' . $type . '_act_' . $loop->post->ID . '">';
-        the_title();
-        echo '</label><br />';
-      endwhile;
+    	echo '<div style="position:relative;left:-15px">';
+    	prtCPost($type, $ctid, $cpmap, $childmap, $custom_act, $custom_childs_act);
+    	echo '</div>';
+
       echo '</div>';
       echo '</div><!-- end dynwid_conf -->';
     }
@@ -734,6 +872,30 @@ h4 {
         swChb(cAuthors, false);
         swChb(cCat, false);
     }
+  }
+
+  function chkChild(pid) {
+  	if ( jQuery('#page_act_'+pid).attr('checked') == false ) {
+  		jQuery('#child_'+pid).attr('checked', false);
+  	}
+  }
+
+  function chkParent(pid) {
+  	if ( jQuery('#child_'+pid).attr('checked') == true ) {
+  		jQuery('#page_act_'+pid).attr('checked', true);
+  	}
+  }
+
+  function chkCPChild(type, pid) {
+  	if ( jQuery('#'+type+'_act_'+pid).attr('checked') == false ) {
+  		jQuery('#'+type+'_child_'+pid).attr('checked', false);
+  	}
+  }
+
+  function chkCPParent(type, pid) {
+  	if ( jQuery('#'+type+'_child_'+pid).attr('checked') == true ) {
+  		jQuery('#'+type+'_act_'+pid).attr('checked', true);
+  	}
   }
 
   function ci(id) {

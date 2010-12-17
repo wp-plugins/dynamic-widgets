@@ -169,6 +169,18 @@
     $DW->addSingleOption($_POST['widget_id'], 'page');
   }
 
+  // -- Childs
+  if ( isset($_POST['page_act']) && count($_POST['page_act']) > 0 && isset($_POST['page_childs_act']) && count($_POST['page_childs_act']) > 0 ) {
+  	$child_act = array();
+		foreach ( $_POST['page_childs_act'] as $act ) {
+  		if ( in_array($act, $_POST['page_act']) ) {
+  			$childs_act[ ] = $act;
+  		}
+  	}
+
+  	$DW->addMultiOption($_POST['widget_id'], 'page-childs', $_POST['page'], $childs_act);
+  }
+
   // Author
   if ( isset($_POST['author_act']) && count($_POST['author_act']) > 0 ) {
     $DW->addMultiOption($_POST['widget_id'], 'author', $_POST['author'], $_POST['author_act']);
@@ -207,6 +219,18 @@
       } else if ( $_POST[$type] == 'no' ) {
         $DW->addSingleOption($_POST['widget_id'], $type);
       }
+
+    	// -- Childs
+    	$act_childs_field = $type . '_childs_act';
+    	if ( count($_POST[$act_field]) > 0 && isset($_POST[$act_childs_field]) && count($_POST[$act_childs_field]) > 0 ) {
+    		$childs_act = array();
+    		foreach ( $_POST[$act_childs_field] as $act ) {
+    			if ( in_array($act, $_POST[$act_field]) ) {
+    				$childs_act[ ] = $act;
+    			}
+    		}
+    		$DW->addMultiOption($_POST['widget_id'], $type . '-childs', $_POST[$type], $childs_act);
+    	}
     }
   }
 

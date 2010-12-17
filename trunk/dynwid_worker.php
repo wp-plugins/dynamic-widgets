@@ -146,9 +146,29 @@
                   $DW->message('WPML ObjectID: ' . $id);
                 }
 
-                if ( in_array($id, $act) ) {
+              	foreach ( $opt as $condition ) {
+              		if ( $condition['name'] != 'default' ) {
+              			switch ( $condition['maintype'] ) {
+              				case $DW->whereami:
+              					$act_custom[ ] = $condition['name'];
+              					break;
+
+              				case $DW->whereami . '-childs':
+              					$act_childs[ ] = $condition['name'];
+              					break;
+              			}
+              		}
+              	}
+
+                if ( in_array($id, $act_custom) ) {
                   $display = $other;
                   $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP1)');
+                } else if ( count($act_childs) > 0 ) {
+                	$parents = $DW->getParents('post', array(), $id);
+                	if ( (bool) array_intersect($act_childs, $parents) ) {
+                		$display = $other;
+                		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP2)');
+                	}
                 }
               }
             } else {
@@ -261,6 +281,9 @@
 
                 case 'page':
                   if ( count($act) > 0 ) {
+                  	$act_page = array();
+                  	$act_childs = array();
+
                     $post = $GLOBALS['post'];
                     $id = $post->ID;
                     if ( $DW->wpml ) {
@@ -268,9 +291,29 @@
                       $DW->message('WPML ObjectID: ' . $id);
                     }
 
-                    if ( in_array($id, $act) ) {
+                  	foreach ( $opt as $condition ) {
+                  		if ( $condition['name'] != 'default' ) {
+                  			switch ( $condition['maintype'] ) {
+                  				case 'page':
+                  					$act_page[ ] = $condition['name'];
+                  					break;
+
+                  				case 'page-childs':
+                  					$act_childs[ ] = $condition['name'];
+                  					break;
+                  			}
+                  		}
+                  	}
+
+                    if ( in_array($id, $act_page) ) {
                       $display = $other;
                       $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP1)');
+                    } else if ( count($act_childs) > 0 ) {
+                    	$parents = $DW->getParents('page', array(), $id);
+                    	if ( (bool) array_intersect($act_childs, $parents) ) {
+                    		$display = $other;
+                    		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP2)');
+                    	}
                     }
                   }
                   break;
