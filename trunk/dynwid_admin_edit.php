@@ -407,6 +407,7 @@ h4 {
 <input type="hidden" name="widget_id" value="<?php echo $_GET['id']; ?>" />
 <input type="hidden" name="returnurl" value="<?php echo ( isset($_GET['returnurl']) ? urldecode($_GET['returnurl']) : '' ); ?>" />
 
+<!-- Role //-->
 <div id="dynwid">
 <h4><b><?php _e('Role'); ?></b><?php echo ( count($opt_role) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
@@ -427,6 +428,7 @@ h4 {
 </div>
 </div><!-- end dynwid_conf -->
 
+<!-- Date //-->
 <h4><b><?php _e('Date'); ?></b><?php echo ( count($opt_date) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget always?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('date');" /><br />
@@ -457,6 +459,7 @@ h4 {
 </div>
 </div><!-- end dynwid_conf -->
 
+<!-- Language (WPML) //-->
 <?php if ( $DW->wpml ) { /* WPML */ ?>
 <h4><b><?php _e('Language (WPML)', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_wpml) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
@@ -478,6 +481,7 @@ h4 {
 </div><!-- end dynwid_conf -->
 <?php } ?>
 
+<!-- Front Page //-->
 <?php if ( get_option('show_on_front') != 'page' ) { ?>
 <h4><b><?php _e('Front Page', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_frontpage) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
@@ -495,6 +499,7 @@ h4 {
 </div><!-- end dynwid_conf -->
 <?php } ?>
 
+<!-- Single Posts //-->
 <h4><b><?php _e('Single Posts', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_single) > 0 || count($opt_single_author) > 0 || count($opt_single_category) > 0 || count($opt_single_post) > 0 || count($opt_single_tag) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on single posts?', DW_L10N_DOMAIN) ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('single')" /><br />
@@ -555,6 +560,7 @@ h4 {
 </table>
 </div><!-- end dynwid_conf -->
 
+<!-- Pages //-->
 <h4><b><?php _e('Pages'); ?></b> <?php echo ( count($opt_page) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . ( $DW->wpml ? $wpml_icon : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on static pages?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('pages');" /><br />
@@ -603,7 +609,7 @@ h4 {
 	}
 	$childmap = childPageMap(array(), 0);
 
-	function prtPgs($pages, $childmap, $page_act, $page_childs_act) {
+	function prtPgs($pages, $childmap, $page_act, $page_childs_act, $static_page) {
 		foreach ( $pages as $pid => $childs ) {
 			$page = get_page($pid);
 
@@ -615,18 +621,19 @@ h4 {
 			echo '</div>';
 
 			if ( count($childs) > 0 ) {
-				prtPgs($childs, $childmap, $page_act, $page_childs_act);
+				prtPgs($childs, $childmap, $page_act, $page_childs_act, $static_page);
 			}
 			echo '</div>';
 		}
 	}
-	prtPgs($pagemap, $childmap, $page_act, $page_childs_act);
+	prtPgs($pagemap, $childmap, $page_act, $page_childs_act, $static_page);
 ?>
 </div>
 </div>
 
 </div><!-- end dynwid_conf -->
 
+<!-- Author Pages //-->
 <h4><b><?php _e('Author Pages', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_author) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on author pages?', DW_L10N_DOMAIN); ?><br />
@@ -640,6 +647,7 @@ h4 {
 <?php } ?></div>
 </div><!-- end dynwid_conf -->
 
+<!-- Category Pages //-->
 <h4><b><?php _e('Category Pages', DW_L10N_DOMAIN); ?></b> <?php echo ( count($opt_category) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . ( $DW->wpml ? $wpml_icon : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on category pages?', DW_L10N_DOMAIN); ?><br />
@@ -654,6 +662,7 @@ h4 {
 </div>
 </div><!-- end dynwid_conf -->
 
+<!-- Archive Pages //-->
 <h4><b><?php _e('Archive Pages', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_archive) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget on archive pages', DW_L10N_DOMAIN); ?>? <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('archive')" /><br />
@@ -668,6 +677,7 @@ h4 {
 
 </div><!-- end dynwid_conf -->
 
+<!-- Error Page //-->
 <h4><b><?php _e('Error Page', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_e404) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget on the error page?', DW_L10N_DOMAIN); ?><br />
@@ -676,6 +686,7 @@ h4 {
 <input type="radio" name="e404" value="no" id="e404-no" <?php echo ( isset($e404_no_selected) ? $e404_no_selected : '' ); ?> /> <label for="e404-no"><?php _e('No'); ?></label>
 </div><!-- end dynwid_conf -->
 
+<!-- Search Page //-->
 <h4><b><?php _e('Search Page', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_search) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget on the search page?', DW_L10N_DOMAIN); ?><br />
@@ -684,6 +695,7 @@ h4 {
 <input type="radio" name="search" value="no" id="search-no" <?php echo ( isset($search_no_selected) ? $search_no_selected : '' ); ?> /> <label for="search-no"><?php _e('No'); ?></label>
 </div><!-- end dynwid_conf -->
 
+<!-- Custom Post Type //-->
 <?php
   /* WordPress 3.0 and higher: Custom Post Types */
   if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
@@ -810,7 +822,10 @@ h4 {
       echo '</div><!-- end dynwid_conf -->';
     }
   } // end version compare >= WP 3.0
+?>
 
+<!-- WPSC Category //-->
+<?php
 	// WPEC
   if ( $DW->wpsc ) {
 ?>
@@ -828,7 +843,7 @@ h4 {
 </div>
 </div><!-- end dynwid_conf -->
 <?php
-  } // DW->wpsc
+  } // end DW->wpsc
 ?>
 
 </div><!-- end dynwid -->
@@ -844,20 +859,19 @@ h4 {
 
 </form>
 
-
 <script type="text/javascript">
   function chkInPosts() {
     var posts = <?php echo count($single_post_act); ?>;
     var tags = <?php echo count($single_tag_act); ?>;
 
-    if ( (posts > 0 || tags > 0) && document.getElementById('individual').checked == false ) {
+    if ( (posts > 0 || tags > 0) && jQuery('#individual').attr('checked') == false ) {
       if ( confirm('Are you sure you want to disable the exception rule for individual posts and tags?\nThis will remove the options set to individual posts and/or tags for this widget.\nOk = Yes; No = Cancel') ) {
         swChb(cAuthors, false);
         swChb(cCat, false);
       } else {
         jQuery('#individual').attr('checked', true);
       }
-    } else if ( icount > 0 && document.getElementById('individual').checked ) {
+    } else if ( icount > 0 && jQuery('#individual').attr('checked') ) {
       if ( confirm('Are you sure you want to enable the exception rule for individual posts and tags?\nThis will remove the exceptions set for Author and/or Category on single posts for this widget.\nOk = Yes; No = Cancel') ) {
         swChb(cAuthors, true);
         swChb(cCat, true);

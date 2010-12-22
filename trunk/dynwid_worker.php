@@ -52,6 +52,7 @@
                 $other = TRUE;
               } else {
                 $DW->message('Default for ' . $widget_id . ' set to TRUE (rule D3)');
+              	$display = TRUE;
                 $other = FALSE;
               }
             } else if ( $condition['maintype'] == 'role' && $condition['name'] == 'default' ) {
