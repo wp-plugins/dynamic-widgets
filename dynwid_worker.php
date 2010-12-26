@@ -42,18 +42,17 @@
               // Get default value
               if ( $condition['name'] == 'default' ) {
                 $default = $condition['value'];
+              	if ( $default == '0' ) {
+              		$DW->message('Default for ' . $widget_id . ' set to FALSE (rule D2)');
+              		$display = FALSE;
+              		$other = TRUE;
+              	} else {
+              		$DW->message('Default for ' . $widget_id . ' set to TRUE (rule D3)');
+              		$display = TRUE;
+              		$other = FALSE;
+              	}
               } else {
                 $act[ ] = $condition['name'];
-              }
-
-              if ( $default == '0' ) {
-                $DW->message('Default for ' . $widget_id . ' set to FALSE (rule D2)');
-                $display = FALSE;
-                $other = TRUE;
-              } else {
-                $DW->message('Default for ' . $widget_id . ' set to TRUE (rule D3)');
-              	$display = TRUE;
-                $other = FALSE;
               }
             } else if ( $condition['maintype'] == 'role' && $condition['name'] == 'default' ) {
               $DW->message('Default for ' . $widget_id . ' set to FALSE (rule R1)');
@@ -64,6 +63,10 @@
             } else if ( $condition['maintype'] == 'wpml' && $condition['name'] == 'default' ) {
             	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) $condition['value'] ? 'TRUE' : 'FALSE' ) . ' (rule DML1)');
             	$wpml = (bool) $condition['value'];
+            } else {	// Failsave
+            	$DW->message('Failsave: Default for ' . $widget_id . ' set to TRUE (rule D4)');
+            	$display = TRUE;
+            	$other = FALSE;
             }
           }
 
@@ -268,6 +271,7 @@
                 case 'home':
                   if ( count($act) > 0 ) {
                     $home_id = get_option('page_for_posts');
+                  	$DW->message('ID = ' . $home_id);
                     if ( $DW->wpml ) {
                       $home_id = dw_wpml_get_id($home_id);
                       $DW->message('WPML ObjectID: ' . $home_id);
@@ -287,6 +291,7 @@
 
                     $post = $GLOBALS['post'];
                     $id = $post->ID;
+                  	$DW->message('ID = ' . $id);
                     if ( $DW->wpml ) {
                       $id = dw_wpml_get_id($id);
                       $DW->message('WPML ObjectID: ' . $id);
