@@ -1,20 +1,21 @@
 === Plugin Name ===
 Contributors: Qurl
 Donate link:
-Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
+Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, condition, conditional tags
 Requires at least: 2.9.1
-Tested up to: 3.0.1
-Stable tag: 1.3.6
+Tested up to: 3.0.3
+Stable tag: 1.3.7
 
-Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages.
+Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages.
 
 == Description ==
 
-Dynamic Widgets gives you more control over your widgets. It lets you dynamicly place widgets on WordPress pages by excluding or including rules with just a few mouse clicks by role, dates, for the homepage, single posts, pages, authors, categories, archives, error page, search page and custom post types.
+Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages by setting conditional rules with just a few mouse clicks by role, dates, language (WPML), for the homepage, single posts, pages, authors, categories, archives, error page, search page and custom post types.
 
 * Default widget display setting is supported for:
   - User roles
   - Dates
+  - Language (WPML)
   - Front page
   - Single post pages
   - Pages
@@ -23,22 +24,26 @@ Dynamic Widgets gives you more control over your widgets. It lets you dynamicly 
   - Archive pages
   - Error Page
   - Search Page
-  - Custom Post Types (since WordPress 3.0)
+  - Custom Post Types
   - WP Shopping Cart / WP E-Commerce Categories
 
 * Exceptions can be created for:
   - User roles on role, including not logged in (anonymous) users
   - Dates on from, to or range
+  - Language (WPML) on language
   - Single post pages on Author, Categories, Tags and/or Individual posts
-  - Pages on Page Title
+  - Pages on Page Title, including inheritance from hierarchical parents
   - Author pages on Author
   - Category pages on Category name
-  - Custom Posts Type on Custom post name (since WordPress 3.0)
+  - Custom Posts Type on Custom post name, including inheritance from hierarchical parents
   - WP Shopping Cart / WP E-Commerce Categories on Category name
 
 * Plugin support for:
   - WP MultiLingual (WPML)
   - WP Shopping Cart / WP E-Commerce (WPSC / WPEC)
+
+* Language files provided:
+	- French (fr_FR) by Alexis Nomine
 
 == Installation ==
 
@@ -81,6 +86,10 @@ Did you save the options? If you did, you may try to hit the (i) icon a bit to t
 
 Try setting the plugin to the 'OLD' method. You can do this by clicking on the 'Advanced >' link at the bottom of the Widgets Overview page and check the box next to 'Use OLD method'. See if that helps. Setting the plugin using the 'OLD' method comes with a downside unfortunately. It may leave you behind with a visible empty sidebar.
 
+= I want to check if the ‘OLD’ method suits me better, is there a way back if it doesn’t? =
+
+Yes! You can switch between FILTER and OLD method without any loss of widgets configuration or whatsoever.
+
 = I want in Page X the sidebar becomes empty, but instead several widgets are shown in that sidebar. Am I doing something wrong? =
 
 Your theme probably uses a 'default display widgets policy'. When a sidebar becomes empty, the theme detects this and places widgets by default in it. The plugin can't do anything about that. Ask the theme creator how to fix this.
@@ -105,11 +114,18 @@ Please file a [bugreport](http://www.qurl.nl/dynamic-widgets/bugreport/). Please
 * Confirm you really want to uninstall the plugin. After the cleanup, the plugin is deactivated automaticly.
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
-== Release notes ==
-
-With version 1.3.6 of Dynamic Widgets I've implemented l10n support. Not all text strings are already in the POT file which you can find in the `locale` directory. The first text strings I have already translated into Dutch. You're invited to add another translation. When you have a finished translation PO and MO file, please send it to me, so I can include it into the repository.
-
 == Changelog ==
+
+= Version 1.3.7 =
+
+* Added more l10n text strings.
+* Added French language files (locale: fr_FR) - Merci beaucoup Alexis!
+* Added language (WPML) as an option.
+* Added hierarchical inheritance support for Pages and Custom Post Types
+* Bugfix for unexpected behavior when two widgets are in opposite config of eachother.
+* Fixed a couple of l10n text strings
+* Changed UI in edit options screen (Thanks Alexis for the help!).
+* Speeded up the removing process in FILTER method.
 
 = Version 1.3.6 =
 
