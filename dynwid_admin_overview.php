@@ -25,7 +25,7 @@
   	}
 ?>
 <div class="updated fade" id="message">
-	<p><strong <?php echo __('Method set to', DW_L10N_DOMAIN) . ( get_option('dynwid_old_method') ? '\''. __('OLD', DW_L10N_DOMAIN) .'\'' : '\'' . __('FILTER', DW_L10N_DOMAIN) . '\'' ); ?>.</strong></p>
+	<p><strong><?php echo __('Method set to', DW_L10N_DOMAIN) . ' ' . ( get_option('dynwid_old_method') ? '\''. __('OLD', DW_L10N_DOMAIN) .'\'' : '\'' . __('FILTER', DW_L10N_DOMAIN) . '\'' ); ?>.</strong></p>
 </div>
 <?php
   }
@@ -33,7 +33,7 @@
   foreach ( $DW->sidebars as $sidebar_id => $widgets ) {
     if ( count($widgets) > 0 ) {
       if ( $sidebar_id == 'wp_inactive_widgets' ) {
-        $name = 'Inactive Widgets';
+        $name = __('Inactive Widgets');
       } else {
         $name = $DW->getName($sidebar_id, 'S');
       }
@@ -127,7 +127,7 @@ For debugging purposes it is possible you're asked to create a dump. Click the '
 
 <br /><br />
 
-If you deceide not to use this plugin anymore (sorry to hear that!). You can cleanup all settings and data related to this plugin by clicking on the 'Uninstall' button. This process is irreversible! After the cleanup the plugin is deactivated automaticly.
+When you deceide not to use this plugin anymore (sorry to hear that!). You can cleanup all settings and data related to this plugin by clicking on the 'Uninstall' button. This process is irreversible! After the cleanup the plugin is deactivated automaticly.
 <br /><br />
 <div id="uninstall">
   <form action="" method="get">
