@@ -63,10 +63,6 @@
             } else if ( $condition['maintype'] == 'wpml' && $condition['name'] == 'default' ) {
             	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) $condition['value'] ? 'TRUE' : 'FALSE' ) . ' (rule DML1)');
             	$wpml = (bool) $condition['value'];
-            } else {	// Failsave
-            	$DW->message('Failsave: Default for ' . $widget_id . ' set to TRUE (rule D4)');
-            	$display = TRUE;
-            	$other = FALSE;
             }
           }
 
@@ -134,6 +130,7 @@
           			$wpml = $wpml_tmp;
           		}
           	}
+          	unset($wpml_tmp);
 
             // For debug messages
             $e = ( $other ) ? 'TRUE' : 'FALSE';
