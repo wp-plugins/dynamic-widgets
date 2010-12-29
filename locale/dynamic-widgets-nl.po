@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dynamic Widgets NL\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-27 10:47+0100\n"
+"POT-Creation-Date: 2010-12-29 20:34+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Jacco\n"
 "Language-Team: \n"
@@ -16,58 +16,62 @@ msgstr ""
 msgid "Anonymous"
 msgstr "Anoniem"
 
-#: ../dynwid_admin_edit.php:387
+#: ../dynwid_admin_edit.php:74
+msgid "(and other Gecko based)"
+msgstr "(en andere op Gecko gebaseerd)"
+
+#: ../dynwid_admin_edit.php:420
 msgid "Widget options saved."
 msgstr "Widget opties bewaard"
 
-#: ../dynwid_admin_edit.php:387
-#: ../dynwid_admin_edit.php:857
+#: ../dynwid_admin_edit.php:420
+#: ../dynwid_admin_edit.php:910
 msgid "Return"
 msgstr "Terug"
 
-#: ../dynwid_admin_edit.php:387
+#: ../dynwid_admin_edit.php:420
 msgid "to Dynamic Widgets overview"
 msgstr "naar Dynamische Widgets overzicht"
 
-#: ../dynwid_admin_edit.php:392
+#: ../dynwid_admin_edit.php:425
 msgid "Dynamic does not mean static hiding of a widget."
 msgstr "Dynamisch houdt niet in het statisch verbergen van een widget."
 
-#: ../dynwid_admin_edit.php:392
+#: ../dynwid_admin_edit.php:425
 msgid "Hint"
 msgstr "Hint"
 
-#: ../dynwid_admin_edit.php:392
+#: ../dynwid_admin_edit.php:425
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: ../dynwid_admin_edit.php:392
+#: ../dynwid_admin_edit.php:425
 msgid "the widget from the sidebar"
 msgstr "de widget in de sidebar"
 
-#: ../dynwid_admin_edit.php:396
+#: ../dynwid_admin_edit.php:429
 msgid "The From date can't be later than the To date."
 msgstr "The 'van' datum kan niet later zijn dan de 'tot' datum."
 
-#: ../dynwid_admin_edit.php:401
+#: ../dynwid_admin_edit.php:434
 msgid "Edit options for"
 msgstr "Wijzig de opties voor"
 
-#: ../dynwid_admin_edit.php:401
+#: ../dynwid_admin_edit.php:434
 msgid "Widget"
 msgstr "Widget"
 
-#: ../dynwid_admin_edit.php:412
-#: ../dynwid_class_php4.php:54
-#: ../dynwid_class.php:48
+#: ../dynwid_admin_edit.php:445
+#: ../dynwid_class_php4.php:56
+#: ../dynwid_class.php:50
 msgid "Role"
 msgstr "Rol"
 
-#: ../dynwid_admin_edit.php:414
+#: ../dynwid_admin_edit.php:447
 msgid "Show widget to everybody?"
 msgstr "Toon de widget aan iedereen?"
 
-#: ../dynwid_admin_edit.php:418
+#: ../dynwid_admin_edit.php:451
 msgid ""
 "Setting options by role is very powerfull. It can override all other options!<br />\n"
 "\t\t\t\t\t\tUsers who are not logged in, get the <em>Anonymous</em> role."
@@ -75,61 +79,63 @@ msgstr ""
 "De rol opties zijn zeer bijzonder. Ze kunnen alle andere opties overstijgen!<br />\n"
 "\t\t\t\t\t\tGebruikers die niet ingelogd zijn, krijgen de <em>anonieme</em> rol."
 
-#: ../dynwid_admin_edit.php:422
-#: ../dynwid_admin_edit.php:446
-#: ../dynwid_admin_edit.php:473
-#: ../dynwid_admin_edit.php:497
-#: ../dynwid_admin_edit.php:514
-#: ../dynwid_admin_edit.php:579
-#: ../dynwid_admin_edit.php:641
-#: ../dynwid_admin_edit.php:655
-#: ../dynwid_admin_edit.php:675
-#: ../dynwid_admin_edit.php:685
+#: ../dynwid_admin_edit.php:455
+#: ../dynwid_admin_edit.php:479
+#: ../dynwid_admin_edit.php:506
+#: ../dynwid_admin_edit.php:527
+#: ../dynwid_admin_edit.php:550
+#: ../dynwid_admin_edit.php:567
+#: ../dynwid_admin_edit.php:632
 #: ../dynwid_admin_edit.php:694
-#: ../dynwid_admin_edit.php:811
-#: ../dynwid_admin_edit.php:836
+#: ../dynwid_admin_edit.php:708
+#: ../dynwid_admin_edit.php:728
+#: ../dynwid_admin_edit.php:738
+#: ../dynwid_admin_edit.php:747
+#: ../dynwid_admin_edit.php:864
+#: ../dynwid_admin_edit.php:889
 msgid "Yes"
 msgstr "Ja"
 
-#: ../dynwid_admin_edit.php:423
-#: ../dynwid_admin_edit.php:447
-#: ../dynwid_admin_edit.php:474
-#: ../dynwid_admin_edit.php:498
-#: ../dynwid_admin_edit.php:515
-#: ../dynwid_admin_edit.php:580
-#: ../dynwid_admin_edit.php:642
-#: ../dynwid_admin_edit.php:656
-#: ../dynwid_admin_edit.php:676
-#: ../dynwid_admin_edit.php:686
+#: ../dynwid_admin_edit.php:456
+#: ../dynwid_admin_edit.php:480
+#: ../dynwid_admin_edit.php:507
+#: ../dynwid_admin_edit.php:528
+#: ../dynwid_admin_edit.php:551
+#: ../dynwid_admin_edit.php:568
+#: ../dynwid_admin_edit.php:633
 #: ../dynwid_admin_edit.php:695
-#: ../dynwid_admin_edit.php:812
-#: ../dynwid_admin_edit.php:837
+#: ../dynwid_admin_edit.php:709
+#: ../dynwid_admin_edit.php:729
+#: ../dynwid_admin_edit.php:739
+#: ../dynwid_admin_edit.php:748
+#: ../dynwid_admin_edit.php:865
+#: ../dynwid_admin_edit.php:890
 msgid "No"
 msgstr "Nee"
 
-#: ../dynwid_admin_edit.php:423
+#: ../dynwid_admin_edit.php:456
 msgid "only to"
 msgstr "alleen aan"
 
-#: ../dynwid_admin_edit.php:432
-#: ../dynwid_class_php4.php:55
-#: ../dynwid_class.php:49
+#: ../dynwid_admin_edit.php:465
+#: ../dynwid_class_php4.php:57
+#: ../dynwid_class.php:51
 msgid "Date"
 msgstr "Datum"
 
-#: ../dynwid_admin_edit.php:434
+#: ../dynwid_admin_edit.php:467
 msgid "Show widget always?"
 msgstr "Altijd de widget tonen?"
 
-#: ../dynwid_admin_edit.php:438
+#: ../dynwid_admin_edit.php:471
 msgid "Next to the above role option, the date option is also very powerfull. You've been warned!"
 msgstr "Net zoals de bovenstaande opties, is de datum opties zeer bijzonder. U bent gewaarschuwd!"
 
-#: ../dynwid_admin_edit.php:439
+#: ../dynwid_admin_edit.php:472
 msgid "Enter dates in the YYYY-MM-DD format. You can also use the calender by clicking on the"
 msgstr "Voer datum in volgens hets JJJJ-MM-DD formaat. U kunt ook de kalander gebruiken door te klikken op"
 
-#: ../dynwid_admin_edit.php:440
+#: ../dynwid_admin_edit.php:473
 msgid ""
 "Date ranges can be made by entering a From AND a To date<br />\n"
 "  \t\t\t\t\tWhen you want the widget to be displayed from a specific date, only fill in the From date<br />\n"
@@ -141,45 +147,63 @@ msgstr ""
 "  \t\t\t\t\tWanneer u de widget vanaf een bepaalde datum niet meer wilt tonen, vul dan alleen de 'tot' datum in.\n"
 "  \t\t\t\t"
 
-#: ../dynwid_admin_edit.php:447
+#: ../dynwid_admin_edit.php:480
 msgid "only"
 msgstr "alleen"
 
-#: ../dynwid_admin_edit.php:451
+#: ../dynwid_admin_edit.php:484
 msgid "From"
 msgstr "Van"
 
-#: ../dynwid_admin_edit.php:455
+#: ../dynwid_admin_edit.php:488
 msgid "To"
 msgstr "Tot"
 
-#: ../dynwid_admin_edit.php:464
+#: ../dynwid_admin_edit.php:497
 msgid "Language (WPML)"
 msgstr "Taal (WPML)"
 
-#: ../dynwid_admin_edit.php:466
+#: ../dynwid_admin_edit.php:499
 msgid "Show widget default on all languages?"
 msgstr "Toon de widget voor alle talen?"
 
-#: ../dynwid_admin_edit.php:470
+#: ../dynwid_admin_edit.php:503
 msgid "Using this option can override all other options."
 msgstr "Door gebruik te maken van deze opties kan deze alle andere opties overstijgen."
 
-#: ../dynwid_admin_edit.php:475
+#: ../dynwid_admin_edit.php:508
 msgid "Except the languages"
 msgstr "Behalve de talen"
 
-#: ../dynwid_admin_edit.php:486
-#: ../dynwid_class_php4.php:57
-#: ../dynwid_class.php:51
+#: ../dynwid_admin_edit.php:518
+#: ../dynwid_class_php4.php:58
+#: ../dynwid_class.php:52
+msgid "Browser"
+msgstr "Browser"
+
+#: ../dynwid_admin_edit.php:520
+msgid "Show widget with all browsers?"
+msgstr "De widget tonen met alle browsers?"
+
+#: ../dynwid_admin_edit.php:524
+msgid "Browser detection is never 100% accurate."
+msgstr "Browser detectie is nooit 100% accuraat"
+
+#: ../dynwid_admin_edit.php:529
+msgid "Except the browser(s)"
+msgstr "Behalve de browser(s)"
+
+#: ../dynwid_admin_edit.php:539
+#: ../dynwid_class_php4.php:60
+#: ../dynwid_class.php:54
 msgid "Front Page"
 msgstr "Startpagina"
 
-#: ../dynwid_admin_edit.php:488
+#: ../dynwid_admin_edit.php:541
 msgid "Show widget on the front page?"
 msgstr "De widget op de startpagina tonen?"
 
-#: ../dynwid_admin_edit.php:492
+#: ../dynwid_admin_edit.php:545
 msgid ""
 "This option only applies when your front page is set to display your latest posts (See Settings &gt; Reading).<br />\n"
 "\t\t\t\t\t\tWhen a static page is set, you can use the options for the static pages below.\n"
@@ -189,17 +213,17 @@ msgstr ""
 "\t\t\t\t\t\tWanneer deze optie op statische pagina staat, kunt u gebruik maken van de onderstaande pagina opties.\n"
 "\t\t\t\t\t"
 
-#: ../dynwid_admin_edit.php:503
-#: ../dynwid_class_php4.php:58
-#: ../dynwid_class.php:52
+#: ../dynwid_admin_edit.php:556
+#: ../dynwid_class_php4.php:61
+#: ../dynwid_class.php:55
 msgid "Single Posts"
 msgstr "Berichten"
 
-#: ../dynwid_admin_edit.php:505
+#: ../dynwid_admin_edit.php:558
 msgid "Show widget default on single posts?"
 msgstr "De widget bij de berichten tonen?"
 
-#: ../dynwid_admin_edit.php:509
+#: ../dynwid_admin_edit.php:562
 msgid ""
 "When you use an author <b>AND</b> a category exception, both rules in the condition must be met. Otherwise the exception rule won't be applied.\n"
 "  \t\t\t\t\tIf you want to use the rules in a logical OR condition. Add the same widget again and apply the other rule to that.\n"
@@ -209,11 +233,11 @@ msgstr ""
 "  \t\t\t\t\tAls u de regels in een logische OR wilt gebruiken kunt u de widget opnieuw toevoegen en daarop dan de andere regel toepassen.\n"
 "  \t\t\t\t\t"
 
-#: ../dynwid_admin_edit.php:518
+#: ../dynwid_admin_edit.php:571
 msgid "Make exception rule available to individual posts and tags."
 msgstr "Maak de uitzonderings regel beschikbaar voor individuele berichten en tags"
 
-#: ../dynwid_admin_edit.php:522
+#: ../dynwid_admin_edit.php:575
 msgid ""
 "When you enable this option, you have the ability to apply the exception rule for <em>Single Posts</em> to tags and individual posts.\n"
 "\t\t\t\t\t\tYou can set the exception rule for tags in the single Edit Tag Panel (go to <a href=\"edit-tags.php?taxonomy=post_tag\">Post Tags</a>,\n"
@@ -229,25 +253,25 @@ msgstr ""
 "  \t\t\t\t\tLet er op dat uitzonderings regels voor auteur en categorie worden verwijderd.\n"
 "  \t\t\t\t"
 
-#: ../dynwid_admin_edit.php:539
+#: ../dynwid_admin_edit.php:592
 msgid "Except the posts by author"
 msgstr "Behalve de berichten van"
 
-#: ../dynwid_admin_edit.php:550
+#: ../dynwid_admin_edit.php:603
 msgid "Except the posts in category"
 msgstr "Behalve de berichten in de categorie"
 
-#: ../dynwid_admin_edit.php:564
-#: ../dynwid_class_php4.php:59
-#: ../dynwid_class.php:53
+#: ../dynwid_admin_edit.php:617
+#: ../dynwid_class_php4.php:62
+#: ../dynwid_class.php:56
 msgid "Pages"
 msgstr "Pagina's"
 
-#: ../dynwid_admin_edit.php:566
+#: ../dynwid_admin_edit.php:619
 msgid "Show widget default on static pages?"
 msgstr "Toon de widget op pagina's?"
 
-#: ../dynwid_admin_edit.php:571
+#: ../dynwid_admin_edit.php:624
 msgid ""
 "Checking the \"All childs\" option, makes the exception rule apply\n"
 "\t\t\t\tto the parent and all items under it in all levels. Also future items\n"
@@ -255,109 +279,109 @@ msgid ""
 "\t\t\t\t\"All childs\" without the parent."
 msgstr "Door gebruik te maken van de \"Alle kinderen\" optie, wordt de uitzonderingsregel toegepast op de ouder en alle daaronder liggende item in alle levels. Ook toekomstige items onder de ouder. Het is niet mogelijk om de uitzonderingsregel toe te passen zonder de ouder."
 
-#: ../dynwid_admin_edit.php:581
+#: ../dynwid_admin_edit.php:634
 msgid "Except the page(s)"
 msgstr "Behalve de pagina('s)"
 
-#: ../dynwid_admin_edit.php:620
-#: ../dynwid_admin_edit.php:735
+#: ../dynwid_admin_edit.php:673
+#: ../dynwid_admin_edit.php:788
 msgid "All childs"
 msgstr "Alle kinderen"
 
-#: ../dynwid_admin_edit.php:637
-#: ../dynwid_class_php4.php:60
-#: ../dynwid_class.php:54
+#: ../dynwid_admin_edit.php:690
+#: ../dynwid_class_php4.php:63
+#: ../dynwid_class.php:57
 msgid "Author Pages"
 msgstr "Auteur pagina's"
 
-#: ../dynwid_admin_edit.php:639
+#: ../dynwid_admin_edit.php:692
 msgid "Show widget default on author pages?"
 msgstr "Toon de widget op auteurs pagina's?"
 
-#: ../dynwid_admin_edit.php:643
+#: ../dynwid_admin_edit.php:696
 msgid "Except the author(s)"
 msgstr "Behalve van"
 
-#: ../dynwid_admin_edit.php:651
-#: ../dynwid_class_php4.php:61
-#: ../dynwid_class.php:55
+#: ../dynwid_admin_edit.php:704
+#: ../dynwid_class_php4.php:64
+#: ../dynwid_class.php:58
 msgid "Category Pages"
 msgstr "Categorie pagina's"
 
-#: ../dynwid_admin_edit.php:653
+#: ../dynwid_admin_edit.php:706
 msgid "Show widget default on category pages?"
 msgstr "Toon de widget standaard op de categorie pagina's?"
 
-#: ../dynwid_admin_edit.php:657
-#: ../dynwid_admin_edit.php:838
+#: ../dynwid_admin_edit.php:710
+#: ../dynwid_admin_edit.php:891
 msgid "Except the categories"
 msgstr "Behalve de categoriën"
 
-#: ../dynwid_admin_edit.php:666
-#: ../dynwid_class_php4.php:62
-#: ../dynwid_class.php:56
+#: ../dynwid_admin_edit.php:719
+#: ../dynwid_class_php4.php:65
+#: ../dynwid_class.php:59
 msgid "Archive Pages"
 msgstr "Archief pagina's"
 
-#: ../dynwid_admin_edit.php:668
+#: ../dynwid_admin_edit.php:721
 msgid "Show widget on archive pages"
 msgstr "Toon de widget op archief pagina's"
 
-#: ../dynwid_admin_edit.php:672
+#: ../dynwid_admin_edit.php:725
 msgid "This option does not include Author and Category Pages."
 msgstr "Deze optie bevat niet auteurs en categorie pagina's"
 
-#: ../dynwid_admin_edit.php:681
-#: ../dynwid_class_php4.php:63
-#: ../dynwid_class.php:57
+#: ../dynwid_admin_edit.php:734
+#: ../dynwid_class_php4.php:66
+#: ../dynwid_class.php:60
 msgid "Error Page"
 msgstr "Foutmeldings pagina"
 
-#: ../dynwid_admin_edit.php:683
+#: ../dynwid_admin_edit.php:736
 msgid "Show widget on the error page?"
 msgstr "Toon de widget op de foutmeldings pagina?"
 
-#: ../dynwid_admin_edit.php:690
+#: ../dynwid_admin_edit.php:743
 msgid "Search Page"
 msgstr "Zoek pagina"
 
-#: ../dynwid_admin_edit.php:692
+#: ../dynwid_admin_edit.php:745
 msgid "Show widget on the search page?"
 msgstr "Toon de widget op de zoekpagina?"
 
-#: ../dynwid_admin_edit.php:797
+#: ../dynwid_admin_edit.php:850
 msgid "Custom Post Type"
-msgstr ""
+msgstr "Custom Post Type"
 
-#: ../dynwid_admin_edit.php:799
+#: ../dynwid_admin_edit.php:852
 msgid "Show widget on"
 msgstr "Toon de widget op"
 
-#: ../dynwid_admin_edit.php:814
+#: ../dynwid_admin_edit.php:867
 msgid "Except for"
 msgstr "Behalve voor"
 
-#: ../dynwid_admin_edit.php:832
-#: ../dynwid_class_php4.php:65
-#: ../dynwid_class.php:59
+#: ../dynwid_admin_edit.php:885
+#: ../dynwid_class_php4.php:68
+#: ../dynwid_class.php:62
 msgid "WPSC Category"
 msgstr "WPSC Categorie"
 
-#: ../dynwid_admin_edit.php:834
+#: ../dynwid_admin_edit.php:887
 msgid "Show widget default on WPSC categories?"
 msgstr "Toon de widget standaard in de WPSC categoriën?"
 
-#: ../dynwid_admin_edit.php:853
+#: ../dynwid_admin_edit.php:906
 msgid "Save"
 msgstr "Opslaan"
 
-#: ../dynwid_class_php4.php:56
-#: ../dynwid_class.php:50
+#: ../dynwid_class_php4.php:59
+#: ../dynwid_class.php:53
 msgid "Language"
 msgstr "Taal"
 
-#: ../dynwid_class_php4.php:64
-#: ../dynwid_class.php:58
+#: ../dynwid_class_php4.php:67
+#: ../dynwid_class.php:61
 msgid "Search page"
 msgstr "Zoek pagina"
 
@@ -383,7 +407,7 @@ msgstr "OUD"
 #: ../dynwid_admin.php:44
 #: ../dynwid_admin_overview.php:28
 msgid "FILTER"
-msgstr ""
+msgstr "FILTER"
 
 #: ../dynwid_admin_overview.php:15
 msgid "Widget options have been reset to default."

@@ -8,11 +8,22 @@
   // Security - nonce
   check_admin_referer('plugin-name-action_edit_' . $_POST['widget_id']);
 
-  // Checking basic stuff
-  if ( $_POST['role'] == 'no' && count($_POST['role_act']) == 0 ) {
+  /* Checking basic stuff */
+  // Role
+	if ( $_POST['role'] == 'no' && count($_POST['role_act']) == 0 ) {
     wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
     die();
   }
+  // Browser
+	if ( $_POST['browser'] == 'no' && count($_POST['role_act']) == 0 ) {
+		wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
+		die();
+	}
+	// WPML
+	if ( isset($_POST['wpml']) && $_POST['wpml'] == 'no' && count($_POST['wpml_act']) == 0 ) {
+		wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
+		die();
+	}
 
   // Date check
   if ( $_POST['date'] == 'no' ) {
@@ -45,63 +56,6 @@
     }
   }
 
-  $fields = array('front-page', 'single', 'page', 'author', 'category', 'archive', 'e404', 'search');
-  $work = FALSE;
-  foreach ( $fields as $field ) {
-    if ( $_POST[$field] == 'yes' ) {
-      $work = TRUE;
-      break;
-    }
-  }
-  if (! $work ) {
-    $fields = array('single_author_act',
-                    'single_category_act',
-                    'single_post_act',
-                    'single_tag_act',
-                    'page_act',
-                    'author_act',
-                    'category_act'
-                 );
-    foreach ( $fields as $field ) {
-      if ( count($_POST[$field]) > 0 ) {
-        $work = TRUE;
-        break;
-      }
-    }
-  }
-  if (! $work) {
-    if ( $_POST['individual'] == '1' ) {
-      $work = TRUE;
-    }
-  }
-
-  // Custom Types (WP >= 3.0)
-  if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') && isset($_POST['post_types']) ) {
-    if (! $work  ) {
-      foreach ( $_POST['post_types'] as $type ) {
-        if ( $_POST[$type] == 'yes' ) {
-          $work = TRUE;
-          break;
-        }
-      }
-    }
-
-    if (! $work ) {
-      foreach ( $_POST['post_types'] as $type ) {
-        $field = $type . '_act';
-        if ( count($_POST[$field]) > 0 ) {
-          $work = TRUE;
-          break;
-        }
-      }
-    }
-  }
-
-  if (! $work ) {
-    wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
-    die();
-  }
-
   // Removing already set options
   $DW->resetOptions($_POST['widget_id']);
 
@@ -124,6 +78,13 @@
       $DW->addDate($_POST['widget_id'], $dates);
     }
   }
+
+  // Browser
+	if ( isset($_POST['browser_act']) && count($_POST['browser_act']) > 0 ) {
+		$DW->addMultiOption($_POST['widget_id'], 'browser', $_POST['browser'], $_POST['browser_act']);
+	} else if ( isset($_POST['browser']) && $_POST['browser'] == 'no' ) {
+		$DW->addSingleOption($_POST['widget_id'], 'browser');
+	}
 
   // Front Page
   if ( isset($_POST['front-page']) && $_POST['front-page'] == 'no' ) {
@@ -177,7 +138,6 @@
   			$childs_act[ ] = $act;
   		}
   	}
-
   	$DW->addMultiOption($_POST['widget_id'], 'page-childs', $_POST['page'], $childs_act);
   }
 
