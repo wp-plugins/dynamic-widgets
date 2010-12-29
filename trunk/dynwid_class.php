@@ -20,6 +20,7 @@
   	public  $removelist;
     public  $sidebars;
     public  $plugin_url;
+  	public  $useragent;
     public  $userrole;
   	public  $whereami;
     private $wpdb;
@@ -36,17 +37,19 @@
     	$this->custom_post_type = FALSE;
       $this->firstmessage = TRUE;
     	$this->listmade = FALSE;
-    	$this->overrule_maintype = array('date', 'role', 'wpml');
+    	$this->overrule_maintype = array('date', 'role', 'browser', 'wpml');
       $this->registered_sidebars = $GLOBALS['wp_registered_sidebars'];
       $this->registered_widget_controls = &$GLOBALS['wp_registered_widget_controls'];
       $this->registered_widgets = &$GLOBALS['wp_registered_widgets'];
     	$this->removelist = array();
       $this->sidebars = wp_get_sidebars_widgets();
+    	$this->useragent = $this->getBrowser();
       $this->plugin_url = WP_PLUGIN_URL . '/' . str_replace( basename(__FILE__), '', plugin_basename(__FILE__) );
 
     	$this->dwoptions = array(
 	    	'role'        => __('Role'),
 	    	'date'        => __('Date'),
+	    	'browser'			=> __('Browser', DW_L10N_DOMAIN),
 	    	'wpml'				=> __('Language', DW_L10N_DOMAIN),
 	    	'front-page'  => __('Front Page', DW_L10N_DOMAIN),
 	    	'single'      => __('Single Posts', DW_L10N_DOMAIN),
@@ -248,12 +251,36 @@
       }
 
       $query = "SELECT DISTINCT widget_id FROM " . $this->dbtable . "
-                  WHERE maintype LIKE '" . $whereami . "%' OR maintype = 'role' OR maintype = 'date' OR maintype = 'wpml'";
+                  WHERE  maintype LIKE '" . $whereami . "%'
+                  		OR maintype = 'role'
+                  		OR maintype = 'date'
+                  		OR maintype = 'browser'
+                  		OR maintype = 'wpml'";
       $results = $this->wpdb->get_results($query);
       foreach ( $results as $myrow ) {
         $this->dynwid_list[ ] = $myrow->widget_id;
       }
     }
+
+  	private function getBrowser() {
+  		global $is_gecko, $is_IE, $is_opera, $is_NS4, $is_safari, $is_chrome;
+
+  		if ( $is_gecko ) {
+  			return 'gecko';
+  		} else if ( $is_IE ) {
+  			return 'msie';
+  		} else if ( $is_opera ) {
+  			return 'opera';
+  		} else if ( $is_NS4 ) {
+  			return 'ns';
+  		} else if ( $is_safari ) {
+  			return 'safari';
+  		} else if ( $is_chrome ) {
+  			return 'chrome';
+  		} else {
+  			return 'undef';
+  		}
+  	}
 
     public function getName($id, $type = 'W') {
       switch ( $type ) {
@@ -296,7 +323,11 @@
       	}
         $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
                   WHERE widget_id LIKE '" . $widget_id . "'
-                    AND (maintype LIKE '" . $maintype . "%' OR maintype = 'role' OR maintype = 'date' OR maintype = 'wpml')
+                    AND (maintype LIKE '" . $maintype . "%'
+                    	OR maintype = 'role'
+                    	OR maintype = 'date'
+                    	OR maintype = 'browser'
+                    	OR maintype = 'wpml')
                   ORDER BY maintype, name";
       }
       $results = $this->wpdb->get_results($query);

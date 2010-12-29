@@ -69,6 +69,39 @@
     unset($date_yes_selected);
   }
 
+  // Browser
+  $useragents = array(
+  								'gecko'  => 'Firefox' . ' ' . __('(and other Gecko based)', DW_L10N_DOMAIN),
+  								'msie'   => 'Internet Explorer',
+									'opera'  => 'Opera',
+									'ns'     => 'Netscape 4',
+									'safari' => 'Safari',
+									'chrome' => 'Chrome',
+									'undef'  => 'Other / Unknown / Not detected'
+								);
+	if ( count($useragents) > DW_LIST_LIMIT ) {
+		$browser_condition_select_style = DW_LIST_STYLE;
+	}
+
+  $browser_yes_selected = 'checked="checked"';
+  $opt_browser = $DW->getOptions($_GET['id'], 'browser');
+	if ( count($opt_browser) > 0 ) {
+		$browser_act = array();
+		foreach ( $opt_browser as $browser_condition ) {
+			if ( $browser_condition['name'] == 'default' || empty($browser_condition['name']) ) {
+				$browser_default = $browser_condition['value'];
+			} else {
+				$browser_act[ ] = $browser_condition['name'];
+			}
+		}
+
+		if ( $browser_default == '0' ) {
+			$browser_no_selected = $browser_yes_selected;
+			unset($browser_yes_selected);
+		}
+	}
+
+
   // Front Page
   if ( get_option('show_on_front') != 'page' ) {
     $frontpage_yes_selected = 'checked="checked"';
@@ -467,7 +500,7 @@ h4 {
 <?php $DW->dumpOpt($opt_wpml); ?>
 <div>
 	<div id="wpml" class="infotext">
-	<?php _e('Using this option can override all other options.'); ?><br />
+	<?php _e('Using this option can override all other options.', DW_L10N_DOMAIN); ?><br />
 	</div>
 </div>
 <input type="radio" name="wpml" value="yes" id="wpml-yes" <?php echo ( isset($wpml_yes_selected) ? $wpml_yes_selected : '' ); ?> /> <label for="wpml-yes"><?php _e('Yes'); ?></label>
@@ -480,6 +513,26 @@ h4 {
 </div>
 </div><!-- end dynwid_conf -->
 <?php } ?>
+
+<!-- UserAgent //-->
+<h4><b><?php _e('Browser', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_browser) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
+<div class="dynwid_conf">
+<?php _e('Show widget with all browsers?', DW_L10N_DOMAIN) ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('browser');" /><br />
+<?php $DW->dumpOpt($opt_browser); ?>
+<div>
+	<div id="browser"  class="infotext">
+		<?php _e('Browser detection is never 100% accurate.', DW_L10N_DOMAIN); ?>
+	</div>
+</div>
+<input type="radio" name="browser" value="yes" id="browser-yes" <?php echo ( isset($browser_yes_selected) ? $browser_yes_selected : '' ); ?> /> <label for="browser-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="browser" value="no" id="browser-no" <?php echo ( isset($browser_no_selected) ? $browser_no_selected : '' ); ?> /> <label for="browser-no"><?php _e('No'); ?></label><br />
+<?php _e('Except the browser(s)', DW_L10N_DOMAIN); ?>:<br />
+<div id="browser-select" class="condition-select" <?php echo ( isset($browser_condition_select_style) ? $browser_condition_select_style : '' ); ?>>
+<?php foreach ( $useragents as $code => $agent ) { ?>
+	<input type="checkbox" id="browser_act_<?php echo $code; ?>" name="browser_act[]" value="<?php echo $code; ?>" <?php echo ( count($browser_act) > 0 && in_array($code, $browser_act) ) ? 'checked="checked"' : ''; ?> /> <label for="browser_act_<?php echo $code; ?>"><?php echo $agent; ?></label><br />
+<?php } ?>
+</div>
+</div><!-- end dynwid_conf -->
 
 <!-- Front Page //-->
 <?php if ( get_option('show_on_front') != 'page' ) { ?>
