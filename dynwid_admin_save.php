@@ -123,6 +123,11 @@
     }
   }
 
+  // Attachment
+	if ( $_POST['attachment'] == 'no' ) {
+		$DW->addSingleOption($_POST['widget_id'], 'attachment');
+	}
+
   // Pages
   if ( isset($_POST['page_act']) && count($_POST['page_act']) > 0 ) {
     $DW->addMultiOption($_POST['widget_id'], 'page', $_POST['page'], $_POST['page_act']);
