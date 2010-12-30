@@ -53,6 +53,7 @@
 	    	'wpml'				=> __('Language', DW_L10N_DOMAIN),
 	    	'front-page'  => __('Front Page', DW_L10N_DOMAIN),
 	    	'single'      => __('Single Posts', DW_L10N_DOMAIN),
+	    	'attachment'	=> __('Attachments', DW_L10N_DOMAIN),
 	    	'page'        => __('Pages'),
 	    	'author'      => __('Author Pages', DW_L10N_DOMAIN),
 	    	'category'    => __('Category Pages', DW_L10N_DOMAIN),
@@ -185,6 +186,8 @@
         return 'front-page';
       } else if ( is_home() && get_option('show_on_front') == 'page' ) {
       	return 'home';
+      } else if ( is_attachment() ) {
+      	return 'attachment';					// must be before single, otherwise detection says 'single'
       } else if ( is_single() ) {
         return 'single';
       } else if ( is_page() ) {
