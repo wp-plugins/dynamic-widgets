@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages.
  * Author: Jacco
- * Version: 1.3.7.4
+ * Version: 1.3.7.5
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
  *
@@ -19,7 +19,8 @@
  */
 
 /*
-   Thanks to Alexis Nomine for the contributions of the French (fr_FR) language files, several L10N fixes and change of the edit options UI.
+   Thanks to Alexis Nomine for the contribution of the French (fr_FR) language files, several L10N fixes and change of the edit options UI.
+   Thanks to Daniel Bihler for the contribution of the German (de_DE) language files.
  */
 
 /*
@@ -47,7 +48,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.3.7.4');
+  define('DW_VERSION', '1.3.7.5');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -147,10 +148,8 @@
   function dynwid_add_admin_scripts() {
   	$DW = &$GLOBALS['DW'];
     wp_enqueue_script('jquery');
-    wp_enqueue_script('jquery-ui-core');
-    wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'jquery_datepicker.js', array('jquery-ui-core'));
-    wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'jquery.ui.accordion.min.js', array('jquery-ui-core'));
-  }
+    wp_enqueue_script('jquery-ui-custom', $DW->plugin_url . 'jquery-ui-1.8.7.custom.min.js', array('jquery'));
+	}
 
   /**
    * dynwid_add_admin_styles() Enqueue CSS to admin page
@@ -158,10 +157,7 @@
    */
   function dynwid_add_admin_styles() {
     $DW = &$GLOBALS['DW'];
-    wp_enqueue_style('jquery-ui-core', $DW->plugin_url . 'jquery.ui.core.css');
-    wp_enqueue_style('jquery-ui-smoothness', $DW->plugin_url . 'jquery.ui.theme.smoothness.css', array('jquery-ui-core'));
-    wp_enqueue_style('jquery-ui-accordion', $DW->plugin_url . 'jquery.ui.accordion.css', array('jquery-ui-core', 'jquery-ui-smoothness'));
-    wp_enqueue_style('jquery-ui-datepicker', $DW->plugin_url . 'jquery.ui.datepicker.css', array('jquery-ui-core', 'jquery-ui-smoothness'));
+    wp_enqueue_style('jquery-ui-custom', $DW->plugin_url . 'jquery-ui-1.8.7.custom.css');
   }
 
   /**
