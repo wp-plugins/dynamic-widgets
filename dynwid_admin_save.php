@@ -197,6 +197,12 @@
     		$DW->addMultiOption($_POST['widget_id'], $type . '-childs', $_POST[$type], $childs_act);
     	}
     }
+
+  	if ( isset($_POST['cp_archive_act']) && count($_POST['cp_archive_act']) > 0 ) {
+  		$DW->addMultiOption($_POST['widget_id'], 'cp_archive', $_POST['cp_archive'], $_POST['cp_archive_act']);
+  	} else if ( $_POST['cp_archive'] == 'no' ) {
+  		$DW->addSingleOption($_POST['widget_id'], 'cp_archive');
+  	}
   }
 
   // WPML PLugin support
