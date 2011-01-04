@@ -182,12 +182,12 @@
     }
 
     public function detectPage() {
-      if ( is_front_page() && get_option('show_on_front') == 'posts' ) {
+    	if ( is_front_page() && get_option('show_on_front') == 'posts' ) {
         return 'front-page';
       } else if ( is_home() && get_option('show_on_front') == 'page' ) {
       	return 'home';
       } else if ( is_attachment() ) {
-      	return 'attachment';					// must be before single, otherwise detection says 'single'
+      	return 'attachment';					// must be before is_single(), otherwise detects as 'single'
       } else if ( is_single() ) {
         return 'single';
       } else if ( is_page() ) {
@@ -196,6 +196,8 @@
         return 'author';
       } else if ( is_category() ) {
         return 'category';
+      } else if ( function_exists('is_post_type_archive') && is_post_type_archive() ) {
+    		return 'cp_archive';				// must be before is_archive(), otherwise detects as 'archive' in WP 3.1.0
       } else if ( is_archive() && ! is_category() && ! is_author() ) {
         return 'archive';
       } else if ( is_404() ) {

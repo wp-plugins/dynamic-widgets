@@ -361,6 +361,33 @@
                   }
                   break;
 
+                case 'cp_archive':
+                	if ( count($act) > 0 ) {
+                		/*
+                		   is_post_type_archive() is natively supported in WP 3.1.0
+                		   WP 3.0.x gets is_post_type_archive() via plugin
+                		   'Custom Post Type Archive', but does not accept array
+                		*/
+                		$is_cpa = FALSE;
+
+                		if ( version_compare($GLOBALS['wp_version'], '3.1.0', '>=') ) {
+                			if ( is_post_type_archive($act) ) {
+                				$is_cpa = TRUE;
+                			}
+                		} else {
+                			$post_type = get_query_var('post_type');
+                			if ( in_array($post_type, $act) ) {
+                				$is_cpa = TRUE;
+                			}
+                		}
+
+                		if ( $is_cpa ) {
+                			$display = $other;
+                			$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECPA1)');
+                		}
+                	}
+                	break;
+
               	case 'wpsc':
               		if ( count($act) > 0 ) {
               			if ( is_dw_wpsc_category($act) ) {

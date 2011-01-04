@@ -8,7 +8,7 @@
 	// WPML Plugin support
 	if ( defined('ICL_PLUGIN_PATH') && file_exists(ICL_PLUGIN_PATH . DW_WPML_API) ) {
 		$DW->wpml = TRUE;
-		$wpml_icon = '<img src="' . $DW->plugin_url . DW_WPML_ICON . '" alt="WMPL" title="Dynamic Widgets syncs with other languages of these pages via WPML" />';
+		$wpml_icon = '<img src="' . $DW->plugin_url . DW_WPML_ICON . '" alt="WMPL" title="Dynamic Widgets syncs with other languages of these pages via WPML" style="position:relative;top:2px;" />';
 		$wpml_api = ICL_PLUGIN_PATH . DW_WPML_API;
 		require_once($wpml_api);
 	}
@@ -894,6 +894,46 @@ h4 {
       echo '</div>';
       echo '</div><!-- end dynwid_conf -->';
     }
+
+  	if ( function_exists('is_post_type_archive') ) {
+  		$cp_archive_yes_selected = 'checked="checked"';
+  		$opt_cp_archive = $DW->getOptions($_GET['id'], 'cp_archive');
+  		if ( count($opt_cp_archive) > 0 ) {
+  			$cp_archive_act = array();
+  			foreach ( $opt_cp_archive as $cp_archive_condition ) {
+  				if ( $cp_archive_condition['name'] == 'default' || empty($cp_archive_condition['name']) ) {
+  					$cp_archive_default = $cp_archive_condition['value'];
+  				} else {
+  					$cp_archive_act[ ] = $cp_archive_condition['name'];
+  				}
+  			}
+
+  			if ( $cp_archive_default == '0' ) {
+  				$cp_archive_no_selected = $cp_archive_yes_selected;
+  				unset($cp_archive_yes_selected);
+  			}
+  		}
+
+  		if ( count($post_types) > DW_LIST_LIMIT ) {
+  			$cp_archive_condition_select_style = DW_LIST_STYLE;
+  		}
+
+  		echo '<h4><b>' . __('Custom Post Type Archives') . '</b> ' . ( count($opt_cp_archive) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . '</h4>';
+  		echo '<div class="dynwid_conf">';
+  		echo __('Show widget on Custom Post Type Archives', DW_L10N_DOMAIN) . '?<br />';
+  		$DW->dumpOpt($opt_cp_archive);
+
+  		echo '<input type="radio" name="cp_archive" value="yes" id="cp_archive-yes" ' . ( isset($cp_archive_yes_selected) ? $cp_archive_yes_selected : '' ) . ' /> <label for="cp_archive-yes">' . __('Yes') . '</label> ';
+  		echo '<input type="radio" name="cp_archive" value="no" id="cp_archive-no" ' . ( isset($cp_archive_no_selected) ? $cp_archive_no_selected : '' ) . ' /> <label for="cp_archive-no">' . __('No') . '</label><br />';
+
+  		echo __('Except for') . ':<br />';
+  		echo '<div id="cp_archive-select" class="condition-select" ' . ( isset($cp_archive_condition_select_style) ? $cp_archive_condition_select_style : '' ) . '>';
+  		foreach ( $post_types as $type => $ctid ){
+  			echo '<input type="checkbox" id="cp_archive_act_' . $type . '" name="cp_archive_act[]" value="' . $type . '"' . ( count($cp_archive_act) > 0 && in_array($type, $cp_archive_act) ? 'checked="checked"' : '') . ' /> <label for="cp_archive_act_' . $type . '">' . $ctid->label . '</label><br />';
+  		}
+  		echo '</div>';
+  		echo '</div><!-- end dynwid_conf -->';
+  	}
   } // end version compare >= WP 3.0
 ?>
 
