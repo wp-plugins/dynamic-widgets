@@ -11,17 +11,17 @@
   /* Checking basic stuff */
   // Role
 	if ( $_POST['role'] == 'no' && count($_POST['role_act']) == 0 ) {
-    wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
+    wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
     die();
   }
   // Browser
 	if ( $_POST['browser'] == 'no' && count($_POST['role_act']) == 0 ) {
-		wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
+		wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
 		die();
 	}
 	// WPML
 	if ( isset($_POST['wpml']) && $_POST['wpml'] == 'no' && count($_POST['wpml_act']) == 0 ) {
-		wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
+		wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
 		die();
 	}
 
@@ -31,7 +31,7 @@
     $date_end = trim($_POST['date_end']);
 
     if (! preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $date_start) && ! preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $date_end) ) {
-      wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=none' );
+      wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
       die();
     }
 
@@ -49,8 +49,8 @@
     }
 
     if (! empty($date_start) && ! empty($date_end) ) {
-      if ( mktime(0,0,0,$date_start_month,$date_start_day,$date_start_year) > mktime(0,0,0,$date_end_month,$date_end_day, $date_end_year) ) {
-        wp_redirect( get_option('siteurl') . $_SERVER['REQUEST_URI'] . '&work=nonedate' );
+      if ( mktime(0, 0, 0, $date_start_month, $date_start_day, $date_start_year) > mktime(0, 0, 0, $date_end_month, $date_end_day, $date_end_year) ) {
+        wp_redirect( $_SERVER['REQUEST_URI'] . '&work=nonedate' );
         die();
       }
     }
@@ -230,7 +230,7 @@
       $query_string = substr($_POST['returnurl'], ($pos+1));
       $args = explode('&', $query_string);
       foreach ( $args as $arg ) {
-        @list($name,$value) = explode('=', $arg);
+        @list($name, $value) = explode('=', $arg);
         if ( $name != 'dynwid_save' && $name != 'widget_id' ) {
           $q[ ] = $name . '=' . $value;
         }

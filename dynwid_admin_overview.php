@@ -85,22 +85,22 @@
 
 <div class="clear"><br /><br /></div>
 
-<a href="#" onclick="jQuery('#un').slideToggle('fast'); return false;"><?php _e('Advanced'); ?> &gt;</a>
+<a href="#" onclick="jQuery('#un').slideToggle('fast'); return false;"><?php _e('Advanced', DW_L10N_DOMAIN); ?> &gt;</a>
 <div id="un" style="display:none">
-<br /> <strong>wp_head() check: </strong>
+<br /> <strong><?php _e('wp_head() check:', DW_L10N_DOMAIN); ?> </strong>
 <?php
   $c = $DW->checkWPhead();
   switch ( $c ) {
     case 0:
-      echo '<span style="color:red">wp_head() is NOT called (at the most obvious place)</span>';
+      echo '<span style="color:red">' . __('wp_head() is NOT called (at the most obvious place)', DW_L10N_DOMAIN) . '</span>';
       break;
 
     case 1:
-      echo '<span style="color:green">wp_head() is called</span>';
+      echo '<span style="color:green">' . __('wp_head() is called', DW_L10N_DOMAIN) . '</span>';
       break;
 
     case 2:
-      echo '<span style="color:orange">Unable to determine if wp_head() is called</span>';
+      echo '<span style="color:orange">' . __('Unable to determine if wp_head() is called', DW_L10N_DOMAIN) . '</span>';
       break;
   }
 ?>
@@ -111,28 +111,28 @@
 	<form id="dynwid_method" action="" method="get">
 		<input type="hidden" name="page" value="dynwid-config" />
 		<input type="hidden" name="action" value="dynwid_set_method" />
-		<input type="checkbox" id="oldmethod" name="oldmethod" <?php echo ( get_option('dynwid_old_method') ? 'checked="checked"' : '' ) ?> onchange="document.getElementById('dynwid_method').submit();" /> <label for="oldmethod">Use 'OLD' method</label>
+		<input type="checkbox" id="oldmethod" name="oldmethod" <?php echo ( get_option('dynwid_old_method') ? 'checked="checked"' : '' ) ?> onchange="document.getElementById('dynwid_method').submit();" /> <label for="oldmethod"><?php _e('Use \'OLD\' method', DW_L10N_DOMAIN); ?></label>
 </form>
 </div>
 
 <br />
-For debugging purposes it is possible you're asked to create a dump. Click the 'Create dump' button and save the text file.
+<?php _e('For debugging purposes it is possible you\'re asked to create a dump. Click the \'Create dump\' button and save the text file.', DW_L10N_DOMAIN); ?>
 <br /><br />
 <div id="dump">
   <form action="" method="get">
     <input type="hidden" name="action" value="dynwid_dump" />
-    <input class="button-primary" type="submit" value="Create dump" />
+    <input class="button-primary" type="submit" value="<?php _e('Create dump', DW_L10N_DOMAIN); ?>" />
   </form>
 </div>
 
 <br /><br />
 
-When you deceide not to use this plugin anymore (sorry to hear that!). You can cleanup all settings and data related to this plugin by clicking on the 'Uninstall' button. This process is irreversible! After the cleanup the plugin is deactivated automaticly.
+<?php _e('When you deceide not to use this plugin anymore (sorry to hear that!). You can cleanup all settings and data related to this plugin by clicking on the \'Uninstall\' button. This process is irreversible! After the cleanup the plugin is deactivated automaticly.', DW_L10N_DOMAIN); ?>
 <br /><br />
 <div id="uninstall">
   <form action="" method="get">
     <input type="hidden" name="action" value="dynwid_uninstall" />
-    <input class="button-primary" type="submit" value="Uninstall" onclick="if ( confirm('Are you sure you want to uninstall Dynamic Widgets?') ) { return true; } return false;" />
+    <input class="button-primary" type="submit" value="<?php _e('Uninstall', DW_L10N_DOMAIN); ?>" onclick="if ( confirm('Are you sure you want to uninstall Dynamic Widgets?') ) { return true; } return false;" />
   </form>
 </div>
 </div>
