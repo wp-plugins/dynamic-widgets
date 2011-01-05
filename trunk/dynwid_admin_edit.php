@@ -77,7 +77,7 @@
 									'ns'     => 'Netscape 4',
 									'safari' => 'Safari',
 									'chrome' => 'Chrome',
-									'undef'  => 'Other / Unknown / Not detected'
+									'undef'  => __('Other / Unknown / Not detected', DW_L10N_DOMAIN)
 								);
 	if ( count($useragents) > DW_LIST_LIMIT ) {
 		$browser_condition_select_style = DW_LIST_STYLE;
@@ -182,8 +182,7 @@
           }
         }
       }
-
-      $count_individual = '(Posts: ' . count($single_post_act) . ', Tags: ' . count($single_tag_act) . ')';
+      $count_individual = '(' . __('Posts: ', DW_L10N_DOMAIN) . count($single_post_act) . ', ' . __('Tags: ', DW_L10N_DOMAIN) . count($single_tag_act) . ')';
     }
   }
 
@@ -239,12 +238,12 @@
   if ( get_option('show_on_front') == 'page' ) {
     if ( get_option('page_on_front') == get_option('page_for_posts') ) {
       $id = get_option('page_on_front');
-      $static_page[$id] = 'Front page, Posts page';
+      $static_page[$id] = __('Front page', DW_L10N_DOMAIN) . ', ' . __('Posts page', DW_L10N_DOMAIN);
     } else {
       $id = get_option('page_on_front');
-      $static_page[$id] = 'Front page';
+      $static_page[$id] = __('Front page', DW_L10N_DOMAIN);
       $id = get_option('page_for_posts');
-      $static_page[$id] = 'Posts page';
+      $static_page[$id] = __('Posts page', DW_L10N_DOMAIN);
     }
   }
 
@@ -442,7 +441,7 @@ h4 {
 
 <?php } ?>
 
-<h3><?php _e('Edit options for', DW_L10N_DOMAIN); ?> <em><?php echo $DW->getName($_GET['id']); ?></em> <?php _e('Widget'); ?></h3>
+<h3><?php _e('Edit options for the widget', DW_L10N_DOMAIN); ?>: <em><?php echo $DW->getName($_GET['id']); ?></em></h3>
 <?php echo ( DW_DEBUG ) ? '<pre>ID = ' . $_GET['id'] . '</pre><br />' : ''; ?>
 
 <form action="<?php echo trailingslashit(admin_url()) . 'themes.php?page=dynwid-config&action=edit&id=' . $_GET['id']; ?>" method="post">
@@ -455,7 +454,7 @@ h4 {
 <div id="dynwid">
 <h4><b><?php _e('Role'); ?></b><?php echo ( count($opt_role) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
-<?php _e('Show widget to everybody?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('role');" /><br />
+<?php _e('Show widget to everybody?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN) ?>" onclick="divToggle('role');" /><br />
 <?php $DW->dumpOpt($opt_role); ?>
 <div>
 	<div id="role" class="infotext">
@@ -475,7 +474,7 @@ h4 {
 <!-- Date //-->
 <h4><b><?php _e('Date'); ?></b><?php echo ( count($opt_date) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
-<?php _e('Show widget always?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('date');" /><br />
+<?php _e('Show widget always?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN) ?>" onclick="divToggle('date');" /><br />
 <?php $DW->dumpOpt($opt_date); ?>
 <div>
 	<div id="date" class="infotext">
@@ -507,7 +506,7 @@ h4 {
 <?php if ( $DW->wpml ) { /* WPML */ ?>
 <h4><b><?php _e('Language (WPML)', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_wpml) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
-<?php _e('Show widget default on all languages?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('wpml');" /><br /><br />
+<?php _e('Show widget default on all languages?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN) ?>" onclick="divToggle('wpml');" /><br /><br />
 <?php $DW->dumpOpt($opt_wpml); ?>
 <div>
 	<div id="wpml" class="infotext">
@@ -528,7 +527,7 @@ h4 {
 <!-- UserAgent //-->
 <h4><b><?php _e('Browser', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_browser) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
-<?php _e('Show widget with all browsers?', DW_L10N_DOMAIN) ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('browser');" /><br />
+<?php _e('Show widget with all browsers?', DW_L10N_DOMAIN) ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN) ?>" onclick="divToggle('browser');" /><br />
 <?php $DW->dumpOpt($opt_browser); ?>
 <div>
 	<div id="browser"  class="infotext">
@@ -566,7 +565,7 @@ h4 {
 <!-- Single Posts //-->
 <h4><b><?php _e('Single Posts', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_single) > 0 || count($opt_single_author) > 0 || count($opt_single_category) > 0 || count($opt_single_post) > 0 || count($opt_single_tag) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
-<?php _e('Show widget default on single posts?', DW_L10N_DOMAIN) ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('single')" /><br />
+<?php _e('Show widget default on single posts?', DW_L10N_DOMAIN) ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN) ?>" onclick="divToggle('single')" /><br />
 <?php $DW->dumpOpt($opt_single); ?>
 <div>
 	<div id="single" class="infotext">
@@ -580,7 +579,7 @@ h4 {
 <?php $DW->dumpOpt($opt_individual); ?>
 <input type="checkbox" id="individual" name="individual" value="1" <?php echo ( $individual ) ? 'checked="checked"' : ''; ?> onclick="chkInPosts()" />
 <label for="individual"><?php _e('Make exception rule available to individual posts and tags.', DW_L10N_DOMAIN) ?> <?php echo ( isset($count_individual) ? $count_individual : '' ); ?></label>
-<img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('individual_post_tag')" />
+<img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN) ?>" onclick="divToggle('individual_post_tag')" />
 <div>
 	<div id="individual_post_tag" class="infotext">
   <?php _e('When you enable this option, you have the ability to apply the exception rule for <em>Single Posts</em> to tags and individual posts.
@@ -636,7 +635,7 @@ h4 {
 <!-- Pages //-->
 <h4><b><?php _e('Pages'); ?></b> <?php echo ( count($opt_page) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . ( $DW->wpml ? $wpml_icon : '' ); ?></h4>
 <div class="dynwid_conf">
-<?php _e('Show widget default on static pages?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('pages');" /><br />
+<?php _e('Show widget default on static pages?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN); ?>" onclick="divToggle('pages');" /><br />
 <?php $DW->dumpOpt($opt_page); ?>
 <div>
 	<div id="pages" class="infotext">
@@ -738,7 +737,7 @@ h4 {
 <!-- Archive Pages //-->
 <h4><b><?php _e('Archive Pages', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_archive) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
 <div class="dynwid_conf">
-<?php _e('Show widget on archive pages', DW_L10N_DOMAIN); ?>? <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="Click to toggle info" onclick="divToggle('archive')" /><br />
+<?php _e('Show widget on archive pages', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN); ?>" onclick="divToggle('archive')" /><br />
 <?php $DW->dumpOpt($opt_archive); ?>
 <div>
 <div id="archive" class="infotext">
@@ -867,7 +866,7 @@ h4 {
     	$childmap = childCPostMap($type, array(), 0);
 
       // Output
-      echo '<h4><b>' . __('Custom Post Type') . ' <em>' . $ctid->label . '</em></b> ' . ( count($opt_custom) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . ( $DW->wpml ? $wpml_icon : '' ) . '</h4>';
+      echo '<h4><b>' . __('Custom Post Type', DW_L10N_DOMAIN) . ' <em>' . $ctid->label . '</em></b> ' . ( count($opt_custom) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . ( $DW->wpml ? $wpml_icon : '' ) . '</h4>';
       echo '<div class="dynwid_conf">';
       echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $ctid->label . '? ' . ( $ctid->hierarchical ? '<img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $type . '\');" />' : '' ) . '<br />';
       echo '<input type="hidden" name="post_types[]" value="' . $type . '" />';
@@ -884,7 +883,7 @@ h4 {
 			echo '<input type="radio" name="' . $type . '" value="yes" id="' . $type . '-yes" ' . ( isset($custom_yes_selected) ? $custom_yes_selected : '' ) . ' /> <label for="' . $type . '-yes">' . __('Yes') . '</label> ';
       echo '<input type="radio" name="' . $type . '" value="no" id="' . $type . '-no" ' . ( isset($custom_no_selected) ? $custom_no_selected : '' ) . ' /> <label for="' . $type . '-no">' . __('No') . '</label><br />';
 
-      echo __('Except for') . ':<br />';
+      echo __('Except for', DW_L10N_DOMAIN) . ':<br />';
       echo '<div id="' . $type . '-select" class="condition-select" ' . ( isset($custom_condition_select_style) ? $custom_condition_select_style : '' ) . '>';
 
     	echo '<div style="position:relative;left:-15px">';
@@ -918,7 +917,7 @@ h4 {
   			$cp_archive_condition_select_style = DW_LIST_STYLE;
   		}
 
-  		echo '<h4><b>' . __('Custom Post Type Archives') . '</b> ' . ( count($opt_cp_archive) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . '</h4>';
+  		echo '<h4><b>' . __('Custom Post Type Archives', DW_L10N_DOMAIN) . '</b> ' . ( count($opt_cp_archive) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . '</h4>';
   		echo '<div class="dynwid_conf">';
   		echo __('Show widget on Custom Post Type Archives', DW_L10N_DOMAIN) . '?<br />';
   		$DW->dumpOpt($opt_cp_archive);
@@ -926,7 +925,7 @@ h4 {
   		echo '<input type="radio" name="cp_archive" value="yes" id="cp_archive-yes" ' . ( isset($cp_archive_yes_selected) ? $cp_archive_yes_selected : '' ) . ' /> <label for="cp_archive-yes">' . __('Yes') . '</label> ';
   		echo '<input type="radio" name="cp_archive" value="no" id="cp_archive-no" ' . ( isset($cp_archive_no_selected) ? $cp_archive_no_selected : '' ) . ' /> <label for="cp_archive-no">' . __('No') . '</label><br />';
 
-  		echo __('Except for') . ':<br />';
+  		echo __('Except for', DW_L10N_DOMAIN) . ':<br />';
   		echo '<div id="cp_archive-select" class="condition-select" ' . ( isset($cp_archive_condition_select_style) ? $cp_archive_condition_select_style : '' ) . '>';
   		foreach ( $post_types as $type => $ctid ){
   			echo '<input type="checkbox" id="cp_archive_act_' . $type . '" name="cp_archive_act[]" value="' . $type . '"' . ( count($cp_archive_act) > 0 && in_array($type, $cp_archive_act) ? 'checked="checked"' : '') . ' /> <label for="cp_archive_act_' . $type . '">' . $ctid->label . '</label><br />';
@@ -965,7 +964,7 @@ h4 {
 <div style="float:left">
 <input class="button-primary" type="submit" value="<?php _e('Save'); ?>" /> &nbsp;&nbsp;
 </div>
-<?php $url = (! empty($_GET['returnurl']) ) ? urldecode($_GET['returnurl']) : trailingslashit(admin_url()) . 'themes.php?page=dynwid-config'; ?>
+<?php $url = (! empty($_GET['returnurl']) ? urldecode($_GET['returnurl']) : trailingslashit(admin_url()) ) . 'themes.php?page=dynwid-config'; ?>
 <div style="float:left">
 <input class="button-secondary" type="button" value="<?php _e('Return', DW_L10N_DOMAIN); ?>" onclick="location.href='<?php echo $url; ?>'" />
 </div>
