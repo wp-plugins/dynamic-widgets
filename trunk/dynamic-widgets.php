@@ -3,10 +3,10 @@
  * Plugin Name: Dynamic Widgets
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages.
- * Author: Jacco
+ * Author: Qurl
  * Version: 1.3.7.7
  * Author URI: http://www.qurl.nl/
- * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags
+ * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags, wpml, wpec, buddypress
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -35,8 +35,15 @@
 
 /*
 	 WPSC/WPEC Plugin support
- 	 Using constants	WPSC_TABLE_PRODUCT_CATEGORIES	> dynwid_admin_edit.php, dynwid_init_worker.php, wpsc.php
+ 	 Using constants	WPSC_TABLE_PRODUCT_CATEGORIES	> dynwid_admin_overview.php, wpsc.php
+ 	 									WPSC_VERSION > dynwid_admin_edit.php, dynwid_init_worker.php, wpsc.php
  	 Using vars 			$wpsc_query > dynwid_init_worker.php, wpsc.php
+ */
+
+/*
+   BP Plugin support
+   Using constants	BP_VERSION > dynwid_admin_edit.php, dynwid_init_worker.php
+   User vars				$bp > dynwid_init_worker.php, bp.php
  */
 
   // Constants
@@ -49,7 +56,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.3.7.7');
+  define('DW_VERSION', '1.3.7.8');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -148,8 +155,23 @@
    */
   function dynwid_add_admin_scripts() {
   	$DW = &$GLOBALS['DW'];
+
+  	// Workaround fixing a js error with ui.accordion
+  	if ( wp_script_is('dtheme-ajax-js') ) {
+  		wp_deregister_script('dtheme-ajax-js');
+  	}
+
     wp_enqueue_script('jquery');
-    wp_enqueue_script('jquery-ui-custom', $DW->plugin_url . 'jquery-ui-1.8.7.custom.min.js', array('jquery'));
+  	wp_enqueue_script('jquery-ui-core');
+  	if ( version_compare($GLOBALS['wp_version'], '3.1', '>=') ) {
+  		wp_enqueue_script('jquery-ui-widget');
+  		wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'ui.accordion.1.8.7.js', array('jquery-ui-widget'));
+  		wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'ui.datepicker.1.8.7.js', array('jquery-ui-widget'));
+  	} else {
+  		wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'ui.accordion.1.7.3.js', array('jquery-ui-core'));
+  		wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'ui.datepicker.1.7.3.js', array('jquery-ui-core'));
+
+  	}
 	}
 
   /**
@@ -324,6 +346,61 @@
   function dynwid_admin_page() {
     $DW = &$GLOBALS['DW'];
     require_once(dirname(__FILE__) . '/dynwid_admin.php');
+  }
+
+	/**
+	 * dynwid_admin_wpec_dump() Dump WPEC rules function for upgrade to 3.8
+	 * @since 1.3.7.8
+	 */
+  function dynwid_admin_wpec_dump() {
+  	$DW = &$GLOBALS['DW'];
+  	$wpdb = &$GLOBALS['wpdb'];
+  	$dump = array();
+
+		$opt = $DW->getOptions('%', 'wpsc');
+
+  	$categories = array();
+  	$table = WPSC_TABLE_PRODUCT_CATEGORIES;
+  	$fields = array('id', 'name');
+  	$query = "SELECT " . implode(', ', $fields) . " FROM " . $table . " WHERE active = '1' ORDER BY name";
+  	$results = $wpdb->get_results($query);
+  	foreach ( $results as $myrow ) {
+  		$categories[$myrow->id] = $myrow->name;
+  	}
+
+  	foreach ( $opt as $widget ) {
+  		$id = $widget['widget_id'];
+  		if (! array_key_exists($id, $dump) ) {
+  			$dump[$id] = array( 'name' => strip_tags($DW->getName($widget['widget_id'])) );
+  		}
+
+  		if ( $widget['name'] == 'default' ) {
+  			$dump[$id]['default'] = ( $widget['value'] == '0' ? 'No' : 'Yes' );
+  		} else {
+  			$v = $widget['name'];
+  			$dump[$id][ ] = $categories[$v];
+  		}
+  	}
+
+  	header('Content-Description: File Transfer');
+  	header('Content-Disposition: attachment; filename=dynwid_wpec_dump_' . date('Ymd') . '.txt' );
+  	header('Content-Type: text/plain');
+
+  	foreach ( $dump as $widget ) {
+  		echo 'Widget: ' . $widget['name'] . "\r\n";
+  		echo 'Default set to ' . $widget['default'] . "\r\n";
+  		if ( count($widget) > 2 ) {
+  			echo 'Categories ticked: ' . "\r\n";
+  			foreach ( $widget as $k => $v ) {
+  				if ( is_int($k) ) {
+  					echo "\t" . $v . "\r\n";
+  				}
+	  		}
+  		}
+  		echo "\r\n";
+  	}
+
+  	die();
   }
 
   /**
@@ -631,6 +708,7 @@
 
   // Hooks
   add_action('admin_action_dynwid_dump', 'dynwid_admin_dump');
+  add_action('admin_action_wpec_dump', 'dynwid_admin_wpec_dump');
   add_action('admin_action_dynwid_uninstall', 'dynwid_uninstall');
   add_action('init', 'dynwid_init');
   register_activation_hook(__FILE__, 'dynwid_install');

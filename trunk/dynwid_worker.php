@@ -364,13 +364,13 @@
                 case 'cp_archive':
                 	if ( count($act) > 0 ) {
                 		/*
-                		   is_post_type_archive() is natively supported in WP 3.1.0
+                		   is_post_type_archive() is natively supported in WP 3.1
                 		   WP 3.0.x gets is_post_type_archive() via plugin
                 		   'Custom Post Type Archive', but does not accept array
                 		*/
                 		$is_cpa = FALSE;
 
-                		if ( version_compare($GLOBALS['wp_version'], '3.1.0', '>=') ) {
+                		if ( version_compare($GLOBALS['wp_version'], '3.1', '>=') ) {
                 			if ( is_post_type_archive($act) ) {
                 				$is_cpa = TRUE;
                 			}
@@ -390,12 +390,45 @@
 
               	case 'wpsc':
               		if ( count($act) > 0 ) {
+              			require_once(DW_PLUGIN . 'wpsc.php');
+
               			if ( is_dw_wpsc_category($act) ) {
               				$display = $other;
               				$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ESC1)');
               			}
               		}
               		break;
+
+              	case 'bp':
+              		// We have to split out the conditions as we don't want the bp-groups to interfere
+              		$act = array();
+              		foreach ( $opt as $condition ) {
+              			if ( $condition['name'] != 'default' && $condition['maintype'] == 'bp' ) {
+              				$act[ ] = $condition['name'];
+              			}
+              		}
+
+              		if ( count($act) > 0 ) {
+              			require_once(DW_PLUGIN . 'bp.php');
+
+              			if ( is_dw_bp_component($act) ) {
+              				$display = $other;
+              				$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EBP1)');
+              			}
+              		}
+              		break;
+
+              	case 'bp-group':
+              		if ( count($act) > 0 ) {
+              			require_once(DW_PLUGIN . 'bp.php');
+
+              			if ( is_dw_bp_group($act) ) {
+              				$display = $other;
+              				$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EBPG1)');
+              			}
+              		}
+              		break;
+
 
               } // END switch ( $DW->whereami )
             } // END if/else ( $DW->custom_post_type )

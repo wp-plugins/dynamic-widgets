@@ -56,7 +56,7 @@
 
 	if ( $DW->whereami == 'page' ) {
 		// WPSC/WPEC Plugin Support
-		if ( defined('WPSC_TABLE_PRODUCT_CATEGORIES') ) {
+		if ( defined('WPSC_VERSION') && version_compare(WPSC_VERSION, '3.8', '<') ) {
 			$wpsc_query = &$GLOBALS['wpsc_query'];
 
 			if ( $wpsc_query->category > 0 ) {
@@ -66,9 +66,36 @@
 
 				require_once(DW_PLUGIN . 'wpsc.php');
 			}
+		} else if ( defined('BP_VERSION') ) {	// BuddyPress Plugin Support -- else if needed, otherwise WPEC pages are detected as BP
+			$bp = &$GLOBALS['bp'];
+			if (! empty($bp->current_component) ) {
+				if ( $bp->current_component == 'groups' && ! empty($bp->current_item) ) {
+					$DW->bp_groups = TRUE;
+					$DW->whereami = 'bp-group';
+					$DW->message('BP detected, component: ' . $bp->current_component . '; Group: ' . $bp->current_item . ', Page changed to bp-group');
+				} else {
+					$DW->bp = TRUE;
+					$DW->whereami = 'bp';
+					$DW->message('BP detected, component: ' . $bp->current_component . ', Page changed to bp');
+				}
+			}
+		}
+	}
+
+	if ( $DW->whereami == 'archive' ) {
+		// WPSC/WPEC Plugin Support
+		if ( defined('WPSC_VERSION') && version_compare(WPSC_VERSION, '3.8', '>=') ) {
+			$wpsc_query = &$GLOBALS['wpsc_query'];
+			if ( $wpsc_query->query_vars['taxonomy'] == 'wpsc_product_category' ) {
+				$DW->wpsc = TRUE;
+				$DW->whereami = 'wpsc';
+				$term = get_term_by('slug', $wpsc_query->query_vars['term'], 'wpsc_product_category');
+				$DW->message('WPSC detected, page changed to ' . $DW->whereami . ', category: ' . $term->term_id);
+
+				require_once(DW_PLUGIN . 'wpsc.php');
+			}
 		}
 	}
 
 	$DW->dwList($DW->whereami);
-
 ?>

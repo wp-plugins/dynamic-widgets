@@ -87,7 +87,10 @@
 
 <a href="#" onclick="jQuery('#un').slideToggle('fast'); return false;"><?php _e('Advanced', DW_L10N_DOMAIN); ?> &gt;</a>
 <div id="un" style="display:none">
-<br /> <strong><?php _e('wp_head() check:', DW_L10N_DOMAIN); ?> </strong>
+<br />
+
+<!-- wp_head() check //-->
+<strong><?php _e('wp_head() check:', DW_L10N_DOMAIN); ?> </strong>
 <?php
   $c = $DW->checkWPhead();
   switch ( $c ) {
@@ -105,8 +108,9 @@
   }
 ?>
 .<br />
-
 <br />
+
+<!-- method //-->
 <div id="method">
 	<form id="dynwid_method" action="" method="get">
 		<input type="hidden" name="page" value="dynwid-config" />
@@ -115,7 +119,21 @@
 </form>
 </div>
 
-<br />
+<?php if ( defined('WPSC_TABLE_PRODUCT_CATEGORIES') ) { ?>
+<!-- WPEC dump //--><br /><br />
+<?php _e('When upgrading to WPEC 3.8 the Dynamic Widgets rules for WPEC are lost. The WPEC dump gives you an overview of the rules before the update.'); ?><br />
+<span style="color:red;font-weight:bold;"><?php _e('WARNING'); ?></span> <?php _e('This only works correct when you did not add or change anything in the Dynamic Widgets rules.'); ?>
+<br /><br />
+<div id="wpec_dump">
+  <form action="" method="get">
+    <input type="hidden" name="action" value="wpec_dump" />
+    <input class="button-primary" type="submit" value="<?php _e('Create WPEC dump', DW_L10N_DOMAIN); ?>" />
+  </form>
+</div>
+<br /><br />
+<?php } ?>
+
+<!-- dump //-->
 <?php _e('For debugging purposes it is possible you\'re asked to create a dump. Click the \'Create dump\' button and save the text file.', DW_L10N_DOMAIN); ?>
 <br /><br />
 <div id="dump">
@@ -127,6 +145,7 @@
 
 <br /><br />
 
+<!-- uninstall //-->
 <?php _e('When you deceide not to use this plugin anymore (sorry to hear that!). You can cleanup all settings and data related to this plugin by clicking on the \'Uninstall\' button. This process is irreversible! After the cleanup the plugin is deactivated automaticly.', DW_L10N_DOMAIN); ?>
 <br /><br />
 <div id="uninstall">
