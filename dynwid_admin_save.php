@@ -219,6 +219,20 @@
 		$DW->addSingleOption($_POST['widget_id'], 'wpsc');
 	}
 
+	// BP Plugin support
+	if ( isset($_POST['bp_act']) && count($_POST['bp_act']) > 0 ) {
+		$DW->addMultiOption($_POST['widget_id'], 'bp', $_POST['bp'], $_POST['bp_act']);
+	} else if ( isset($_POST['bp']) && $_POST['bp'] == 'no' ) {
+		$DW->addSingleOption($_POST['widget_id'], 'bp');
+	}
+
+	// BP Plugin support (Groups)
+	if ( isset($_POST['bp_group_act']) && count($_POST['bp_group_act']) > 0 ) {
+		$DW->addMultiOption($_POST['widget_id'], 'bp-group', $_POST['bp-group'], $_POST['bp_group_act']);
+	} else if ( isset($_POST['bp-group']) && $_POST['bp-group'] == 'no' ) {
+		$DW->addSingleOption($_POST['widget_id'], 'bp-group');
+	}
+
   // Redirect to ReturnURL
   if (! empty($_POST['returnurl']) ) {
     $q = array();

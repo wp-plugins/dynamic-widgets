@@ -6,6 +6,8 @@
  */
 
   class dynWid {
+    public  $bp;				// BuddyPress Plugin support
+  	public  $bp_groups;	// BuddyPress Plugin support (groups)
   	public	$custom_post_type;
     private $dbtable;
   	public  $dwoptions;
@@ -86,6 +88,10 @@
     	} else {
     		$this->enabled = TRUE;
     	}
+
+    	// BuddyPress Plugin support
+    	$this->bp = FALSE;
+    	$this->bp_groups = FALSE;
 
 			// WPML Plugin support
       $this->wpml = FALSE;
