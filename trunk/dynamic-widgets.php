@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.3.7.7
+ * Version: 1.3.7.9
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags, wpml, wpec, buddypress
  *
@@ -26,24 +26,24 @@
 
 /*
    WPML Plugin support via API
-   Using constants	ICL_PLUGIN_PATH > dynwid_admin_edit.php, dynwid_init_worker.php, dynwid_worker.php
+   Using constants	ICL_PLUGIN_PATH > dynwid_admin_edit.php, mods/wpml_module.php, dynwid_init_worker.php, dynwid_worker.php
    Using functions  wpml_get_default_language() > dynwid_init_worker.php
-                    wpml_get_current_language() > dynwid_init_worker.php, dynwid_worker.php, wpml.php
-                    wpml_get_content_translation() > wpml.php
-   									wpml_get_active_languages() > dynwid_admin_edit.php
+                    wpml_get_current_language() > dynwid_init_worker.php, dynwid_worker.php, plugin/wpml.php
+                    wpml_get_content_translation() > plugin/wpml.php
+   									wpml_get_active_languages() > mods/wpml_module.php
  */
 
 /*
 	 WPSC/WPEC Plugin support
- 	 Using constants	WPSC_TABLE_PRODUCT_CATEGORIES	> dynwid_admin_overview.php, wpsc.php
- 	 									WPSC_VERSION > dynwid_admin_edit.php, dynwid_init_worker.php, wpsc.php
- 	 Using vars 			$wpsc_query > dynwid_init_worker.php, wpsc.php
+ 	 Using constants	WPSC_TABLE_PRODUCT_CATEGORIES	> dynwid_admin_overview.php, plugin/wpsc.php
+ 	 									WPSC_VERSION > mods/wpec_module.php, dynwid_init_worker.php, plugin/wpsc.php
+ 	 Using vars 			$wpsc_query > dynwid_init_worker.php, plugin/wpsc.php
  */
 
 /*
    BP Plugin support
-   Using constants	BP_VERSION > dynwid_admin_edit.php, dynwid_init_worker.php
-   User vars				$bp > dynwid_init_worker.php, bp.php
+   Using constants	BP_VERSION > mods/bp_module, dynwid_init_worker.php
+   User vars				$bp > dynwid_init_worker.php, plugin/bp.php
  */
 
   // Constants
@@ -53,10 +53,11 @@
   define('DW_LIST_LIMIT', 20);
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
   define('DW_OLD_METHOD', get_option('dynwid_old_method'));
+  define('DW_MODULES', dirname(__FILE__) . '/' . 'mods/');
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.3.7.8');
+  define('DW_VERSION', '1.3.7.9');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -156,9 +157,17 @@
   function dynwid_add_admin_scripts() {
   	$DW = &$GLOBALS['DW'];
 
-  	// Workaround fixing a js error with ui.accordion
+  	/* 
+  		BuddyPress doing an overall JS enqueue (BAD!)
+  		Workaround fixing a js error with ui.accordion freezing the screen
+  			- dtheme-ajax-js is used in BP default theme
+  			- bp-js is used in BP Compatibility Plugin
+  	*/
   	if ( wp_script_is('dtheme-ajax-js') ) {
   		wp_deregister_script('dtheme-ajax-js');
+  	}
+  	if ( wp_script_is('bp-js') ) {
+  		wp_deregister_script('bp-js');
   	}
 
     wp_enqueue_script('jquery');
@@ -180,7 +189,12 @@
    */
   function dynwid_add_admin_styles() {
     $DW = &$GLOBALS['DW'];
-    wp_enqueue_style('jquery-ui-custom', $DW->plugin_url . 'jquery-ui-1.8.7.custom.css');
+
+  	if ( version_compare($GLOBALS['wp_version'], '3.1', '>=') ) {
+    	wp_enqueue_style('jquery-ui-custom', $DW->plugin_url . 'jquery-ui-1.8.7.custom.css');
+  	} else {
+  		wp_enqueue_style('jquery-ui-custom', $DW->plugin_url . 'jquery-ui-1.7.3.custom.css');
+  	}
   }
 
   /**
