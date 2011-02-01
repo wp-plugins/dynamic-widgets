@@ -8,7 +8,7 @@
  * @copyright 2011
  */
 
-	function dw_get_components() {
+	function dw_get_bp_components() {
 		$bp = &$GLOBALS['bp'];
 		$DW = &$GLOBALS['DW'];
 		$components = array();
