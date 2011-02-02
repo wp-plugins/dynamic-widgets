@@ -22,6 +22,11 @@
 	}
 
 	// -- Author
+	$authors = get_users_of_blog();
+	if ( count($authors) > DW_LIST_LIMIT ) {
+    $author_condition_select_style = DW_LIST_STYLE;
+  }
+  
 	$js_count = 0;
 	$opt_single_author = $DW->getOptions($_GET['id'], 'single-author');
 	$js_author_array = array();
@@ -34,6 +39,11 @@
 	}
 
 	// -- Category
+	$category = get_categories( array('hide_empty' => FALSE) );
+	if ( count($category) > DW_LIST_LIMIT ) {
+    $category_condition_select_style = DW_LIST_STYLE;
+  }
+  
 	$opt_single_category = $DW->getOptions($_GET['id'], 'single-category');
 	$js_category_array = array();
 	if ( count($opt_single_category) > 0 ) {
