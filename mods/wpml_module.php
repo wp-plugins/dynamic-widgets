@@ -3,7 +3,7 @@
  * WPML Module
  *
  * @version $Id$
- * @copyright 2011
+ * @copyright 2011 Jacco Drabbe
  */
 
 	if ( $DW->wpml ) {
@@ -34,7 +34,7 @@
 		}
 ?>
 
-<h4><b><?php _e('Language (WPML)', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_wpml) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
+<h4><b><?php _e('Language (WPML)', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_wpml) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on all languages?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN) ?>" onclick="divToggle('wpml');" /><br /><br />
 <?php $DW->dumpOpt($opt_wpml); ?>

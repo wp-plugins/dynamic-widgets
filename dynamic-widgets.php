@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.3.7.9
+ * Version: 1.3.7.10
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags, wpml, wpec, buddypress
  *
@@ -16,6 +16,7 @@
  * Released under the GPL v.2, http://www.gnu.org/copyleft/gpl.html
  *
  * @version $Id$
+ * @copyright 2011 Jacco Drabbe
  */
 
 /*
@@ -57,7 +58,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.3.7.9');
+  define('DW_VERSION', '1.3.7.10');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -157,7 +158,7 @@
   function dynwid_add_admin_scripts() {
   	$DW = &$GLOBALS['DW'];
 
-  	/* 
+  	/*
   		BuddyPress doing an overall JS enqueue (BAD!)
   		Workaround fixing a js error with ui.accordion freezing the screen
   			- dtheme-ajax-js is used in BP default theme
@@ -172,14 +173,13 @@
 
     wp_enqueue_script('jquery');
   	wp_enqueue_script('jquery-ui-core');
-  	if ( version_compare($GLOBALS['wp_version'], '3.1', '>=') ) {
+  	if ( version_compare(substr($GLOBALS['wp_version'], 0, 3), '3.1', '>=') ) {
   		wp_enqueue_script('jquery-ui-widget');
   		wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'ui.accordion.1.8.7.js', array('jquery-ui-widget'));
   		wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'ui.datepicker.1.8.7.js', array('jquery-ui-widget'));
   	} else {
   		wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'ui.accordion.1.7.3.js', array('jquery-ui-core'));
   		wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'ui.datepicker.1.7.3.js', array('jquery-ui-core'));
-
   	}
 	}
 
@@ -190,7 +190,7 @@
   function dynwid_add_admin_styles() {
     $DW = &$GLOBALS['DW'];
 
-  	if ( version_compare($GLOBALS['wp_version'], '3.1', '>=') ) {
+  	if ( version_compare(substr($GLOBALS['wp_version'], 0, 3), '3.1', '>=') ) {
     	wp_enqueue_style('jquery-ui-custom', $DW->plugin_url . 'jquery-ui-1.8.7.custom.css');
   	} else {
   		wp_enqueue_style('jquery-ui-custom', $DW->plugin_url . 'jquery-ui-1.7.3.custom.css');

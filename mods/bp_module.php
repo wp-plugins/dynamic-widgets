@@ -3,8 +3,8 @@
  * BP module
  * http://buddypress.org/
  *
- * @version $Id$
- * @copyright 2011
+ * @version $Id$\
+ * @copyright 2011 Jacco Drabbe
  */
 
 	if ( defined('BP_VERSION') ) {
@@ -48,7 +48,7 @@
 		unset($tmp);
 ?>
 
-<h4><b><?php _e('BuddyPress', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_bp) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
+<h4><b><?php _e('BuddyPress', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_bp) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on BuddyPress pages?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_bp); ?>

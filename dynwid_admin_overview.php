@@ -3,6 +3,7 @@
  * dynwid_admin_overview.php - Overview page
  *
  * @version $Id$
+ * @copyright 2011 Jacco Drabbe
  */
 
   // Special case: Reset action needs to go back to overview.

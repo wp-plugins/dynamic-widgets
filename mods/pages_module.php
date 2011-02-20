@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	define('DW_PAGE_LIMIT', 500);
+
 	function getPageChilds($arr, $id, $i) {
 		$pg = get_pages('child_of=' . $id);
 		foreach ($pg as $p ) {
@@ -35,6 +37,12 @@
 			}
 			echo '</div>';
 		}
+	}
+
+	function lsPages($pages, $static_page, $page_act) {
+		foreach ( $pages as $page ) {
+			echo '<input type="checkbox" id="page_act_' . $page->ID . '" name="page_act[]" value="' . $page->ID . '" ' . ( count($page_act) > 0 && in_array($page->ID, $page_act) ? 'checked="checked"' : '' ) . ' /> <label for="page_act_' . $page->ID . '">' . $page->post_title . ' ' . ( get_option('show_on_front') == 'page' && isset($static_page[$page->ID]) ? '(' . $static_page[$page->ID] . ')' : '' ) . '</label><br />';
+ 		}
 	}
 
 	$page_yes_selected = 'checked="checked"';
@@ -69,7 +77,8 @@
 	}
 
 	$pages = get_pages();
-	if ( count($pages) > DW_LIST_LIMIT ) {
+	$num_pages = count($pages);
+	if ( $num_pages > DW_LIST_LIMIT ) {
 		$page_condition_select_style = DW_LIST_STYLE;
 	}
 
@@ -86,20 +95,26 @@
 		}
 	}
 
-	$pagemap = getPageChilds(array(), 0, array());
+	if ( $num_pages < DW_PAGE_LIMIT ) {
+		$pagemap = getPageChilds(array(), 0, array());
+	}
 ?>
-
-<h4><b><?php _e('Pages'); ?></b> <?php echo ( count($opt_page) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . ( $DW->wpml ? $wpml_icon : '' ); ?></h4>
+<h4><b><?php _e('Pages'); ?></b> <?php echo ( count($opt_page) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ( $DW->wpml ? $wpml_icon : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on static pages?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN); ?>" onclick="divToggle('pages');" /><br />
 <?php $DW->dumpOpt($opt_page); ?>
 <div>
 	<div id="pages" class="infotext">
 	<?php
-		$childs_infotext = __('Checking the "All childs" option, makes the exception rule apply
-				to the parent and all items under it in all levels. Also future items
-				under the parent. It\'s not possible to apply an exception rule to
-				"All childs" without the parent.', DW_L10N_DOMAIN);
+		if ( $num_pages < DW_PAGE_LIMIT ) {
+			$childs_infotext = __('Checking the "All childs" option, makes the exception rule apply
+					to the parent and all items under it in all levels. Also future items
+					under the parent. It\'s not possible to apply an exception rule to
+					"All childs" without the parent.', DW_L10N_DOMAIN);
+		} else {
+			$childs_infotext = __('Unfortunately the childs-function has been disabled
+					because you have more than 500 pages.', DW_L10N_DOMAIN);
+		}
 		echo $childs_infotext;
 	?>
 	</div>
@@ -109,7 +124,7 @@
 <?php _e('Except the page(s)', DW_L10N_DOMAIN); ?>:<br />
 <div id="page-select" class="condition-select" <?php echo ( isset($page_condition_select_style) ? $page_condition_select_style : '' ); ?>>
 <div style="position:relative;left:-15px">
-<?php prtPgs($pagemap, $page_act, $page_childs_act, $static_page); ?>
+<?php ( $num_pages < DW_PAGE_LIMIT ? prtPgs($pagemap, $page_act, $page_childs_act, $static_page) : lsPages($pages, $static_page, $page_act) ); ?>
 </div>
 </div>
 </div><!-- end dynwid_conf -->

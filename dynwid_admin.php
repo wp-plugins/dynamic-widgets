@@ -3,6 +3,7 @@
  * dynwid_admin.php - Startpage for admin
  *
  * @version $Id$
+ * @copyright 2011 Jacco Drabbe
  */
 ?>
 

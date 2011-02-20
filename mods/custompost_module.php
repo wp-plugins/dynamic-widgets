@@ -144,7 +144,7 @@
 				$cp_archive_condition_select_style = DW_LIST_STYLE;
 			}
 
-			echo '<h4><b>' . __('Custom Post Type Archives', DW_L10N_DOMAIN) . '</b> ' . ( count($opt_cp_archive) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . '</h4>';
+			echo '<h4><b>' . __('Custom Post Type Archives', DW_L10N_DOMAIN) . '</b> ' . ( count($opt_cp_archive) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
 			echo '<div class="dynwid_conf">';
 			echo __('Show widget on Custom Post Type Archives', DW_L10N_DOMAIN) . '?<br />';
 			$DW->dumpOpt($opt_cp_archive);

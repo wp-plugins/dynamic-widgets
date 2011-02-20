@@ -3,6 +3,7 @@
  * dynwid_class.php - Dynamic Widgets Class (PHP5)
  *
  * @version $Id$
+ * @copyright 2011 Jacco Drabbe
  */
 
   class dynWid {
