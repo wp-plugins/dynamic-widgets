@@ -3,6 +3,7 @@
  * dynwid_admin_edit.php - Options settings
  *
  * @version $Id$
+ * @copyright 2011 Jacco Drabbe
  */
 
 	// WPML Plugin support
@@ -123,6 +124,7 @@ h4 {
 </form>
 
 <script type="text/javascript">
+/* <![CDATA[ */
   function chkInPosts() {
     var posts = <?php echo count($single_post_act); ?>;
     var tags = <?php echo count($single_tag_act); ?>;
@@ -249,4 +251,5 @@ h4 {
 			autoHeight: false,
 		});
 	});
+/* ]]> */
 </script>

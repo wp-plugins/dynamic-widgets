@@ -26,7 +26,7 @@
 	if ( count($authors) > DW_LIST_LIMIT ) {
     $author_condition_select_style = DW_LIST_STYLE;
   }
-  
+
 	$js_count = 0;
 	$opt_single_author = $DW->getOptions($_GET['id'], 'single-author');
 	$js_author_array = array();
@@ -43,7 +43,7 @@
 	if ( count($category) > DW_LIST_LIMIT ) {
     $category_condition_select_style = DW_LIST_STYLE;
   }
-  
+
 	$opt_single_category = $DW->getOptions($_GET['id'], 'single-category');
 	$js_category_array = array();
 	if ( count($opt_single_category) > 0 ) {
@@ -87,7 +87,7 @@
 	}
 ?>
 
-<h4><b><?php _e('Single Posts', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_single) > 0 || count($opt_single_author) > 0 || count($opt_single_category) > 0 || count($opt_single_post) > 0 || count($opt_single_tag) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
+<h4><b><?php _e('Single Posts', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_single) > 0 || count($opt_single_author) > 0 || count($opt_single_category) > 0 || count($opt_single_post) > 0 || count($opt_single_tag) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on single posts?', DW_L10N_DOMAIN) ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN) ?>" onclick="divToggle('single')" /><br />
 <?php $DW->dumpOpt($opt_single); ?>

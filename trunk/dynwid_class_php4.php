@@ -4,6 +4,7 @@
  * Needs at least PHP 4.1.0
  *
  * @version $Id$
+ * @copyright 2011 Jacco Drabbe
  */
 
   class dynWid {

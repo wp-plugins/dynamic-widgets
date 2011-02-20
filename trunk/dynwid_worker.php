@@ -3,6 +3,7 @@
  * dynwid_worker.php - The worker does the actual work.
  *
  * @version $Id$
+ * @copyright 2011 Jacco Drabbe
  */
 
 	$DW->message('Worker START');
@@ -370,7 +371,7 @@
                 		*/
                 		$is_cpa = FALSE;
 
-                		if ( version_compare($GLOBALS['wp_version'], '3.1', '>=') ) {
+                		if ( version_compare(substr($GLOBALS['wp_version'], 0, 3), '3.1', '>=') ) {
                 			if ( is_post_type_archive($act) ) {
                 				$is_cpa = TRUE;
                 			}

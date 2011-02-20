@@ -30,7 +30,7 @@
 	}
 ?>
 
-<h4><b><?php _e('Category Pages', DW_L10N_DOMAIN); ?></b> <?php echo ( count($opt_category) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . ( $DW->wpml ? $wpml_icon : '' ); ?></h4>
+<h4><b><?php _e('Category Pages', DW_L10N_DOMAIN); ?></b> <?php echo ( count($opt_category) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ( $DW->wpml ? $wpml_icon : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on category pages?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_category); ?>

@@ -30,7 +30,7 @@
 	}
 ?>
 
-<h4><b><?php _e('Author Pages', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_author) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
+<h4><b><?php _e('Author Pages', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_author) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on author pages?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_author); ?>

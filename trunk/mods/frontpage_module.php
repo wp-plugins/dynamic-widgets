@@ -17,7 +17,7 @@
 			}
 		}
 ?>
-<h4><b><?php _e('Front Page', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_frontpage) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
+<h4><b><?php _e('Front Page', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_frontpage) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget on the front page?', DW_L10N_DOMAIN) ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" onclick="divToggle('frontpage');" /><br />
 <?php $DW->dumpOpt($opt_frontpage); ?>

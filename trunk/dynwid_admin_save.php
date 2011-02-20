@@ -3,6 +3,7 @@
  * dynwid_admin_save.php - Saving options to the database
  *
  * @version $Id$
+ * @copyright 2011 Jacco Drabbe
  */
 
   // Security - nonce

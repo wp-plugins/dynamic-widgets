@@ -4,6 +4,7 @@
  * dynwid_init_worker.php
  *
  * @version $Id$
+ * @copyright 2011 Jacco Drabbe
  */
 
 	$DW->message('Dynamic Widgets INIT');

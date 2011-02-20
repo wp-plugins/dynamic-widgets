@@ -4,7 +4,7 @@
  *  http://getshopped.org/
  *
  * @version $Id$
- * @copyright 2011
+ * @copyright 2011 Jacco Drabbe
  */
 
 	if ( defined('WPSC_VERSION') ) {
@@ -34,7 +34,7 @@
 			$wpsc_condition_select_style = DW_LIST_STYLE;
 		}
 ?>
-<h4><b><?php _e('WPSC Category', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_wpsc) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
+<h4><b><?php _e('WPSC Category', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_wpsc) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on WPSC categories?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_wpsc); ?>

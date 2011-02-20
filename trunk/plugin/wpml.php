@@ -3,8 +3,8 @@
  * WordPress MultiLingual Plugin
  * http://wpml.org/
  *
- *
  * @version $Id$
+ * @copyright 2010 Jacco Drabbe
  */
 
 	function dw_wpml_get_id($content_id, $content_type = 'post_page') {

@@ -17,7 +17,7 @@
 	}
 ?>
 
-<h4><b><?php _e('Error Page', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_e404) > 0 ? ' <span class="hasoptions">*</span>' : '' ); ?></h4>
+<h4><b><?php _e('Error Page', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_e404) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget on the error page?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_e404); ?>

@@ -5,7 +5,7 @@
  * http://buddypress.org/
  *
  * @version $Id$
- * @copyright 2011
+ * @copyright 2011 Jacco Drabbe
  */
 
 	function dw_get_bp_components() {

@@ -4,6 +4,7 @@
  * http://getshopped.org/
  *
  * @version $Id$
+ * @copyright 2011 Jacco Drabbe
  */
 
 	function dw_wpsc_get_categories() {
