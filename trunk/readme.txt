@@ -1,23 +1,25 @@
 === Plugin Name ===
 Contributors: Qurl
 Donate link:
-Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, condition, conditional tags
+Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, condition, conditional tags, wpml, wpec, buddypress
 Requires at least: 2.9.1
-Tested up to: 3.0.3
-Stable tag: 1.3.7
+Tested up to: 3.1
+Stable tag: 1.4.0
 
 Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages.
 
 == Description ==
 
-Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages by setting conditional rules with just a few mouse clicks by role, dates, language (WPML), for the homepage, single posts, pages, authors, categories, archives, error page, search page and custom post types.
+Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages by setting conditional rules with just a few mouse clicks by role, dates, browser, language (WPML), for the homepage, single posts, attachments, pages, authors, categories, archives, error page, search page, custom post types, custom post type archives, WPEC/WPSC categories, BuddyPress Components and BuddyPress Groups
 
 * Default widget display setting is supported for:
   - User roles
   - Dates
-  - Language (WPML)
+  - Browsers
+  - Languages (WPML)
   - Front page
   - Single post pages
+  - Attachment pages
   - Pages
   - Author pages
   - Category pages
@@ -25,25 +27,35 @@ Dynamic Widgets gives you full control on which pages your widgets will appear. 
   - Error Page
   - Search Page
   - Custom Post Types
+  - Custom Post Type Archive pages
   - WP Shopping Cart / WP E-Commerce Categories
+  - BuddyPress Components pages
+  - BuddyPress Groups
 
 * Exceptions can be created for:
   - User roles on role, including not logged in (anonymous) users
   - Dates on from, to or range
-  - Language (WPML) on language
+  - Browsers on browser name
+  - Languages (WPML) on language
   - Single post pages on Author, Categories, Tags and/or Individual posts
   - Pages on Page Title, including inheritance from hierarchical parents
   - Author pages on Author
   - Category pages on Category name
   - Custom Posts Type on Custom post name, including inheritance from hierarchical parents
+  - Custom Post Type Archive pages on Custom Post Type
   - WP Shopping Cart / WP E-Commerce Categories on Category name
+  - BuddyPress Component pages on Component
+  - BuddyPress Groups on group
 
 * Plugin support for:
+	- BuddyPress
   - WP MultiLingual (WPML)
   - WP Shopping Cart / WP E-Commerce (WPSC / WPEC)
 
 * Language files provided:
 	- French (fr_FR) by Alexis Nomine
+	- German (de_DE) by Daniel Bihler
+	- Spanish (es_ES) by Eduardo Larequi
 
 == Installation ==
 
@@ -82,11 +94,15 @@ Yes, but only if you activate the plugin on a per site base. Network Activation 
 
 Did you save the options? If you did, you may try to hit the (i) icon a bit to the right and read the text which appears below.
 
+= According to the featurelist I should be able to use a hierarchical structure in static pages, but I don't see it. Where is it? =
+
+You probably have more than 500 pages. Building a tree with so many pages slows down the performance of the plugin dramatically. To prevent time-out errors, the childs-function has been automatically disabled.
+
 = The plugin slows down the loading of a page dramatically. Can you do something about it? =
 
 Try setting the plugin to the 'OLD' method. You can do this by clicking on the 'Advanced >' link at the bottom of the Widgets Overview page and check the box next to 'Use OLD method'. See if that helps. Setting the plugin using the 'OLD' method comes with a downside unfortunately. It may leave you behind with a visible empty sidebar.
 
-= I want to check if the ‘OLD’ method suits me better, is there a way back if it doesn’t? =
+= I want to check if the 'OLD' method suits me better, is there a way back if it doesn't? =
 
 Yes! You can switch between FILTER and OLD method without any loss of widgets configuration or whatsoever.
 
@@ -115,6 +131,26 @@ Please file a [bugreport](http://www.qurl.nl/dynamic-widgets/bugreport/). Please
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.4.0 =
+
+* Added more l10n text strings
+* Added support for browser options.
+* Added support for attachments.
+* Added support for Custom Post Type Archive pages (native in WordPress 3.1, via plugin in 3.0.x).
+* Added support for BuddyPress Component pages.
+* Added support for BuddyPress Group pages.
+* Added German language files (locale: de_DE) - Vielen dank Daniel!
+* Added Spanish language files (locale: es_ES) - Muchas gracias Eduardo!
+* Bugfix for unexpected behavior when subsequent widgets are in opposite config for WPML.
+* Bugfix for not correct displaying of options string in the widget admin when having options set for childs in Pages or Custom Post Types.
+* Bugfix for an error 404 (file not found) when an error occurs while saving options.
+* Bugfix for unnecessary double creation of the hierarchical tree in Static Pages and Custom Post Types.
+* Modified admin UI for compatibility with WordPress 3.1.
+* Upgrade for WP Shopping Cart / WP E-Commerce to support version 3.8 *** SEE RELEASE NOTES ***
+* Workaround in admin UI when using (a child of) the default BuddyPress theme or the BP Template Pack plugin bombing the accordion.
+* Modularized admin scripts
+* Standarized the use of JavaScript (jQuery)
 
 = Version 1.3.7 =
 
@@ -216,6 +252,10 @@ Please file a [bugreport](http://www.qurl.nl/dynamic-widgets/bugreport/). Please
 = Version 1.0.1 =
 
 * Added default widget display setting option for 'Not Found' Error (404) Page.
+
+== Release notes ==
+
+With this version, Dynamic Widgets supports version 3.8 of WPEC. Unfortunately because of the change by WPEC, when you upgrade WPEC you'll have to redo all rules you've created within Dynamic Widgets for WPEC manually. It was nog possible for me to find out how to convert these to the new system used by WPEC. For your convience I've created a WPEC config dump generator to be able to give an overview of all the WPEC rules created in Dynamic Widgets to make recreating the rules easier. Please note the generator only works correctly when the WPEC product categories database table still exists and you did not add or modified any rule in Dynamic Widgets. The generator can be found at the Dynamic Widgets overview page by clicking on the 'Advanced >' link at the bottom of the page.
 
 == Upgrade Notice ==
 
