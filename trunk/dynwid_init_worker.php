@@ -68,8 +68,17 @@
 				require_once(DW_PLUGIN . 'wpsc.php');
 			}
 		} else if ( defined('BP_VERSION') ) {	// BuddyPress Plugin Support -- else if needed, otherwise WPEC pages are detected as BP
+			require_once(DW_PLUGIN . 'bp.php');
 			$bp = &$GLOBALS['bp'];
-			if (! empty($bp->current_component) ) {
+
+			/*
+			   Array of BP components needed as a workaround for certain themes claiming an invalid BP component,
+			   confusing DW by detecting BP, when it should be Page.
+			*/
+			$components = dw_get_bp_components();
+			$bp_components = array_keys($components);
+
+			if (! empty($bp->current_component) && in_array($bp->current_component, $bp_components) ) {
 				if ( $bp->current_component == 'groups' && ! empty($bp->current_item) ) {
 					$DW->bp_groups = TRUE;
 					$DW->whereami = 'bp-group';

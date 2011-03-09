@@ -54,7 +54,7 @@
 <?php $DW->dumpOpt($opt_bp); ?>
 <input type="radio" name="bp" value="yes" id="bp-yes" <?php echo ( isset($bp_yes_selected) ? $bp_yes_selected : '' ); ?> /> <label for="bp-yes"><?php _e('Yes'); ?></label>
 <input type="radio" name="bp" value="no" id="bp-no" <?php echo ( isset($bp_no_selected) ? $bp_no_selected : '' ); ?> /> <label for="bp-no"><?php _e('No'); ?></label><br />
-<?php _e('Except on the compontents pages', DW_L10N_DOMAIN); ?>:<br />
+<?php _e('Except on the components pages', DW_L10N_DOMAIN); ?>:<br />
 <div id="bp-select" class="condition-select" <?php echo ( isset($bp_condition_select_style) ? $bp_condition_select_style : '' ); ?>>
 <?php foreach ( $bp_components as $id => $component ) { ?>
 <input type="checkbox" id="bp_act_<?php echo $id; ?>" name="bp_act[]" value="<?php echo $id; ?>" <?php echo ( count($bp_act) > 0 && in_array($id, $bp_act) ) ? 'checked="checked"' : ''; ?> /> <label for="bp_act_<?php echo $id; ?>"><?php echo $component; ?></label><br />
