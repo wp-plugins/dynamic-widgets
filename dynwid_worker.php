@@ -18,7 +18,7 @@
 			$curlang = wpml_get_current_language();
 		}
 	}
-	
+
   foreach ( $sidebars as $sidebar_id => $widgets ) {
     // Only processing active sidebars with widgets
     if ( $sidebar_id != 'wp_inactive_widgets' && count($widgets) > 0 && is_array($widgets) ) {
@@ -161,10 +161,12 @@
                 $id = $post->ID;
                 $DW->message('PostID: ' . $id);
                 if ( $DW->wpml ) {
-                  $id = dw_wpml_get_id($id, 'post_' . $post_type);
+                  $id = dw_wpml_get_id($id, 'post_' . $DW->whereami);
                   $DW->message('WPML ObjectID: ' . $id);
                 }
 
+              	$act_custom = array();
+              	$act_childs = array();
               	foreach ( $opt as $condition ) {
               		if ( $condition['name'] != 'default' ) {
               			switch ( $condition['maintype'] ) {
@@ -179,6 +181,23 @@
               		}
               	}
 
+              	$act_tax = array();
+              	foreach ( get_object_taxonomies($DW->whereami) as $t ) {
+              		$m = $DW->whereami . '-tax_' . $t;
+              		foreach ( $opt as $condition ) {
+              			if ( $condition['maintype'] == $m ) {
+              				if (! key_exists($t, $act_tax) ) {
+              					$act_tax[$t] = array();
+              				}
+              				if ( $condition['name'] != 'default' ) {
+              					$act_tax[$t][ ] = $condition['name'];
+              				}
+              			}
+              		}
+              	}
+
+              	$term = wp_get_object_terms($id, get_object_taxonomies($DW->whereami), array('fields' => 'all'));
+
                 if ( in_array($id, $act_custom) ) {
                   $display = $other;
                   $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP1)');
@@ -188,6 +207,14 @@
                 		$display = $other;
                 		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP2)');
                 	}
+                } else if ( count($act_tax) > 0 ) {
+									foreach ( $term as $t ) {
+										if ( is_array($act_tax[$t->taxonomy]) && in_array($t->term_id, $act_tax[$t->taxonomy]) ) {
+											$display = $other;
+											$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP3)');
+											break;
+										}
+									}
                 }
               }
             } else {

@@ -179,8 +179,23 @@
   // Custom Types (WP >= 3.0)
   if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') && isset($_POST['post_types']) ) {
     foreach ( $_POST['post_types'] as $type ) {
+    	// Check taxonomies
+    	$taxonomy = FALSE;
+    	$tax_list = get_object_taxonomies($type);
+    	foreach ( $tax_list as $tax ) {
+    		$act_tax_field = $type . '-tax_' . $tax . '_act';
+    		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
+    			$taxonomy = TRUE;
+    			break;
+    		}
+    	}
+
       $act_field = $type . '_act';
-      if ( count($_POST[$act_field]) > 0 ) {
+      if ( count($_POST[$act_field]) > 0 || $taxonomy ) {
+      	if (! is_array($_POST[$act_field]) ) {
+      		$_POST[$act_field] = array();
+      	}
+
         $DW->addMultiOption($_POST['widget_id'], $type, $_POST[$type], $_POST[$act_field]);
       } else if ( $_POST[$type] == 'no' ) {
         $DW->addSingleOption($_POST['widget_id'], $type);
@@ -196,6 +211,14 @@
     			}
     		}
     		$DW->addMultiOption($_POST['widget_id'], $type . '-childs', $_POST[$type], $childs_act);
+    	}
+
+    	// -- Taxonomies
+    	foreach ( $tax_list as $tax ) {
+    		$act_tax_field = $type . '-tax_' . $tax . '_act';
+    		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
+					$DW->addMultiOption($_POST['widget_id'], $type . '-tax_' . $tax, $_POST[$type], $_POST[$act_tax_field]);
+    		}
     	}
     }
 
