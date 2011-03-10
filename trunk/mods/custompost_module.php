@@ -90,21 +90,21 @@
 			}
 
 			$cpmap = getCPostChilds($type, array(), 0, array());
+			$tax_list = get_object_taxonomies($type, 'objects');
 
 			// Output
-			echo '<h4><b>' . __('Custom Post Type', DW_L10N_DOMAIN) . ' <em>' . $ctid->label . '</em></b> ' . ( count($opt_custom) > 0 ? ' <span class="hasoptions">*</span>' : '' ) . ( $DW->wpml ? $wpml_icon : '' ) . '</h4>';
+			echo '<h4><b>' . __('Custom Post Type', DW_L10N_DOMAIN) . ' <em>' . $ctid->label . '</em></b> ' . ( count($opt_custom) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ( $DW->wpml ? $wpml_icon : '' ) . '</h4>';
 			echo '<div class="dynwid_conf">';
-			echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $ctid->label . '? ' . ( $ctid->hierarchical ? '<img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $type . '\');" />' : '' ) . '<br />';
+			echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $ctid->label . '? ' . ( $ctid->hierarchical || count($tax_list) > 0 ? '<img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $type . '\');" />' : '' ) . '<br />';
 			echo '<input type="hidden" name="post_types[]" value="' . $type . '" />';
 			$DW->dumpOpt($opt_custom);
 
-			if ( $ctid->hierarchical ) {
-				echo '<div>';
-				echo '<div id="custom_' . $type . '" class="infotext">';
-				echo $childs_infotext;
-				echo '</div>';
-				echo '</div>';
-			}
+			echo '<div>';
+			echo '<div id="custom_' . $type . '" class="infotext">';
+			echo ( $ctid->hierarchical ? '<p>' . $childs_infotext . '</p>' : '' );
+			echo ( count($tax_list) > 0 ? '<p>All exceptions (Titles and Taxonomies) work in a logical OR condition. That means when one of the exceptions is met, the exception rule is applied.</p>' : '' );
+			echo '</div>';
+			echo '</div>';
 
 			echo '<input type="radio" name="' . $type . '" value="yes" id="' . $type . '-yes" ' . ( isset($custom_yes_selected) ? $custom_yes_selected : '' ) . ' /> <label for="' . $type . '-yes">' . __('Yes') . '</label> ';
 			echo '<input type="radio" name="' . $type . '" value="no" id="' . $type . '-no" ' . ( isset($custom_no_selected) ? $custom_no_selected : '' ) . ' /> <label for="' . $type . '-no">' . __('No') . '</label><br />';
@@ -115,8 +115,53 @@
 			echo '<div style="position:relative;left:-15px">';
 			prtCPost($type, $ctid, $cpmap, $custom_act, $custom_childs_act);
 			echo '</div>';
-
 			echo '</div>';
+
+			foreach ( $tax_list as $tax_type ) {
+				// Prepare
+				$tax_yes_selected = 'checked="checked"';
+				$opt_tax = $DW->getOptions($_GET['id'], $type . '-tax_' . $tax_type->name);
+				if ( count($opt_tax) > 0 ) {
+					$tax_act = array();
+
+					foreach ( $opt_tax as $tax_condition ) {
+						if ( $tax_condition['maintype'] == $type . '-tax_' . $tax_type->name ) {
+							if ( $tax_condition['name'] == 'default' || empty($tax_condition['name']) ) {
+								$tax_default = $tax_condition['value'];
+							} else {
+								$tax_act[ ] = $tax_condition['name'];
+							}
+						}
+					}
+
+					if ( $tax_default == '0' ) {
+						$tax_no_selected = $tax_yes_selected;
+						unset($tax_yes_selected);
+					}
+				}
+
+				$tax = get_terms($tax_type->name, array('get' => 'all'));
+				if ( count($tax) > 0 ) {
+					if ( count($tax) > DW_LIST_LIMIT ) {
+						$tax_condition_select_style = DW_LIST_STYLE;
+					}
+
+					echo '<br />';
+					$DW->dumpOpt($opt_tax);
+					echo __('Except for Custom Taxonomy') . ' <em>' . $tax_type->label . '</em>:<br />';
+					echo '<div id="' . $type . '-tax_' . $tax_type->name . '-select" class="condition-select" ' . ( isset($tax_condition_select_style) ? $tax_condition_select_style : '' ) . '>';
+
+					foreach ( $tax as $t ) {
+						echo '<input type="checkbox" id="' . $type . '-tax_' . $tax_type->name . '_act_' . $t->term_id . '" name="' . $type . '-tax_' . $tax_type->name . '_act[]" value="' . $t->term_id . '" ';
+						echo ( count($tax_act) > 0 && in_array($t->term_id, $tax_act) ) ? 'checked="checked"' : '';
+						echo ' /> <label for="' . $type . '-tax_' . $tax_type->name . '_act_' . $t->term_id . '">';
+						echo $t->name;
+						echo '</label><br />';
+					}
+					echo '</div>';
+				}
+			}
+
 			echo '</div><!-- end dynwid_conf -->';
 		}
 
@@ -160,6 +205,7 @@
 			echo '</div>';
 			echo '</div><!-- end dynwid_conf -->';
 		}
+
 	} // end version compare >= WP 3.0
 ?>
 
