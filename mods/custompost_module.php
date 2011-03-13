@@ -9,8 +9,13 @@
 
 	/* WordPress 3.0 and higher: Custom Post Types */
 	if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
+		if ( $DW->wpml ) {
+			require(DW_PLUGIN . 'wpml.php');
+		}
+		
 		function getCPostChilds($type, $arr, $id, $i) {
 			$post = get_posts('post_type=' . $type . '&post_parent=' . $id);
+
 			foreach ($post as $p ) {
 				if (! in_array($p->ID, $i) ) {
 					$i[ ] = $p->ID;
@@ -23,22 +28,34 @@
 		}
 
 		function prtCPost($type, $ctid, $posts, $posts_act, $posts_childs_act) {
+			$DW = $GLOBALS['DW'];		
+			
 			foreach ( $posts as $pid => $childs ) {
+				$run = TRUE;
 				$post = get_post($pid);
+				
+				if ( $DW->wpml ) {
+					$wpml_id = dw_wpml_get_id($pid, $content_type = 'post_' . $type);
+					if ( $wpml_id > 0 && $wpml_id <> $pid ) {
+						$run = FALSE;
+					}
+				}
 
-				echo '<div style="position:relative;left:15px;">';
-				echo '<input type="checkbox" id="' . $type . '_act_' . $post->ID . '" name="' . $type . '_act[]" value="' . $post->ID . '" ' . ( isset($posts_act) && count($posts_act) > 0 && in_array($post->ID, $posts_act) ? 'checked="checked"' : '' ) . ' onchange="chkCPChild(\'' . $type . '\',' . $pid . ')" /> <label for="' . $type . '_act_' . $post->ID . '">' . $post->post_title . '</label><br />';
-
-				if ( $ctid->hierarchical ) {
+				if ( $run ) {
 					echo '<div style="position:relative;left:15px;">';
-					echo '<input type="checkbox" id="' . $type . '_child_' . $pid . '" name="' . $type . '_childs_act[]" value="' . $pid . '" ' . ( isset($posts_childs_act) && count($posts_childs_act) > 0 && in_array($pid, $posts_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkCPParent(\'' . $type . '\',' . $pid . ')" /> <label for="' . $type . '_child_' . $pid . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></label><br />';
+					echo '<input type="checkbox" id="' . $type . '_act_' . $post->ID . '" name="' . $type . '_act[]" value="' . $post->ID . '" ' . ( isset($posts_act) && count($posts_act) > 0 && in_array($post->ID, $posts_act) ? 'checked="checked"' : '' ) . ' onchange="chkCPChild(\'' . $type . '\',' . $pid . ')" /> <label for="' . $type . '_act_' . $post->ID . '">' . $post->post_title . '</label><br />';
+
+					if ( $ctid->hierarchical ) {
+						echo '<div style="position:relative;left:15px;">';
+						echo '<input type="checkbox" id="' . $type . '_child_' . $pid . '" name="' . $type . '_childs_act[]" value="' . $pid . '" ' . ( isset($posts_childs_act) && count($posts_childs_act) > 0 && in_array($pid, $posts_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkCPParent(\'' . $type . '\',' . $pid . ')" /> <label for="' . $type . '_child_' . $pid . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></label><br />';
+						echo '</div>';
+					}
+
+					if ( count($childs) > 0 ) {
+						prtCPost($type, $ctid, $childs, $posts_act, $posts_childs_act);
+					}
 					echo '</div>';
 				}
-
-				if ( count($childs) > 0 ) {
-					prtCPost($type, $ctid, $childs, $posts_act, $posts_childs_act);
-				}
-				echo '</div>';
 			}
 		}
 
@@ -152,11 +169,21 @@
 					echo '<div id="' . $type . '-tax_' . $tax_type->name . '-select" class="condition-select" ' . ( isset($tax_condition_select_style) ? $tax_condition_select_style : '' ) . '>';
 
 					foreach ( $tax as $t ) {
-						echo '<input type="checkbox" id="' . $type . '-tax_' . $tax_type->name . '_act_' . $t->term_id . '" name="' . $type . '-tax_' . $tax_type->name . '_act[]" value="' . $t->term_id . '" ';
-						echo ( count($tax_act) > 0 && in_array($t->term_id, $tax_act) ) ? 'checked="checked"' : '';
-						echo ' /> <label for="' . $type . '-tax_' . $tax_type->name . '_act_' . $t->term_id . '">';
-						echo $t->name;
-						echo '</label><br />';
+						$run = TRUE;						
+						if ( $DW->wpml ) {
+							$wpml_id = dw_wpml_get_id($t->term_id, 'tax_' . $tax_type->name);
+							if ( $wpml_id > 0 && $wpml_id <> $t->term_id ) {
+								$run = FALSE;
+							}
+						}
+						
+						if ( $run ) {
+							echo '<input type="checkbox" id="' . $type . '-tax_' . $tax_type->name . '_act_' . $t->term_id . '" name="' . $type . '-tax_' . $tax_type->name . '_act[]" value="' . $t->term_id . '" ';
+							echo ( count($tax_act) > 0 && in_array($t->term_id, $tax_act) ) ? 'checked="checked"' : '';
+							echo ' /> <label for="' . $type . '-tax_' . $tax_type->name . '_act_' . $t->term_id . '">';
+							echo $t->name;
+							echo '</label><br />';
+						}
 					}
 					echo '</div>';
 				}

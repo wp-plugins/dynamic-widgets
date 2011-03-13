@@ -208,6 +208,7 @@
                 		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP2)');
                 	}
                 } else if ( count($act_tax) > 0 ) {
+                	// bcause $id has already been moved to default language, term doesn't need to be converted. WPML takes care of default language term 
 									foreach ( $term as $t ) {
 										if ( is_array($act_tax[$t->taxonomy]) && in_array($t->term_id, $act_tax[$t->taxonomy]) ) {
 											$display = $other;
