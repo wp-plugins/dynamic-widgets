@@ -20,8 +20,7 @@
 				if (! in_array($p->ID, $i) ) {
 					$i[ ] = $p->ID;
 					$arr[$p->ID] = array();
-					$a = &$arr[$p->ID];
-					$a = getCPostChilds($type, $a, $p->ID, &$i);
+					getCPostChilds($type, &$arr[$p->ID], $p->ID, &$i);
 				}
 			}
 			return $arr;
