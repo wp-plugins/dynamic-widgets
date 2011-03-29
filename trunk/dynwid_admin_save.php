@@ -229,6 +229,23 @@
   	}
   }
 
+	// Custom Taxonomies (WP >= 3.0)
+	if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') && isset($_POST['taxonomy']) ) {
+		foreach ( $_POST['taxonomy'] as $tax ) {
+			$type = 'tax_' . $tax;
+			$act_field = $type . '_act';
+			if ( count($_POST[$act_field]) > 0 ) {
+				if (! is_array($_POST[$act_field]) ) {
+					$_POST[$act_field] = array();
+				}
+
+				$DW->addMultiOption($_POST['widget_id'], $type, $_POST[$type], $_POST[$act_field]);
+			} else if ( $_POST[$type] == 'no' ) {
+				$DW->addSingleOption($_POST['widget_id'], $type);
+			}
+		}
+	}
+
   // WPML PLugin support
 	if ( isset($_POST['wpml_act']) && count($_POST['wpml_act']) > 0 ) {
 		$DW->addMultiOption($_POST['widget_id'], 'wpml', $_POST['wpml'], $_POST['wpml_act']);

@@ -11,6 +11,7 @@
   	var $bp;												/* BuddyPress Plugin support */
   	var $bp_groups;									/* BuddyPress Plugin support (groups) */
   	var $custom_post_type;
+  	var $custom_taxonomy;
     var $dbtable;                       /* private */
   	var $enabled;
   	var $dwoptions;
@@ -44,6 +45,7 @@
       }
 
     	$this->custom_post_type = FALSE;
+    	$this->custom_taxonomy = FALSE;
       $this->firstmessage = TRUE;
     	$this->listmade = FALSE;
     	$this->overrule_maintype = array('date', 'role', 'browser', 'wpml');
@@ -69,7 +71,10 @@
 	    	'archive'     => __('Archive Pages', DW_L10N_DOMAIN),
 	    	'e404'        => __('Error Page', DW_L10N_DOMAIN),
 	    	'search'      => __('Search page', DW_L10N_DOMAIN),
-	    	'wpsc'				=> __('WPSC Category', DW_L10N_DOMAIN)
+  	  	'wpsc'				=> __('WPSC Category', DW_L10N_DOMAIN),
+    		'cp_archive'	=> __('Custom Post Type Archives', DW_L10N_DOMAIN),
+    		'bp'					=> __('BuddyPress', DW_L10N_DOMAIN),
+    		'bp-group'		=> __('BuddyPress Groups', DW_L10N_DOMAIN)
 	    );
 
     	// Adding Custom Post Types to $this->dwoptions
@@ -81,6 +86,12 @@
     		$post_types = get_post_types($args, 'objects', 'and');
     		foreach ( $post_types as $ctid ) {
     			$this->dwoptions[key($post_types)] = $ctid->label;
+    		}
+
+    		// Adding Custom Taxonomies to $this->dwoptions
+    		$taxonomy = get_taxonomies($args, 'objects', 'and');
+    		foreach ( $taxonomy as $tax_id => $tax ) {
+    			$this->dwoptions['tax_' . $tax_id] = $tax->label;
     		}
     	}
 
@@ -212,6 +223,8 @@
         return 'category';
       } else if ( function_exists('is_post_type_archive') && is_post_type_archive() ) {
     		return 'cp_archive';				// must be before is_archive(), otherwise detects as 'archive' in WP 3.1.0
+      } else if ( function_exists('is_tax') && is_tax() ) {
+      	return 'tax_archive';
       } else if ( is_archive() && ! is_category() && ! is_author() ) {
         return 'archive';
       } else if ( is_404() ) {

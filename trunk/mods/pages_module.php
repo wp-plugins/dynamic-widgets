@@ -78,7 +78,14 @@
 
 	$pages = get_pages();
 	$num_pages = count($pages);
-	if ( $num_pages > DW_LIST_LIMIT ) {
+
+	// For childs we double the number of pages because of addition of 'All childs' option
+	if ( $num_pages < DW_PAGE_LIMIT ) {
+		$pagemap = getPageChilds(array(), 0, array());
+		$num_pages = $num_pages * 2;
+	}
+
+	if ( $num_pages > DW_LIST_LIMIT  ) {
 		$page_condition_select_style = DW_LIST_STYLE;
 	}
 
@@ -93,10 +100,6 @@
 			$id = get_option('page_for_posts');
 			$static_page[$id] = __('Posts page', DW_L10N_DOMAIN);
 		}
-	}
-
-	if ( $num_pages < DW_PAGE_LIMIT ) {
-		$pagemap = getPageChilds(array(), 0, array());
 	}
 ?>
 <h4><b><?php _e('Pages'); ?></b> <?php echo ( count($opt_page) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ( $DW->wpml ? $wpml_icon : '' ); ?></h4>
