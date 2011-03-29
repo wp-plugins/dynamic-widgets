@@ -22,7 +22,7 @@
 
 			$wpmlang = wpml_get_default_language();
 			$curlang = wpml_get_current_language();
-			$wpml = TRUE;
+			// $wpml = TRUE;
 			$DW->message('WPML language: ' . $curlang);
 
 			if ( $wpmlang != $curlang ) {
@@ -35,7 +35,7 @@
 
 	$DW->message('User has role(s): ' . implode(', ', $DW->userrole));
 
-	$custom_post_type = FALSE;
+//	$custom_post_type = FALSE;
 	$DW->whereami = $DW->detectPage();
 	$DW->message('Page is ' . $DW->whereami);
 
@@ -90,6 +90,15 @@
 				}
 			}
 		}
+	}
+
+	if ( $DW->whereami == 'tax_archive' ) {
+		$wp_query =  $GLOBALS['wp_query'];
+		$taxonomy = $wp_query->get('taxonomy');
+
+		$DW->custom_taxonomy = TRUE;
+		$DW->whereami = 'tax_' . $taxonomy;
+		$DW->message('Page changed to tax_'. $taxonomy. ' (term: ' . $wp_query->get_queried_object_id() . ')');
 	}
 
 	if ( $DW->whereami == 'archive' ) {

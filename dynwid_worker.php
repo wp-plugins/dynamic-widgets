@@ -208,7 +208,7 @@
                 		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP2)');
                 	}
                 } else if ( count($act_tax) > 0 ) {
-                	// bcause $id has already been moved to default language, term doesn't need to be converted. WPML takes care of default language term 
+                	// bcause $id has already been moved to default language, term doesn't need to be converted. WPML takes care of default language term
 									foreach ( $term as $t ) {
 										if ( is_array($act_tax[$t->taxonomy]) && in_array($t->term_id, $act_tax[$t->taxonomy]) ) {
 											$display = $other;
@@ -218,6 +218,26 @@
 									}
                 }
               }
+            } else if ( $DW->custom_taxonomy ) {		// Custom Taxonomy Archive
+            	$wp_query = $GLOBALS['wp_query'];
+            	$term = $wp_query->get_queried_object_id();
+            	if ( $DW->wpml ) {
+            		$term = dw_wpml_get_id($term, $DW->whereami);
+            		$DW->message('WPML ObjectID: ' . $term);
+            	}
+
+            	$act_custom = array();
+
+            	foreach ( $opt as $condition ) {
+            		if ( $condition['name'] != 'default' && $condition['maintype'] == $DW->whereami ) {
+	       					$act_custom[ ] = $condition['name'];
+            		}
+            	}
+
+            	if ( in_array($term, $act_custom) ) {
+            		$display = $other;
+            		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECT1)');
+            	}
             } else {
               // no custom post type
               switch ( $DW->whereami ) {
