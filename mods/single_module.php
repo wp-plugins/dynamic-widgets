@@ -44,8 +44,15 @@
     $category_condition_select_style = DW_LIST_STYLE;
   }
 
-	$opt_single_category = $DW->getOptions($_GET['id'], 'single-category');
+	// For JS
 	$js_category_array = array();
+	foreach ( $category as $cat ) {
+		$js_category_array[ ] = '\'single_cat_act_' . $cat->cat_ID . '\'';
+	}
+
+	$catmap = getCatChilds(array(), 0, array());
+
+	$opt_single_category = $DW->getOptions($_GET['id'], 'single-category');
 	if ( count($opt_single_category) > 0 ) {
 		$js_count = $js_count + count($opt_single_category) - 1;
 		$single_category_act = array();
@@ -137,10 +144,7 @@
     <?php _e('Except the posts in category', DW_L10N_DOMAIN); ?>: <?php echo ( $DW->wpml ? $wpml_icon : '' ); ?>
     <?php $DW->dumpOpt($opt_single_category); ?>
     <div id="single-category-select" class="condition-select" <?php echo ( isset($category_condition_select_style) ? $category_condition_select_style : '' ); ?>>
-    <?php foreach ( $category as $cat ) { ?>
-    <?php $js_category_array[ ] = '\'single_cat_act_' . $cat->cat_ID . '\''; ?>
-    <input type="checkbox" id="single_cat_act_<?php echo $cat->cat_ID; ?>" name="single_category_act[]" value="<?php echo $cat->cat_ID; ?>" <?php echo ( isset($single_category_act) && count($single_category_act) > 0 && in_array($cat->cat_ID,$single_category_act) ) ? 'checked="checked"' : ''; ?> onclick="ci('single_cat_act_<?php echo $cat->cat_ID; ?>')" /> <label for="single_cat_act_<?php echo $cat->cat_ID; ?>"><?php echo $cat->name; ?></label><br />
-    <?php } ?>
+		<?php prtCat($catmap, $single_category_act, TRUE); ?>
     </div>
   </td>
 </tr>

@@ -9,9 +9,6 @@
 
 	/* WordPress 3.0 and higher: Custom Post Types */
 	if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
-		if ( $DW->wpml ) {
-			require(DW_PLUGIN . 'wpml.php');
-		}
 
 		function getCPostChilds($type, $arr, $id, $i) {
 			$post = get_posts('post_type=' . $type . '&post_parent=' . $id);
@@ -34,7 +31,7 @@
 				$post = get_post($pid);
 
 				if ( $DW->wpml ) {
-					$wpml_id = dw_wpml_get_id($pid, $content_type = 'post_' . $type);
+					$wpml_id = dw_wpml_get_id($pid, 'post_' . $type);
 					if ( $wpml_id > 0 && $wpml_id <> $pid ) {
 						$run = FALSE;
 					}
