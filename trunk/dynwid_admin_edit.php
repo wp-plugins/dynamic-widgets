@@ -9,7 +9,48 @@
 	// WPML Plugin support
 	if ( defined('ICL_PLUGIN_PATH') && file_exists(ICL_PLUGIN_PATH . DW_WPML_API) ) {
 		$DW->wpml = TRUE;
+		require(DW_PLUGIN . 'wpml.php');
 		$wpml_icon = '<img src="' . $DW->plugin_url . DW_WPML_ICON . '" alt="WMPL" title="Dynamic Widgets syncs with other languages of these pages via WPML" style="position:relative;top:2px;" />';
+	}
+
+	// Functions used in more modules
+	function getCatChilds($arr, $id, $i) {
+		$cat = get_categories( array('hide_empty' => FALSE, 'child_of' => $id) );
+		foreach ($cat as $c ) {
+			if (! in_array($c->cat_ID, $i) ) {
+				$i[ ] = $c->cat_ID;
+				$arr[$c->cat_ID] = array();
+				$a = &$arr[$c->cat_ID];
+				$a = getCatChilds($a, $c->cat_ID, &$i);
+			}
+		}
+		return $arr;
+	}
+
+	function prtCat($categories, $category_act, $single = FALSE) {
+		$DW = $GLOBALS['DW'];
+
+		foreach ( $categories as $pid => $childs ) {
+			$run = TRUE;
+
+			if ( $DW->wpml ) {
+				$wpml_id = dw_wpml_get_id($pid, 'tax_category');
+				if ( $wpml_id > 0 && $wpml_id <> $pid ) {
+					$run = FALSE;
+				}
+			}
+
+			if ( $run ) {
+				$cat = get_category($pid);
+				echo '<div style="position:relative;left:15px;">';
+				echo '<input type="checkbox" id="' . ( $single ? 'single_' : '' ) . 'cat_act_' . $cat->cat_ID . '" name="' . ( $single ? 'single_' : '' ) . 'category_act[]" value="' . $cat->cat_ID . '" ' . ( isset($category_act) && count($category_act) > 0 && in_array($cat->cat_ID, $category_act) ? 'checked="checked"' : '' ) . ( $single ? ' onclick="ci(\'single_cat_act_' . $cat->cat_ID . '\')"' : '' ) . ' /> <label for="' . ( $single ? 'single_' : '' ) . 'cat_act_' . $cat->cat_ID . '">' . $cat->name . '</label><br />';
+
+				if ( count($childs) > 0 ) {
+					prtCat($childs, $category_act, $single);
+				}
+				echo '</div>';
+			}
+		}
 	}
 ?>
 
