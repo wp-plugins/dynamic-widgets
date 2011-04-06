@@ -52,6 +52,12 @@
 			}
 		}
 	}
+
+	// For JS exclOff
+	$excl = array();
+	foreach ( $DW->overrule_maintype as $m ) {
+		$excl[ ] = "'" . $m . "'";
+	}
 ?>
 
 <style type="text/css">
@@ -115,6 +121,10 @@ h4 {
 
 <h3><?php _e('Edit options for the widget', DW_L10N_DOMAIN); ?>: <em><?php echo $DW->getName($_GET['id']); ?></em></h3>
 <?php echo ( DW_DEBUG ) ? '<pre>ID = ' . $_GET['id'] . '</pre><br />' : ''; ?>
+
+<p>
+<a href="#" onclick="setOff(); return false;"><?php _e('Set all options to \'No\''); ?></a> (<?php _e('Except Role, Date, Browser and WPML'); ?>)
+</p>
 
 <form action="<?php echo trailingslashit(admin_url()) . 'themes.php?page=dynwid-config&action=edit&id=' . $_GET['id']; ?>" method="post">
 <?php wp_nonce_field('plugin-name-action_edit_' . $_GET['id']); ?>
@@ -269,11 +279,21 @@ h4 {
     }
   }
 
+  function setOff() {
+  	jQuery(':radio').each( function() {
+  		if ( jQuery(this).val() == 'no' && jQuery.inArray(jQuery(this).attr('name'), exclOff) == -1 ) {
+  			jQuery(this).attr('checked', true);
+  		};
+  	});
+  	alert('All options set to \'No\'.\nDon\'t forget to make changes, otherwise you\'ll receive an error when saving.');
+  }
+
   var cAuthors = new Array(<?php echo implode(', ', $js_author_array); ?>);
   var cCat = new Array(<?php echo implode(', ', $js_category_array); ?>);
   var cRole = new Array(<?php echo implode(', ' , $jsroles); ?>);
   var cDate =  new Array('date_start', 'date_end');
   var icount = <?php echo $js_count; ?>;
+  var exclOff = new Array(<?php echo implode(', ', $excl); ?>);
 
   if ( jQuery('#role-yes').attr('checked') ) {
   	swChb(cRole, true);
