@@ -66,4 +66,26 @@
 			return FALSE;
 		}
 	}
+
+	function is_dw_bp_group_forum($id) {
+		$bp = &$GLOBALS['bp'];
+
+		if ( $bp->current_action == 'forum' ) {
+			if ( count($bp->action_variables) > 0 && in_array('forum_topic', $id) ) {
+				return TRUE;
+			} else if ( count($bp->action_variables) == 0 && in_array('forum_index', $id) ) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+
+	function is_dw_bp_group_members($id) {
+		$bp = &$GLOBALS['bp'];
+
+		if ( $bp->current_action == 'members' && in_array('members_index', $id) ) {
+			return TRUE;
+		}
+		return FALSE;
+	}
 ?>

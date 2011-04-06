@@ -474,6 +474,12 @@
               			if ( is_dw_bp_group($act) ) {
               				$display = $other;
               				$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EBPG1)');
+              			} else if ( is_dw_bp_group_forum($act) ) {
+             					$display = $other;
+             					$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EBPG2)');
+              			} else if ( is_dw_bp_group_members($act) ) {
+             					$display = $other;
+             					$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EBPG3)');
               			}
               		}
               		break;
