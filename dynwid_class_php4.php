@@ -135,26 +135,39 @@
     }
 
     function addMultiOption($widget_id, $maintype, $default, $act) {
-      if ( $default == 'no' ) {
-        $opt_default = '0';
-        $opt_act = '1';
-      } else {
-        $opt_default = '1';
-        $opt_act = '0';
-      }
+    	$insert = TRUE;
 
-      $query = "INSERT INTO " . $this->dbtable . "
+    	if ( $default == 'no' ) {
+    		$opt_default = '0';
+    		$opt_act = '1';
+    	} else {
+    		$opt_default = '1';
+    		$opt_act = '0';
+    	}
+
+    	// Check single-post or single-option coming from post or tag screen
+    	if ( $maintype == 'single-post' || $maintype == 'single-tag' ) {
+    		$query = "SELECT COUNT(1) AS total FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = '" . $maintype . "' AND name = 'default'";
+    		$count = $this->wpdb->get_var($this->wpdb->prepare($query));
+    		if ( $count > 0 ) {
+    			$insert = FALSE;
+    		}
+    	}
+
+    	if ( $insert ) {
+    		$query = "INSERT INTO " . $this->dbtable . "
                       (widget_id, maintype, name, value)
                     VALUES
                       ('" . $widget_id . "', '" . $maintype . "', 'default', '" . $opt_default . "')";
-      $this->wpdb->query($query);
-      foreach ( $act as $option ) {
-        $query = "INSERT INTO " . $this->dbtable . "
+    		$this->wpdb->query($query);
+    	}
+    	foreach ( $act as $option ) {
+    		$query = "INSERT INTO " . $this->dbtable . "
                       (widget_id, maintype, name, value)
                     VALUES
                       ('" . $widget_id . "', '" . $maintype . "', '" . $option . "', '" . $opt_act . "')";
-        $this->wpdb->query($query);
-      }
+    		$this->wpdb->query($query);
+    	}
     }
 
     function addSingleOption($widget_id, $maintype, $value = '0') {
@@ -199,11 +212,11 @@
     }
 
     function deleteOption($widget_id, $maintype, $name = '') {
-      $query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" .$widget_id . "' AND maintype = '" .$maintype ."'";
-      if (! empty($name) ) {
-        $query .= " AND (name = '" . $name . "' OR name = 'default')";
-      }
-      $this->wpdb->query($query);
+    	$query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = '" . $maintype ."'";
+    	if (! empty($name) ) {
+    		$query .= " AND name = '" . $name . "'";
+    	}
+    	$this->wpdb->query($query);
     }
 
     function detectPage() {
