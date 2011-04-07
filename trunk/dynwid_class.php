@@ -129,6 +129,8 @@
     }
 
     public function addMultiOption($widget_id, $maintype, $default, $act) {
+    	$insert = TRUE;
+
       if ( $default == 'no' ) {
         $opt_default = '0';
         $opt_act = '1';
@@ -137,11 +139,22 @@
         $opt_act = '0';
       }
 
-      $query = "INSERT INTO " . $this->dbtable . "
+    	// Check single-post or single-option coming from post or tag screen
+    	if ( $maintype == 'single-post' || $maintype == 'single-tag' ) {
+    		$query = "SELECT COUNT(1) AS total FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = '" . $maintype . "' AND name = 'default'";
+    		$count = $this->wpdb->get_var($this->wpdb->prepare($query));
+    		if ( $count > 0 ) {
+    			$insert = FALSE;
+    		}
+    	}
+
+    	if ( $insert ) {
+    		$query = "INSERT INTO " . $this->dbtable . "
                       (widget_id, maintype, name, value)
                     VALUES
                       ('" . $widget_id . "', '" . $maintype . "', 'default', '" . $opt_default . "')";
-      $this->wpdb->query($query);
+    		$this->wpdb->query($query);
+    	}
       foreach ( $act as $option ) {
         $query = "INSERT INTO " . $this->dbtable . "
                       (widget_id, maintype, name, value)
@@ -192,9 +205,9 @@
     }
 
     public function deleteOption($widget_id, $maintype, $name = '') {
-      $query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" .$widget_id . "' AND maintype = '" .$maintype ."'";
+      $query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = '" . $maintype ."'";
       if (! empty($name) ) {
-        $query .= " AND (name = '" . $name . "' OR name = 'default')";
+      	$query .= " AND name = '" . $name . "'";
       }
       $this->wpdb->query($query);
     }
