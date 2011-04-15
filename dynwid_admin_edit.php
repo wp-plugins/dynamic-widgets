@@ -122,15 +122,18 @@ h4 {
 <h3><?php _e('Edit options for the widget', DW_L10N_DOMAIN); ?>: <em><?php echo $DW->getName($_GET['id']); ?></em></h3>
 <?php echo ( DW_DEBUG ) ? '<pre>ID = ' . $_GET['id'] . '</pre><br />' : ''; ?>
 
+<div style="border-color: #E3E3E3;border-radius: 6px 6px 6px 6px;border-style: solid;border-width: 1px;padding: 5px;">
+<b><?php _e('Quick settings', DW_L10N_DOMAIN); ?></b>
 <p>
 <a href="#" onclick="setOff(); return false;"><?php _e('Set all options to \'No\''); ?></a> (<?php _e('Except Role, Date, Browser and WPML'); ?>)
 </p>
+</div><br />
 
 <form action="<?php echo trailingslashit(admin_url()) . 'themes.php?page=dynwid-config&action=edit&id=' . $_GET['id']; ?>" method="post">
 <?php wp_nonce_field('plugin-name-action_edit_' . $_GET['id']); ?>
 <input type="hidden" name="dynwid_save" value="yes" />
 <input type="hidden" name="widget_id" value="<?php echo $_GET['id']; ?>" />
-<input type="hidden" name="returnurl" value="<?php echo ( isset($_GET['returnurl']) ? urldecode($_GET['returnurl']) : '' ); ?>" />
+<input type="hidden" name="returnurl" value="<?php echo ( isset($_GET['returnurl']) ? trailingslashit(admin_url()) . $_GET['returnurl'] : '' ); ?>" />
 
 <div id="dynwid">
 <?php
@@ -167,7 +170,7 @@ h4 {
 <div style="float:left">
 <input class="button-primary" type="submit" value="<?php _e('Save'); ?>" /> &nbsp;&nbsp;
 </div>
-<?php $url = (! empty($_GET['returnurl']) ? urldecode($_GET['returnurl']) : trailingslashit(admin_url()) ) . 'themes.php?page=dynwid-config'; ?>
+<?php $url = (! empty($_GET['returnurl']) ? trailingslashit(admin_url()) . $_GET['returnurl'] : trailingslashit(admin_url()) . 'themes.php?page=dynwid-config' ); ?>
 <div style="float:left">
 <input class="button-secondary" type="button" value="<?php _e('Return', DW_L10N_DOMAIN); ?>" onclick="location.href='<?php echo $url; ?>'" />
 </div>
