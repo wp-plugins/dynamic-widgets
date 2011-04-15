@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Custom Post Type Module
  *
@@ -189,7 +188,7 @@
 		}
 
 		// Custom Post Type Archives
-		if ( function_exists('is_post_type_archive') ) {
+		if ( function_exists('is_post_type_archive') && count($post_types) > 0 ) {
 			$cp_archive_yes_selected = 'checked="checked"';
 			$opt_cp_archive = $DW->getOptions($_GET['id'], 'cp_archive');
 			if ( count($opt_cp_archive) > 0 ) {
@@ -231,62 +230,65 @@
 
 		if ( function_exists('is_tax') ) {
 			$taxlist = get_taxonomies($args, 'objects', 'and');
-			foreach ( $taxlist as $tax_id => $tax ) {
-				$ct = 'tax_' . $tax_id;
-				$ct_archive_yes_selected = 'checked="checked"';
-				$opt_ct_archive = $DW->getOptions($_GET['id'], $ct);
 
-				if ( count($opt_ct_archive) > 0 ) {
-					$ct_archive_act = array();
-					foreach ( $opt_ct_archive as $ct_archive_condition ) {
-						if ( $ct_archive_condition['name'] == 'default' || empty($ct_archive_condition['name']) ) {
-							$ct_archive_default = $ct_archive_condition['value'];
-						} else {
-							$ct_archive_act[ ] = $ct_archive_condition['name'];
+			if ( count($taxlist) > 0 ) {
+				foreach ( $taxlist as $tax_id => $tax ) {
+					$ct = 'tax_' . $tax_id;
+					$ct_archive_yes_selected = 'checked="checked"';
+					$opt_ct_archive = $DW->getOptions($_GET['id'], $ct);
+
+					if ( count($opt_ct_archive) > 0 ) {
+						$ct_archive_act = array();
+						foreach ( $opt_ct_archive as $ct_archive_condition ) {
+							if ( $ct_archive_condition['name'] == 'default' || empty($ct_archive_condition['name']) ) {
+								$ct_archive_default = $ct_archive_condition['value'];
+							} else {
+								$ct_archive_act[ ] = $ct_archive_condition['name'];
+							}
+						}
+
+						if ( $ct_archive_default == '0' ) {
+							$ct_archive_no_selected = $ct_archive_yes_selected;
+							unset($ct_archive_yes_selected);
 						}
 					}
 
-					if ( $ct_archive_default == '0' ) {
-						$ct_archive_no_selected = $ct_archive_yes_selected;
-						unset($ct_archive_yes_selected);
+					$t = get_terms($tax->name, array('get' => 'all'));
+					if ( count($t) > DW_LIST_LIMIT ) {
+						$ct_archive_condition_select_style = DW_LIST_STYLE;
 					}
-				}
 
-				$t = get_terms($tax->name, array('get' => 'all'));
-				if ( count($t) > DW_LIST_LIMIT ) {
-					$ct_archive_condition_select_style = DW_LIST_STYLE;
-				}
+					echo '<h4><b>' . __('Custom Taxonomy Archive', DW_L10N_DOMAIN) . ' <em>' . $tax->label . '</em></b> ' . ( count($opt_ct_archive) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
+					echo '<div class="dynwid_conf">';
+					echo __('Show widget on Custom Taxonomy Archive', DW_L10N_DOMAIN) . ' <em>' . $tax->label . '</em>?<br />';
+					echo '<input type="hidden" name="taxonomy[]" value="' . $tax_id . '" />';
+					$DW->dumpOpt($opt_ct_archive);
 
-				echo '<h4><b>' . __('Custom Taxonomy Archive', DW_L10N_DOMAIN) . ' <em>' . $tax->label . '</em></b> ' . ( count($opt_ct_archive) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
-				echo '<div class="dynwid_conf">';
-				echo __('Show widget on Custom Taxonomy Archive', DW_L10N_DOMAIN) . ' <em>' . $tax->label . '</em>?<br />';
-				echo '<input type="hidden" name="taxonomy[]" value="' . $tax_id . '" />';
-				$DW->dumpOpt($opt_ct_archive);
+					echo '<input type="radio" name="' . $ct . '" value="yes" id="' . $ct . '-yes" ' . ( isset($ct_archive_yes_selected) ? $ct_archive_yes_selected : '' ) . ' /> <label for="' . $ct . '-yes">' . __('Yes') . '</label> ';
+					echo '<input type="radio" name="' . $ct . '" value="no" id="' . $ct . '-no" ' . ( isset($ct_archive_no_selected) ? $ct_archive_no_selected : '' ) . ' /> <label for="' . $ct . '-no">' . __('No') . '</label><br />';
 
-				echo '<input type="radio" name="' . $ct . '" value="yes" id="' . $ct . '-yes" ' . ( isset($ct_archive_yes_selected) ? $ct_archive_yes_selected : '' ) . ' /> <label for="' . $ct . '-yes">' . __('Yes') . '</label> ';
-				echo '<input type="radio" name="' . $ct . '" value="no" id="' . $ct . '-no" ' . ( isset($ct_archive_no_selected) ? $ct_archive_no_selected : '' ) . ' /> <label for="' . $ct . '-no">' . __('No') . '</label><br />';
+					if ( count($t) > 0 ) {
+						echo __('Except for', DW_L10N_DOMAIN) . ':<br />';
+						echo '<div id="' . $ct . '-select" class="condition-select" ' . ( isset($ct_archive_condition_select_style) ? $ct_archive_condition_select_style : '' ) . '>';
+						foreach ( $t as $term ) {
+							$run = TRUE;
+							if ( $DW->wpml ) {
+								$wpml_id = dw_wpml_get_id($term->term_id, 'tax_' . $term->taxonomy);
+								if ( $wpml_id > 0 && $wpml_id <> $term->term_id ) {
+									$run = FALSE;
+								}
+							}
 
-				echo __('Except for', DW_L10N_DOMAIN) . ':<br />';
-				echo '<div id="' . $ct . '-select" class="condition-select" ' . ( isset($ct_archive_condition_select_style) ? $ct_archive_condition_select_style : '' ) . '>';
-				foreach ( $t as $term ) {
-					$run = TRUE;
-					if ( $DW->wpml ) {
-						$wpml_id = dw_wpml_get_id($term->term_id, 'tax_' . $term->taxonomy);
-						if ( $wpml_id > 0 && $wpml_id <> $term->term_id ) {
-							$run = FALSE;
+							if ( $run ) {
+								echo '<input type="checkbox" id="' . $ct . '_act_' . $term->term_id . '" name="' . $ct . '_act[]" value="' . $term->term_id . '"' . ( count($ct_archive_act) > 0 && in_array($term->term_id, $ct_archive_act) ? 'checked="checked"' : '') . ' /> <label for="' . $ct . '_act_' . $term->term_id . '">' . $term->name . '</label><br />';
+							}
 						}
+						echo '</div>';
 					}
-
-					if ( $run ) {
-						echo '<input type="checkbox" id="' . $ct . '_act_' . $term->term_id . '" name="' . $ct . '_act[]" value="' . $term->term_id . '"' . ( count($ct_archive_act) > 0 && in_array($term->term_id, $ct_archive_act) ? 'checked="checked"' : '') . ' /> <label for="' . $ct . '_act_' . $term->term_id . '">' . $term->name . '</label><br />';
-					}
+					echo '</div><!-- end dynwid_conf -->';
 				}
-				echo '</div>';
-				echo '</div><!-- end dynwid_conf -->';
-
 			}
 		}
-
 	} // end version compare >= WP 3.0
 ?>
 
