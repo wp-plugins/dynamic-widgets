@@ -7,13 +7,14 @@
  */
 
 	$useragents = array(
-									'gecko'  => 'Firefox' . ' ' . __('(and other Gecko based)', DW_L10N_DOMAIN),
-									'msie'   => 'Internet Explorer',
-	'opera'  => 'Opera',
-	'ns'     => 'Netscape 4',
-	'safari' => 'Safari',
-	'chrome' => 'Chrome',
-	'undef'  => __('Other / Unknown / Not detected', DW_L10N_DOMAIN)
+		'gecko'		=> 'Firefox' . ' ' . __('(and other Gecko based)', DW_L10N_DOMAIN),
+		'msie'   	=> 'Internet Explorer',
+		'msie6'		=> 'Internet Explorer 6',
+		'opera'  	=> 'Opera',
+		'ns'     	=> 'Netscape 4',
+		'safari' 	=> 'Safari',
+		'chrome' 	=> 'Chrome',
+		'undef'  	=> __('Other / Unknown / Not detected', DW_L10N_DOMAIN)
 );
 	if ( count($useragents) > DW_LIST_LIMIT ) {
 		$browser_condition_select_style = DW_LIST_STYLE;
@@ -52,7 +53,7 @@
 <?php _e('Except the browser(s)', DW_L10N_DOMAIN); ?>:<br />
 <div id="browser-select" class="condition-select" <?php echo ( isset($browser_condition_select_style) ? $browser_condition_select_style : '' ); ?>>
 <?php foreach ( $useragents as $code => $agent ) { ?>
-	<input type="checkbox" id="browser_act_<?php echo $code; ?>" name="browser_act[]" value="<?php echo $code; ?>" <?php echo ( count($browser_act) > 0 && in_array($code, $browser_act) ) ? 'checked="checked"' : ''; ?> /> <label for="browser_act_<?php echo $code; ?>"><?php echo $agent; ?></label><br />
+	<input type="checkbox" id="browser_act_<?php echo $code; ?>" name="browser_act[]" value="<?php echo $code; ?>" <?php echo ( count($browser_act) > 0 && in_array($code, $browser_act) ? 'checked="checked"' : '' ); ?> /> <label for="browser_act_<?php echo $code; ?>"><?php echo $agent; ?></label><br />
 <?php } ?>
 </div>
 </div><!-- end dynwid_conf -->
