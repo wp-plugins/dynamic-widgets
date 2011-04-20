@@ -306,7 +306,11 @@
   		if ( $is_gecko ) {
   			return 'gecko';
   		} else if ( $is_IE ) {
-  			return 'msie';
+  			if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.') !== FALSE ) {
+  				return 'msie6';
+  			} else {
+  				return 'msie';
+  			}
   		} else if ( $is_opera ) {
   			return 'opera';
   		} else if ( $is_NS4 ) {
