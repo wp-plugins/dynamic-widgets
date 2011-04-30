@@ -23,6 +23,7 @@
     public  $registered_widgets;
   	public  $removelist;
     public  $sidebars;
+  	public  $template;
     public  $plugin_url;
   	public  $useragent;
     public  $userrole;
@@ -42,7 +43,7 @@
     	$this->custom_taxonomy = FALSE;
       $this->firstmessage = TRUE;
     	$this->listmade = FALSE;
-    	$this->overrule_maintype = array('date', 'role', 'browser', 'wpml');
+    	$this->overrule_maintype = array('date', 'role', 'browser', 'tpl', 'wpml');
       $this->registered_sidebars = $GLOBALS['wp_registered_sidebars'];
       $this->registered_widget_controls = &$GLOBALS['wp_registered_widget_controls'];
       $this->registered_widgets = &$GLOBALS['wp_registered_widgets'];
@@ -55,6 +56,7 @@
 	    	'role'        => __('Role'),
 	    	'date'        => __('Date'),
 	    	'browser'			=> __('Browser', DW_L10N_DOMAIN),
+	    	'tpl'					=> __('Templates', DW_L10N_DOMAIN),
 	    	'wpml'				=> __('Language', DW_L10N_DOMAIN),
 	    	'front-page'  => __('Front Page', DW_L10N_DOMAIN),
 	    	'single'      => __('Single Posts', DW_L10N_DOMAIN),
@@ -293,6 +295,7 @@
                   		OR maintype = 'role'
                   		OR maintype = 'date'
                   		OR maintype = 'browser'
+                  		OR maintype = 'tpl'
                   		OR maintype = 'wpml'";
       $results = $this->wpdb->get_results($query);
       foreach ( $results as $myrow ) {
@@ -369,6 +372,7 @@
                     	OR maintype = 'role'
                     	OR maintype = 'date'
                     	OR maintype = 'browser'
+                    	OR maintype = 'tpl'
                     	OR maintype = 'wpml')
                   ORDER BY maintype, name";
       }

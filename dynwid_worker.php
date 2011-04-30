@@ -9,6 +9,11 @@
 	$DW->message('Worker START');
 	$DW->message('WhereAmI = ' . $DW->whereami);
 
+	// Template
+	$tpl = get_page_template();
+	$DW->template = basename($tpl);
+	$DW->message('Template = ' . $DW->template);
+
 	// WPML Plugin support
 	if ( defined('ICL_PLUGIN_PATH') ) {
 		$wpml_api = ICL_PLUGIN_PATH . DW_WPML_API;
@@ -32,6 +37,7 @@
           $role = TRUE;
           $date = TRUE;
         	$browser = TRUE;
+        	$tpl = TRUE;
         	$wpml = TRUE;
 
           foreach ( $opt as $condition ) {
@@ -65,6 +71,9 @@
             } else if ( $condition['maintype'] == 'browser' && $condition['name'] == 'default' ) {
             	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) $condition['value'] ? 'TRUE' : 'FALSE' ) . ' (rule DB1)');
             	$browser = (bool) $condition['value'];
+            } else if ( $condition['maintype'] == 'tpl' && $condition['name'] == 'default' ) {
+            	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) $condition['value'] ? 'TRUE' : 'FALSE' ) . ' (rule DTPL1)');
+            	$tpl = (bool) $condition['value'];
             } else if ( $condition['maintype'] == 'wpml' && $condition['name'] == 'default' ) {
             	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) $condition['value'] ? 'TRUE' : 'FALSE' ) . ' (rule DML1)');
             	$wpml = (bool) $condition['value'];
@@ -137,18 +146,26 @@
           	}
           	unset($wpml_tmp);
 
-          	// Browser
+          	// Browser and Template
           	foreach ( $opt as $condition ) {
           		if ( $condition['maintype'] == 'browser' && $condition['name'] == $DW->useragent ) {
           			(bool) $browser_tmp = $condition['value'];
+          		} else if ( $condition['maintype'] == 'tpl' && $condition['name'] == $DW->template ) {
+          			(bool) $tpl_tmp = $condition['value'];
           		}
           	}
 
           	if ( isset($browser_tmp) && $browser_tmp != $browser ) {
-          		$DW->message('Exception triggered for browser, sets display to ' . ( $wpml_tmp ? 'TRUE' : 'FALSE' ) . ' (rule EB1)');
+          		$DW->message('Exception triggered for browser, sets display to ' . ( $browser_tmp ? 'TRUE' : 'FALSE' ) . ' (rule EB1)');
           		$browser = $browser_tmp;
           	}
           	unset($browser_tmp);
+
+          	if ( isset($tpl_tmp) && $tpl_tmp != $tpl ) {
+          		$DW->message('Exception triggered for template, sets display to ' . ( $tpl_tmp ? 'TRUE' : 'FALSE' ) . ' (rule ETPL1)');
+          		$tpl = $tpl_tmp;
+          	}
+          	unset($tpl_tmp);
 
             // For debug messages
             $e = ( $other ) ? 'TRUE' : 'FALSE';
@@ -489,7 +506,7 @@
             } // END if/else ( $DW->custom_post_type )
           } /* END if ( count($opt) > 0 ) */
 
-          if (! $display || ! $role || ! $date || ! $browser || ! $wpml ) {
+          if (! $display || ! $role || ! $date || ! $browser || ! $tpl || ! $wpml ) {
             $DW->message('Removed ' . $widget_id . ' from display, SID = ' . $sidebar_id . ' / WID = ' . $widget_id . ' / KID = ' . $widget_key);
           	if ( DW_OLD_METHOD ) {
           		unset($DW->registered_widgets[$widget_id]);

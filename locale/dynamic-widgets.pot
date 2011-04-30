@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dynamic Widgets\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-06 21:04+0100\n"
-"PO-Revision-Date: 2011-04-06 21:04+0100\n"
+"POT-Creation-Date: 2011-04-27 22:10+0100\n"
+"PO-Revision-Date: 2011-04-27 22:11+0100\n"
 "Last-Translator: Jacco\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,104 +16,109 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 
 # WordPress MO
-#: ../dynwid_class_php4.php:61
-#: ../dynwid_class.php:55
+#: ../dynwid_class_php4.php:62
+#: ../dynwid_class.php:56
 msgid "Role"
 msgstr ""
 
 # WordPress MO
-#: ../dynwid_class_php4.php:62
-#: ../dynwid_class.php:56
-msgid "Date"
-msgstr ""
-
 #: ../dynwid_class_php4.php:63
 #: ../dynwid_class.php:57
-msgid "Browser"
+msgid "Date"
 msgstr ""
 
 #: ../dynwid_class_php4.php:64
 #: ../dynwid_class.php:58
-msgid "Language"
+msgid "Browser"
 msgstr ""
 
 #: ../dynwid_class_php4.php:65
 #: ../dynwid_class.php:59
-#: ../mods/frontpage_module.php:20
-msgid "Front Page"
+msgid "Templates"
 msgstr ""
 
 #: ../dynwid_class_php4.php:66
 #: ../dynwid_class.php:60
-#: ../mods/single_module.php:97
-msgid "Single Posts"
+msgid "Language"
 msgstr ""
 
 #: ../dynwid_class_php4.php:67
 #: ../dynwid_class.php:61
+#: ../mods/frontpage_module.php:20
+msgid "Front Page"
+msgstr ""
+
+#: ../dynwid_class_php4.php:68
+#: ../dynwid_class.php:62
+#: ../mods/single_module.php:97
+msgid "Single Posts"
+msgstr ""
+
+#: ../dynwid_class_php4.php:69
+#: ../dynwid_class.php:63
 #: ../mods/attachment_module.php:20
 msgid "Attachments"
 msgstr ""
 
 # WordPress MO
-#: ../dynwid_class_php4.php:68
-#: ../dynwid_class.php:62
-msgid "Pages"
-msgstr ""
-
-#: ../dynwid_class_php4.php:69
-#: ../dynwid_class.php:63
-msgid "Author Pages"
-msgstr ""
-
 #: ../dynwid_class_php4.php:70
 #: ../dynwid_class.php:64
-#: ../mods/category_module.php:35
-msgid "Category Pages"
+msgid "Pages"
 msgstr ""
 
 #: ../dynwid_class_php4.php:71
 #: ../dynwid_class.php:65
-#: ../mods/archive_module.php:20
-msgid "Archive Pages"
+msgid "Author Pages"
 msgstr ""
 
 #: ../dynwid_class_php4.php:72
 #: ../dynwid_class.php:66
-#: ../mods/error_module.php:20
-msgid "Error Page"
+#: ../mods/category_module.php:35
+msgid "Category Pages"
 msgstr ""
 
 #: ../dynwid_class_php4.php:73
 #: ../dynwid_class.php:67
-msgid "Search page"
+#: ../mods/archive_module.php:20
+msgid "Archive Pages"
 msgstr ""
 
 #: ../dynwid_class_php4.php:74
 #: ../dynwid_class.php:68
-msgid "WPSC Category"
+#: ../mods/error_module.php:20
+msgid "Error Page"
 msgstr ""
 
 #: ../dynwid_class_php4.php:75
 #: ../dynwid_class.php:69
-msgid "Custom Post Type Archives"
+msgid "Search page"
 msgstr ""
 
 #: ../dynwid_class_php4.php:76
 #: ../dynwid_class.php:70
-msgid "BuddyPress"
+msgid "WPSC Category"
 msgstr ""
 
 #: ../dynwid_class_php4.php:77
 #: ../dynwid_class.php:71
+msgid "Custom Post Type Archives"
+msgstr ""
+
+#: ../dynwid_class_php4.php:78
+#: ../dynwid_class.php:72
+msgid "BuddyPress"
+msgstr ""
+
+#: ../dynwid_class_php4.php:79
+#: ../dynwid_class.php:73
 msgid "BuddyPress Groups"
 msgstr ""
 
 #: ../dynwid_admin.php:19
-#: ../dynamic-widgets.php:132
-#: ../dynamic-widgets.php:155
-#: ../dynamic-widgets.php:261
-#: ../dynamic-widgets.php:661
+#: ../dynamic-widgets.php:143
+#: ../dynamic-widgets.php:166
+#: ../dynamic-widgets.php:272
+#: ../dynamic-widgets.php:672
 msgid "Dynamic Widgets"
 msgstr ""
 
@@ -135,112 +140,112 @@ msgstr ""
 msgid "FILTER"
 msgstr ""
 
-#: ../dynamic-widgets.php:140
+#: ../dynamic-widgets.php:151
 msgid "Widgets are always displayed by default"
 msgstr ""
 
-#: ../dynamic-widgets.php:140
+#: ../dynamic-widgets.php:151
 msgid "The '<em>Yes</em>' selection"
 msgstr ""
 
-#: ../dynamic-widgets.php:141
+#: ../dynamic-widgets.php:152
 msgid "Click on the"
 msgstr ""
 
-#: ../dynamic-widgets.php:141
+#: ../dynamic-widgets.php:152
 msgid "next to the options for more info"
 msgstr ""
 
-#: ../dynamic-widgets.php:142
+#: ../dynamic-widgets.php:153
 msgid "The"
 msgstr ""
 
-#: ../dynamic-widgets.php:142
+#: ../dynamic-widgets.php:153
 msgid "next to a section means it has options set."
 msgstr ""
 
-#: ../dynamic-widgets.php:144
-#: ../dynamic-widgets.php:145
-#: ../dynamic-widgets.php:148
-#: ../dynamic-widgets.php:663
+#: ../dynamic-widgets.php:155
+#: ../dynamic-widgets.php:156
+#: ../dynamic-widgets.php:159
+#: ../dynamic-widgets.php:674
 #: ../dynwid_admin_overview.php:74
 msgid "Static"
 msgstr ""
 
-#: ../dynamic-widgets.php:144
-#: ../dynamic-widgets.php:146
-#: ../dynamic-widgets.php:663
+#: ../dynamic-widgets.php:155
+#: ../dynamic-widgets.php:157
+#: ../dynamic-widgets.php:674
 #: ../dynwid_admin_overview.php:74
 msgid "Dynamic"
 msgstr ""
 
-#: ../dynamic-widgets.php:145
+#: ../dynamic-widgets.php:156
 msgid "When a widget is"
 msgstr ""
 
-#: ../dynamic-widgets.php:145
+#: ../dynamic-widgets.php:156
 msgid "the widget uses the WordPress default. In other words, it's shown everywhere"
 msgstr ""
 
-#: ../dynamic-widgets.php:146
+#: ../dynamic-widgets.php:157
 msgid "A widget is"
 msgstr ""
 
-#: ../dynamic-widgets.php:146
+#: ../dynamic-widgets.php:157
 msgid "when there are options set, i.e. not showing on the front page."
 msgstr ""
 
-#: ../dynamic-widgets.php:147
+#: ../dynamic-widgets.php:158
 #: ../dynwid_admin_overview.php:68
 msgid "Reset"
 msgstr ""
 
-#: ../dynamic-widgets.php:148
+#: ../dynamic-widgets.php:159
 msgid "Reset makes the widget return to"
 msgstr ""
 
 # WordPress MO
-#: ../dynamic-widgets.php:214
+#: ../dynamic-widgets.php:225
 msgid "Settings"
 msgstr ""
 
-#: ../dynamic-widgets.php:228
+#: ../dynamic-widgets.php:239
 msgid "Apply exception rule to widgets:"
 msgstr ""
 
-#: ../dynamic-widgets.php:244
+#: ../dynamic-widgets.php:255
 msgid "Off"
 msgstr ""
 
-#: ../dynamic-widgets.php:244
+#: ../dynamic-widgets.php:255
 msgid "On"
 msgstr ""
 
-#: ../dynamic-widgets.php:245
+#: ../dynamic-widgets.php:256
 msgid " (Default: "
 msgstr ""
 
-#: ../dynamic-widgets.php:342
+#: ../dynamic-widgets.php:353
 msgid "Dynamic Widgets Options saved"
 msgstr ""
 
-#: ../dynamic-widgets.php:342
+#: ../dynamic-widgets.php:353
 msgid "for"
 msgstr ""
 
-#: ../dynamic-widgets.php:662
+#: ../dynamic-widgets.php:673
 msgid "Edit Dynamic Widgets Options"
 msgstr ""
 
-#: ../dynamic-widgets.php:687
+#: ../dynamic-widgets.php:698
 msgid "and"
 msgstr ""
 
-#: ../dynamic-widgets.php:693
+#: ../dynamic-widgets.php:704
 msgid "Options set for"
 msgstr ""
 
-#: ../dynamic-widgets.php:693
+#: ../dynamic-widgets.php:704
 msgid "Option set for"
 msgstr ""
 
@@ -249,7 +254,7 @@ msgid "Widget options saved."
 msgstr ""
 
 #: ../dynwid_admin_edit.php:108
-#: ../dynwid_admin_edit.php:172
+#: ../dynwid_admin_edit.php:176
 msgid "Return"
 msgstr ""
 
@@ -282,15 +287,19 @@ msgid "Edit options for the widget"
 msgstr ""
 
 #: ../dynwid_admin_edit.php:126
+msgid "Quick settings"
+msgstr ""
+
+#: ../dynwid_admin_edit.php:128
 msgid "Set all options to 'No'"
 msgstr ""
 
-#: ../dynwid_admin_edit.php:126
-msgid "Except Role, Date, Browser and WPML"
+#: ../dynwid_admin_edit.php:128
+msgid "Except overriding options like Role, Date, etc."
 msgstr ""
 
 # WordPress MO
-#: ../dynwid_admin_edit.php:168
+#: ../dynwid_admin_edit.php:172
 msgid "Save"
 msgstr ""
 
@@ -489,7 +498,7 @@ msgid "This option does not include Author and Category Pages."
 msgstr ""
 
 #: ../mods/pages_module.php:32
-#: ../mods/custompost_module.php:46
+#: ../mods/custompost_module.php:45
 msgid "All childs"
 msgstr ""
 
@@ -588,53 +597,69 @@ msgstr ""
 msgid "(and other Gecko based)"
 msgstr ""
 
-#: ../mods/useragent_module.php:16
+#: ../mods/useragent_module.php:17
 msgid "Other / Unknown / Not detected"
 msgstr ""
 
-#: ../mods/useragent_module.php:43
+#: ../mods/useragent_module.php:44
 msgid "Show widget with all browsers?"
 msgstr ""
 
-#: ../mods/useragent_module.php:47
+#: ../mods/useragent_module.php:48
 msgid "Browser detection is never 100% accurate."
 msgstr ""
 
-#: ../mods/useragent_module.php:52
+#: ../mods/useragent_module.php:53
 msgid "Except the browser(s)"
 msgstr ""
 
-#: ../mods/custompost_module.php:109
+#: ../mods/tpl_module.php:39
+msgid "Show widget on every template?"
+msgstr ""
+
+#: ../mods/tpl_module.php:43
+msgid "This options takes precedence above other options like Pages and/or Single Posts."
+msgstr ""
+
+#: ../mods/tpl_module.php:48
+msgid "Except the templates"
+msgstr ""
+
+#: ../mods/tpl_module.php:50
+msgid "Default Template"
+msgstr ""
+
+#: ../mods/custompost_module.php:108
 msgid "Custom Post Type"
 msgstr ""
 
-#: ../mods/custompost_module.php:111
+#: ../mods/custompost_module.php:110
 msgid "Show widget on"
 msgstr ""
 
-#: ../mods/custompost_module.php:118
+#: ../mods/custompost_module.php:117
 msgid "All exceptions (Titles and Taxonomies) work in a logical OR condition. That means when one of the exceptions is met, the exception rule is applied."
 msgstr ""
 
-#: ../mods/custompost_module.php:125
-#: ../mods/custompost_module.php:223
-#: ../mods/custompost_module.php:269
+#: ../mods/custompost_module.php:124
+#: ../mods/custompost_module.php:222
+#: ../mods/custompost_module.php:271
 msgid "Except for"
 msgstr ""
 
-#: ../mods/custompost_module.php:164
+#: ../mods/custompost_module.php:163
 msgid "Except for Custom Taxonomy"
 msgstr ""
 
-#: ../mods/custompost_module.php:217
+#: ../mods/custompost_module.php:216
 msgid "Show widget on Custom Post Type Archives"
 msgstr ""
 
-#: ../mods/custompost_module.php:260
+#: ../mods/custompost_module.php:261
 msgid "Custom Taxonomy Archive"
 msgstr ""
 
-#: ../mods/custompost_module.php:262
+#: ../mods/custompost_module.php:263
 msgid "Show widget on Custom Taxonomy Archive"
 msgstr ""
 
