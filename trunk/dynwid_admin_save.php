@@ -16,7 +16,12 @@
     die();
   }
   // Browser
-	if ( $_POST['browser'] == 'no' && count($_POST['role_act']) == 0 ) {
+	if ( $_POST['browser'] == 'no' && count($_POST['browser_act']) == 0 ) {
+		wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
+		die();
+	}
+	// Template
+	if ( $_POST['tpl'] == 'no' && count($_POST['tpl_act']) == 0 ) {
 		wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
 		die();
 	}
@@ -85,6 +90,13 @@
 		$DW->addMultiOption($_POST['widget_id'], 'browser', $_POST['browser'], $_POST['browser_act']);
 	} else if ( isset($_POST['browser']) && $_POST['browser'] == 'no' ) {
 		$DW->addSingleOption($_POST['widget_id'], 'browser');
+	}
+
+	// Template
+	if ( isset($_POST['tpl_act']) && count($_POST['tpl_act']) > 0 ) {
+		$DW->addMultiOption($_POST['widget_id'], 'tpl', $_POST['tpl'], $_POST['tpl_act']);
+	} else if ( isset($_POST['tpl']) && $_POST['tpl'] == 'no' ) {
+		$DW->addSingleOption($_POST['widget_id'], 'tpl');
 	}
 
   // Front Page

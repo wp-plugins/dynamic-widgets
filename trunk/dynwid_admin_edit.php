@@ -125,7 +125,7 @@ h4 {
 <div style="border-color: #E3E3E3;border-radius: 6px 6px 6px 6px;border-style: solid;border-width: 1px;padding: 5px;">
 <b><?php _e('Quick settings', DW_L10N_DOMAIN); ?></b>
 <p>
-<a href="#" onclick="setOff(); return false;"><?php _e('Set all options to \'No\''); ?></a> (<?php _e('Except Role, Date, Browser and WPML'); ?>)
+<a href="#" onclick="setOff(); return false;"><?php _e('Set all options to \'No\''); ?></a> (<?php _e('Except overriding options like Role, Date, etc.'); ?>)
 </p>
 </div><br />
 
@@ -142,6 +142,7 @@ h4 {
 								'date' => 'Date',
 								'wpml' => 'Language (WPML)',
 								'useragent' => 'UserAgent',
+								'tpl' => 'Templates',
 								'frontpage' => 'Front Page',
 								'single' => 'Single Posts',
 								'attachment' => 'Attachment',
