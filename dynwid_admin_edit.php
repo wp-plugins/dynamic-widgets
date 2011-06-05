@@ -17,7 +17,7 @@
 	function getCatChilds($arr, $id, $i) {
 		$cat = get_categories( array('hide_empty' => FALSE, 'child_of' => $id) );
 		foreach ($cat as $c ) {
-			if (! in_array($c->cat_ID, $i) ) {
+			if (! in_array($c->cat_ID, $i) && $c->category_parent == $id ) {
 				$i[ ] = $c->cat_ID;
 				$arr[$c->cat_ID] = array();
 				$a = &$arr[$c->cat_ID];
@@ -43,7 +43,7 @@
 			if ( $run ) {
 				$cat = get_category($pid);
 				echo '<div style="position:relative;left:15px;">';
-				echo '<input type="checkbox" id="' . ( $single ? 'single_' : '' ) . 'cat_act_' . $cat->cat_ID . '" name="' . ( $single ? 'single_' : '' ) . 'category_act[]" value="' . $cat->cat_ID . '" ' . ( isset($category_act) && count($category_act) > 0 && in_array($cat->cat_ID, $category_act) ? 'checked="checked"' : '' ) . ( $single ? ' onclick="ci(\'single_cat_act_' . $cat->cat_ID . '\')"' : '' ) . ' /> <label for="' . ( $single ? 'single_' : '' ) . 'cat_act_' . $cat->cat_ID . '">' . $cat->name . '</label><br />';
+				echo '<input type="checkbox" id="' . ( $single ? 'single_' : '' ) . 'category_act_' . $cat->cat_ID . '" name="' . ( $single ? 'single_' : '' ) . 'category_act[]" value="' . $cat->cat_ID . '" ' . ( isset($category_act) && count($category_act) > 0 && in_array($cat->cat_ID, $category_act) ? 'checked="checked"' : '' ) . ( $single ? ' onclick="ci(\'single_category_act_' . $cat->cat_ID . '\')"' : '' ) . ' /> <label for="' . ( $single ? 'single_' : '' ) . 'category_act_' . $cat->cat_ID . '">' . $cat->name . '</label><br />';
 
 				if ( count($childs) > 0 ) {
 					prtCat($childs, $category_act, $single);
@@ -166,6 +166,11 @@ h4 {
 ?>
 
 </div><!-- end dynwid -->
+<br /><br />
+
+<!-- <div>
+Save as a quick setting <input type="text" name="qsetting" value="" />
+</div> //-->
 
 <br />
 <div style="float:left">
@@ -210,24 +215,24 @@ h4 {
 
   function chkChild(pid) {
   	if ( jQuery('#page_act_'+pid).attr('checked') == false ) {
-  		jQuery('#child_'+pid).attr('checked', false);
+  		jQuery('#page_childs_act_'+pid).attr('checked', false);
   	}
   }
 
   function chkParent(pid) {
-  	if ( jQuery('#child_'+pid).attr('checked') == true ) {
+  	if ( jQuery('#page_childs_act_'+pid).attr('checked') == true ) {
   		jQuery('#page_act_'+pid).attr('checked', true);
   	}
   }
 
   function chkCPChild(type, pid) {
   	if ( jQuery('#'+type+'_act_'+pid).attr('checked') == false ) {
-  		jQuery('#'+type+'_child_'+pid).attr('checked', false);
+  		jQuery('#'+type+'_childs_act_'+pid).attr('checked', false);
   	}
   }
 
   function chkCPParent(type, pid) {
-  	if ( jQuery('#'+type+'_child_'+pid).attr('checked') == true ) {
+  	if ( jQuery('#'+type+'_childs_act_'+pid).attr('checked') == true ) {
   		jQuery('#'+type+'_act_'+pid).attr('checked', true);
   	}
   }

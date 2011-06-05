@@ -353,6 +353,33 @@
       return $name;
     }
 
+    public function getOpt($widget_id, $maintype, $admin = TRUE) {
+      $opt = array();
+
+      if ( $admin ) {
+        $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
+                  WHERE widget_id LIKE '" . $widget_id . "'
+                    AND maintype LIKE '" . $maintype . "%'
+                  ORDER BY maintype, name";
+
+      } else {
+      	if ( $maintype == 'home' ) {
+      		$maintype = 'page';
+      	}
+        $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
+                  WHERE widget_id LIKE '" . $widget_id . "'
+                    AND (maintype LIKE '" . $maintype . "%'
+                    	OR maintype = 'role'
+                    	OR maintype = 'date'
+                    	OR maintype = 'browser'
+                    	OR maintype = 'tpl'
+                    	OR maintype = 'wpml')
+                  ORDER BY maintype, name";
+      }
+      $results = $this->wpdb->get_results($query);
+      return $results;
+    }
+
     public function getOptions($widget_id, $maintype, $admin = TRUE) {
       $opt = array();
 
