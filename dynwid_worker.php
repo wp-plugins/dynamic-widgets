@@ -31,7 +31,7 @@
         // Check if the widget has options set
         if ( in_array($widget_id, $DW->dynwid_list) ) {
           $act = array();
-          $opt = $DW->getOptions($widget_id, $DW->whereami, FALSE);
+          $opt = $DW->getOpt($widget_id, $DW->whereami, FALSE);
           $DW->message('Number of rules to check for widget ' . $widget_id . ': ' . count($opt));
           $display = TRUE;
           $role = TRUE;
@@ -41,15 +41,15 @@
         	$wpml = TRUE;
 
           foreach ( $opt as $condition ) {
-            if ( empty($condition['name']) && $condition['value'] == '0' ) {
+            if ( empty($condition->name) && $condition->value == '0' ) {
               $DW->message('Default for ' . $widget_id . ' set to FALSE (rule D1)');
               $display = FALSE;
               $other = TRUE;
               break;
-            } else if (! in_array($condition['maintype'], $DW->overrule_maintype) ) {
+            } else if (! in_array($condition->maintype, $DW->overrule_maintype) ) {
               // Get default value
-              if ( $condition['name'] == 'default' ) {
-                $default = $condition['value'];
+              if ( $condition->name == 'default' ) {
+                $default = $condition->value;
               	if ( $default == '0' ) {
               		$DW->message('Default for ' . $widget_id . ' set to FALSE (rule D2)');
               		$display = FALSE;
@@ -60,23 +60,23 @@
               		$other = FALSE;
               	}
               } else {
-                $act[ ] = $condition['name'];
+                $act[ ] = $condition->name;
               }
-            } else if ( $condition['maintype'] == 'role' && $condition['name'] == 'default' ) {
+            } else if ( $condition->maintype == 'role' && $condition->name == 'default' ) {
               $DW->message('Default for ' . $widget_id . ' set to FALSE (rule R1)');
               $role = FALSE;
-            } else if ( $condition['maintype'] == 'date' && $condition['name'] == 'default' ) {
+            } else if ( $condition->maintype == 'date' && $condition->name == 'default' ) {
               $DW->message('Default for ' . $widget_id . ' set to FALSE (rule DT1)');
               $date = FALSE;
-            } else if ( $condition['maintype'] == 'browser' && $condition['name'] == 'default' ) {
-            	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) $condition['value'] ? 'TRUE' : 'FALSE' ) . ' (rule DB1)');
-            	$browser = (bool) $condition['value'];
-            } else if ( $condition['maintype'] == 'tpl' && $condition['name'] == 'default' ) {
-            	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) $condition['value'] ? 'TRUE' : 'FALSE' ) . ' (rule DTPL1)');
-            	$tpl = (bool) $condition['value'];
-            } else if ( $condition['maintype'] == 'wpml' && $condition['name'] == 'default' ) {
-            	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) $condition['value'] ? 'TRUE' : 'FALSE' ) . ' (rule DML1)');
-            	$wpml = (bool) $condition['value'];
+            } else if ( $condition->maintype == 'browser' && $condition->name == 'default' ) {
+            	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) ($condition->value) ? 'TRUE' : 'FALSE' ) . ' (rule DB1)');
+            	$browser = (bool) $condition->value;
+            } else if ( $condition->maintype == 'tpl' && $condition->name == 'default' ) {
+            	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) ($condition->value) ? 'TRUE' : 'FALSE' ) . ' (rule DTPL1)');
+            	$tpl = (bool) $condition->value;
+            } else if ( $condition->maintype == 'wpml' && $condition->name == 'default' ) {
+            	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) ($condition->value) ? 'TRUE' : 'FALSE' ) . ' (rule DML1)');
+            	$wpml = (bool) $condition->value;
             }
           }
 
@@ -85,7 +85,7 @@
             // Role exceptions
           	if (! $role ) {
           		foreach ( $opt as $condition ) {
-          			if ( $condition['maintype'] == 'role' && in_array($condition['name'], $DW->userrole) ) {
+          			if ( $condition->maintype == 'role' && in_array($condition->name, $DW->userrole) ) {
           				$DW->message('Role set to TRUE (rule ER1)');
           				$role = TRUE;
           			}
@@ -96,14 +96,14 @@
 						if (! $date ) {
 							$dates = array();
 							foreach ( $opt as $condition ) {
-								if ( $condition['maintype'] == 'date' ) {
-									switch ( $condition['name'] ) {
+								if ( $condition->maintype == 'date' ) {
+									switch ( $condition->name ) {
 										case 'date_start':
-											$date_start = $condition['value'];
+											$date_start = $condition->value;
 											break;
 
 										case 'date_end':
-											$date_end = $condition['value'];
+											$date_end = $condition->value;
 											break;
 									}
 								}
@@ -134,13 +134,13 @@
           	// WPML
           	if ( isset($curlang) ) {
           		foreach ( $opt as $condition ) {
-          			if ( $condition['maintype'] == 'wpml' && $condition['name'] == $curlang ) {
-          				(bool) $wpml_tmp = $condition['value'];
+          			if ( $condition->maintype == 'wpml' && $condition->name == $curlang ) {
+          				(bool) $wpml_tmp = $condition->value;
           			}
           		}
 
           		if ( isset($wpml_tmp) && $wpml_tmp != $wpml ) {
-          			$DW->message('Exception triggered for WPML language, sets display to ' . ( $wpml_tmp ? 'TRUE' : 'FALSE' ) . ' (rule EML1)');
+          			$DW->message('Exception triggered for WPML language, sets display to ' . ( ($wpml_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EML1)');
           			$wpml = $wpml_tmp;
           		}
           	}
@@ -148,21 +148,21 @@
 
           	// Browser and Template
           	foreach ( $opt as $condition ) {
-          		if ( $condition['maintype'] == 'browser' && $condition['name'] == $DW->useragent ) {
-          			(bool) $browser_tmp = $condition['value'];
-          		} else if ( $condition['maintype'] == 'tpl' && $condition['name'] == $DW->template ) {
-          			(bool) $tpl_tmp = $condition['value'];
+          		if ( $condition->maintype == 'browser' && $condition->name == $DW->useragent ) {
+          			(bool) $browser_tmp = $condition->value;
+          		} else if ( $condition->maintype == 'tpl' && $condition->name == $DW->template ) {
+          			(bool) $tpl_tmp = $condition->value;
           		}
           	}
 
           	if ( isset($browser_tmp) && $browser_tmp != $browser ) {
-          		$DW->message('Exception triggered for browser, sets display to ' . ( $browser_tmp ? 'TRUE' : 'FALSE' ) . ' (rule EB1)');
+          		$DW->message('Exception triggered for browser, sets display to ' . ( ($browser_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EB1)');
           		$browser = $browser_tmp;
           	}
           	unset($browser_tmp);
 
           	if ( isset($tpl_tmp) && $tpl_tmp != $tpl ) {
-          		$DW->message('Exception triggered for template, sets display to ' . ( $tpl_tmp ? 'TRUE' : 'FALSE' ) . ' (rule ETPL1)');
+          		$DW->message('Exception triggered for template, sets display to ' . ( ($tpl_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ETPL1)');
           		$tpl = $tpl_tmp;
           	}
           	unset($tpl_tmp);
@@ -185,14 +185,14 @@
               	$act_custom = array();
               	$act_childs = array();
               	foreach ( $opt as $condition ) {
-              		if ( $condition['name'] != 'default' ) {
-              			switch ( $condition['maintype'] ) {
+              		if ( $condition->name != 'default' ) {
+              			switch ( $condition->maintype ) {
               				case $DW->whereami:
-              					$act_custom[ ] = $condition['name'];
+              					$act_custom[ ] = $condition->name;
               					break;
 
               				case $DW->whereami . '-childs':
-              					$act_childs[ ] = $condition['name'];
+              					$act_childs[ ] = $condition->name;
               					break;
               			}
               		}
@@ -202,12 +202,12 @@
               	foreach ( get_object_taxonomies($DW->whereami) as $t ) {
               		$m = $DW->whereami . '-tax_' . $t;
               		foreach ( $opt as $condition ) {
-              			if ( $condition['maintype'] == $m ) {
+              			if ( $condition->maintype == $m ) {
               				if (! key_exists($t, $act_tax) ) {
               					$act_tax[$t] = array();
               				}
-              				if ( $condition['name'] != 'default' ) {
-              					$act_tax[$t][ ] = $condition['name'];
+              				if ( $condition->name != 'default' ) {
+              					$act_tax[$t][ ] = $condition->name;
               				}
               			}
               		}
@@ -234,6 +234,7 @@
 										}
 									}
                 }
+                unset($act_custom, $act_childs, $act_tax);
               }
             } else if ( $DW->custom_taxonomy ) {		// Custom Taxonomy Archive
             	$wp_query = $GLOBALS['wp_query'];
@@ -246,8 +247,8 @@
             	$act_custom = array();
 
             	foreach ( $opt as $condition ) {
-            		if ( $condition['name'] != 'default' && $condition['maintype'] == $DW->whereami ) {
-	       					$act_custom[ ] = $condition['name'];
+            		if ( $condition->name != 'default' && $condition->maintype == $DW->whereami ) {
+	       					$act_custom[ ] = $condition->name;
             		}
             	}
 
@@ -255,6 +256,7 @@
             		$display = $other;
             		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECT1)');
             	}
+            	unset($act_custom);
             } else {
               // no custom post type
               switch ( $DW->whereami ) {
@@ -289,22 +291,22 @@
 
                   // Split out the conditions
                   foreach ( $opt as $condition ) {
-                    if ( $condition['name'] != 'default' ) {
-                      switch ( $condition['maintype'] ) {
+                    if ( $condition->name != 'default' ) {
+                      switch ( $condition->maintype ) {
                         case 'single-author':
-                          $act_author[ ] = $condition['name'];
+                          $act_author[ ] = $condition->name;
                           break;
 
                         case 'single-category':
-                          $act_category[ ] = $condition['name'];
+                          $act_category[ ] = $condition->name;
                           break;
 
                         case 'single-tag':
-                          $act_tag[ ] = $condition['name'];
+                          $act_tag[ ] = $condition->name;
                           break;
 
                         case 'single-post':
-                          $act_post[ ] = $condition['name'];
+                          $act_post[ ] = $condition->name;
                           break;
                       } // END switch
                     }
@@ -378,14 +380,14 @@
                     }
 
                   	foreach ( $opt as $condition ) {
-                  		if ( $condition['name'] != 'default' ) {
-                  			switch ( $condition['maintype'] ) {
+                  		if ( $condition->name != 'default' ) {
+                  			switch ( $condition->maintype ) {
                   				case 'page':
-                  					$act_page[ ] = $condition['name'];
+                  					$act_page[ ] = $condition->name;
                   					break;
 
                   				case 'page-childs':
-                  					$act_childs[ ] = $condition['name'];
+                  					$act_childs[ ] = $condition->name;
                   					break;
                   			}
                   		}
@@ -469,8 +471,8 @@
               		// We have to split out the conditions as we don't want the bp-groups to interfere
               		$act = array();
               		foreach ( $opt as $condition ) {
-              			if ( $condition['name'] != 'default' && $condition['maintype'] == 'bp' ) {
-              				$act[ ] = $condition['name'];
+              			if ( $condition->name != 'default' && $condition->maintype == 'bp' ) {
+              				$act[ ] = $condition->name;
               			}
               		}
 

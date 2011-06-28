@@ -1,11 +1,59 @@
 <?php
 /**
- * dynwid_class_php4.php - Dynamic Widgets Class for PHP4
+ * dynwid_class_php4.php - Dynamic Widgets Classes for PHP4
  * Needs at least PHP 4.1.0
  *
  * @version $Id$
  * @copyright 2011 Jacco Drabbe
  */
+
+	class DWOpts {
+		var $act;
+		var $checked = 'checked="checked"';
+		var $count;
+		var $default;
+		var $type;			/* private */
+
+		/* Old constructor redirect to new constructor */
+		function DWOpts($result, $type) {
+			$this->__construct($result, $type);
+		}
+
+		function __construct($result, $type) {
+			$this->act = array();
+			$this->count = count($result);
+			$this->type = $type;
+			if ( $this->count > 0 ) {
+				foreach ( $result as $condition ) {
+					if ( $condition->maintype == $this->type ) {
+						if ( $condition->name == 'default' || empty($condition->name) ) {
+							$this->default = $condition->value;
+						} else {
+							$this->act[ ] = $condition->name;
+						}
+					}
+				}
+			} else {
+				$this->default = '1';
+			}
+		}
+
+		function selectNo() {
+			if ( $this->default == '0' ) {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+
+		function selectYes() {
+			if ( $this->default == '1' ) {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+	}
 
   class dynWid {
   	var $bp;												/* BuddyPress Plugin support */
@@ -283,11 +331,9 @@
     }
 
     function dumpOpt($opt) {
-      if ( DW_DEBUG && count($opt) > 0 ) {
-        echo '<pre>';
-        print_r($opt);
-        echo '</pre>';
-      }
+    	if ( DW_DEBUG && count($opt) > 0 ) {
+    		var_dump($opt);
+    	}
     }
 
     // replacement for createList() to make the worker faster
@@ -333,6 +379,18 @@
   		} else {
   			return 'undef';
   		}
+  	}
+
+  	function getDWOpt($widget_id, $maintype) {
+  		if ( $maintype == 'home' ) {
+  			$maintype = 'page';
+  		}
+  		$query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
+                 WHERE widget_id LIKE '" . $widget_id . "'
+                   AND maintype LIKE '" . $maintype . "%'
+                 ORDER BY maintype, name";
+  		$results = new DWOpts($this->wpdb->get_results($query), $maintype);
+  		return $results;
   	}
 
     function getName($id, $type = 'W') {
@@ -388,7 +446,7 @@
   		return $results;
   	}
 
-    function getOptions($widget_id, $maintype, $admin = TRUE) {
+/*    function getOptions($widget_id, $maintype, $admin = TRUE) {
       $opt = array();
 
       if ( $admin ) {
@@ -422,7 +480,7 @@
       }
 
       return $opt;
-    }
+    } */
 
 		function getParents($type, $arr, $id) {
 			if ( $type == 'page' ) {

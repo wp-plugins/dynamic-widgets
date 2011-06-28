@@ -1,10 +1,53 @@
 <?php
 /**
- * dynwid_class.php - Dynamic Widgets Class (PHP5)
+ * dynwid_class.php - Dynamic Widgets Classes (PHP5)
  *
  * @version $Id$
  * @copyright 2011 Jacco Drabbe
  */
+
+	class DWOpts {
+		public  $act;
+		public  $checked = 'checked="checked"';
+		public  $count;
+		public  $default;
+		private $type;
+
+		public function __construct($result, $type) {
+			$this->act = array();
+			$this->count = count($result);
+			$this->type = $type;
+			if ( $this->count > 0 ) {
+				foreach ( $result as $condition ) {
+					if ( $condition->maintype == $this->type ) {
+						if ( $condition->name == 'default' || empty($condition->name) ) {
+							$this->default = $condition->value;
+						} else {
+							$this->act[ ] = $condition->name;
+						}
+					}
+				}
+			} else {
+				$this->default = '1';
+			}
+		}
+
+		public function selectNo() {
+			if ( $this->default == '0' ) {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+
+		public function selectYes() {
+			if ( $this->default == '1' ) {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+	}
 
   class dynWid {
     public  $bp;				// BuddyPress Plugin support
@@ -277,9 +320,7 @@
 
     public function dumpOpt($opt) {
       if ( DW_DEBUG && count($opt) > 0 ) {
-        echo '<pre>';
-        print_r($opt);
-        echo '</pre>';
+        var_dump($opt);
       }
     }
 
@@ -325,6 +366,18 @@
   		} else {
   			return 'undef';
   		}
+  	}
+
+  	public function getDWOpt($widget_id, $maintype) {
+  		if ( $maintype == 'home' ) {
+  			$maintype = 'page';
+  		}
+  		$query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
+                 WHERE widget_id LIKE '" . $widget_id . "'
+                   AND maintype LIKE '" . $maintype . "%'
+                 ORDER BY maintype, name";
+  		$results = new DWOpts($this->wpdb->get_results($query), $maintype);
+  		return $results;
   	}
 
     public function getName($id, $type = 'W') {
@@ -376,11 +429,12 @@
                     	OR maintype = 'wpml')
                   ORDER BY maintype, name";
       }
-      $results = $this->wpdb->get_results($query);
+
+			$results = $this->wpdb->get_results($query);
       return $results;
     }
 
-    public function getOptions($widget_id, $maintype, $admin = TRUE) {
+    /* public function getOptions($widget_id, $maintype, $admin = TRUE) {
       $opt = array();
 
       if ( $admin ) {
@@ -414,7 +468,7 @@
       }
 
       return $opt;
-    }
+    } */
 
   	public function getParents($type, $arr, $id) {
   		if ( $type == 'page' ) {

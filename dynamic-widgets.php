@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.4.0.14
+ * Version: 1.4.0.15
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags, wpml, wpec, buddypress
  *
@@ -58,7 +58,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.4.0.14');
+  define('DW_VERSION', '1.4.0.15');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -161,7 +161,7 @@
   		add_contextual_help($screen, $help);
 
   		// Only show meta box in posts panel when there are widgets enabled.
-  		$opt = $DW->getOptions('%','individual');
+  		$opt = $DW->getOpt('%','individual');
   		if ( count($opt) > 0 ) {
   			add_meta_box('dynwid', __('Dynamic Widgets', DW_L10N_DOMAIN), 'dynwid_add_post_control', 'post', 'side', 'low');
   		}
@@ -235,25 +235,25 @@
     $post = $GLOBALS['post'];
     $DW = &$GLOBALS['DW'];
 
-    $opt = $DW->getOptions('%','individual');
+    $opt = $DW->getOpt('%','individual');
     echo '<strong>' . __('Apply exception rule to widgets:', DW_L10N_DOMAIN) . '</strong><br /><br />';
     foreach ( $opt as $widget ) {
       $single_condition = '1';
       $checked = '';
-      $opt_single = $DW->getOptions($widget['widget_id'], 'single');
+      $opt_single = $DW->getOpt($widget->widget_id, 'single');
 
       // loop through the opts to see if we have a match
       foreach ( $opt_single as $widget_opt ) {
-        if ( $widget_opt['maintype'] == 'single' ) {
-          $single_condition = $widget_opt['value'];
+        if ( $widget_opt->maintype == 'single' ) {
+          $single_condition = $widget_opt->value;
         }
-        if ( $widget_opt['maintype'] == 'single-post' && $widget_opt['name'] == $post->ID ) {
+        if ( $widget_opt->maintype == 'single-post' && $widget_opt->name == $post->ID ) {
           $checked = ' checked="checked"';
         }
       }
 
       $default = ( $single_condition == '0' ) ? __('Off', DW_L10N_DOMAIN) : __('On', DW_L10N_DOMAIN);
-      echo '<input type="checkbox" id="dw_' . $widget['widget_id'] . '" name="dw-single-post[]" value="' . $widget['widget_id'] . '"' . $checked . ' /> <label for="dw_' . $widget['widget_id'] . '">' . $DW->getName($widget['widget_id']) . __(' (Default: ', DW_L10N_DOMAIN) . $default . ')</label><br />';
+      echo '<input type="checkbox" id="dw_' . $widget->widget_id . '" name="dw-single-post[]" value="' . $widget->widget_id . '"' . $checked . ' /> <label for="dw_' . $widget->widget_id . '">' . $DW->getName($widget->widget_id) . __(' (Default: ', DW_L10N_DOMAIN) . $default . ')</label><br />';
     }
   }
 
@@ -265,7 +265,7 @@
     $DW = &$GLOBALS['DW'];
 
     // Only show dynwid row when there are widgets enabled
-    $opt = $DW->getOptions('%','individual');
+    $opt = $DW->getOpt('%','individual');
     if ( count($opt) > 0 ) {
 
       echo '<tr class="form-field">';
@@ -274,20 +274,20 @@
       foreach ( $opt as $widget ) {
         $single_condition = '1';
         $checked = '';
-        $opt_single = $DW->getOptions($widget['widget_id'], 'single');
+        $opt_single = $DW->getOpt($widget->widget_id, 'single');
 
         // loop through the opts to see if we have a match
         foreach ( $opt_single as $widget_opt ) {
-          if ( $widget_opt['maintype'] == 'single' ) {
-            $single_condition = $widget_opt['value'];
+          if ( $widget_opt->maintype == 'single' ) {
+            $single_condition = $widget_opt->value;
           }
-          if ( $widget_opt['maintype'] == 'single-tag' && $widget_opt['name'] == $_GET['tag_ID'] ) {
+          if ( $widget_opt->maintype == 'single-tag' && $widget_opt->name == $_GET['tag_ID'] ) {
             $checked = ' checked="checked"';
           }
         }
 
         $default = ( $single_condition == '0' ) ? 'Off' : 'On';
-        echo '<input type="checkbox" style="width:10pt;border:none;" id="dw_' . $widget['widget_id'] . '" name="dw-single-tag[]" value="' . $widget['widget_id'] . '"' . $checked . ' /> <label for="dw_' . $widget['widget_id'] . '">' . $DW->getName($widget['widget_id']) . ' (Default: ' . $default . ')</label><br />';
+        echo '<input type="checkbox" style="width:10pt;border:none;" id="dw_' . $widget->widget_id . '" name="dw-single-tag[]" value="' . $widget->widget_id . '"' . $checked . ' /> <label for="dw_' . $widget->widget_id . '">' . $DW->getName($widget->widget_id) . ' (Default: ' . $default . ')</label><br />';
 
       } // END foreach opt
       echo '</td>';
@@ -388,7 +388,7 @@
   	$wpdb = &$GLOBALS['wpdb'];
   	$dump = array();
 
-		$opt = $DW->getOptions('%', 'wpsc');
+		$opt = $DW->getOpt('%', 'wpsc');
 
   	$categories = array();
   	$table = WPSC_TABLE_PRODUCT_CATEGORIES;
@@ -400,15 +400,15 @@
   	}
 
   	foreach ( $opt as $widget ) {
-  		$id = $widget['widget_id'];
+  		$id = $widget->widget_id;
   		if (! array_key_exists($id, $dump) ) {
-  			$dump[$id] = array( 'name' => strip_tags($DW->getName($widget['widget_id'])) );
+  			$dump[$id] = array( 'name' => strip_tags($DW->getName($widget->widget_id)) );
   		}
 
-  		if ( $widget['name'] == 'default' ) {
-  			$dump[$id]['default'] = ( $widget['value'] == '0' ? 'No' : 'Yes' );
+  		if ( $widget->name == 'default' ) {
+  			$dump[$id]['default'] = ( $widget->value == '0' ? 'No' : 'Yes' );
   		} else {
-  			$v = $widget['name'];
+  			$v = $widget->name;
   			$dump[$id][ ] = $categories[$v];
   		}
   	}
@@ -536,9 +536,9 @@
 	  }
 
 	  // Housekeeping
-	  $opt = $DW->getOptions('%','individual');
+	  $opt = $DW->getOpt('%','individual');
 	  foreach ( $opt as $widget ) {
-	    $DW->deleteOption($widget['widget_id'], 'single-post', $post_id);
+	    $DW->deleteOption($widget->widget_id, 'single-post', $post_id);
 	  }
 
 	  if ( array_key_exists('dw-single-post', $_POST) ) {
@@ -547,11 +547,11 @@
 	    $default_single = '1';
 
 	    foreach ( $opt as $widget_id ) {
-	      $opt_single = $DW->getOptions($widget_id, 'single');
+	      $opt_single = $DW->getOpt($widget_id, 'single');
 	      if ( count($opt_single) > 0 ) {
 	        foreach ( $opt_single as $widget ) {
-	          if ( $widget['maintype'] == 'single' ) {
-	            $default_single = $widget['value'];
+	          if ( $widget->maintype == 'single' ) {
+	            $default_single = $widget->value;
 	          }
 	        }
 
@@ -579,9 +579,9 @@
 	    }
 
 	    // Housekeeping
-	    $opt = $DW->getOptions('%', 'individual');
+	    $opt = $DW->getOpt('%', 'individual');
 	    foreach ( $opt as $widget ) {
-	      $DW->deleteOption($widget['widget_id'], 'single-tag', $term_id);
+	      $DW->deleteOption($widget->widget_id, 'single-tag', $term_id);
 	    }
 
 	    if ( array_key_exists('dw-single-tag', $_POST) ) {
@@ -590,11 +590,11 @@
 	      $default_single = '1';
 
 	      foreach ( $opt as $widget_id ) {
-	        $opt_single = $DW->getOptions($widget_id, 'single');
+	        $opt_single = $DW->getOpt($widget_id, 'single');
 	        if ( count($opt_single) > 0 ) {
 	          foreach ( $opt_single as $widget ) {
-	            if ( $widget['maintype'] == 'single' ) {
-	              $default_single = $widget['value'];
+	            if ( $widget->maintype == 'single' ) {
+	              $default_single = $widget->value;
 	            }
 	          }
 	        }
@@ -675,9 +675,9 @@
 		echo '</a>';
 	  if ( $DW->hasOptions($widget_id) ) {
 	    $s = array();
-	    $opt = $DW->getOptions($widget_id, NULL);
+	    $opt = $DW->getOpt($widget_id, NULL);
 	    foreach ( $opt as $widget ) {
-	      $type = $widget['maintype'];
+	      $type = $widget->maintype;
 	      if ( $type != 'individual' && substr($type, -6) != 'childs' && ! preg_match('/.*-tax_.*/', $type) ) {
 	        $single = array('single-author', 'single-category', 'single-tag', 'single-post');
 	        if ( in_array($type, $single) ) {
@@ -721,7 +721,7 @@
 		if ( $DW->listmade ) {
 			$DW->message('Dynamic Widgets removelist already created');
 			if ( count($DW->removelist) > 0 ) {
-				foreach ( $DW->removelist as $sidebar_id => $widgets ){
+				foreach ( $DW->removelist as $sidebar_id => $widgets ) {
 					foreach ( $widgets as $widget_key ){
 						unset($sidebars[$sidebar_id][$widget_key]);
 					}
