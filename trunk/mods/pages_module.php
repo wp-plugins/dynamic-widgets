@@ -45,35 +45,9 @@
  		}
 	}
 
-	$page_yes_selected = 'checked="checked"';
-	$opt_page = $DW->getOpt($_GET['id'], 'page');
-	if ( count($opt_page) > 0 ) {
-		$page_act = array();
-		foreach ( $opt_page as $page_condition ) {
-			if ( $page_condition->maintype == 'page' ) {
-				if ( $page_condition->name == 'default' || empty($page_condition->name) ) {
-					$page_default = $page_condition->value;
-				} else {
-					$page_act[ ] = $page_condition->name;
-				}
-			}
-		}
-
-		if ( $page_default == '0' ) {
-			$page_no_selected = $page_yes_selected;
-			unset($page_yes_selected);
-		}
-
-		// -- Childs
-		$opt_page_childs = $DW->getOpt($_GET['id'], 'page-childs');
-		if ( count($opt_page_childs) > 0 ) {
-			$page_childs_act = array();
-			foreach ( $opt_page_childs as $child_condition ) {
-				if ( $child_condition->name != 'default' ) {
-					$page_childs_act[ ] = $child_condition->name;
-				}
-			}
-		}
+	$opt_page = $DW->getDWOpt($_GET['id'], 'page');
+	if ( $opt_page->count > 0 ) {
+		$opt_page_childs = $DW->getDWOpt($_GET['id'], 'page-childs');
 	}
 
 	$pages = get_pages();
@@ -102,7 +76,7 @@
 		}
 	}
 ?>
-<h4><b><?php _e('Pages'); ?></b> <?php echo ( (count($opt_page) > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ( ($DW->wpml) ? $wpml_icon : '' ); ?></h4>
+<h4><b><?php _e('Pages'); ?></b> <?php echo ( ($opt_page->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ( ($DW->wpml) ? $wpml_icon : '' ); ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on static pages?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN); ?>" onclick="divToggle('pages');" /><br />
 <?php $DW->dumpOpt($opt_page); ?>
@@ -122,13 +96,13 @@
 	?>
 	</div>
 </div>
-<input type="radio" name="page" value="yes" id="page-yes" <?php echo ( (isset($page_yes_selected)) ? $page_yes_selected : '' ); ?> /> <label for="page-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="page" value="no" id="page-no" <?php echo ( (isset($page_no_selected)) ? $page_no_selected : '' ); ?> /> <label for="page-no"><?php _e('No'); ?></label><br />
+<input type="radio" name="page" value="yes" id="page-yes" <?php echo ( ($opt_page->selectYes()) ? $opt_page->checked : '' ); ?> /> <label for="page-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="page" value="no" id="page-no" <?php echo ( ($opt_page->selectNo()) ? $opt_page->checked : '' ); ?> /> <label for="page-no"><?php _e('No'); ?></label><br />
 <?php if ( $num_pages > 0 ) { ?>
 <?php _e('Except the page(s)', DW_L10N_DOMAIN); ?>:<br />
 <div id="page-select" class="condition-select" <?php echo ( (isset($page_condition_select_style)) ? $page_condition_select_style : '' ); ?>>
 <div style="position:relative;left:-15px">
-<?php ( ($num_pages < DW_PAGE_LIMIT) ? prtPgs($pagemap, $page_act, $page_childs_act, $static_page) : lsPages($pages, $static_page, $page_act) ); ?>
+<?php ( ($num_pages < DW_PAGE_LIMIT) ? prtPgs($pagemap, $opt_page->act, $opt_page_childs->act, $static_page) : lsPages($pages, $static_page, $opt_page->act) ); ?>
 </div>
 </div>
 <?php } ?>

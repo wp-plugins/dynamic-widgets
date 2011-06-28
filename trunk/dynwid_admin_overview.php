@@ -119,6 +119,7 @@
 		<input type="checkbox" id="oldmethod" name="oldmethod" <?php echo ( get_option('dynwid_old_method') ? 'checked="checked"' : '' ) ?> onchange="document.getElementById('dynwid_method').submit();" /> <label for="oldmethod"><?php _e('Use \'OLD\' method', DW_L10N_DOMAIN); ?></label>
 </form>
 </div>
+<br />
 
 <?php if ( defined('WPSC_TABLE_PRODUCT_CATEGORIES') ) { ?>
 <!-- WPEC dump //--><br /><br />

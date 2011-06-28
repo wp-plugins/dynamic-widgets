@@ -1,22 +1,23 @@
 <?php
 /**
  * Date Module
+ * Can't use DWOpts object because value = the actual date
  *
  * @version $Id$
  * @copyright 2011 Jacco Drabbe
  */
 
 	$date_yes_selected = 'checked="checked"';
-	$opt_date = $DW->getOptions($_GET['id'], 'date');
+	$opt_date = $DW->getOpt($_GET['id'], 'date');
 	if ( count($opt_date) > 0 ) {
 		foreach ( $opt_date as $value ) {
-			switch ( $value['name'] ) {
+			switch ( $value->name ) {
 				case 'date_start':
-					$date_start = $value['value'];
+					$date_start = $value->value;
 					break;
 
 				case 'date_end':
-					$date_end = $value['value'];
+					$date_end = $value->value;
 					break;
 			}
 		}
@@ -26,7 +27,7 @@
 	}
 ?>
 
-<h4><b><?php _e('Date'); ?></b><?php echo ( count($opt_date) > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ); ?></h4>
+<h4><b><?php _e('Date'); ?></b><?php echo ( count($opt_date) > 0 ) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : ''; ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget always?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN) ?>" onclick="divToggle('date');" /><br />
 <?php $DW->dumpOpt($opt_date); ?>
@@ -40,17 +41,17 @@
   				', DW_L10N_DOMAIN); ?>
 	</div>
 </div>
-<input type="radio" name="date" value="yes" id="date-yes" <?php echo ( isset($date_yes_selected) ? $date_yes_selected : '' ); ?> onclick="swTxt(cDate, true);" /> <label for="date-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="date" value="no" id="date-no" <?php echo ( isset($date_no_selected) ? $date_no_selected : '' ); ?> onclick="swTxt(cDate, false)" /> <label for="date-no"><?php _e('No'); ?>, <?php _e('only', DW_L10N_DOMAIN); ?>:</label><br />
+<input type="radio" name="date" value="yes" id="date-yes" <?php echo ( isset($date_yes_selected) ) ? $date_yes_selected : ''; ?> onclick="swTxt(cDate, true);" /> <label for="date-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="date" value="no" id="date-no" <?php echo ( isset($date_no_selected) ) ? $date_no_selected : ''; ?> onclick="swTxt(cDate, false)" /> <label for="date-no"><?php _e('No'); ?>, <?php _e('only', DW_L10N_DOMAIN); ?>:</label><br />
 <div id="date-select" class="condition-select">
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
   <td style="width:45px;"><?php _e('From', DW_L10N_DOMAIN); ?></td>
-  <td><input id="date_start" type="text" name="date_start" value="<?php echo ( isset($date_start) ? $date_start : '' ); ?>" size="10" maxlength="10" /> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" onclick="showCalendar('date_start')" /></td>
+  <td><input id="date_start" type="text" name="date_start" value="<?php echo ( isset($date_start) ) ? $date_start : ''; ?>" size="10" maxlength="10" /> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" onclick="showCalendar('date_start')" /></td>
 </tr>
 <tr>
   <td style="width:45px;"><?php _e('To', DW_L10N_DOMAIN); ?></td>
-  <td><input id="date_end" type="text" name="date_end" value="<?php echo ( isset($date_end) ? $date_end : '' ); ?>" size="10" maxlength="10" /> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" onclick="showCalendar('date_end')" /></td>
+  <td><input id="date_end" type="text" name="date_end" value="<?php echo ( isset($date_end) ) ? $date_end : ''; ?>" size="10" maxlength="10" /> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" onclick="showCalendar('date_end')" /></td>
 </tr>
 </table>
 </div>

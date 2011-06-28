@@ -186,17 +186,17 @@ Save as a quick setting <input type="text" name="qsetting" value="" />
 <script type="text/javascript">
 /* <![CDATA[ */
   function chkInPosts() {
-    var posts = <?php echo count($single_post_act); ?>;
-    var tags = <?php echo count($single_tag_act); ?>;
+    var posts = <?php echo $opt_single_post->count; ?>;
+    var tags = <?php echo $opt_single_tag->count; ?>;
 
-    if ( (posts > 0 || tags > 0) && jQuery('#individual').attr('checked') == false ) {
+    if ( (posts > 0 || tags > 0) && jQuery('#individual').is(':checked') == false ) {
       if ( confirm('Are you sure you want to disable the exception rule for individual posts and tags?\nThis will remove the options set to individual posts and/or tags for this widget.\nOk = Yes; No = Cancel') ) {
         swChb(cAuthors, false);
         swChb(cCat, false);
       } else {
         jQuery('#individual').attr('checked', true);
       }
-    } else if ( icount > 0 && jQuery('#individual').attr('checked') ) {
+    } else if ( icount > 0 && jQuery('#individual').is(':checked') ) {
       if ( confirm('Are you sure you want to enable the exception rule for individual posts and tags?\nThis will remove the exceptions set for Author and/or Category on single posts for this widget.\nOk = Yes; No = Cancel') ) {
         swChb(cAuthors, true);
         swChb(cCat, true);
@@ -204,7 +204,7 @@ Save as a quick setting <input type="text" name="qsetting" value="" />
       } else {
         jQuery('#individual').attr('checked', false);
       }
-    } else if ( jQuery('#individual').attr('checked') ) {
+    } else if ( jQuery('#individual').is(':checked') ) {
         swChb(cAuthors, true);
         swChb(cCat, true);
     } else {
@@ -214,31 +214,31 @@ Save as a quick setting <input type="text" name="qsetting" value="" />
   }
 
   function chkChild(pid) {
-  	if ( jQuery('#page_act_'+pid).attr('checked') == false ) {
+  	if ( jQuery('#page_act_'+pid).is(':checked') == false ) {
   		jQuery('#page_childs_act_'+pid).attr('checked', false);
   	}
   }
 
   function chkParent(pid) {
-  	if ( jQuery('#page_childs_act_'+pid).attr('checked') == true ) {
+  	if ( jQuery('#page_childs_act_'+pid).is(':checked') == true ) {
   		jQuery('#page_act_'+pid).attr('checked', true);
   	}
   }
 
   function chkCPChild(type, pid) {
-  	if ( jQuery('#'+type+'_act_'+pid).attr('checked') == false ) {
+  	if ( jQuery('#'+type+'_act_'+pid).is(':checked') == false ) {
   		jQuery('#'+type+'_childs_act_'+pid).attr('checked', false);
   	}
   }
 
   function chkCPParent(type, pid) {
-  	if ( jQuery('#'+type+'_childs_act_'+pid).attr('checked') == true ) {
+  	if ( jQuery('#'+type+'_childs_act_'+pid).is(':checked') == true ) {
   		jQuery('#'+type+'_act_'+pid).attr('checked', true);
   	}
   }
 
   function ci(id) {
-    if ( jQuery('#'+id).attr('checked') ) {
+    if ( jQuery('#'+id).is(':checked') ) {
       icount++;
     } else {
       icount--;
@@ -304,13 +304,13 @@ Save as a quick setting <input type="text" name="qsetting" value="" />
   var icount = <?php echo $js_count; ?>;
   var exclOff = new Array(<?php echo implode(', ', $excl); ?>);
 
-  if ( jQuery('#role-yes').attr('checked') ) {
+  if ( jQuery('#role-yes').is(':checked') ) {
   	swChb(cRole, true);
   }
-  if ( jQuery('#date-yes').attr('checked') ) {
+  if ( jQuery('#date-yes').is(':checked') ) {
   	swTxt(cDate, true);
   }
-  if ( jQuery('#individual').attr('checked') ) {
+  if ( jQuery('#individual').is(':checked') ) {
     swChb(cAuthors, true);
     swChb(cCat, true);
   }
