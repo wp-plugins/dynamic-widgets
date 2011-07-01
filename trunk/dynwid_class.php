@@ -6,6 +6,49 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	class DWMessageBox {
+		private $leadtext;
+		private $message;
+		public  $type;
+
+		public function __construct($type = 'notify') {
+			$this->type = $type;
+		}
+
+		public function create($lead, $msg) {
+			$this->setlead($lead);
+			$this->setMessage($msg);
+			$this->output();
+		}
+
+		public function output() {
+			switch ( $this->type ) {
+				case 'error':
+					$class = 'error';
+					break;
+				default:
+					$class = 'updated fade';
+			}
+
+			echo '<div class="' . $class . '" id="message">';
+			echo '<p>';
+			if (! empty($this->leadtext) ) {
+				echo '<strong>' . $this->leadtext . '</strong> ';
+			}
+			echo $this->message;
+			echo '</p>';
+			echo '</div>';
+		}
+
+		public function setLead($text) {
+			$this->leadtext = $text;
+		}
+
+		public function setMessage($text) {
+			$this->message = $text;
+		}
+	}
+
 	class DWOpts {
 		public  $act;
 		public  $checked = 'checked="checked"';
@@ -29,6 +72,12 @@
 				}
 			} else {
 				$this->default = '1';
+			}
+
+			// in some cases the default is (still) null
+			if ( is_null($this->default) ) {
+				$this->default = '1';
+				$this->count = 0;
 			}
 		}
 

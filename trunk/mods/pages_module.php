@@ -6,7 +6,18 @@
  * @copyright 2011 Jacco Drabbe
  */
 
-	define('DW_PAGE_LIMIT', 500);
+	// Abort function when timeout occurs
+	register_shutdown_function('dw_abort');
+	function dw_abort() {
+		if ( connection_status() == CONNECTION_TIMEOUT ) {
+			echo '<div class="error" id="message"><p><strong>';
+			_e('The static page module failed to load.', DW_L10N_DOMAIN);
+			echo '</strong><br />';
+			_e('This is probably because building the hierarchical tree took too long.<br />Decrease the limit of number of pages in the advanced settings.', DW_L10N_DOMAIN);
+			echo '</p></div>';
+		}
+		exit();
+	}
 
 	function getPageChilds($arr, $id, $i) {
 		$pg = get_pages('child_of=' . $id);
