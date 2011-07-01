@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.4.0.15
+ * Version: 1.4.0.16
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags, wpml, wpec, buddypress
  *
@@ -54,11 +54,12 @@
   define('DW_LIST_LIMIT', 20);
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
   define('DW_OLD_METHOD', get_option('dynwid_old_method'));
+  define('DW_PAGE_LIMIT', get_option('dynwid_page_limit', 500));
   define('DW_MODULES', dirname(__FILE__) . '/' . 'mods/');
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.4.0.15');
+  define('DW_VERSION', '1.4.0.16');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -286,8 +287,8 @@
           }
         }
 
-        $default = ( $single_condition == '0' ) ? 'Off' : 'On';
-        echo '<input type="checkbox" style="width:10pt;border:none;" id="dw_' . $widget->widget_id . '" name="dw-single-tag[]" value="' . $widget->widget_id . '"' . $checked . ' /> <label for="dw_' . $widget->widget_id . '">' . $DW->getName($widget->widget_id) . ' (Default: ' . $default . ')</label><br />';
+        $default = ( $single_condition == '0' ) ? __('Off', DW_L10N_DOMAIN) : __('On', DW_L10N_DOMAIN);
+        echo '<input type="checkbox" style="width:10pt;border:none;" id="dw_' . $widget->widget_id . '" name="dw-single-tag[]" value="' . $widget->widget_id . '"' . $checked . ' /> <label for="dw_' . $widget->widget_id . '">' . $DW->getName($widget->widget_id) . ' (' . __('Default', DW_L10N_DOMAIN) . ': ' . $default . ')</label><br />';
 
       } // END foreach opt
       echo '</td>';
@@ -347,12 +348,11 @@
     $DW = &$GLOBALS['DW'];
 
     $name = strip_tags($DW->getName($_GET['widget_id']));
+		$lead = __('Dynamic Widgets Options saved', DW_L10N_DOMAIN);
+  	$msg = __('for', DW_L10N_DOMAIN) . ' ' .  $name;
 
-    echo '<div class="updated fade" id="message">';
-    echo '<p>';
-    echo '<strong>' . __('Dynamic Widgets Options saved', DW_L10N_DOMAIN) . '</strong> ' . __('for', DW_L10N_DOMAIN) . ' ' .  $name;
-    echo '</p>';
-    echo '</div>';
+		$mbox = new DWMessageBox();
+  	$mbox->create($lead, $msg);
   }
 
   /**

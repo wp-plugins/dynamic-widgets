@@ -41,7 +41,7 @@
         	$wpml = TRUE;
 
           foreach ( $opt as $condition ) {
-            if ( empty($condition->name) && $condition->value == '0' ) {
+            if ( empty($condition->name) && $condition->value == '0' && $condition->maintype == $DW->whereami ) {
               $DW->message('Default for ' . $widget_id . ' set to FALSE (rule D1)');
               $display = FALSE;
               $other = TRUE;

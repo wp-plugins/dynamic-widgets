@@ -3,7 +3,7 @@
  * BP module
  * http://buddypress.org/
  *
- * @version $Id$\
+ * @version $Id$
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -11,36 +11,7 @@
 		$DW->bp = TRUE;
 		require_once(DW_PLUGIN . 'bp.php');
 
-		$tmp = array();
-		$bp_yes_selected = 'checked="checked"';
-		$opt_bp = $DW->getOpt($_GET['id'], 'bp');
-		if ( count($opt_bp) > 0 ) {
-			$bp_act = array();
-			foreach ( $opt_bp as $key => $bp_condition ) {
-				if ( $bp_condition->maintype == 'bp' ) {
-					if ( $bp_condition->name == 'default' || empty($bp_condition->name) ) {
-						$bp_default = $bp_condition->value;
-					} else {
-						$bp_act[ ] = $bp_condition->name;
-					}
-				} else {
-					$tmp[ ] = $key;
-				}
-			}
-
-			if ( $bp_default == '0' ) {
-				$bp_no_selected = $bp_yes_selected;
-				unset($bp_yes_selected);
-			}
-
-			// Removing the bp-group options
-			if ( count($tmp) > 0 ) {
-				foreach ( $tmp as $key ){
-					unset($opt_bp[$key]);
-				}
-			}
-		}
-
+		$opt_bp = $DW->getDWOpt($_GET['id'], 'bp');
 		$bp_components = dw_get_bp_components();
 		if ( count($bp_components) > DW_LIST_LIMIT ) {
 			$bp_condition_select_style = DW_LIST_STYLE;
@@ -48,16 +19,16 @@
 		unset($tmp);
 ?>
 
-<h4><b><?php _e('BuddyPress', DW_L10N_DOMAIN); ?></b><?php echo ( count($opt_bp) > 0 ) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : ''; ?></h4>
+<h4><b><?php _e('BuddyPress', DW_L10N_DOMAIN); ?></b><?php echo ( $opt_bp->count > 0 ) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : ''; ?></h4>
 <div class="dynwid_conf">
 <?php _e('Show widget default on BuddyPress pages?', DW_L10N_DOMAIN); ?><br />
 <?php $DW->dumpOpt($opt_bp); ?>
-<input type="radio" name="bp" value="yes" id="bp-yes" <?php echo ( isset($bp_yes_selected) ) ? $bp_yes_selected : ''; ?> /> <label for="bp-yes"><?php _e('Yes'); ?></label>
-<input type="radio" name="bp" value="no" id="bp-no" <?php echo ( isset($bp_no_selected) ) ? $bp_no_selected : ''; ?> /> <label for="bp-no"><?php _e('No'); ?></label><br />
+<input type="radio" name="bp" value="yes" id="bp-yes" <?php echo ( $opt_bp->selectYes() ) ? $opt_bp->checked : ''; ?> /> <label for="bp-yes"><?php _e('Yes'); ?></label>
+<input type="radio" name="bp" value="no" id="bp-no" <?php echo ( $opt_bp->selectNo() ) ? $opt_bp->checked : ''; ?> /> <label for="bp-no"><?php _e('No'); ?></label><br />
 <?php _e('Except on the components pages', DW_L10N_DOMAIN); ?>:<br />
 <div id="bp-select" class="condition-select" <?php echo ( isset($bp_condition_select_style) ) ? $bp_condition_select_style : ''; ?>>
 <?php foreach ( $bp_components as $id => $component ) { ?>
-<input type="checkbox" id="bp_act_<?php echo $id; ?>" name="bp_act[]" value="<?php echo $id; ?>" <?php echo ( count($bp_act) > 0 && in_array($id, $bp_act) ) ? 'checked="checked"' : ''; ?> /> <label for="bp_act_<?php echo $id; ?>"><?php echo $component; ?></label><br />
+<input type="checkbox" id="bp_act_<?php echo $id; ?>" name="bp_act[]" value="<?php echo $id; ?>" <?php echo ( $opt_bp->count > 0 && in_array($id, $opt_bp->act) ) ? 'checked="checked"' : ''; ?> /> <label for="bp_act_<?php echo $id; ?>"><?php echo $component; ?></label><br />
 <?php } ?>
 </div>
 </div><!-- end dynwid_conf -->

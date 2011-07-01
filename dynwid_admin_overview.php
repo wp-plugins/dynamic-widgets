@@ -6,30 +6,41 @@
  * @copyright 2011 Jacco Drabbe
  */
 
-  // Special case: Reset action needs to go back to overview.
-  if ( isset($_GET['action']) && $_GET['action'] == 'reset' ) {
-    check_admin_referer('plugin-name-action_reset_' . $_GET['id']);
-    $DW->resetOptions($_GET['id']);
-?>
-<div class="updated fade" id="message">
-  <p>
-    <strong><?php _e('Widget options have been reset to default.', DW_L10N_DOMAIN); ?></strong><br />
-  </p>
-</div>
-<?php
-  }
-  if ( isset($_GET['action']) && $_GET['action'] == 'dynwid_set_method' ) {
-  	if ( $_GET['oldmethod'] == 'on' ) {
-  		update_option('dynwid_old_method', TRUE);
-  	} else {
-  		update_option('dynwid_old_method', FALSE);
-  	}
-?>
-<div class="updated fade" id="message">
-	<p><strong><?php echo __('Method set to', DW_L10N_DOMAIN) . ' ' . ( get_option('dynwid_old_method') ? '\''. __('OLD', DW_L10N_DOMAIN) .'\'' : '\'' . __('FILTER', DW_L10N_DOMAIN) . '\'' ); ?>.</strong></p>
-</div>
-<?php
-  }
+	if ( isset($_GET['action']) ) {
+		$mbox = new DWMessageBox();
+
+		switch ( $_GET['action'] ) {
+			case 'dynwid_set_method':
+				if ( $_GET['oldmethod'] == 'on' ) {
+					update_option('dynwid_old_method', TRUE);
+				} else {
+					update_option('dynwid_old_method', FALSE);
+				}
+
+				$text = __('Method set to', DW_L10N_DOMAIN) . ' ' . ( get_option('dynwid_old_method') ? '\''. __('OLD', DW_L10N_DOMAIN) .'\'' : '\'' . __('FILTER', DW_L10N_DOMAIN) . '\'' );
+				$mbox->create($text, '');
+				break;
+
+			case 'dynwid_set_page_limit':
+				$limit = (int) $_GET['page_limit'];
+				if ( $limit > 0 ) {
+					update_option('dynwid_page_limit', $limit);
+					$text = __('Page limit set to', DW_L10N_DOMAIN) . ' ' . $limit . '.';
+					$mbox->create($text, '');
+				} else {
+					$text = __('ERROR', DW_L10N_DOMAIN) . ': ' . strip_tags($_GET['page_limit']) . ' ' . __('is not a valid limit.', DW_L10N_DOMAIN);
+					$mbox->type = 'error';
+					$mbox->create($text, '');
+				}
+				break;
+
+			case 'reset':
+				check_admin_referer('plugin-name-action_reset_' . $_GET['id']);
+				$DW->resetOptions($_GET['id']);
+				$mbox->create(__('Widget options have been reset to default.', DW_L10N_DOMAIN), '');
+				break;
+		} // switch
+	}
 
   foreach ( $DW->sidebars as $sidebar_id => $widgets ) {
     if ( count($widgets) > 0 ) {
@@ -116,7 +127,21 @@
 	<form id="dynwid_method" action="" method="get">
 		<input type="hidden" name="page" value="dynwid-config" />
 		<input type="hidden" name="action" value="dynwid_set_method" />
-		<input type="checkbox" id="oldmethod" name="oldmethod" <?php echo ( get_option('dynwid_old_method') ? 'checked="checked"' : '' ) ?> onchange="document.getElementById('dynwid_method').submit();" /> <label for="oldmethod"><?php _e('Use \'OLD\' method', DW_L10N_DOMAIN); ?></label>
+		<input type="checkbox" id="oldmethod" name="oldmethod" <?php echo ( get_option('dynwid_old_method') ? 'checked="checked"' : '' ) ?> onchange="jQuery('#dynwid_method').submit();" /> <label for="oldmethod"><?php _e('Use \'OLD\' method', DW_L10N_DOMAIN); ?></label>
+</form>
+</div>
+<br />
+
+<!-- page limit //-->
+<div id ="page_limit">
+<form action="" method="get">
+<input type="hidden" name="page" value="dynwid-config" />
+<input type="hidden" name="action" value="dynwid_set_page_limit" />
+<b><?php _e('Page limit') ?></b>: <input type="text" name="page_limit" value="<?php echo ( isset($_GET['page_limit']) ) ? $_GET['page_limit'] : DW_PAGE_LIMIT; ?>" style="width:50px" maxlength="4" /> <input class="button-primary" type="submit" value="<? _e('Save'); ?>" />
+<br />
+<?php _e('The page limit sets the limit of number of pages to prevent a timeout when building the hierarchical tree. When the number of pages is above this limit, a flat list will be displayed which is less time consuming.', DW_L10N_DOMAIN); ?>
+<br />
+<?php echo __('Currently the number of pages is', DW_L10N_DOMAIN) . ' ' . count(get_pages()); ?>.
 </form>
 </div>
 <br />
@@ -124,7 +149,7 @@
 <?php if ( defined('WPSC_TABLE_PRODUCT_CATEGORIES') ) { ?>
 <!-- WPEC dump //--><br /><br />
 <?php _e('When upgrading to WPEC 3.8 the Dynamic Widgets rules for WPEC are lost. The WPEC dump gives you an overview of the rules before the update.'); ?><br />
-<span style="color:red;font-weight:bold;"><?php _e('WARNING'); ?></span> <?php _e('This only works correct when you did not add or change anything in the Dynamic Widgets rules.'); ?>
+<span style="color:red;font-weight:bold;"><?php _e('WARNING', DW_L10N_DOMAIN); ?></span> <?php _e('This only works correct when you did not add or change anything in the Dynamic Widgets rules.', DW_L10N_DOMAIN); ?>
 <br /><br />
 <div id="wpec_dump">
   <form action="" method="get">

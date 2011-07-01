@@ -102,22 +102,24 @@ h4 {
 }
 </style>
 
-<?php if ( isset($_POST['dynwid_save']) && $_POST['dynwid_save'] == 'yes' ) { ?>
-<div class="updated fade" id="message">
-  <p>
-    <strong><?php _e('Widget options saved.', DW_L10N_DOMAIN); ?></strong> <a href="themes.php?page=dynwid-config"><?php _e('Return', DW_L10N_DOMAIN); ?></a> <?php _e('to Dynamic Widgets overview', DW_L10N_DOMAIN); ?>.
-  </p>
-</div>
-<?php } else if ( isset($_GET['work']) && $_GET['work'] == 'none' ) { ?>
-<div class="error" id="message">
-  <p><?php echo __('Dynamic does not mean static hiding of a widget.', DW_L10N_DOMAIN) . ' ' . __('Hint', DW_L10N_DOMAIN) . ': '; ?><a href="widgets.php"><?php _e('Remove', DW_L10N_DOMAIN); ?></a> <?php _e('the widget from the sidebar', DW_L10N_DOMAIN); ?>.</p>
-</div>
-<?php } else if ( isset($_GET['work']) && $_GET['work'] == 'nonedate' ) { ?>
-<div class="error" id="message">
-  <p><?php _e('The From date can\'t be later than the To date.', DW_L10N_DOMAIN); ?></p>
-</div>
-
-<?php } ?>
+<?php
+	if ( isset($_POST['dynwid_save']) && $_POST['dynwid_save'] == 'yes' ) {
+		$mbox = new DWMessageBox();
+		$lead = __('Widget options saved.', DW_L10N_DOMAIN);
+		$msg = '<a href="themes.php?page=dynwid-config">' . __('Return', DW_L10N_DOMAIN) . '</a> ' . __('to Dynamic Widgets overview', DW_L10N_DOMAIN);
+		$mbox->create($lead, $msg);
+	} else if ( isset($_GET['work']) && $_GET['work'] == 'none' ) {
+		$mbox = new DWMessageBox('error');
+		$text = __('Dynamic does not mean static hiding of a widget.', DW_L10N_DOMAIN) . ' ' . __('Hint', DW_L10N_DOMAIN) . ': <a href="widgets.php">' . __('Remove', DW_L10N_DOMAIN) . '</a>' . __('the widget from the sidebar', DW_L10N_DOMAIN) . '.';
+		$mbox->setMessage($text);
+		$mbox->output();
+	} else if ( isset($_GET['work']) && $_GET['work'] == 'nonedate' ) {
+		$mbox = new DWMessageBox('error');
+		$text = __('The From date can\'t be later than the To date.', DW_L10N_DOMAIN);
+		$mbox->setMessage($text);
+		$mbox->output();
+	}
+?>
 
 <h3><?php _e('Edit options for the widget', DW_L10N_DOMAIN); ?>: <em><?php echo $DW->getName($_GET['id']); ?></em></h3>
 <?php echo ( DW_DEBUG ) ? '<pre>ID = ' . $_GET['id'] . '</pre><br />' : ''; ?>
