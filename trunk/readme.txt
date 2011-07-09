@@ -3,8 +3,8 @@ Contributors: Qurl
 Donate link:
 Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, condition, conditional tags, wpml, wpec, buddypress
 Requires at least: 2.9.1
-Tested up to: 3.1
-Stable tag: 1.4.0
+Tested up to: 3.2
+Stable tag: 1.4.1
 
 Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly place the widgets on WordPress pages.
 
@@ -16,6 +16,7 @@ Dynamic Widgets gives you full control on which pages your widgets will appear. 
   - User roles
   - Dates
   - Browsers
+  - Theme  Templates
   - Languages (WPML)
   - Front page
   - Single post pages
@@ -32,20 +33,21 @@ Dynamic Widgets gives you full control on which pages your widgets will appear. 
   - BuddyPress Components pages
   - BuddyPress Groups
 
-* Exceptions can be created for:
+* Exception rules can be created for:
   - User roles on role, including not logged in (anonymous) users
   - Dates on from, to or range
   - Browsers on browser name
+  - Theme Templates on template name
   - Languages (WPML) on language
   - Single post pages on Author, Categories, Tags and/or Individual posts
   - Pages on Page Title, including inheritance from hierarchical parents
   - Author pages on Author
   - Category pages on Category name
-  - Custom Posts Type on Custom post name, including inheritance from hierarchical parents
+  - Custom Posts Type on custom taxonomy and Custom post name, including inheritance from hierarchical parents
   - Custom Post Type Archive pages on Custom Post Type
   - WP Shopping Cart / WP E-Commerce Categories on Category name
   - BuddyPress Component pages on Component
-  - BuddyPress Groups on group
+  - BuddyPress Groups on Group or Component
 
 * Plugin support for:
 	- BuddyPress
@@ -131,6 +133,29 @@ Please file a [bugreport](http://www.qurl.nl/dynamic-widgets/bugreport/). Please
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.4.1 =
+
+* Added Custom Taxonomies support for Custom Post Types.
+* Added WPML support to Custom Taxonomies.
+* Added support for Custom Taxonomies Archives.
+* Added support for Theme Templates.
+* Added hierarchical structure overview for Categories.
+* Added Component exceptions support in BuddyPress Groups.
+* Added a Quick setting: 'Set all options to Off'.
+* Added 'Internet Explorer 6' to the browser detection.
+* Added advanced option setting for the page limit.
+* Bugfix for not selecting the WPML main language ID for Custom Post Types.
+* Bugfix for showing all WPML translated Custom Post Type titles
+* Bugfix for not correct displaying of options string in the widget admin when having options set for Custom Post Type Archives, BuddyPress, BuddyPress Groups.
+* Bugfix for losing exception rules for single posts and tags in rare cases.
+* Bugfix for showing empty Custom Post Type Archives option in settings screen.
+* Bugfix for unexptected behaviour when setting BP groups default to 'No'.
+* Bugfix for only showing the last Custom Posts in the list.
+* Limited the list of authors to users with user level > 0.
+* Security fix in the usage of the returnURL.
+* Workaround when using prototype theme.
+* Workaround for certain themes claiming an invalid BP component confusing Dynamic Widgets.
 
 = Version 1.4.0 =
 
@@ -255,11 +280,14 @@ Please file a [bugreport](http://www.qurl.nl/dynamic-widgets/bugreport/). Please
 
 == Release notes ==
 
-With this version, Dynamic Widgets supports version 3.8 of WPEC. Unfortunately because of the change by WPEC, when you upgrade WPEC you'll have to redo all rules you've created within Dynamic Widgets for WPEC manually. It was nog possible for me to find out how to convert these to the new system used by WPEC. For your convience I've created a WPEC config dump generator to be able to give an overview of all the WPEC rules created in Dynamic Widgets to make recreating the rules easier. Please note the generator only works correctly when the WPEC product categories database table still exists and you did not add or modified any rule in Dynamic Widgets. The generator can be found at the Dynamic Widgets overview page by clicking on the 'Advanced >' link at the bottom of the page.
+Because of the addition of support for Custom Taxonomies within Custom Post Types and the addtion of Internet Explorer 6 detection, the database table used by Dynamic Widgets needs to be upgraded. Please make sure to do a proper deactivation and activation of the plugin. Otherwise the database upgrade will not be triggered.
+
+When you have set a rule of Internet Explorer, the upgrade process will add a rule for Internet Explorer 6.
 
 == Upgrade Notice ==
 
-Be sure to deactivate Dynamic Widgets Plugin before installing the new version following steps 1 and 2 in the installation procedure. After the install you can reactivate the plugin.
+= 1.4.1 =
+This version has 9 features added, 7 bugs fixed and 2 theme workarounds created.
 
 == Screenshots ==
 
