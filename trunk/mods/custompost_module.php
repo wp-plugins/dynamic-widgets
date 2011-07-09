@@ -10,7 +10,7 @@
 	if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
 
 		function getCPostChilds($type, $arr, $id, $i) {
-			$post = get_posts('post_type=' . $type . '&post_parent=' . $id);
+			$post = get_posts('post_type=' . $type . '&post_parent=' . $id . '&posts_per_page=-1');
 
 			foreach ($post as $p ) {
 				if (! in_array($p->ID, $i) ) {
@@ -69,7 +69,7 @@
 				$opt_custom_childs = $DW->getDWOpt($_GET['id'], $type . '-childs');
 			}
 
-			$loop = new WP_Query( array('post_type' => $type) );
+			$loop = new WP_Query( array('post_type' => $type, 'posts_per_page' => -1) );
 			if ( $loop->post_count > DW_LIST_LIMIT ) {
 				$custom_condition_select_style = DW_LIST_STYLE;
 			}
