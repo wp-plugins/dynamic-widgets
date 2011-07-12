@@ -11,6 +11,11 @@
 		require_once($wpml_api);
 
 		$opt_wpml = $DW->getDWOpt($_GET['id'], 'wpml');
+		
+		$wpml_langs = wpml_get_active_languages();
+		if ( count($wpml_langs) > DW_LIST_LIMIT ) {
+			$wpml_condition_select_style = DW_LIST_STYLE;
+		}
 ?>
 
 <h4><b><?php _e('Language (WPML)', DW_L10N_DOMAIN); ?></b><?php echo ( $opt_wpml->count > 0 ) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : ''; ?></h4>
