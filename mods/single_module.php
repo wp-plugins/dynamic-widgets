@@ -9,7 +9,12 @@
 	$opt_single = $DW->getDWOpt($_GET['id'], 'single');
 
 	// -- Author
-	$authors = get_users( array('who' => 'author') );
+	if ( function_exists('get_users') ) {
+		$authors = get_users( array('who' => 'author') );
+	} else {
+		$authors = get_users_of_blog();
+	}
+
 	if ( count($authors) > DW_LIST_LIMIT ) {
     $author_condition_select_style = DW_LIST_STYLE;
   }
