@@ -36,7 +36,7 @@
 		foreach ( $pages as $pid => $childs ) {
 			$page = get_page($pid);
 
-			echo '<div style="position:relative;left:15px;">';
+			echo '<div style="position:relative;left:15px;width:95%">';
 			echo '<input type="checkbox" id="page_act_' . $page->ID . '" name="page_act[]" value="' . $page->ID . '" ' . ( isset($page_act) && count($page_act) > 0 && in_array($page->ID, $page_act) ? 'checked="checked"' : '' ) . ' onchange="chkChild(' . $pid . ')" /> <label for="page_act_' . $page->ID . '">' . $page->post_title . ' ' . ( get_option('show_on_front') == 'page' && isset($static_page[$page->ID]) ? '(' . $static_page[$page->ID] . ')' : '' ) . '</label><br />';
 
 			echo '<div style="position:relative;left:15px;">';
@@ -51,9 +51,11 @@
 	}
 
 	function lsPages($pages, $static_page, $page_act) {
+		echo '<div style="position:relative;left:15px;width:95%">';
 		foreach ( $pages as $page ) {
 			echo '<input type="checkbox" id="page_act_' . $page->ID . '" name="page_act[]" value="' . $page->ID . '" ' . ( count($page_act) > 0 && in_array($page->ID, $page_act) ? 'checked="checked"' : '' ) . ' /> <label for="page_act_' . $page->ID . '">' . $page->post_title . ' ' . ( get_option('show_on_front') == 'page' && isset($static_page[$page->ID]) ? '(' . $static_page[$page->ID] . ')' : '' ) . '</label><br />';
  		}
+ 		echo '</div>';
 	}
 
 	$opt_page = $DW->getDWOpt($_GET['id'], 'page');
