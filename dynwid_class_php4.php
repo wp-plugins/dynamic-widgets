@@ -377,10 +377,10 @@
       print_r($this->registered_widgets);
 
       echo "options: \n";
-      print_r( $this->getOptions('%', NULL) );
+      print_r( $this->getOpt('%', NULL) );
 
       echo "\n";
-      echo serialize($this->getOptions('%', NULL));
+      echo serialize($this->getOpt('%', NULL));
     }
 
     function dumpOpt($opt) {
