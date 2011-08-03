@@ -11,7 +11,7 @@
 	if ( function_exists('get_users') ) {
 		$authors = get_users( array('who' => 'author') );
 	} else {
-		$authors = get_users_of_blog();
+		$authors = dwGetAuthors();
 	}
 
 	if ( count($authors) > DW_LIST_LIMIT ) {

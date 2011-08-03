@@ -52,6 +52,16 @@
 			}
 		}
 	}
+	
+	function dwGetAuthors() {
+		global $wpdb;
+		$query = "SELECT " . $wpdb->prefix . "users.ID, " . $wpdb->prefix . "users.display_name
+							 FROM " . $wpdb->prefix . "users
+							 JOIN " . $wpdb->prefix . "usermeta ON " . $wpdb->prefix . "users.ID = " . $wpdb->prefix . "usermeta.user_id
+							 WHERE 1 AND " . $wpdb->prefix . "usermeta.meta_key = '" . $wpdb->prefix . "user_level'
+							 	AND " . $wpdb->prefix . "usermeta.meta_value > '0'";
+		return $wpdb->get_results($query);	
+	}
 
 	// For JS exclOff
 	$excl = array();
