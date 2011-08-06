@@ -52,7 +52,7 @@
 			}
 		}
 	}
-	
+
 	function dwGetAuthors() {
 		global $wpdb;
 		$query = "SELECT " . $wpdb->prefix . "users.ID, " . $wpdb->prefix . "users.display_name
@@ -60,7 +60,7 @@
 							 JOIN " . $wpdb->prefix . "usermeta ON " . $wpdb->prefix . "users.ID = " . $wpdb->prefix . "usermeta.user_id
 							 WHERE 1 AND " . $wpdb->prefix . "usermeta.meta_key = '" . $wpdb->prefix . "user_level'
 							 	AND " . $wpdb->prefix . "usermeta.meta_value > '0'";
-		return $wpdb->get_results($query);	
+		return $wpdb->get_results($query);
 	}
 
 	// For JS exclOff
@@ -153,6 +153,7 @@ h4 {
 								'role' => 'Role',
 								'date' => 'Date',
 								'wpml' => 'Language (WPML)',
+								'qtranslate' => 'Language (QT)',
 								'useragent' => 'UserAgent',
 								'tpl' => 'Templates',
 								'frontpage' => 'Front Page',

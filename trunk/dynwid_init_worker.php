@@ -22,7 +22,6 @@
 
 			$wpmlang = wpml_get_default_language();
 			$curlang = wpml_get_current_language();
-			// $wpml = TRUE;
 			$DW->message('WPML language: ' . $curlang);
 
 			if ( $wpmlang != $curlang ) {
@@ -30,6 +29,18 @@
 				$DW->message('WPML enabled');
 				require_once(DW_PLUGIN . 'wpml.php');
 			}
+		}
+	}
+
+	// QT Plugin Support
+	if ( defined('QTRANS_INIT') ) {
+		$qtlang = get_option('qtranslate_default_language');
+		$curlang = qtrans_getLanguage();
+		$DW->message('QT language: ' . $curlang);
+
+		if ( $qtlang != $curlang ) {
+			$DW->qt = TRUE;
+			$DW->message('QT enabled');
 		}
 	}
 
