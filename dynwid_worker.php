@@ -24,6 +24,11 @@
 		}
 	}
 
+	// QT Plugin support
+	if ( defined('QTRANS_INIT') ) {
+		$curlang = qtrans_getLanguage();
+	}
+
   foreach ( $sidebars as $sidebar_id => $widgets ) {
     // Only processing active sidebars with widgets
     if ( $sidebar_id != 'wp_inactive_widgets' && count($widgets) > 0 && is_array($widgets) ) {
@@ -39,6 +44,7 @@
         	$browser = TRUE;
         	$tpl = TRUE;
         	$wpml = TRUE;
+        	$qt = TRUE;
 
           foreach ( $opt as $condition ) {
             if ( empty($condition->name) && $condition->value == '0' && $condition->maintype == $DW->whereami ) {
@@ -77,6 +83,9 @@
             } else if ( $condition->maintype == 'wpml' && $condition->name == 'default' ) {
             	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) ($condition->value) ? 'TRUE' : 'FALSE' ) . ' (rule DML1)');
             	$wpml = (bool) $condition->value;
+            } else if ( $condition->maintype == 'qt' && $condition->name == 'default' ) {
+          		$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) ($condition->value) ? 'TRUE' : 'FALSE' ) . ' (rule DQT1)');
+            	$qt = (bool) $condition->value;
             }
           }
 
@@ -132,7 +141,7 @@
 						}
 
           	// WPML
-          	if ( isset($curlang) ) {
+          	if ( isset($wpml) && isset($curlang) ) {
           		foreach ( $opt as $condition ) {
           			if ( $condition->maintype == 'wpml' && $condition->name == $curlang ) {
           				(bool) $wpml_tmp = $condition->value;
@@ -142,6 +151,21 @@
           		if ( isset($wpml_tmp) && $wpml_tmp != $wpml ) {
           			$DW->message('Exception triggered for WPML language, sets display to ' . ( ($wpml_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EML1)');
           			$wpml = $wpml_tmp;
+          		}
+          	}
+          	unset($wpml_tmp);
+
+          	// QTranslate
+          	if ( isset($qt) && isset($curlang) ) {
+          		foreach ( $opt as $condition ) {
+          			if ( $condition->maintype == 'qt' && $condition->name == $curlang ) {
+          				(bool) $qt_tmp = $condition->value;
+          			}
+          		}
+
+          		if ( isset($qt_tmp) && $qt_tmp != $qt ) {
+          			$DW->message('Exception triggered for QT language, sets display to ' . ( ($qt_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EQT1)');
+          			$qt = $qt_tmp;
           		}
           	}
           	unset($wpml_tmp);
@@ -508,7 +532,7 @@
             } // END if/else ( $DW->custom_post_type )
           } /* END if ( count($opt) > 0 ) */
 
-          if (! $display || ! $role || ! $date || ! $browser || ! $tpl || ! $wpml ) {
+          if (! $display || ! $role || ! $date || ! $browser || ! $tpl || ! $wpml || ! $qt ) {
             $DW->message('Removed ' . $widget_id . ' from display, SID = ' . $sidebar_id . ' / WID = ' . $widget_id . ' / KID = ' . $widget_key);
           	if ( DW_OLD_METHOD ) {
           		unset($DW->registered_widgets[$widget_id]);

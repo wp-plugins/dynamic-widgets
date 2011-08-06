@@ -127,6 +127,7 @@
     var $sidebars;
   	var $template;
     var $plugin_url;
+    var $qtranslate;
   	var $useragent;
     var $userrole;
   	var $whereami;
@@ -150,7 +151,7 @@
     	$this->custom_taxonomy = FALSE;
       $this->firstmessage = TRUE;
     	$this->listmade = FALSE;
-    	$this->overrule_maintype = array('date', 'role', 'browser', 'tpl', 'wpml');
+    	$this->overrule_maintype = array('date', 'role', 'browser', 'tpl', 'wpml', 'qt');
       $this->registered_sidebars = $GLOBALS['wp_registered_sidebars'];
       $this->registered_widget_controls = &$GLOBALS['wp_registered_widget_controls'];
       $this->registered_widgets = &$GLOBALS['wp_registered_widgets'];
@@ -165,6 +166,7 @@
 	    	'browser'			=> __('Browser', DW_L10N_DOMAIN),
 	    	'tpl'					=> __('Templates', DW_L10N_DOMAIN),
 	    	'wpml'				=> __('Language', DW_L10N_DOMAIN),
+	    	'qt'					=> __('Language', DW_L10N_DOMAIN),
 	    	'front-page'  => __('Front Page', DW_L10N_DOMAIN),
 	    	'single'      => __('Single Posts', DW_L10N_DOMAIN),
 	    	'attachment'	=> __('Attachments', DW_L10N_DOMAIN),
@@ -216,6 +218,9 @@
 
       // WPML Plugin support
       $this->wpml = FALSE;
+      
+      // QTranslate Plugin support
+    	$this->qtranslate = FALSE;
 
     	// WPSC/WPEC Plugin support
     	$this->wpsc = FALSE;
@@ -402,7 +407,8 @@
                   		OR maintype = 'date'
                   		OR maintype = 'browser'
                   		OR maintype = 'tpl'
-											OR maintype = 'wpml'";
+											OR maintype = 'wpml'
+											OR maintype = 'qt'";";
       $results = $this->wpdb->get_results($query);
       foreach ( $results as $myrow ) {
         $this->dynwid_list[ ] = $myrow->widget_id;
@@ -492,48 +498,13 @@
                     	OR maintype = 'date'
                     	OR maintype = 'browser'
                     	OR maintype = 'tpl'
-											OR maintype = 'wpml')
+											OR maintype = 'wpml'
+											OR maintype = 'qt'";)
                   ORDER BY maintype, name";
   		}
   		$results = $this->wpdb->get_results($query);
   		return $results;
   	}
-
-/*    function getOptions($widget_id, $maintype, $admin = TRUE) {
-      $opt = array();
-
-      if ( $admin ) {
-        $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
-                  WHERE widget_id LIKE '" . $widget_id . "'
-                    AND maintype LIKE '" . $maintype . "%'
-                  ORDER BY maintype, name";
-
-      } else {
-      	if ( $maintype == 'home' ) {
-      		$maintype = 'page';
-      	}
-        $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
-                  WHERE widget_id LIKE '" . $widget_id . "'
-                    AND (maintype LIKE '" . $maintype . "%'
-                    	OR maintype = 'role'
-                    	OR maintype = 'date'
-                    	OR maintype = 'browser'
-                    	OR maintype = 'tpl'
-											OR maintype = 'wpml')
-                  ORDER BY maintype, name";
-      }
-      $results = $this->wpdb->get_results($query);
-
-      foreach ( $results as $myrow ) {
-        $opt[ ] = array('widget_id' => $myrow->widget_id,
-                        'maintype' => $myrow->maintype,
-                        'name' => $myrow->name,
-                        'value' => $myrow->value
-                  );
-      }
-
-      return $opt;
-    } */
 
 		function getParents($type, $arr, $id) {
 			if ( $type == 'page' ) {

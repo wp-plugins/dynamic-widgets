@@ -265,6 +265,13 @@
 		$DW->addSingleOption($_POST['widget_id'], 'wpml');
 	}
 
+	// QTranslate Plugin support
+	if ( isset($_POST['qt_act']) && count($_POST['qt_act']) > 0 ) {
+		$DW->addMultiOption($_POST['widget_id'], 'qt', $_POST['qt'], $_POST['qt_act']);
+	} else if ( isset($_POST['qt']) && $_POST['qt'] == 'no' ) {
+		$DW->addSingleOption($_POST['widget_id'], 'qt');
+	}
+
   // WPSC/WPEC Plugin support
 	if ( isset($_POST['wpsc_act']) && count($_POST['wpsc_act']) > 0 ) {
 		$DW->addMultiOption($_POST['widget_id'], 'wpsc', $_POST['wpsc'], $_POST['wpsc_act']);
