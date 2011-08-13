@@ -226,15 +226,15 @@ Save as a quick setting <input type="text" name="qsetting" value="" />
     }
   }
 
-  function chkChild(pid) {
-  	if ( jQuery('#page_act_'+pid).is(':checked') == false ) {
-  		jQuery('#page_childs_act_'+pid).attr('checked', false);
+  function chkChild(prefix, pid) {
+  	if ( jQuery('#'+prefix+'_act_'+pid).is(':checked') == false ) {
+  		jQuery('#'+prefix+'_childs_act_'+pid).attr('checked', false);
   	}
   }
 
-  function chkParent(pid) {
-  	if ( jQuery('#page_childs_act_'+pid).is(':checked') == true ) {
-  		jQuery('#page_act_'+pid).attr('checked', true);
+  function chkParent(prefix, pid) {
+  	if ( jQuery('#'+prefix+'_childs_act_'+pid).is(':checked') == true ) {
+  		jQuery('#'+prefix+'_act_'+pid).attr('checked', true);
   	}
   }
 

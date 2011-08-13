@@ -223,17 +223,27 @@
               	}
 
               	$act_tax = array();
+              	$act_tax_childs = array();
               	foreach ( get_object_taxonomies($DW->whereami) as $t ) {
               		$m = $DW->whereami . '-tax_' . $t;
               		foreach ( $opt as $condition ) {
               			if ( $condition->maintype == $m ) {
               				if (! key_exists($t, $act_tax) ) {
               					$act_tax[$t] = array();
-              				}
-              				if ( $condition->name != 'default' ) {
-              					$act_tax[$t][ ] = $condition->name;
+              					$act_tax_childs[$t] = array();
               				}
               			}
+
+             				if ( $condition->name != 'default' ) {
+             					switch ( $condition->maintype ) {
+             						case $m:
+             							$act_tax[$t][ ] = $condition->name;
+             							break;
+             						case $m . '-childs':
+             							$act_tax_childs[$t][ ] = $condition->name;
+             							break;
+             					} // switch
+             				}
               		}
               	}
 
@@ -256,12 +266,18 @@
 											$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP3)');
 											break;
 										}
+										$parents = $DW->getTaxParents($t->taxonomy, array(), $t->term_id);
+										if ( (bool) array_intersect($act_tax_childs[$t->taxonomy], $parents) ) {
+											$display = $other;
+											$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP4)');
+										}
 									}
                 }
                 unset($act_custom, $act_childs, $act_tax);
               }
             } else if ( $DW->custom_taxonomy ) {		// Custom Taxonomy Archive
             	$wp_query = $GLOBALS['wp_query'];
+            	$taxonomy = $wp_query->get('taxonomy');
             	$term = $wp_query->get_queried_object_id();
             	if ( $DW->wpml ) {
             		$term = dw_wpml_get_id($term, $DW->whereami);
@@ -269,18 +285,32 @@
             	}
 
             	$act_custom = array();
-
+							$act_custom_childs = array();
             	foreach ( $opt as $condition ) {
-            		if ( $condition->name != 'default' && $condition->maintype == $DW->whereami ) {
-	       					$act_custom[ ] = $condition->name;
+            		if ( $condition->name != 'default' ) {
+            			switch ( $condition->maintype ) {
+            				case $DW->whereami:
+            					$act_custom[ ] = $condition->name;
+            				 	break;
+            				case $DW->whereami . '-childs':
+            						$act_custom_childs[ ] = $condition->name;
+            					break;
+            			} // switch
             		}
             	}
 
             	if ( in_array($term, $act_custom) ) {
             		$display = $other;
             		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECT1)');
+            	} else if ( count($act_custom_childs) > 0 ) {
+            		$parents = $DW->getTaxParents($taxonomy, array(), $term);
+            		if ( (bool) array_intersect($act_custom_childs, $parents) ) {
+            			$display = $other;
+            			$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECT2)');
+            		}
             	}
             	unset($act_custom);
+            	unset($act_custom_childs);
             } else {
               // no custom post type
               switch ( $DW->whereami ) {
@@ -532,13 +562,22 @@
             } // END if/else ( $DW->custom_post_type )
           } /* END if ( count($opt) > 0 ) */
 
-          if (! $display || ! $role || ! $date || ! $browser || ! $tpl || ! $wpml || ! $qt ) {
+					if ( $display ) {
+						foreach ( $DW->overrule_maintype as $mt ) {
+							if (! $$mt ) {
+        				$display = FALSE;
+								break;
+							}
+						}
+					}
+
+          if (! $display ) {
             $DW->message('Removed ' . $widget_id . ' from display, SID = ' . $sidebar_id . ' / WID = ' . $widget_id . ' / KID = ' . $widget_key);
           	if ( DW_OLD_METHOD ) {
           		unset($DW->registered_widgets[$widget_id]);
           	} else {
           		unset($sidebars[$sidebar_id][$widget_key]);
-          		if (! isset($DW->removelist[$sidebar_id])  ) {
+          		if (! isset($DW->removelist[$sidebar_id]) ) {
           			$DW->removelist[$sidebar_id] = array();
           		}
           		$DW->removelist[$sidebar_id][ ] = $widget_key;

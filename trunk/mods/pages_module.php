@@ -37,10 +37,10 @@
 			$page = get_page($pid);
 
 			echo '<div style="position:relative;left:15px;width:95%">';
-			echo '<input type="checkbox" id="page_act_' . $page->ID . '" name="page_act[]" value="' . $page->ID . '" ' . ( isset($page_act) && count($page_act) > 0 && in_array($page->ID, $page_act) ? 'checked="checked"' : '' ) . ' onchange="chkChild(' . $pid . ')" /> <label for="page_act_' . $page->ID . '">' . $page->post_title . ' ' . ( get_option('show_on_front') == 'page' && isset($static_page[$page->ID]) ? '(' . $static_page[$page->ID] . ')' : '' ) . '</label><br />';
+			echo '<input type="checkbox" id="page_act_' . $page->ID . '" name="page_act[]" value="' . $page->ID . '" ' . ( isset($page_act) && count($page_act) > 0 && in_array($page->ID, $page_act) ? 'checked="checked"' : '' ) . ' onchange="chkChild(\'page\', ' . $pid . ')" /> <label for="page_act_' . $page->ID . '">' . $page->post_title . ' ' . ( get_option('show_on_front') == 'page' && isset($static_page[$page->ID]) ? '(' . $static_page[$page->ID] . ')' : '' ) . '</label><br />';
 
 			echo '<div style="position:relative;left:15px;">';
-			echo '<input type="checkbox" id="page_childs_act_' . $pid . '" name="page_childs_act[]" value="' . $pid . '" ' . ( isset($page_childs_act) && count($page_childs_act) > 0 && in_array($pid, $page_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(' . $pid . ')" /> <label for="page_childs_act_' . $pid . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></label><br />';
+			echo '<input type="checkbox" id="page_childs_act_' . $pid . '" name="page_childs_act[]" value="' . $pid . '" ' . ( isset($page_childs_act) && count($page_childs_act) > 0 && in_array($pid, $page_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(\'page\', ' . $pid . ')" /> <label for="page_childs_act_' . $pid . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></label><br />';
 			echo '</div>';
 
 			if ( count($childs) > 0 ) {
@@ -93,6 +93,7 @@
 <div class="dynwid_conf">
 <?php _e('Show widget default on static pages?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN); ?>" onclick="divToggle('pages');" /><br />
 <?php $DW->dumpOpt($opt_page); ?>
+<?php ( isset($opt_page_childs) ) ? $DW->dumpOpt($opt_page_childs) : ''; ?>
 <div>
 	<div id="pages" class="infotext">
 	<?php
@@ -103,7 +104,7 @@
 					"All childs" without the parent.', DW_L10N_DOMAIN);
 		} else {
 			$childs_infotext = __('Unfortunately the childs-function has been disabled
-					because you have more than 500 pages.', DW_L10N_DOMAIN);
+					because you have more than the limit of pages.', DW_L10N_DOMAIN) . '(' . DW_PAGE_LIMIT . ')';
 		}
 		echo $childs_infotext;
 	?>
@@ -115,7 +116,18 @@
 <?php _e('Except the page(s)', DW_L10N_DOMAIN); ?>:<br />
 <div id="page-select" class="condition-select" <?php echo ( (isset($page_condition_select_style)) ? $page_condition_select_style : '' ); ?>>
 <div style="position:relative;left:-15px">
-<?php ( ($num_pages < DW_PAGE_LIMIT) ? prtPgs($pagemap, $opt_page->act, $opt_page_childs->act, $static_page) : lsPages($pages, $static_page, $opt_page->act) ); ?>
+<?php
+	if ( $num_pages < DW_PAGE_LIMIT ) {
+		if (! isset($opt_page_childs) ) {
+			$childs = array();
+		} else {
+			$childs = $opt_page_childs->act;
+		}
+		prtPgs($pagemap, $opt_page->act, $childs, $static_page);
+	} else {
+		lsPages($pages, $static_page, $opt_page->act);
+	}
+?>
 </div>
 </div>
 <?php } ?>

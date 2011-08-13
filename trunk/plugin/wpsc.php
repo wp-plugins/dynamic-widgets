@@ -21,7 +21,7 @@
 				$categories[$myrow->id] = $myrow->name;
 			}
 		} else {
-			$category_list = get_terms( 'wpsc_product_category', 'hide_empty=0');
+			$category_list = get_terms('wpsc_product_category', 'hide_empty=0');
 			foreach ( $category_list as $cat ) {
 					$categories[$cat->term_id] = $cat->name;
 				}
