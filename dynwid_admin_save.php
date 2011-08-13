@@ -10,26 +10,13 @@
   check_admin_referer('plugin-name-action_edit_' . $_POST['widget_id']);
 
   /* Checking basic stuff */
-  // Role
-	if ( $_POST['role'] == 'no' && count($_POST['role_act']) == 0 ) {
-    wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
-    die();
+  foreach ( $DW->overrule_maintype as $o ) {
+  	$act_field = $o . '_act';
+  	if ( $_POST[$o] == 'no' && count($_POST[$act_field]) == 0 ) {
+  		wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
+  		die();
+  	}
   }
-  // Browser
-	if ( $_POST['browser'] == 'no' && count($_POST['browser_act']) == 0 ) {
-		wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
-		die();
-	}
-	// Template
-	if ( $_POST['tpl'] == 'no' && count($_POST['tpl_act']) == 0 ) {
-		wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
-		die();
-	}
-	// WPML
-	if ( isset($_POST['wpml']) && $_POST['wpml'] == 'no' && count($_POST['wpml_act']) == 0 ) {
-		wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
-		die();
-	}
 
   // Date check
   if ( $_POST['date'] == 'no' ) {
@@ -150,13 +137,7 @@
 
   // -- Childs
   if ( isset($_POST['page_act']) && count($_POST['page_act']) > 0 && isset($_POST['page_childs_act']) && count($_POST['page_childs_act']) > 0 ) {
-  	$child_act = array();
-		foreach ( $_POST['page_childs_act'] as $act ) {
-  		if ( in_array($act, $_POST['page_act']) ) {
-  			$childs_act[ ] = $act;
-  		}
-  	}
-  	$DW->addMultiOption($_POST['widget_id'], 'page-childs', $_POST['page'], $childs_act);
+  	$DW->addChilds($_POST['widget_id'], 'page-childs', $_POST['page'], $_POST['page_act'], $_POST['page_childs_act']);
   }
 
   // Author
@@ -216,13 +197,7 @@
     	// -- Childs
     	$act_childs_field = $type . '_childs_act';
     	if ( count($_POST[$act_field]) > 0 && isset($_POST[$act_childs_field]) && count($_POST[$act_childs_field]) > 0 ) {
-    		$childs_act = array();
-    		foreach ( $_POST[$act_childs_field] as $act ) {
-    			if ( in_array($act, $_POST[$act_field]) ) {
-    				$childs_act[ ] = $act;
-    			}
-    		}
-    		$DW->addMultiOption($_POST['widget_id'], $type . '-childs', $_POST[$type], $childs_act);
+    		$DW->addChilds($_POST['widget_id'], $type . '-childs', $_POST[$type], $_POST[$act_field], $_POST[$act_childs_field]);
     	}
 
     	// -- Taxonomies
@@ -230,6 +205,12 @@
     		$act_tax_field = $type . '-tax_' . $tax . '_act';
     		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
 					$DW->addMultiOption($_POST['widget_id'], $type . '-tax_' . $tax, $_POST[$type], $_POST[$act_tax_field]);
+    		}
+
+    		// -- Childs
+    		$act_tax_childs_field = $type . '-tax_' . $tax . '_childs_act';
+    		if ( count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
+    			$DW->addChilds($_POST['widget_id'], $type . '-tax_' . $tax . '-childs', $_POST[$type], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
     		}
     	}
     }
@@ -254,6 +235,11 @@
 				$DW->addMultiOption($_POST['widget_id'], $type, $_POST[$type], $_POST[$act_field]);
 			} else if ( $_POST[$type] == 'no' ) {
 				$DW->addSingleOption($_POST['widget_id'], $type);
+			}
+
+			$childs_act_field = $type . '_childs_act';
+			if ( count($act_field) > 0 && isset($_POST[$childs_act_field]) && count($_POST[$childs_act_field]) > 0 ) {
+				$DW->addChilds($_POST['widget_id'], $type . '-childs', $_POST[$type], $_POST[$act_field], $_POST[$childs_act_field]);
 			}
 		}
 	}

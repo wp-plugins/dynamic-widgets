@@ -211,6 +211,16 @@
     	$this->wpsc = FALSE;
     }
 
+    public function addChilds($widget_id, $maintype, $default, $act, $childs) {
+  		$child_act = array();
+			foreach ( $childs as $opt ) {
+  			if ( in_array($opt, $act) ) {
+  				$childs_act[ ] = $opt;
+  			}
+  		}
+  		$this->addMultiOption($widget_id, $maintype, $default, $childs_act);
+  	}
+
     public function addDate($widget_id, $dates) {
       $query = "INSERT INTO " . $this->dbtable . "
                     (widget_id, maintype, name, value)
@@ -503,6 +513,16 @@
   			$a = $this->getParents($type, $a, $obj->post_parent);
   		}
 
+  		return $arr;
+  	}
+
+  	public function getTaxParents($tax_name, $arr, $id) {
+  		$obj = get_term_by('id', $id, $tax_name);
+  		if ( $obj->parent > 0 ) {
+  			$arr[ ] = $obj->parent;
+  			$a = &$arr;
+  			$a = $this->getTaxParents($tax_name, $a, $obj->parent);
+  		}
   		return $arr;
   	}
 

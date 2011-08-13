@@ -218,13 +218,23 @@
 
       // WPML Plugin support
       $this->wpml = FALSE;
-      
+
       // QTranslate Plugin support
     	$this->qtranslate = FALSE;
 
     	// WPSC/WPEC Plugin support
     	$this->wpsc = FALSE;
     }
+
+  	function addChilds($widget_id, $maintype, $default, $act, $childs) {
+  		$child_act = array();
+  		foreach ( $childs as $opt ) {
+  			if ( in_array($opt, $act) ) {
+  				$childs_act[ ] = $opt;
+  			}
+  		}
+  		$this->addMultiOption($widget_id, $maintype, $default, $childs_act);
+  	}
 
     function addDate($widget_id, $dates) {
       $query = "INSERT INTO " . $this->dbtable . "
@@ -522,6 +532,15 @@
 			return $arr;
 		}
 
+		function getTaxParents($tax_name, $arr, $id) {
+			$obj = get_term_by('id', $id, $tax_name);
+			if ( $obj->parent > 0 ) {
+				$arr[ ] = $obj->parent;
+				$a = &$arr;
+				$a = $this->getTaxParents($tax_name, $a, $obj->parent);
+			}
+			return $arr;
+		}
 
     function hasOptions($widget_id) {
       $query = "SELECT COUNT(1) AS total FROM " . $this->dbtable . "

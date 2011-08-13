@@ -27,7 +27,6 @@
 
 			foreach ( $posts as $pid => $childs ) {
 				$run = TRUE;
-				$post = get_post($pid);
 
 				if ( $DW->wpml ) {
 					$wpml_id = dw_wpml_get_id($pid, 'post_' . $type);
@@ -37,6 +36,8 @@
 				}
 
 				if ( $run ) {
+					$post = get_post($pid);
+
 					echo '<div style="position:relative;left:15px;">';
 					echo '<input type="checkbox" id="' . $type . '_act_' . $post->ID . '" name="' . $type . '_act[]" value="' . $post->ID . '" ' . ( isset($posts_act) && count($posts_act) > 0 && in_array($post->ID, $posts_act) ? 'checked="checked"' : '' ) . ' onchange="chkCPChild(\'' . $type . '\',' . $pid . ')" /> <label for="' . $type . '_act_' . $post->ID . '">' . $post->post_title . '</label><br />';
 
@@ -48,6 +49,48 @@
 
 					if ( count($childs) > 0 ) {
 						prtCPost($type, $ctid, $childs, $posts_act, $posts_childs_act);
+					}
+					echo '</div>';
+				}
+			}
+		}
+
+		function getTaxChilds($term, $arr, $id, $i) {
+			$tax = get_terms($term, array('hide_empty' => FALSE, 'parent' => $id));
+			foreach ($tax as $t ) {
+				if (! in_array($t->term_id, $i) && $t->parent == $id ) {
+					$i[ ] = $t->term_id;
+					$arr[$t->term_id] = array();
+					$a = &$arr[$t->term_id];
+					$a = getTaxChilds($term, $a, $t->term_id, &$i);
+				}
+			}
+			return $arr;
+		}
+
+		function prtTax($tax, $terms, $terms_act, $terms_childs_act, $prefix) {
+			foreach ( $terms as $pid => $childs ) {
+				$run = TRUE;
+
+				if ( $DW->wpml ) {
+					$wpml_id = dw_wpml_get_id($pid, 'tax_' . $tax);
+					if ( $wpml_id > 0 && $wpml_id <> $pid ) {
+						$run = FALSE;
+					}
+				}
+
+				if ( $run ) {
+					$term = get_term_by('id', $pid, $tax);
+
+					echo '<div style="position:relative;left:15px;">';
+					echo '<input type="checkbox" id="' . $prefix . '_act_' . $pid . '" name="' . $prefix . '_act[]" value="' . $pid . '" ' . ( isset($terms_act) && count($terms_act) > 0 && in_array($pid, $terms_act) ? 'checked="checked"' : '' ) . ' onchange="chkChild(\'' . $prefix . '\', ' . $pid . ')" /> <label for="' . $prefix . '_act_' . $pid . '">' . $term->name . '</label><br />';;
+
+					echo '<div style="position:relative;left:15px;">';
+					echo '<input type="checkbox" id="' . $prefix . '_childs_act_' . $pid . '" name="' . $prefix . '_childs_act[]" value="' . $pid . '" ' . ( isset($terms_childs_act) && count($terms_childs_act) > 0 && in_array($pid, $terms_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(\'' . $prefix . '\', ' . $pid . ')" /> <label for="' . $prefix . '_childs_act_' . $pid . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></label><br />';
+					echo '</div>';
+
+					if ( count($childs) > 0 ) {
+						prtTax($tax, $childs, $terms_act, $terms_childs_act, $prefix);
 					}
 					echo '</div>';
 				}
@@ -78,11 +121,14 @@
 			$tax_list = get_object_taxonomies($type, 'objects');
 
 			// Output
-			echo '<h4><b>' . __('Custom Post Type', DW_L10N_DOMAIN) . ' <em>' . $ctid->label . '</em></b> ' . ( $opt_custom->count > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ( $DW->wpml ? $wpml_icon : '' ) . '</h4>';
+			echo '<h4><b>' . $ctid->label . '</b> ' . ( $opt_custom->count > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ( $DW->wpml ? $wpml_icon : '' ) . '</h4>';
 			echo '<div class="dynwid_conf">';
 			echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $ctid->label . '? ' . ( ($ctid->hierarchical || count($tax_list) > 0) ? '<img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $type . '\');" />' : '' ) . '<br />';
 			echo '<input type="hidden" name="post_types[]" value="' . $type . '" />';
 			$DW->dumpOpt($opt_custom);
+			if ( isset($opt_custom_childs) ) {
+				$DW->dumpOpt($opt_custom_childs);
+			}
 
 			echo '<div>';
 			echo '<div id="custom_' . $type . '" class="infotext">';
@@ -98,13 +144,23 @@
 			echo '<div id="' . $type . '-select" class="condition-select" ' . ( (isset($custom_condition_select_style)) ? $custom_condition_select_style : '' ) . '>';
 
 			echo '<div style="position:relative;left:-15px">';
-			prtCPost($type, $ctid, $cpmap, $opt_custom->act, $opt_custom_childs->act);
+
+			if ( isset($opt_custom_childs) ) {
+				$childs = $opt_custom_childs->act;
+			} else {
+				$childs = array();
+			}
+			prtCPost($type, $ctid, $cpmap, $opt_custom->act, $childs);
+
 			echo '</div>';
 			echo '</div>';
 
 			foreach ( $tax_list as $tax_type ) {
 				// Prepare
 				$opt_tax = $DW->getDWOpt($_GET['id'], $type . '-tax_' . $tax_type->name);
+				if ( $tax_type->hierarchical ) {
+					$opt_tax_childs = $DW->getDWOpt($_GET['id'], $type . '-tax_' . $tax_type->name . '-childs');
+				}
 
 				$tax = get_terms($tax_type->name, array('get' => 'all'));
 				if ( count($tax) > 0 ) {
@@ -112,33 +168,77 @@
 						$tax_condition_select_style = DW_LIST_STYLE;
 					}
 
+					$tree = getTaxChilds($tax_type->name, array(), 0, array());
+
 					echo '<br />';
 					$DW->dumpOpt($opt_tax);
-					echo __('Except for Custom Taxonomy') . ' <em>' . $tax_type->label . '</em>:<br />';
+					if ( isset($opt_tax_childs) ) {
+						$DW->dumpOpt($opt_tax_childs);
+					}
+					echo __('Except for', DW_L10N_DOMAIN) . ' ' . $tax_type->label . ':<br />';
 					echo '<div id="' . $type . '-tax_' . $tax_type->name . '-select" class="condition-select" ' . ( (isset($tax_condition_select_style)) ? $tax_condition_select_style : '' ) . '>';
 
-					foreach ( $tax as $t ) {
-						$run = TRUE;
-						if ( $DW->wpml ) {
-							$wpml_id = dw_wpml_get_id($t->term_id, 'tax_' . $tax_type->name);
-							if ( $wpml_id > 0 && $wpml_id <> $t->term_id ) {
-								$run = FALSE;
-							}
-						}
-
-						if ( $run ) {
-							echo '<input type="checkbox" id="' . $type . '-tax_' . $tax_type->name . '_act_' . $t->term_id . '" name="' . $type . '-tax_' . $tax_type->name . '_act[]" value="' . $t->term_id . '" ';
-							echo ( $opt_tax->count > 0 && in_array($t->term_id, $opt_tax->act) ) ? 'checked="checked"' : '';
-							echo ' /> <label for="' . $type . '-tax_' . $tax_type->name . '_act_' . $t->term_id . '">';
-							echo $t->name;
-							echo '</label><br />';
-						}
+					if (! isset($opt_tax_childs) ) {
+						$childs = array();
+					} else {
+						$childs = $opt_tax_childs->act;
 					}
+					prtTax($tax_type->name, $tree, $opt_tax->act, $childs, $type . '-tax_' . $tax_type->name);
+
 					echo '</div>';
 				}
 			}
 
 			echo '</div><!-- end dynwid_conf -->';
+		}
+
+		if ( function_exists('is_tax') ) {
+			$taxlist = get_taxonomies($args, 'objects', 'and');
+
+			if ( count($taxlist) > 0 ) {
+				foreach ( $taxlist as $tax_id => $tax ) {
+					$ct = 'tax_' . $tax_id;
+					$ct_archive_yes_selected = 'checked="checked"';
+					$opt_ct_archive = $DW->getDWOpt($_GET['id'], $ct);
+					if ( $tax->hierarchical ) {
+						$opt_ct_archive_childs = $DW->getDWOpt($_GET['id'], $ct . '-childs');
+					}
+
+					$t = get_terms($tax->name, array('get' => 'all'));
+					if ( count($t) > DW_LIST_LIMIT ) {
+						$ct_archive_condition_select_style = DW_LIST_STYLE;
+					}
+
+					$tree = getTaxChilds($tax->name, array(), 0, array());
+
+					echo '<h4><b>' . $tax->label . '</b> (<em>' . $post_types[$tax->object_type[0]]->label . '</em>)' . ( ($opt_ct_archive->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
+					echo '<div class="dynwid_conf">';
+					echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $tax->label . '?<br />';
+					echo '<input type="hidden" name="taxonomy[]" value="' . $tax_id . '" />';
+					$DW->dumpOpt($opt_ct_archive);
+					if ( isset($opt_ct_archive_childs) ) {
+						$DW->dumpOpt($opt_ct_archive_childs);
+					}
+
+					echo '<input type="radio" name="' . $ct . '" value="yes" id="' . $ct . '-yes" ' . ( ($opt_ct_archive->selectYes()) ? $opt_ct_archive->checked : '' ) . ' /> <label for="' . $ct . '-yes">' . __('Yes') . '</label> ';
+					echo '<input type="radio" name="' . $ct . '" value="no" id="' . $ct . '-no" ' . ( ($opt_ct_archive->selectNo()) ? $opt_ct_archive->checked : '' ) . ' /> <label for="' . $ct . '-no">' . __('No') . '</label><br />';
+
+					if ( count($t) > 0 ) {
+						echo __('Except for', DW_L10N_DOMAIN) . ':<br />';
+						echo '<div id="' . $ct . '-select" class="condition-select" ' . ( (isset($ct_archive_condition_select_style)) ? $ct_archive_condition_select_style : '' ) . '>';
+
+						if (! isset($opt_ct_archive_childs) ) {
+							$childs = array();
+						} else {
+							$childs = $opt_ct_archive_childs->act;
+						}
+						prtTax($tax->name, $tree, $opt_ct_archive->act, $childs, $ct);
+
+						echo '</div>';
+					}
+					echo '</div><!-- end dynwid_conf -->';
+				}
+			}
 		}
 
 		// Custom Post Type Archives
@@ -166,51 +266,6 @@
 			echo '</div><!-- end dynwid_conf -->';
 		}
 
-		if ( function_exists('is_tax') ) {
-			$taxlist = get_taxonomies($args, 'objects', 'and');
-
-			if ( count($taxlist) > 0 ) {
-				foreach ( $taxlist as $tax_id => $tax ) {
-					$ct = 'tax_' . $tax_id;
-					$ct_archive_yes_selected = 'checked="checked"';
-					$opt_ct_archive = $DW->getDWOpt($_GET['id'], $ct);
-
-					$t = get_terms($tax->name, array('get' => 'all'));
-					if ( count($t) > DW_LIST_LIMIT ) {
-						$ct_archive_condition_select_style = DW_LIST_STYLE;
-					}
-
-					echo '<h4><b>' . __('Custom Taxonomy Archive', DW_L10N_DOMAIN) . ' <em>' . $tax->label . '</em></b> ' . ( ($opt_ct_archive->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
-					echo '<div class="dynwid_conf">';
-					echo __('Show widget on Custom Taxonomy Archive', DW_L10N_DOMAIN) . ' <em>' . $tax->label . '</em>?<br />';
-					echo '<input type="hidden" name="taxonomy[]" value="' . $tax_id . '" />';
-					$DW->dumpOpt($opt_ct_archive);
-
-					echo '<input type="radio" name="' . $ct . '" value="yes" id="' . $ct . '-yes" ' . ( ($opt_ct_archive->selectYes()) ? $opt_ct_archive->checked : '' ) . ' /> <label for="' . $ct . '-yes">' . __('Yes') . '</label> ';
-					echo '<input type="radio" name="' . $ct . '" value="no" id="' . $ct . '-no" ' . ( ($opt_ct_archive->selectNo()) ? $opt_ct_archive->checked : '' ) . ' /> <label for="' . $ct . '-no">' . __('No') . '</label><br />';
-
-					if ( count($t) > 0 ) {
-						echo __('Except for', DW_L10N_DOMAIN) . ':<br />';
-						echo '<div id="' . $ct . '-select" class="condition-select" ' . ( (isset($ct_archive_condition_select_style)) ? $ct_archive_condition_select_style : '' ) . '>';
-						foreach ( $t as $term ) {
-							$run = TRUE;
-							if ( $DW->wpml ) {
-								$wpml_id = dw_wpml_get_id($term->term_id, 'tax_' . $term->taxonomy);
-								if ( $wpml_id > 0 && $wpml_id <> $term->term_id ) {
-									$run = FALSE;
-								}
-							}
-
-							if ( $run ) {
-								echo '<input type="checkbox" id="' . $ct . '_act_' . $term->term_id . '" name="' . $ct . '_act[]" value="' . $term->term_id . '"' . ( ($opt_ct_archive->count > 0 && in_array($term->term_id, $opt_ct_archive->act)) ? 'checked="checked"' : '' ) . ' /> <label for="' . $ct . '_act_' . $term->term_id . '">' . $term->name . '</label><br />';
-							}
-						}
-						echo '</div>';
-					}
-					echo '</div><!-- end dynwid_conf -->';
-				}
-			}
-		}
 	} // end version compare >= WP 3.0
 ?>
 
