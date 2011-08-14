@@ -168,7 +168,7 @@
           			$qt = $qt_tmp;
           		}
           	}
-          	unset($wpml_tmp);
+          	unset($qt_tmp);
 
           	// Browser and Template
           	foreach ( $opt as $condition ) {
@@ -222,6 +222,7 @@
               		}
               	}
 
+              	// Taxonomies within CPT
               	$act_tax = array();
               	$act_tax_childs = array();
               	foreach ( get_object_taxonomies($DW->whereami) as $t ) {
@@ -242,10 +243,10 @@
              						case $m . '-childs':
              							$act_tax_childs[$t][ ] = $condition->name;
              							break;
-             					} // switch
+             					} // END switch
              				}
-              		}
-              	}
+              		} // END $opt
+              	} // END object_taxonomies
 
               	$term = wp_get_object_terms($id, get_object_taxonomies($DW->whereami), array('fields' => 'all'));
 
@@ -267,14 +268,14 @@
 											break;
 										}
 										$parents = $DW->getTaxParents($t->taxonomy, array(), $t->term_id);
-										if ( (bool) array_intersect($act_tax_childs[$t->taxonomy], $parents) ) {
+										if ( is_array($act_tax_childs[$t->taxonomy]) && (bool) array_intersect($act_tax_childs[$t->taxonomy], $parents) ) {
 											$display = $other;
 											$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP4)');
 										}
 									}
                 }
                 unset($act_custom, $act_childs, $act_tax);
-              }
+              } // END count($act)
             } else if ( $DW->custom_taxonomy ) {		// Custom Taxonomy Archive
             	$wp_query = $GLOBALS['wp_query'];
             	$taxonomy = $wp_query->get('taxonomy');
@@ -556,8 +557,6 @@
               			}
               		}
               		break;
-
-
               } // END switch ( $DW->whereami )
             } // END if/else ( $DW->custom_post_type )
           } /* END if ( count($opt) > 0 ) */

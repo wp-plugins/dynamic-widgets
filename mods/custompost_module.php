@@ -101,8 +101,9 @@
 		'public'   => TRUE,
 		'_builtin' => FALSE
 	);
-		$post_types = get_post_types($args, 'objects', 'and');
 
+		// Custom Post Type
+		$post_types = get_post_types($args, 'objects', 'and');
 		foreach ( $post_types as $type => $ctid ) {
 			// Prepare
 			$opt_custom = $DW->getDWOpt($_GET['id'], $type);
@@ -155,6 +156,7 @@
 			echo '</div>';
 			echo '</div>';
 
+			// Taxonomy in Custom Post Type
 			foreach ( $tax_list as $tax_type ) {
 				// Prepare
 				$opt_tax = $DW->getDWOpt($_GET['id'], $type . '-tax_' . $tax_type->name);
@@ -177,14 +179,14 @@
 					}
 					echo __('Except for', DW_L10N_DOMAIN) . ' ' . $tax_type->label . ':<br />';
 					echo '<div id="' . $type . '-tax_' . $tax_type->name . '-select" class="condition-select" ' . ( (isset($tax_condition_select_style)) ? $tax_condition_select_style : '' ) . '>';
-
+					echo '<div style="position:relative;left:-15px">';
 					if (! isset($opt_tax_childs) ) {
 						$childs = array();
 					} else {
 						$childs = $opt_tax_childs->act;
 					}
 					prtTax($tax_type->name, $tree, $opt_tax->act, $childs, $type . '-tax_' . $tax_type->name);
-
+					echo '</div>';
 					echo '</div>';
 				}
 			}
@@ -192,6 +194,7 @@
 			echo '</div><!-- end dynwid_conf -->';
 		}
 
+		// Custom Taxonomy Archive
 		if ( function_exists('is_tax') ) {
 			$taxlist = get_taxonomies($args, 'objects', 'and');
 
@@ -211,14 +214,26 @@
 
 					$tree = getTaxChilds($tax->name, array(), 0, array());
 
-					echo '<h4><b>' . $tax->label . '</b> (<em>' . $post_types[$tax->object_type[0]]->label . '</em>)' . ( ($opt_ct_archive->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
+					$cpt_label = array();
+					foreach ( $tax->object_type as $obj ) {
+						$cpt_label[ ] = $post_types[$obj]->label;
+					}
+
+					echo '<h4><b>' . $tax->label . '</b> (<em>' . implode(', ', $cpt_label) . '</em>)' . ( ($opt_ct_archive->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
 					echo '<div class="dynwid_conf">';
-					echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $tax->label . '?<br />';
+					echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $tax->label . '?' . ( ($tax->hierarchical || count($t) > 0) ? ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $ct . '\');" />' : '' ) . '<br />';
 					echo '<input type="hidden" name="taxonomy[]" value="' . $tax_id . '" />';
 					$DW->dumpOpt($opt_ct_archive);
 					if ( isset($opt_ct_archive_childs) ) {
 						$DW->dumpOpt($opt_ct_archive_childs);
 					}
+
+					echo '<div>';
+					echo '<div id="custom_' . $ct . '" class="infotext">';
+					echo ( $tax->hierarchical ? '<p>' . $childs_infotext . '</p>' : '' );
+					echo ( (count($t) > 0) ? '<p>' . __('All exceptions work in a logical OR condition. That means when one of the exceptions is met, the exception rule is applied.', DW_L10N_DOMAIN) . '</p>' : '' );
+					echo '</div>';
+					echo '</div>';
 
 					echo '<input type="radio" name="' . $ct . '" value="yes" id="' . $ct . '-yes" ' . ( ($opt_ct_archive->selectYes()) ? $opt_ct_archive->checked : '' ) . ' /> <label for="' . $ct . '-yes">' . __('Yes') . '</label> ';
 					echo '<input type="radio" name="' . $ct . '" value="no" id="' . $ct . '-no" ' . ( ($opt_ct_archive->selectNo()) ? $opt_ct_archive->checked : '' ) . ' /> <label for="' . $ct . '-no">' . __('No') . '</label><br />';
@@ -226,14 +241,14 @@
 					if ( count($t) > 0 ) {
 						echo __('Except for', DW_L10N_DOMAIN) . ':<br />';
 						echo '<div id="' . $ct . '-select" class="condition-select" ' . ( (isset($ct_archive_condition_select_style)) ? $ct_archive_condition_select_style : '' ) . '>';
-
+						echo '<div style="position:relative;left:-15px">';
 						if (! isset($opt_ct_archive_childs) ) {
 							$childs = array();
 						} else {
 							$childs = $opt_ct_archive_childs->act;
 						}
 						prtTax($tax->name, $tree, $opt_ct_archive->act, $childs, $ct);
-
+						echo '</div>';
 						echo '</div>';
 					}
 					echo '</div><!-- end dynwid_conf -->';

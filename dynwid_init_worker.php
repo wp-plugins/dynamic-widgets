@@ -112,20 +112,5 @@
 		$DW->message('Page changed to tax_'. $taxonomy. ' (term: ' . $wp_query->get_queried_object_id() . ')');
 	}
 
-	if ( $DW->whereami == 'archive' ) {
-		// WPSC/WPEC Plugin Support
-		if ( defined('WPSC_VERSION') && version_compare(WPSC_VERSION, '3.8', '>=') ) {
-			$wpsc_query = &$GLOBALS['wpsc_query'];
-			if ( $wpsc_query->query_vars['taxonomy'] == 'wpsc_product_category' ) {
-				$DW->wpsc = TRUE;
-				$DW->whereami = 'wpsc';
-				$term = get_term_by('slug', $wpsc_query->query_vars['term'], 'wpsc_product_category');
-				$DW->message('WPSC detected, page changed to ' . $DW->whereami . ', category: ' . $term->term_id);
-
-				require_once(DW_PLUGIN . 'wpsc.php');
-			}
-		}
-	}
-
 	$DW->dwList($DW->whereami);
 ?>
