@@ -1,6 +1,7 @@
 <?php
 /**
  * WordPress Shopping Cart / WordPress E-Commerce Plugin
+ * Only for WPSC < 3.8
  * http://getshopped.org/
  *
  * @version $Id$
@@ -8,23 +9,16 @@
  */
 
 	function dw_wpsc_get_categories() {
-		if ( version_compare(WPSC_VERSION, '3.8', '<' ) ) {
-			$wpdb = &$GLOBALS['wpdb'];
+		$wpdb = &$GLOBALS['wpdb'];
 
-			$categories = array();
-			$table = WPSC_TABLE_PRODUCT_CATEGORIES;
-			$fields = array('id', 'name');
-			$query = "SELECT " . implode(', ', $fields) . " FROM " . $table . " WHERE active = '1' ORDER BY name";
-			$results = $wpdb->get_results($query);
+		$categories = array();
+		$table = WPSC_TABLE_PRODUCT_CATEGORIES;
+		$fields = array('id', 'name');
+		$query = "SELECT " . implode(', ', $fields) . " FROM " . $table . " WHERE active = '1' ORDER BY name";
+		$results = $wpdb->get_results($query);
 
-			foreach ( $results as $myrow ) {
-				$categories[$myrow->id] = $myrow->name;
-			}
-		} else {
-			$category_list = get_terms('wpsc_product_category', 'hide_empty=0');
-			foreach ( $category_list as $cat ) {
-					$categories[$cat->term_id] = $cat->name;
-				}
+		foreach ( $results as $myrow ) {
+			$categories[$myrow->id] = $myrow->name;
 		}
 
 		return $categories;
@@ -32,12 +26,7 @@
 
 	function is_dw_wpsc_category($id) {
 		$wpsc_query = &$GLOBALS['wpsc_query'];
-		if ( version_compare(WPSC_VERSION, '3.8', '<') ) {
-			$category = $wpsc_query->category;
-		} else {
-			$term = get_term_by('slug', $wpsc_query->query_vars['term'], 'wpsc_product_category');
-			$category = $term->term_id;
-		}
+		$category = $wpsc_query->category;
 
 		if ( is_int($id) ) {
 			$id = array($id);

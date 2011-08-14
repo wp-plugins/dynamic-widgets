@@ -6,7 +6,7 @@
  * Author: Qurl
  * Version: 1.4.1.8
  * Author URI: http://www.qurl.nl/
- * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, conditional tags, wpml, wpec, buddypress
+ * Tags: widget, widgets, dynamic, sidebar, custom, rules, admin, condition, conditional tags, wpml, qtranslate, wpec, buddypress
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,43 +17,33 @@
  *
  * @version $Id$
  * @copyright 2011 Jacco Drabbe
- */
-
-/*
-   Thanks to Alexis Nomine for the contribution of the French (fr_FR) language files, several L10N fixes and change of the edit options UI.
-   Thanks to Daniel Bihler for the contribution of the German (de_DE) language files.
-   Thanks to Eduardo Larequi for the contribution of the Spanish (es_ES) language files and several L10N fixes.
- */
-
-/*
-   WPML Plugin support via API
-   Using constants	ICL_PLUGIN_PATH > dynwid_admin_edit.php, mods/wpml_module.php, dynwid_init_worker.php, dynwid_worker.php
-   Using functions  wpml_get_default_language() > dynwid_init_worker.php
-                    wpml_get_current_language() > dynwid_init_worker.php, dynwid_worker.php, plugin/wpml.php
-                    wpml_get_content_translation() > plugin/wpml.php
-   									wpml_get_active_languages() > mods/wpml_module.php
- */
-
-/*
-	QTranslate Plugin support via API
- 	Using constants 	QTRANS_INIT > dynwid_init_worker.php, dynwid_worker.php, mods/qtranslate_module.php
-	Using functions		qtrans_getLanguage() > dynwid_init_worker.php, dynwid_worker.php
-	Using WP Options	qtranslate_default_language > dynwid_init_worker.php
-   									qtranslate_enabled_languages > mods/qtranslate_module.php
-*/
-
-/*
-	 WPSC/WPEC Plugin support
- 	 Using constants	WPSC_TABLE_PRODUCT_CATEGORIES	> dynwid_admin_overview.php, plugin/wpsc.php
- 	 									WPSC_VERSION > mods/wpec_module.php, dynwid_init_worker.php, plugin/wpsc.php
- 	 Using vars 			$wpsc_query > dynwid_init_worker.php, plugin/wpsc.php
- */
-
-/*
-   BP Plugin support
-   Using constants	BP_VERSION > mods/bp_module, dynwid_init_worker.php
-   User vars				$bp > dynwid_init_worker.php, plugin/bp.php
- */
+ *
+ * Thanks to Alexis Nomine for the contribution of the French (fr_FR) language files, several L10N fixes and change of the edit options UI.
+ * Thanks to Daniel Bihler for the contribution of the German (de_DE) language files.
+ * Thanks to Eduardo Larequi for the contribution of the Spanish (es_ES) language files and several L10N fixes.
+ *
+ * WPML Plugin support via API
+ * Using constants	ICL_PLUGIN_PATH > dynwid_admin_edit.php, mods/wpml_module.php, dynwid_init_worker.php, dynwid_worker.php
+ * Using functions  wpml_get_default_language() > dynwid_init_worker.php
+ *                  wpml_get_current_language() > dynwid_init_worker.php, dynwid_worker.php, plugin/wpml.php
+ *                  wpml_get_content_translation() > plugin/wpml.php
+ * 									wpml_get_active_languages() > mods/wpml_module.php
+ *
+ * QTranslate Plugin support via API
+ * Using constants 	QTRANS_INIT > dynwid_init_worker.php, dynwid_worker.php, mods/qtranslate_module.php
+ * Using functions	qtrans_getLanguage() > dynwid_init_worker.php, dynwid_worker.php
+ * Using WPOptions	qtranslate_default_language > dynwid_init_worker.php
+ * 									qtranslate_enabled_languages > mods/qtranslate_module.php
+ *
+ * WPSC/WPEC Plugin support
+ * Using constants	WPSC_TABLE_PRODUCT_CATEGORIES	> dynwid_admin_overview.php, plugin/wpsc.php
+ * 									WPSC_VERSION > mods/wpec_module.php, dynwid_init_worker.php, plugin/wpsc.php
+ * Using vars 			$wpsc_query > dynwid_init_worker.php, plugin/wpsc.php
+ *
+ * BP Plugin support
+ * Using constants	BP_VERSION > mods/bp_module, dynwid_init_worker.php
+ * User vars				$bp > dynwid_init_worker.php, plugin/bp.php
+**/
 
   // Constants
   define('DW_DEBUG', FALSE);
