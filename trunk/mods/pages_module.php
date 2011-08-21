@@ -66,13 +66,12 @@
 	$pages = get_pages();
 	$num_pages = count($pages);
 
-	// For childs we double the number of pages because of addition of 'All childs' option
 	if ( $num_pages < DW_PAGE_LIMIT ) {
 		$pagemap = getPageChilds(array(), 0, array());
-		$num_pages = $num_pages * 2;
 	}
 
-	if ( $num_pages > DW_LIST_LIMIT  ) {
+	// For childs we double the number of pages because of addition of 'All childs' option
+	if ( (isset($pagemap) && ($num_pages * 2 > DW_LIST_LIMIT)) || ($num_pages  > DW_LIST_LIMIT) ) {
 		$page_condition_select_style = DW_LIST_STYLE;
 	}
 

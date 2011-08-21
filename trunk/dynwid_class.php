@@ -396,13 +396,17 @@
       }
 
       $query = "SELECT DISTINCT widget_id FROM " . $this->dbtable . "
-                  WHERE  maintype LIKE '" . $whereami . "%'
-                  		OR maintype = 'role'
-                  		OR maintype = 'date'
-                  		OR maintype = 'browser'
-                  		OR maintype = 'tpl'
-                  		OR maintype = 'wpml'
-                  		OR maintype = 'qt'";
+                  WHERE  maintype LIKE '" . $whereami . "%'";
+      
+      if ( count($this->overrule_maintype) > 0 ) {
+      	$query .= " OR maintype IN ";
+      	$q = array();
+      	foreach ( $this->overrule_maintype as $omt ) {
+      		$q[ ] = "'" . $omt . "'";
+      	}
+      	$query .= "(" . implode(', ', $q) . ")";
+      }          
+      
       $results = $this->wpdb->get_results($query);
       foreach ( $results as $myrow ) {
         $this->dynwid_list[ ] = $myrow->widget_id;
@@ -486,15 +490,21 @@
       	}
         $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
                   WHERE widget_id LIKE '" . $widget_id . "'
-                    AND (maintype LIKE '" . $maintype . "%'
-                    	OR maintype = 'role'
-                    	OR maintype = 'date'
-                    	OR maintype = 'browser'
-                    	OR maintype = 'tpl'
-                    	OR maintype = 'wpml'
-                    	OR maintype = 'qt')
-                  ORDER BY maintype, name";
+                    AND (maintype LIKE '" . $maintype . "%'";
+                    
+      	if ( count($this->overrule_maintype) > 0 ) {
+      		$query .= " OR maintype IN (";
+      		$q = array();
+      		foreach ( $this->overrule_maintype as $omt ) {
+      			$q[ ] = "'" . $omt . "'";
+      		}
+      		$query .= implode(', ', $q);
+      	} 
+      		
+        
+        $query .= ")) ORDER BY maintype, name";
       }
+      $this->message('Q: ' . $query);
 
 			$results = $this->wpdb->get_results($query);
       return $results;

@@ -20,6 +20,11 @@
 	<input type="image" style="vertical-align: middle;" title="Donate for this plugin via PayPal" alt="Donate" name="submit" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" onclick="jQuery('#paypal').submit()">
 </h2>
 <?php
+	if ( DW_CLASSFILE == 'dynwid_class_php4.php' ) {
+		$mbox = new DWMessageBox();
+		$mbox->create('WARNING', 'Your server is running PHP4. Future versions of Dynamic Widgets will not work. See the <a href="' . DW_URL . '/dynamic-widgets/faq/" target="_blank">FAQ</a>.');	
+	}
+	
 	if ( $DW->enabled ) {
 		if ( dynwid_sql_mode() ) {
 			echo '<div class="error" id="message"><p>';
