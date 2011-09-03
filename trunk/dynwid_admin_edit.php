@@ -259,12 +259,12 @@ Save as a quick setting <input type="text" name="qsetting" value="" />
   }
 
   function divToggle(div) {
-    div = '#'+div;
+    var div = '#'+div;
     jQuery(div).slideToggle(400);
   }
 
   function showCalendar(id) {
-    if ( document.getElementById('date-no').checked ) {
+    if ( jQuery('#date-no').is(':checked') ) {
       var id = '#'+id;
       jQuery(function() {
   		  jQuery(id).datepicker({
