@@ -9,7 +9,7 @@
 	$opt_author = $DW->getDWOpt($_GET['id'], 'author');
 
 	if ( function_exists('get_users') ) {
-		$authors = get_users( array('who' => 'author') );
+		$authors = get_users( array('who' => 'authors') );
 	} else {
 		$authors = dwGetAuthors();
 	}
