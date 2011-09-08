@@ -69,6 +69,8 @@
 		}
 
 		function prtTax($tax, $terms, $terms_act, $terms_childs_act, $prefix) {
+			global $DW;
+			
 			foreach ( $terms as $pid => $childs ) {
 				$run = TRUE;
 
