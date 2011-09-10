@@ -346,6 +346,8 @@
       	return 'e404';
       } else if ( is_search() ) {
         return 'search';
+      } else if ( function_exists('is_pod_page') && is_pod_page() ) {
+      	return 'pods';
       } else {
         return 'undef';
       }
