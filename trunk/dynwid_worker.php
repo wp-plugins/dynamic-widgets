@@ -11,6 +11,12 @@
 
 	// Template
 	$tpl = get_page_template();
+	if ( $DW->whereami == 'pods' ) {
+		global $pod_page_exists;
+		if (! empty($pod_page_exists['page_template']) ) {
+			$tpl = $pod_page_exists['page_template'];
+		}
+	}	
 	$DW->template = basename($tpl);
 	$DW->message('Template = ' . $DW->template);
 
@@ -556,6 +562,9 @@
              					$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EBPG3)');
               			}
               		}
+              		break;
+              		
+              	case 'pods':
               		break;
               } // END switch ( $DW->whereami )
             } // END if/else ( $DW->custom_post_type )
