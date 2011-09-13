@@ -6,18 +6,41 @@
  * @copyright 2011 Jacco Drabbe
  */
 
-	$wp_roles = $GLOBALS['wp_roles'];
-	$roles = array_merge($wp_roles->role_names, array('anonymous' => __('Anonymous') . '|User role'));
-	$jsroles = array();
-	foreach ( $roles as $rid => $role ) {
-		$roles[esc_attr($rid)] = translate_user_role($role);
-		$jsroles[ ] = '\'role_act_' . esc_attr($rid) . '\'';    // Prep for JS Array
-	}
-	if ( count($roles) > DW_LIST_LIMIT ) {
-		$role_condition_select_style = DW_LIST_STYLE;
-	}
+	class DW_Role extends DWModule {
+		protected static $info = 'Setting options by role is very powerfull. It can override all other options!<br />Users who are not logged in, get the <em>Anonymous</em> role.';
+		protected static $except = 'Except for:';
+		public static $option = array( 'role' => 'Role' );
+		protected static $overrule = TRUE;
+		protected static $question = 'Show widget to everybody?';
+		protected static $type = 'complex';
 
-	$opt_role = $DW->getDWOpt($_GET['id'], 'role');
+		public static function admin() {
+			$DW = &$GLOBALS['DW'];
+
+			parent::admin();
+/*
+		   $list = array();
+		   $wp_roles = $GLOBALS['wp_roles'];
+		   $roles = array_merge($wp_roles->role_names, array('anonymous' => __('Anonymous') . '|User role'));
+		   foreach ( $roles as $rid => $role ) {
+		   $list[esc_attr($rid)] = translate_user_role($role);
+		   }
+
+		   self::mkGUI(self::$type, self::$option[self::$name], self::$question, self::$info, self::$except, $list);
+*/
+
+			$wp_roles = $GLOBALS['wp_roles'];
+			$roles = array_merge($wp_roles->role_names, array('anonymous' => __('Anonymous') . '|User role'));
+			$jsroles = array();
+			foreach ( $roles as $rid => $role ) {
+				$roles[esc_attr($rid)] = translate_user_role($role);
+				$jsroles[ ] = '\'role_act_' . esc_attr($rid) . '\'';    // Prep for JS Array
+			}
+			if ( count($roles) > DW_LIST_LIMIT ) {
+				$role_condition_select_style = DW_LIST_STYLE;
+			}
+
+			$opt_role = $DW->getDWOpt($_GET['id'], 'role');
 ?>
 
 <h4><b><?php _e('Role'); ?></b><?php echo ( $opt_role->count > 0 ) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : ''; ?></h4>
@@ -38,3 +61,17 @@
 <?php } ?>
 </div>
 </div><!-- end dynwid_conf -->
+
+<script type="text/javascript">
+/* <![CDATA[ */
+	var cRole = new Array(<?php echo implode(', ' , $jsroles); ?>);
+
+  if ( jQuery('#role-yes').is(':checked') ) {
+  	swChb(cRole, true);
+  }
+/* ]]> */
+</script>
+<?php
+		}
+	}
+?>

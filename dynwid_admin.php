@@ -20,11 +20,6 @@
 	<input type="image" style="vertical-align: middle;" title="Donate for this plugin via PayPal" alt="Donate" name="submit" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" onclick="jQuery('#paypal').submit()">
 </h2>
 <?php
-	if ( DW_CLASSFILE == 'dynwid_class_php4.php' ) {
-		$mbox = new DWMessageBox();
-		$mbox->create('WARNING', 'Your server is running PHP4. Future versions of Dynamic Widgets will not work. See the <a href="' . DW_URL . '/dynamic-widgets/faq/" target="_blank">FAQ</a>.');	
-	}
-	
 	if ( $DW->enabled ) {
 		if ( dynwid_sql_mode() ) {
 			echo '<div class="error" id="message"><p>';
@@ -35,6 +30,7 @@
 		// Actions
 		if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
 			$dw_admin_script = '/dynwid_admin_edit.php';
+			$DW->loadModules();
 		} else {
 			$dw_admin_script = '/dynwid_admin_overview.php';
 
@@ -56,7 +52,7 @@
 <!-- Footer //-->
 <div class="clear"><br /><br /></div>
 <div><small>
-  <a href="<?php echo DW_URL; ?>/dynamic-widgets/" target="_blank">Dynamic Widgets</a> v<?php echo DW_VERSION; ?> (<?php echo ( DW_CLASSFILE == 'dynwid_class_php4.php' ? 'PHP4' : 'PHP5' ) . ', ' . ( DW_OLD_METHOD ? __('OLD', DW_L10N_DOMAIN)  : __('FILTER', DW_L10N_DOMAIN) ); ?>)
+  <a href="<?php echo DW_URL; ?>/dynamic-widgets/" target="_blank">Dynamic Widgets</a> v<?php echo DW_VERSION; ?> (<?php echo ( DW_OLD_METHOD ) ? __('OLD', DW_L10N_DOMAIN)  : __('FILTER', DW_L10N_DOMAIN); ?>)
 </small></div>
 
 </div> <!-- /wrap //-->

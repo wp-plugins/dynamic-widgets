@@ -7,22 +7,18 @@
  */
 
 	class DWMessageBox {
-		private $leadtext;
-		private $message;
-		public  $type;
+		private static $leadtext;
+		private static $message;
+		public static  $type;
 
-		public function __construct($type = 'notify') {
-			$this->type = $type;
+		public static function create($lead, $msg) {
+			self::setlead($lead);
+			self::setMessage($msg);
+			self::output();
 		}
 
-		public function create($lead, $msg) {
-			$this->setlead($lead);
-			$this->setMessage($msg);
-			$this->output();
-		}
-
-		public function output() {
-			switch ( $this->type ) {
+		public static function output() {
+			switch ( self::$type ) {
 				case 'error':
 					$class = 'error';
 					break;
@@ -32,20 +28,24 @@
 
 			echo '<div class="' . $class . '" id="message">';
 			echo '<p>';
-			if (! empty($this->leadtext) ) {
-				echo '<strong>' . $this->leadtext . '</strong> ';
+			if (! empty(self::$leadtext) ) {
+				echo '<strong>' . self::$leadtext . '</strong> ';
 			}
-			echo $this->message;
+			echo self::$message;
 			echo '</p>';
 			echo '</div>';
 		}
 
-		public function setLead($text) {
-			$this->leadtext = $text;
+		public static function setLead($text) {
+			self::$leadtext = $text;
 		}
 
-		public function setMessage($text) {
-			$this->message = $text;
+		public static function setMessage($text) {
+			self::$message = $text;
+		}
+
+		public static function setTypeMsg($type) {
+			self::$type = $type;
 		}
 	}
 
@@ -98,32 +98,213 @@
 		}
 	}
 
+	abstract class DWModule {
+		protected static $info = FALSE;
+		protected static $name;
+		public static $option;
+		protected static $opt;
+		protected static $overrule = FALSE;
+		public static $plugin = FALSE;
+		protected static $type = 'simple';
+		protected static $wpml = FALSE;
+
+	  public static function admin() {
+	  	$DW = &$GLOBALS['DW'];
+
+	  	$classname = self::getClassName();
+	  	$vars = self::getVars($classname);
+	  	self::setName($classname);
+
+	  	// Would be so much easier if we could require PHP > 5.3: $name::
+			self::checkOverrule();
+
+	  	if ( $vars['plugin'] !== FALSE ) {
+	  		self::registerPlugin($vars['plugin']);
+	  	}
+
+	  	if ( $vars['type'] == 'simple' ) {
+	  		self::mkGUI($vars['type'], $vars['option'][self::$name], $vars['question'], $vars['info']);
+	  	}
+	  }
+
+		public static function checkOverrule() {
+			$DW = &$GLOBALS['DW'];
+
+			$classname = self::getClassName();
+			$vars = self::getVars($classname);
+			self::setName($classname);
+
+			if ( isset($vars['overrule']) && $vars['overrule'] && ! in_array(self::$name, $DW->overrule_maintype) ) {
+				$DW->overrule_maintype[ ] = self::$name;
+			}
+		}
+
+		protected static function getClassName() {
+			$classname = get_called_class();
+			return $classname;
+		}
+
+		protected static function getVars($classname) {
+			$vars = get_class_vars($classname);
+			return $vars;
+		}
+
+		public static function GUIComplex($except, $list, $name = NULL) {
+			if (! is_null($name) ) {
+				self::$name = $name;
+			}
+
+			if ( count($list) > DW_LIST_LIMIT ) {
+				$select_style = DW_LIST_STYLE;
+			}
+
+			if ( count($list) > 0 ) {
+				echo '<br />' . "\n";
+				_e($except, DW_L10N_DOMAIN);
+				echo '<br />';
+				echo '<div id="' . self::$name . '-select" class="condition-select" ' . ( (isset($select_style)) ? $select_style : '' ) . ' />';
+				foreach ( $list as $key => $value ) {
+					echo '<input type="checkbox" id="' . self::$name . '_act_' . $key . '" name="' . self::$name . '_act[]" value="' . $key . '" ' . ( (self::$opt->count > 0 && in_array($key, self::$opt->act)) ? 'checked="checked"' : '' ) . ' /> <label for="' . self::$name . '_act_' . $key . '">' . $value . '</label><br />' . "\n";
+				}
+				echo '</div>' . "\n";
+			}
+		}
+
+		public static function GUIFooter() {
+			echo '</div><!-- end dynwid_conf -->' . "\n";
+		}
+
+		public static function GUIHeader($title, $question, $info, $post_title = NULL, $opt = NULL) {
+			$DW = &$GLOBALS['DW'];
+
+			$classname = self::getClassName();
+			$vars = self::getVars($classname);
+			if ( $vars['wpml'] !== FALSE ) {
+				$wpml = TRUE;
+			}
+
+			if (! is_null($post_title) ) {
+				$title  = __($title, DW_L10N_DOMAIN);
+				$title .= ' ' . $post_title;
+			}
+
+			if (! is_null($opt) ) {
+				self::$opt = $opt;
+			}
+
+			echo '<!-- ' . $title . '//-->' . "\n";
+			echo '<h4><b>' . __($title, DW_L10N_DOMAIN) . '</b>' . ( (self::$opt->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ' ' . ( ($DW->wpml && $wpml) ? DW_WPML::$icon : '' ) . '</h4>' . "\n";
+			echo '<div class="dynwid_conf">' . "\n";
+			_e($question, DW_L10N_DOMAIN);
+
+			if ( $info !== FALSE ) {
+				echo ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" title="' . __('Click to toggle info', DW_L10N_DOMAIN) . '" onclick="divToggle(\'' . self::$name . '\')" /><br />' . "\n";
+				echo '<div><div id="' . self::$name . '" class="infotext">' . "\n";
+				_e($info, DW_L10N_DOMAIN);
+				echo '</div></div>' . "\n";
+			} else {
+				echo '<br />' . "\n";
+			}
+		}
+
+		public static function GUIOption($name = NULL, $opt = NULL) {
+			$DW = &$GLOBALS['DW'];
+
+			if (! is_null($name) ) {
+				self::$name = $name;
+			}
+
+			if (! is_null($opt) ) {
+				self::$opt = $opt;
+			}
+
+			$DW->dumpOpt(self::$opt);
+			echo '<input type="radio" name="' . self::$name . '" value="yes" id="' . self::$name . '-yes" ' . ( (self::$opt->selectYes()) ? self::$opt->checked : '' ) . ' /> <label for="' . self::$name . '-yes">' . __('Yes') . '</label>' . "\n";
+			echo '<input type="radio" name="' . self::$name . '" value="no" id="' . self::$name . '-no" ' . ( (self::$opt->selectNo()) ? self::$opt->checked : '' ) . ' /> <label for="' . self::$name . '-no">' . __('No') . '</label>' . "\n";
+		}
+
+		public static function mkGUI($type, $title, $question, $info, $except = FALSE, $list = FALSE, $name = NULL) {
+			$DW = &$GLOBALS['DW'];
+
+			if (! is_null($name) ) {
+				self::$name = $name;
+			}
+
+			self::$opt = $DW->getDWOpt($_GET['id'], self::$name);
+
+			self::GUIHeader($title, $question, $info);
+			self::GUIOption();
+			if ( $type == 'complex' ) {
+				self::GUIComplex($except, $list);
+			}
+			self::GUIFooter();
+		}
+
+		protected static function registerOption($dwoption) {
+			$DW = &$GLOBALS['DW'];
+
+			foreach ( $dwoption as $key => $value ) {
+				$DW->dwoptions[$key] = __($value, DW_L10N_DOMAIN);
+			}
+		}
+
+		public static function registerPlugin($plugin) {
+			$DW = &$GLOBALS['DW'];
+
+			foreach ( $plugin as $key => $value ) {
+				if (! isset($DW->$key) ) {
+					$DW->$key = $value;
+				}
+			}
+		}
+
+		public static function save($name, $type = 'simple') {
+			$DW = &$GLOBALS['DW'];
+
+			switch ( $type ) {
+				case 'complex':
+					$act = $name . '_act';
+
+					if ( isset($_POST[$act]) && count($_POST[$act]) > 0 ) {
+						$DW->addMultiOption($_POST['widget_id'], $name, $_POST[$name], $_POST[$act]);
+					} else if ( isset($_POST[$name]) && $_POST[$name] == 'no' ) {
+						$DW->addSingleOption($_POST['widget_id'], $name);
+					}
+					break;
+
+				// simple
+				default:
+					if ( isset($_POST[$name]) && $_POST[$name] == 'no' ) {
+						$DW->addSingleOption($_POST['widget_id'], $name);
+					}
+			} // switch
+		}
+
+		protected static function setName($classname) {
+			self::$name = strtolower(substr($classname, 3));	// Chop off the "DW_"
+			self::$name = str_replace('_', '-', self::$name);
+		}
+	}
+
   class dynWid {
-    public  $bp;				// BuddyPress Plugin support
-  	public  $bp_groups;	// BuddyPress Plugin support (groups)
-  	public	$custom_post_type;
-  	public  $custom_taxonomy;
     private $dbtable;
-  	public  $dwoptions;
+  	public  $dwoptions = array();
     public  $dynwid_list;
   	public  $enabled;
-    private $firstmessage;
-  	public  $listmade;
-		public  $overrule_maintype;
+    private $firstmessage = TRUE;
+  	public  $listmade = FALSE;
+		public  $overrule_maintype = array();
     private $registered_sidebars;
     public  $registered_widget_controls;
     public  $registered_widgets;
-  	public  $removelist;
+  	public  $removelist = array();
     public  $sidebars;
   	public  $template;
     public  $plugin_url;
-  	public  $qtranslate;	// QTranslate Plugin support
   	public  $useragent;
     public  $userrole;
   	public  $whereami;
     private $wpdb;
-    public  $wpml;		// WPML Plugin support
-    public  $wpsc;		// WPSC/WPEC Plugin support
 
     public function __construct() {
       if ( is_user_logged_in() ) {
@@ -132,58 +313,12 @@
         $this->userrole = array('anonymous');
       }
 
-    	$this->custom_post_type = FALSE;
-    	$this->custom_taxonomy = FALSE;
-      $this->firstmessage = TRUE;
-    	$this->listmade = FALSE;
-    	$this->overrule_maintype = array('date', 'role', 'browser', 'tpl', 'wpml', 'qt');
       $this->registered_sidebars = $GLOBALS['wp_registered_sidebars'];
       $this->registered_widget_controls = &$GLOBALS['wp_registered_widget_controls'];
       $this->registered_widgets = &$GLOBALS['wp_registered_widgets'];
-    	$this->removelist = array();
       $this->sidebars = wp_get_sidebars_widgets();
     	$this->useragent = $this->getBrowser();
       $this->plugin_url = WP_PLUGIN_URL . '/' . str_replace( basename(__FILE__), '', plugin_basename(__FILE__) );
-
-    	$this->dwoptions = array(
-	    	'role'        => __('Role'),
-	    	'date'        => __('Date'),
-	    	'browser'			=> __('Browser', DW_L10N_DOMAIN),
-	    	'tpl'					=> __('Templates', DW_L10N_DOMAIN),
-	    	'wpml'				=> __('Language', DW_L10N_DOMAIN),
-	    	'qt'					=> __('Language', DW_L10N_DOMAIN),
-	    	'front-page'  => __('Front Page', DW_L10N_DOMAIN),
-	    	'single'      => __('Single Posts', DW_L10N_DOMAIN),
-	    	'attachment'	=> __('Attachments', DW_L10N_DOMAIN),
-	    	'page'        => __('Pages'),
-	    	'author'      => __('Author Pages', DW_L10N_DOMAIN),
-	    	'category'    => __('Category Pages', DW_L10N_DOMAIN),
-	    	'archive'     => __('Archive Pages', DW_L10N_DOMAIN),
-	    	'e404'        => __('Error Page', DW_L10N_DOMAIN),
-	    	'search'      => __('Search page', DW_L10N_DOMAIN),
-	    	'wpsc'				=> __('WPSC Category', DW_L10N_DOMAIN),
-	    	'cp_archive'	=> __('Custom Post Type Archives', DW_L10N_DOMAIN),
-	    	'bp'					=> __('BuddyPress', DW_L10N_DOMAIN),
-	    	'bp-group'		=> __('BuddyPress Groups', DW_L10N_DOMAIN)
-	    );
-
-    	// Adding Custom Post Types to $this->dwoptions
-    	if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') ) {
-    		$args = array(
-    		          'public'   => TRUE,
-    		          '_builtin' => FALSE
-    		        );
-    		$post_types = get_post_types($args, 'objects', 'and');
-    		foreach ( $post_types as $ctid ) {
-    			$this->dwoptions[key($post_types)] = $ctid->label;
-    		}
-
-    		// Adding Custom Taxonomies to $this->dwoptions
-    		$taxonomy = get_taxonomies($args, 'objects', 'and');
-    		foreach ( $taxonomy as $tax_id => $tax ) {
-    			$this->dwoptions['tax_' . $tax_id] = $tax->label;
-    		}
-    	}
 
     	// DB init
       $this->wpdb = $GLOBALS['wpdb'];
@@ -196,20 +331,22 @@
     	} else {
     		$this->enabled = TRUE;
     	}
-
-    	// BuddyPress Plugin support
-    	$this->bp = FALSE;
-    	$this->bp_groups = FALSE;
-
-			// WPML Plugin support
-      $this->wpml = FALSE;
-
-    	// QTranslate Plugin support
-    	$this->qtranslate = FALSE;
-
-    	// WPSC/WPEC Plugin support
-    	$this->wpsc = FALSE;
     }
+
+  	public function __get($name) {
+  		return $this->$name;
+  	}
+
+  	public function __isset($name) {
+  		if ( isset($this->$name) ) {
+  			return TRUE;
+  		}
+  		return FALSE;
+  	}
+
+  	public function __set($name, $value) {
+  		$this->$name = $value;
+  	}
 
     public function addChilds($widget_id, $maintype, $default, $act, $childs) {
   		$child_act = array();
@@ -399,7 +536,7 @@
 
       $query = "SELECT DISTINCT widget_id FROM " . $this->dbtable . "
                   WHERE  maintype LIKE '" . $whereami . "%'";
-      
+
       if ( count($this->overrule_maintype) > 0 ) {
       	$query .= " OR maintype IN ";
       	$q = array();
@@ -407,8 +544,8 @@
       		$q[ ] = "'" . $omt . "'";
       	}
       	$query .= "(" . implode(', ', $q) . ")";
-      }          
-      
+      }
+
       $results = $this->wpdb->get_results($query);
       foreach ( $results as $myrow ) {
         $this->dynwid_list[ ] = $myrow->widget_id;
@@ -493,7 +630,7 @@
         $query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
                   WHERE widget_id LIKE '" . $widget_id . "'
                     AND (maintype LIKE '" . $maintype . "%'";
-                    
+
       	if ( count($this->overrule_maintype) > 0 ) {
       		$query .= " OR maintype IN (";
       		$q = array();
@@ -501,9 +638,9 @@
       			$q[ ] = "'" . $omt . "'";
       		}
       		$query .= implode(', ', $q);
-      	} 
-      		
-        
+      	}
+
+
         $query .= ")) ORDER BY maintype, name";
       }
       $this->message('Q: ' . $query);
@@ -559,6 +696,15 @@
   		foreach ( $results as $myrow ) {
   			if (! in_array($myrow->widget_id, $widgets) ) {
   				$this->resetOptions($myrow->widget_id);
+  			}
+  		}
+  	}
+
+  	public function loadModules() {
+  		$dh = opendir(DW_MODULES);
+  		while ( ($file = readdir($dh)) !== FALSE) {
+  			if ( $file != '.' && $file != '..' && substr(strrchr($file, '_'), 1) == 'module.php' ) {
+  				include_once(DW_MODULES . $file);
   			}
   		}
   	}
