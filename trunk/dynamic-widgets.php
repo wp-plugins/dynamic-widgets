@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.4.2.2
+ * Version: 1.5b1
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, wpml, qtranslate, wpec, buddypress
  *
@@ -53,22 +53,21 @@
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
   define('DW_OLD_METHOD', get_option('dynwid_old_method'));
   define('DW_PAGE_LIMIT', get_option('dynwid_page_limit', 500));
+  define('DW_MINIMUM_PHP', '5.1.0');
+  define('DW_MINIMUM_WP', '3.0');
   define('DW_MODULES', dirname(__FILE__) . '/' . 'mods/');
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.4.2.2');
+  define('DW_VERSION', '1.5b1');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
 
-	// Class version to use
-  if ( version_compare(PHP_VERSION, '5.0.0', '<') ) {
-    define('DW_CLASSFILE', 'dynwid_class_php4.php');
-  } else {
-    define('DW_CLASSFILE', 'dynwid_class.php');
+	// Classes - only PHP5
+  if ( version_compare(PHP_VERSION, DW_MINIMUM_PHP, '>=') ) {
+  	 require_once(dirname(__FILE__) . '/dynwid_class.php');
   }
-  require_once(dirname(__FILE__) . '/' . DW_CLASSFILE);
 
   // Functions
 	/**
@@ -349,8 +348,7 @@
 		$lead = __('Dynamic Widgets Options saved', DW_L10N_DOMAIN);
   	$msg = __('for', DW_L10N_DOMAIN) . ' ' .  $name;
 
-		$mbox = new DWMessageBox();
-  	$mbox->create($lead, $msg);
+  	DWMessageBox::create($lead, $msg);
   }
 
   /**
@@ -449,6 +447,30 @@
   }
 
   /**
+   * dynwid_disabled_page() Error boxes to show in admin when DW can not be initialised due to not meeting sysreq.
+   * @since 1.5b1
+   *
+   */
+  function dynwid_disabled_page() {
+  	// As the DWMessagebox class is not loaded, we can not use it
+  	$php = version_compare(PHP_VERSION, DW_MINIMUM_PHP, '>=');
+  	$wp = version_compare($GLOBALS['wp_version'], DW_MINIMUM_WP, '>=');
+
+  	if (! $php ) {
+  		echo '<div class="error" id="message"><p>';
+  		_e('<b>ERROR</b> Your host is running a too low version of PHP. Dynamic Widgets needs at least version 5.', DW_L10N_DOMAIN);
+  		echo '<br />See <a href="' . DW_URL . '/question/my-hoster-is-still-using-php4-so-what/">this page</a> why.';
+  		echo '</p></div>';
+  	}
+
+  	if (! $wp) {
+  		echo '<div class="error" id="message"><p>';
+  		_e('<b>ERROR</b> Your host is running a too low version of WordPress. Dynamic Widgets needs at least version 3.', DW_L10N_DOMAIN);
+  		echo '</p></div>';
+  	}
+  }
+
+  /**
    * dynwid_filter_init() Init of the worker
    * @since 1.3.5
    */
@@ -477,30 +499,38 @@
    * @since 1.0
    */
   function dynwid_init() {
-    $GLOBALS['DW'] = new dynWid();
-  	$DW = &$GLOBALS['DW'];
+  	$php = version_compare(PHP_VERSION, DW_MINIMUM_PHP, '>=');
+  	$wp = version_compare($GLOBALS['wp_version'], DW_MINIMUM_WP, '>=');
 
-  	if ( is_admin() ) {
-  	  if ( isset($_POST['dynwid_save']) && $_POST['dynwid_save'] == 'yes' ) {
-  	    require_once(dirname(__FILE__) . '/dynwid_admin_save.php');
-  	  }
+  	if ( $php && $wp ) {
+  		$GLOBALS['DW'] = new dynWid();
+  		$DW = &$GLOBALS['DW'];
 
-  		load_plugin_textdomain(DW_L10N_DOMAIN, FALSE, dirname(plugin_basename(__FILE__)) . '/locale');
+  		if ( is_admin() ) {
+  			if ( isset($_POST['dynwid_save']) && $_POST['dynwid_save'] == 'yes' ) {
+  				require_once(dirname(__FILE__) . '/dynwid_admin_save.php');
+  			}
 
-			add_action('admin_menu', 'dynwid_add_admin_menu');
-  		if ( $DW->enabled ) {
-  			add_action('edit_tag_form_fields', 'dynwid_add_tag_page');
-  			add_action('edited_term', 'dynwid_save_tagdata');
-  			add_action('in_plugin_update_message-' . plugin_basename(__FILE__), 'dynwid_check_version', 10, 2);
-  			add_action('plugin_action_links_' . plugin_basename(__FILE__), 'dynwid_add_plugin_actions');
-  			add_action('save_post', 'dynwid_save_postdata');
-  			add_action('sidebar_admin_setup', 'dynwid_add_widget_control');
+  			load_plugin_textdomain(DW_L10N_DOMAIN, FALSE, dirname(plugin_basename(__FILE__)) . '/locale');
+  			add_action('admin_menu', 'dynwid_add_admin_menu');
+
+  			if ( $DW->enabled ) {
+  				add_action('edit_tag_form_fields', 'dynwid_add_tag_page');
+  				add_action('edited_term', 'dynwid_save_tagdata');
+  				add_action('in_plugin_update_message-' . plugin_basename(__FILE__), 'dynwid_check_version', 10, 2);
+  				add_action('plugin_action_links_' . plugin_basename(__FILE__), 'dynwid_add_plugin_actions');
+  				add_action('save_post', 'dynwid_save_postdata');
+  				add_action('sidebar_admin_setup', 'dynwid_add_widget_control');
+  			}
+  		} else {
+  			if ( $DW->enabled ) {
+  				add_action('wp_head', 'dynwid_filter_widgets');
+  			}
   		}
-		} else {
-			if ( $DW->enabled ) {
-				add_action('wp_head', 'dynwid_filter_widgets');
-			}
-		}
+  	} else {
+  		// Show errors in the admin page
+  		add_submenu_page('themes.php', __('Dynamic Widgets', DW_L10N_DOMAIN), __('Dynamic Widgets', DW_L10N_DOMAIN), 'edit_theme_options', 'dynwid-config', 'dynwid_disabled_page');
+  	}
   }
 
 	/**
@@ -688,6 +718,7 @@
 	    }
 
 	    $last = count($s) - 1;
+	    $string = '';
 	    for ( $i = 0; $i < $last; $i++ ) {
 	      $type = $s[$i];
 	      if (! empty($DW->dwoptions[$type]) ) {
@@ -726,9 +757,6 @@
 				}
 			}
 		} else {
-			if ( $DW->wpsc ) {
-				$wpsc_query = &$GLOBALS['wpsc_query'];
-			}
 			require(dirname(__FILE__) . '/dynwid_worker.php');
 		}
 

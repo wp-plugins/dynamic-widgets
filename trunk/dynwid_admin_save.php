@@ -73,28 +73,16 @@
   }
 
   // Browser
-	if ( isset($_POST['browser_act']) && count($_POST['browser_act']) > 0 ) {
-		$DW->addMultiOption($_POST['widget_id'], 'browser', $_POST['browser'], $_POST['browser_act']);
-	} else if ( isset($_POST['browser']) && $_POST['browser'] == 'no' ) {
-		$DW->addSingleOption($_POST['widget_id'], 'browser');
-	}
+	DWModule::save('browser', 'complex');
 
 	// Template
-	if ( isset($_POST['tpl_act']) && count($_POST['tpl_act']) > 0 ) {
-		$DW->addMultiOption($_POST['widget_id'], 'tpl', $_POST['tpl'], $_POST['tpl_act']);
-	} else if ( isset($_POST['tpl']) && $_POST['tpl'] == 'no' ) {
-		$DW->addSingleOption($_POST['widget_id'], 'tpl');
-	}
+	DWModule::save('tpl', 'complex');
 
   // Front Page
-  if ( isset($_POST['front-page']) && $_POST['front-page'] == 'no' ) {
-    $DW->addSingleOption($_POST['widget_id'], 'front-page');
-  }
+  DWModule::save('front-page');
 
   // Single Post
-  if ( $_POST['single'] == 'no' ) {
-    $DW->addSingleOption($_POST['widget_id'], 'single');
-  }
+	DWModule::save('single');
 
   // -- Author
   if ( isset($_POST['single_author_act']) && count($_POST['single_author_act']) > 0 ) {
@@ -124,16 +112,10 @@
   }
 
   // Attachment
-	if ( $_POST['attachment'] == 'no' ) {
-		$DW->addSingleOption($_POST['widget_id'], 'attachment');
-	}
+	DWModule::save('attachment');
 
   // Pages
-  if ( isset($_POST['page_act']) && count($_POST['page_act']) > 0 ) {
-    $DW->addMultiOption($_POST['widget_id'], 'page', $_POST['page'], $_POST['page_act']);
-  } else if ( $_POST['page'] == 'no' ) {
-    $DW->addSingleOption($_POST['widget_id'], 'page');
-  }
+	DWModule::save('page', 'complex');
 
   // -- Childs
   if ( isset($_POST['page_act']) && count($_POST['page_act']) > 0 && isset($_POST['page_childs_act']) && count($_POST['page_childs_act']) > 0 ) {
@@ -141,42 +123,38 @@
   }
 
   // Author
-  if ( isset($_POST['author_act']) && count($_POST['author_act']) > 0 ) {
-    $DW->addMultiOption($_POST['widget_id'], 'author', $_POST['author'], $_POST['author_act']);
-  } else if ( $_POST['author'] == 'no' ) {
-    $DW->addSingleOption($_POST['widget_id'], 'author');
-  }
+	DWModule::save('author', 'complex');
 
   // Categories
-  if ( isset($_POST['category_act']) && count($_POST['category_act']) > 0 ) {
-    $DW->addMultiOption($_POST['widget_id'], 'category', $_POST['category'], $_POST['category_act']);
-  } else if ( $_POST['category'] == 'no' ) {
-    $DW->addSingleOption($_POST['widget_id'], 'category');
-  }
+	DWModule::save('category', 'complex');
 
   // Archive
-  if ( $_POST['archive'] == 'no' ) {
-    $DW->addSingleOption($_POST['widget_id'], 'archive');
-  }
+	DWModule::save('archive');
 
   // Error 404
-  if ( $_POST['e404'] == 'no' ) {
-  	$DW->addSingleOption($_POST['widget_id'], 'e404');
-  }
+	DWModule::save('e404');
 
   // Search
-  if ( $_POST['search'] == 'no' ) {
-    $DW->addSingleOption($_POST['widget_id'], 'search');
-  }
+	DWModule::save('search');
 
-  // Custom Types (WP >= 3.0)
-  if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') && isset($_POST['post_types']) ) {
+  // Custom Types
+  if ( isset($_POST['post_types']) ) {
     foreach ( $_POST['post_types'] as $type ) {
     	// Check taxonomies
     	$taxonomy = FALSE;
-    	$tax_list = get_object_taxonomies($type);
+
+    	// Go throgh the tax_list - Workaround as for some reason get_object_taxonomies() is not always filled
+    	$tax_list = array();
+    	$len = strlen($type);
+    	foreach ( $_POST['tax_list'] as $tl ) {
+    		if ( substr($tl, 0, $len) == $type ) {
+    			$tax_list [] = $tl;
+    		}
+    	}
+
+    	// $tax_list = get_object_taxonomies($type);
     	foreach ( $tax_list as $tax ) {
-    		$act_tax_field = $type . '-tax_' . $tax . '_act';
+    		$act_tax_field = $tax . '_act';
     		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
     			$taxonomy = TRUE;
     			break;
@@ -202,32 +180,28 @@
 
     	// -- Taxonomies
     	foreach ( $tax_list as $tax ) {
-    		$act_tax_field = $type . '-tax_' . $tax . '_act';
+    		$act_tax_field = $tax . '_act';
     		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
-					$DW->addMultiOption($_POST['widget_id'], $type . '-tax_' . $tax, $_POST[$type], $_POST[$act_tax_field]);
+					$DW->addMultiOption($_POST['widget_id'], $tax, $_POST[$type], $_POST[$act_tax_field]);
     		}
 
     		// -- Childs
-    		$act_tax_childs_field = $type . '-tax_' . $tax . '_childs_act';
+    		$act_tax_childs_field = $tax . '_childs_act';
     		if ( count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
-    			$DW->addChilds($_POST['widget_id'], $type . '-tax_' . $tax . '-childs', $_POST[$type], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
+    			$DW->addChilds($_POST['widget_id'], $tax . '-childs', $_POST[$type], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
     		}
     	}
     }
 
-  	if ( isset($_POST['cp_archive_act']) && count($_POST['cp_archive_act']) > 0 ) {
-  		$DW->addMultiOption($_POST['widget_id'], 'cp_archive', $_POST['cp_archive'], $_POST['cp_archive_act']);
-  	} else if ( $_POST['cp_archive'] == 'no' ) {
-  		$DW->addSingleOption($_POST['widget_id'], 'cp_archive');
-  	}
+		DWModule::save('cp_archive', 'complex');
   }
 
-	// Custom Taxonomies (WP >= 3.0)
-	if ( version_compare($GLOBALS['wp_version'], '3.0', '>=') && isset($_POST['taxonomy']) ) {
+	// Custom Taxonomies
+	if ( isset($_POST['taxonomy']) ) {
 		foreach ( $_POST['taxonomy'] as $tax ) {
 			$type = 'tax_' . $tax;
 			$act_field = $type . '_act';
-			if ( count($_POST[$act_field]) > 0 ) {
+			if ( isset($_POST[$act_field]) && count($_POST[$act_field]) > 0 ) {
 				if (! is_array($_POST[$act_field]) ) {
 					$_POST[$act_field] = array();
 				}
@@ -245,39 +219,22 @@
 	}
 
   // WPML PLugin support
-	if ( isset($_POST['wpml_act']) && count($_POST['wpml_act']) > 0 ) {
-		$DW->addMultiOption($_POST['widget_id'], 'wpml', $_POST['wpml'], $_POST['wpml_act']);
-	} else if ( isset($_POST['wpml']) && $_POST['wpml'] == 'no' ) {
-		$DW->addSingleOption($_POST['widget_id'], 'wpml');
-	}
+	DWModule::save('wpml', 'complex');
 
 	// QTranslate Plugin support
-	if ( isset($_POST['qt_act']) && count($_POST['qt_act']) > 0 ) {
-		$DW->addMultiOption($_POST['widget_id'], 'qt', $_POST['qt'], $_POST['qt_act']);
-	} else if ( isset($_POST['qt']) && $_POST['qt'] == 'no' ) {
-		$DW->addSingleOption($_POST['widget_id'], 'qt');
-	}
+	DWModule::save('qt', 'complex');
 
   // WPSC/WPEC Plugin support
-	if ( isset($_POST['wpsc_act']) && count($_POST['wpsc_act']) > 0 ) {
-		$DW->addMultiOption($_POST['widget_id'], 'wpsc', $_POST['wpsc'], $_POST['wpsc_act']);
-	} else if ( isset($_POST['wpsc']) && $_POST['wpsc'] == 'no' ) {
-		$DW->addSingleOption($_POST['widget_id'], 'wpsc');
-	}
+	DWModule::save('wpsc', 'complex');
 
 	// BP Plugin support
-	if ( isset($_POST['bp_act']) && count($_POST['bp_act']) > 0 ) {
-		$DW->addMultiOption($_POST['widget_id'], 'bp', $_POST['bp'], $_POST['bp_act']);
-	} else if ( isset($_POST['bp']) && $_POST['bp'] == 'no' ) {
-		$DW->addSingleOption($_POST['widget_id'], 'bp');
-	}
+	DWModule::save('bp', 'complex');
 
 	// BP Plugin support (Groups)
-	if ( isset($_POST['bp_group_act']) && count($_POST['bp_group_act']) > 0 ) {
-		$DW->addMultiOption($_POST['widget_id'], 'bp-group', $_POST['bp-group'], $_POST['bp_group_act']);
-	} else if ( isset($_POST['bp-group']) && $_POST['bp-group'] == 'no' ) {
-		$DW->addSingleOption($_POST['widget_id'], 'bp-group');
-	}
+	DWModule::save('bp-group', 'complex');
+
+	// Pods Plugin support
+	DWModule::save('pods', 'complex');
 
   // Redirect to ReturnURL
   if (! empty($_POST['returnurl']) ) {
