@@ -1,10 +1,9 @@
 <?php
-
 /**
  * Pods Module
  *
  * @version $Id$
- * @copyright 2011
+ * @copyright 2011 Jacco Drabbe
  */
 
 	class DW_Pods extends DWModule {

@@ -36,7 +36,7 @@
 
 					self::$except = 'Except in the groups';
 					$list = self::getBPgroups();
-					self::GUIComplex(self::$except, $list, 'bp-group');
+					self::GUIComplex(self::$except, $list, NULL, 'bp-group');
 
 					echo '</td><td style="width:10px"></td><td valign="top">';
 
@@ -46,7 +46,7 @@
 										'forum_topic' 	=> __('Forum Topics', DW_L10N_DOMAIN),
 										'members_index'	=> __('Members Index', DW_L10N_DOMAIN)
 									);
-					self::GUIComplex(self::$except, $list, 'bp_group');
+					self::GUIComplex(self::$except, $list, NULL, 'bp_group');
 
 					echo '</td></tr></table>';
 

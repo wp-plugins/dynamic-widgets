@@ -6,10 +6,14 @@
  * @copyright 2011 Jacco Drabbe
  */
 
-  // Security - nonce
+  // Security - nonce, etc.
   check_admin_referer('plugin-name-action_edit_' . $_POST['widget_id']);
+  if (! array_key_exists($_POST['widget_id'], $DW->registered_widgets) ) {
+  	wp_die('WidgetID is not valid');
+  }
 
   /* Checking basic stuff */
+	$DW->registerOverrulers();
   foreach ( $DW->overrule_maintype as $o ) {
   	$act_field = $o . '_act';
   	if ( $_POST[$o] == 'no' && count($_POST[$act_field]) == 0 ) {
@@ -53,9 +57,7 @@
   $DW->resetOptions($_POST['widget_id']);
 
   // Role
-  if ( $_POST['role'] == 'no' && count($_POST['role_act']) > 0 ) {
-    $DW->addMultiOption($_POST['widget_id'], 'role', 'no', $_POST['role_act']);
-  }
+	DWModule::save('role', 'complex');
 
   // Date
   if ( $_POST['date'] == 'no' ) {
@@ -100,13 +102,18 @@
     $DW->addMultiOption($_POST['widget_id'], 'single-category', $_POST['single'], $_POST['single_category_act']);
   }
 
+	// ---- Childs
+	if ( isset($_POST['single_category_act']) && count($_POST['single_category_act']) > 0 && isset($_POST['single_category_childs_act']) && count($_POST['single_category_childs_act']) > 0 ) {
+		$DW->addChilds($_POST['widget_id'], 'single-category-childs', $_POST['single'], $_POST['single_category_act'], $_POST['single_category_childs_act']);
+	}
+
   // -- Individual / Posts / Tag
   if ( isset($_POST['individual']) && $_POST['individual'] == '1' ) {
     $DW->addSingleOption($_POST['widget_id'], 'individual', '1');
-    if ( count($_POST['single_post_act']) > 0 ) {
+    if ( isset($_POST['single_post_act']) && count($_POST['single_post_act']) > 0 ) {
       $DW->addMultiOption($_POST['widget_id'], 'single-post', $_POST['single'], $_POST['single_post_act']);
     }
-    if ( count($_POST['single_tag_act']) > 0 ) {
+    if ( isset($_POST['single_tag_act']) && count($_POST['single_tag_act']) > 0 ) {
       $DW->addMultiOption($_POST['widget_id'], 'single-tag', $_POST['single'], $_POST['single_tag_act']);
     }
   }
@@ -116,17 +123,14 @@
 
   // Pages
 	DWModule::save('page', 'complex');
-
-  // -- Childs
-  if ( isset($_POST['page_act']) && count($_POST['page_act']) > 0 && isset($_POST['page_childs_act']) && count($_POST['page_childs_act']) > 0 ) {
-  	$DW->addChilds($_POST['widget_id'], 'page-childs', $_POST['page'], $_POST['page_act'], $_POST['page_childs_act']);
-  }
+	DWModule::childSave('page');				// -- Childs
 
   // Author
 	DWModule::save('author', 'complex');
 
   // Categories
 	DWModule::save('category', 'complex');
+	DWModule::childSave('category');		// -- Childs
 
   // Archive
 	DWModule::save('archive');
@@ -143,7 +147,7 @@
     	// Check taxonomies
     	$taxonomy = FALSE;
 
-    	// Go throgh the tax_list - Workaround as for some reason get_object_taxonomies() is not always filled
+    	// Go through the tax_list - Workaround as for some reason get_object_taxonomies() is not always filled
     	$tax_list = array();
     	$len = strlen($type);
     	foreach ( $_POST['tax_list'] as $tl ) {
@@ -152,7 +156,6 @@
     		}
     	}
 
-    	// $tax_list = get_object_taxonomies($type);
     	foreach ( $tax_list as $tax ) {
     		$act_tax_field = $tax . '_act';
     		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
@@ -162,7 +165,7 @@
     	}
 
       $act_field = $type . '_act';
-      if ( count($_POST[$act_field]) > 0 || $taxonomy ) {
+      if ( (isset($_POST[$act_field]) && count($_POST[$act_field]) > 0) || $taxonomy ) {
       	if (! is_array($_POST[$act_field]) ) {
       		$_POST[$act_field] = array();
       	}
@@ -173,10 +176,7 @@
       }
 
     	// -- Childs
-    	$act_childs_field = $type . '_childs_act';
-    	if ( count($_POST[$act_field]) > 0 && isset($_POST[$act_childs_field]) && count($_POST[$act_childs_field]) > 0 ) {
-    		$DW->addChilds($_POST['widget_id'], $type . '-childs', $_POST[$type], $_POST[$act_field], $_POST[$act_childs_field]);
-    	}
+    	DWModule::childSave($type);
 
     	// -- Taxonomies
     	foreach ( $tax_list as $tax ) {
@@ -185,9 +185,9 @@
 					$DW->addMultiOption($_POST['widget_id'], $tax, $_POST[$type], $_POST[$act_tax_field]);
     		}
 
-    		// -- Childs
+    		// ---- Childs >> Can't use DWModule:;childSave() cause of $name != $tax, but $name == $type
     		$act_tax_childs_field = $tax . '_childs_act';
-    		if ( count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
+    		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
     			$DW->addChilds($_POST['widget_id'], $tax . '-childs', $_POST[$type], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
     		}
     	}
@@ -211,10 +211,7 @@
 				$DW->addSingleOption($_POST['widget_id'], $type);
 			}
 
-			$childs_act_field = $type . '_childs_act';
-			if ( count($act_field) > 0 && isset($_POST[$childs_act_field]) && count($_POST[$childs_act_field]) > 0 ) {
-				$DW->addChilds($_POST['widget_id'], $type . '-childs', $_POST[$type], $_POST[$act_field], $_POST[$childs_act_field]);
-			}
+			DWModule::childSave($type);
 		}
 	}
 
