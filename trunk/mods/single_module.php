@@ -42,6 +42,7 @@
 			$js_category_array = array();
 			foreach ( $category as $cat ) {
 				$js_category_array[ ] = '\'single_category_act_' . $cat->cat_ID . '\'';
+				$js_category_array[ ] = '\'single_category_childs_act_' . $cat->cat_ID . '\'';
 			}
 
 			$catmap = DW_Category::getCatChilds(array(), 0, array());
@@ -65,8 +66,9 @@
 
 			// Individual
 			$DW->dumpOpt($opt_individual);
+			echo '<br />';
 			echo '<input type="checkbox" id="individual" name="individual" value="1" ' . ( (isset($individual) && $individual)  ? 'checked="checked"' : '' ) . ' onclick="chkInPosts()" />';
-			echo '<label for="individual">' . __('Make exception rule available to individual posts and tags.', DW_L10N_DOMAIN) . ( ($opt_individual->count > 0)  ? $count_individual : '' ) . '</label>';
+			echo '<label for="individual">' . __('Make exception rule available to individual posts and tags.', DW_L10N_DOMAIN) . ' ' . ( ($opt_individual->count > 0)  ? $count_individual : '' ) . '</label>';
 			echo '<img src="' . $DW->plugin_url . 'img/info.gif" alt="info" title="' . __('Click to toggle info', DW_L10N_DOMAIN) . '" onclick="divToggle(\'individual_post_tag\')" />';
 			echo '<div>';
 			echo '<div id="individual_post_tag" class="infotext">';
@@ -96,15 +98,13 @@
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
   <td valign="top">
-  	<?php $DW->dumpOpt($opt_single_author); ?>
-  	<?php self::GUIComplex('Except the posts by author', $authors, 'single-author'); ?>
+  	<?php  DW_Author::mkGUI(TRUE); ?>
   </td>
   <td style="width:10px"></td>
   <td valign="top">
-    <?php _e('Except the posts in category', DW_L10N_DOMAIN); ?>: <?php echo ( $DW->wpml ) ? DW_WPML::$icon : ''; ?>
-    <?php $DW->dumpOpt($opt_single_category); ?>
-    <div id="single-category-select" class="condition-select" <?php echo ( isset($category_condition_select_style) ) ? $category_condition_select_style : ''; ?>>
-		<?php DW_Category::prtCat($catmap, $opt_single_category->act, TRUE); ?>
+  	<?php $opt = $DW->getDWOpt($_GET['id'], 'single-category'); ?>
+  	<?php $DW->dumpOpt($opt); ?>
+		<?php DW_Category::GUIComplex(TRUE, $opt); ?>
     </div>
   </td>
 </tr>

@@ -72,6 +72,7 @@
 			self::GUIOption();
 
 			if ( $num_pages > 0 ) {
+				echo '<br />';
 				_e('Except the page(s)', DW_L10N_DOMAIN);
 				echo '<br />';
 				echo '<div id="page-select" class="condition-select" ' . ( (isset($page_condition_select_style)) ? $page_condition_select_style : '' ) . ' />';

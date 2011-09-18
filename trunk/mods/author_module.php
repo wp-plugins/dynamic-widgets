@@ -14,9 +14,7 @@
 
 		public static function admin() {
 			parent::admin();
-
-			$list = self::getAuthors();
-			self::mkGUI(self::$type, self::$option[self::$name], self::$question, FALSE, self::$except, $list);
+			self::mkGUI();
 		}
 
 		public static function getAuthors() {
@@ -39,6 +37,34 @@
 			}
 
 			return $list;
+		}
+
+		public static function mkGUI($single = FALSE) {
+			$DW = &$GLOBALS['DW'];
+			$list = self::getAuthors();
+
+			if ( $single ) {
+				self::$opt = $DW->getDWOpt($_GET['id'], 'single-author');
+
+				if ( count($list) > DW_LIST_LIMIT ) {
+					$select_style = DW_LIST_STYLE;
+				}
+
+				if ( count($list) > 0 ) {
+					$DW->dumpOpt(self::$opt);
+					echo '<br />';
+					_e(self::$except, DW_L10N_DOMAIN);
+					echo '<br />';
+					echo '<div id="single-author-select" class="condition-select" ' . ( (isset($select_style)) ? $select_style : '' ) . ' />';
+					foreach ( $list as $key => $value ) {
+						$extra = 'onclick="ci(\'single_author_act_' . $key . '\')"';
+						echo '<input type="checkbox" id="single_author_act_' . $key . '" name="single_author_act[]" value="' . $key . '" ' . ( (self::$opt->count > 0 && in_array($key, self::$opt->act)) ? 'checked="checked"' : '' ) . $extra  . ' /> <label for="single_author_act_' . $key . '">' . $value . '</label><br />' . "\n";
+					}
+					echo '</div>' . "\n";
+				}
+			} else {
+				parent::mkGUI(self::$type, self::$option[self::$name], self::$question, FALSE, self::$except, $list);
+			}
 		}
 	}
 ?>

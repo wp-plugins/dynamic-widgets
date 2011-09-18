@@ -4,9 +4,9 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5b1
+ * Version: 1.5b2
  * Author URI: http://www.qurl.nl/
- * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, wpml, qtranslate, wpec, buddypress
+ * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,29 +23,34 @@
  * Thanks to Eduardo Larequi for the contribution of the Spanish (es_ES) language files and several L10N fixes.
  *
  * WPML Plugin support via API
- * Using constants	ICL_PLUGIN_PATH > dynwid_admin_edit.php, mods/wpml_module.php, dynwid_init_worker.php, dynwid_worker.php
- * Using functions  wpml_get_default_language() > dynwid_init_worker.php
- *                  wpml_get_current_language() > dynwid_init_worker.php, dynwid_worker.php, plugin/wpml.php
- *                  wpml_get_content_translation() > plugin/wpml.php
+ * Using constants	ICL_PLUGIN_PATH > mods/wpml_module.php
+ * Using functions  wpml_get_default_language() > mods/wpml_module.php
+ *                  wpml_get_current_language() > mods/wpml_module.php
+ *                  wpml_get_content_translation() > mods/wpml_module.php
  * 									wpml_get_active_languages() > mods/wpml_module.php
  *
  * QTranslate Plugin support via API
- * Using constants 	QTRANS_INIT > dynwid_init_worker.php, dynwid_worker.php, mods/qtranslate_module.php
- * Using functions	qtrans_getLanguage() > dynwid_init_worker.php, dynwid_worker.php
- * Using WPOptions	qtranslate_default_language > dynwid_init_worker.php
- * 									qtranslate_enabled_languages > mods/qtranslate_module.php
+ * Using constants 	QTRANS_INIT > mods/qt_module.php
+ * Using functions	qtrans_getLanguage() > mods/qt_module.php
+ * Using WPOptions	qtranslate_default_language > mods/qt_module.php
+ * 									qtranslate_enabled_languages > mods/qt_module.php
  *
  * WPSC/WPEC Plugin support
- * Using constants	WPSC_TABLE_PRODUCT_CATEGORIES	> dynwid_admin_overview.php, plugin/wpsc.php
- * 									WPSC_VERSION > mods/wpec_module.php, dynwid_init_worker.php, plugin/wpsc.php
- * Using vars 			$wpsc_query > dynwid_init_worker.php, plugin/wpsc.php
+ * Using constants	WPSC_TABLE_PRODUCT_CATEGORIES	> dynwid_admin_overview.php
+ * 									WPSC_VERSION > mods/wpsc_module.php
+ * Using vars 			$wpsc_query > mods/wpsc_module.php
  *
  * BP Plugin support
- * Using constants	BP_VERSION > mods/bp_module, dynwid_init_worker.php
- * User vars				$bp > dynwid_init_worker.php, plugin/bp.php
+ * Using constants	BP_VERSION > mods/bp_module.php
+ * User vars				$bp > mods/bp_module.php
+ *
+ * Pods Plugin support
+ * Using constants 	PODS_VERSION_FULL > mods/pods_module.php
+ * Using vars				$pod_page_exists > mods/pods_module.php, dynwid_worker.php
 **/
 
   // Constants
+  define('DW_CLASSES', dirname(__FILE__) . '/' . 'classes/');
   define('DW_DEBUG', FALSE);
   define('DW_DB_TABLE', 'dynamic_widgets');
   define('DW_L10N_DOMAIN', 'dynamic-widgets');
@@ -59,7 +64,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5b1');
+  define('DW_VERSION', '1.5b2');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -300,6 +305,10 @@
   function dynwid_add_widget_control() {
     $DW = &$GLOBALS['DW'];
 
+  	// Loading the options strings from the modules
+  	$DW->loadModules();
+  	$DW->getModuleName();
+
     /*
       Hooking into the callback of the widgets by moving the existing callback to wp_callback
       and setting callback with own callback function.
@@ -458,14 +467,16 @@
 
   	if (! $php ) {
   		echo '<div class="error" id="message"><p>';
-  		_e('<b>ERROR</b> Your host is running a too low version of PHP. Dynamic Widgets needs at least version 5.', DW_L10N_DOMAIN);
+  		_e('<b>ERROR</b> Your host is running a too low version of PHP. Dynamic Widgets needs at least version', DW_L10N_DOMAIN);
+  		echo ' ' . DW_MINIMUM_PHP . '.';
   		echo '<br />See <a href="' . DW_URL . '/question/my-hoster-is-still-using-php4-so-what/">this page</a> why.';
   		echo '</p></div>';
   	}
 
-  	if (! $wp) {
+  	if (! $wp ) {
   		echo '<div class="error" id="message"><p>';
-  		_e('<b>ERROR</b> Your host is running a too low version of WordPress. Dynamic Widgets needs at least version 3.', DW_L10N_DOMAIN);
+  		_e('<b>ERROR</b> Your host is running a too low version of WordPress. Dynamic Widgets needs at least version', DW_L10N_DOMAIN);
+  		echo ' ' . DW_MINIMUM_WP . '.';
   		echo '</p></div>';
   	}
   }
@@ -505,6 +516,7 @@
   	if ( $php && $wp ) {
   		$GLOBALS['DW'] = new dynWid();
   		$DW = &$GLOBALS['DW'];
+  		$DW->plugin_url = WP_PLUGIN_URL . '/' . str_replace( basename(__FILE__), '', plugin_basename(__FILE__) );
 
   		if ( is_admin() ) {
   			if ( isset($_POST['dynwid_save']) && $_POST['dynwid_save'] == 'yes' ) {

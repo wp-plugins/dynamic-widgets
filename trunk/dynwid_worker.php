@@ -9,16 +9,6 @@
 	$DW->message('Worker START');
 	$DW->message('WhereAmI = ' . $DW->whereami);
 
-	// Register the overrule maintypes
-	include_once(DW_MODULES . 'browser_module.php');
-	include_once(DW_MODULES . 'date_module.php');
-	include_once(DW_MODULES . 'role_module.php');
-	include_once(DW_MODULES . 'tpl_module.php');
-	DW_Browser::checkOverrule();
-	DW_Date::checkOverrule();
-	DW_Role::checkOverrule();
-	DW_Tpl::checkOverrule();
-
 	// Registering Custom Post Type & Custom Taxonomy to $DW (object overload)
 	include(DW_MODULES . 'custompost_module.php');
 	DWModule::registerPlugin(DW_CustomPost::$plugin);
@@ -83,35 +73,24 @@
               } else {
                 $act[ ] = $condition->name;
               }
-            } else if ( $condition->maintype == 'role' && $condition->name == 'default' ) {
-              $DW->message('Default for ' . $widget_id . ' set to FALSE (rule R1)');
-              $role = FALSE;
-            } else if ( $condition->maintype == 'date' && $condition->name == 'default' ) {
-              $DW->message('Default for ' . $widget_id . ' set to FALSE (rule DT1)');
-              $date = FALSE;
-            } else if ( $condition->maintype == 'browser' && $condition->name == 'default' ) {
-            	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) ($condition->value) ? 'TRUE' : 'FALSE' ) . ' (rule DB1)');
-            	$browser = (bool) $condition->value;
-            } else if ( $condition->maintype == 'tpl' && $condition->name == 'default' ) {
-            	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) ($condition->value) ? 'TRUE' : 'FALSE' ) . ' (rule DTPL1)');
-            	$tpl = (bool) $condition->value;
-            } else if ( $condition->maintype == 'wpml' && $condition->name == 'default' ) {
-            	$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) ($condition->value) ? 'TRUE' : 'FALSE' ) . ' (rule DML1)');
-            	$wpml = (bool) $condition->value;
-            } else if ( $condition->maintype == 'qt' && $condition->name == 'default' ) {
-          		$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) ($condition->value) ? 'TRUE' : 'FALSE' ) . ' (rule DQT1)');
-            	$qt = (bool) $condition->value;
+            } else {
+            	foreach ( $DW->overrule_maintype as $m ) {
+            		if ( $condition->maintype == $m && $condition->name == 'default' ) {
+            			$DW->message('Default for ' . $widget_id . ' set to ' . ( (bool) ($condition->value) ? 'TRUE' : 'FALSE' ) . ' by ' . $m . ' (rule OM1)');
+            			$$m = (bool) $condition->value;
+            		}
+            	}
             }
           }
 
           // Act the condition(s) when there are options set
           if ( count($opt) > 0 ) {
             // Role exceptions
-          	if (! $role ) {
+          	if ( isset($role) ) {
           		foreach ( $opt as $condition ) {
           			if ( $condition->maintype == 'role' && in_array($condition->name, $DW->userrole) ) {
-          				$DW->message('Role set to TRUE (rule ER1)');
-          				$role = TRUE;
+          				$DW->message('Exception triggered for Role, sets display to ' . ( (bool) ($condition->value) ? 'TRUE' : 'FALSE' ) . ' (rule ER1)');
+          				$role = (bool) $condition->value;;
           			}
           		}
           	}
@@ -334,6 +313,7 @@
                 	$post = $GLOBALS['post'];
                   $act_author = array();
                   $act_category = array();
+                	$act_category_childs = array();
                   $act_post = array();
                   $act_tag = array();
                   $post_category = array();
@@ -371,6 +351,10 @@
                           $act_category[ ] = $condition->name;
                           break;
 
+                        case 'single-category-childs':
+                        	$act_category_childs[ ] = $condition->name;
+                        	break;
+
                         case 'single-tag':
                           $act_tag[ ] = $condition->name;
                           break;
@@ -385,10 +369,18 @@
                   /* Author AND Category */
                   if ( count($act_author) > 0 && count($act_category) > 0 ) {
                     // Use of array_intersect to be sure one value in both arrays returns true
-                    if ( in_array($post->post_author, $act_author) && (bool) array_intersect($post_category, $act_category) ) {
-                      $display = $other;
-                      $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES1)');
-                    }
+                  	if ( in_array($post->post_author, $act_author) ) {
+                  		if ( (bool) array_intersect($post_category, $act_category) ) {
+            	          $display = $other;
+              	        $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES1)');
+                  		} else if ( count($act_category_childs) > 0 ) {
+												$parents = $DW->getPostCatParents($post_category);
+                  			if ( (bool) array_intersect($act_category_childs, $parents) ) {
+                  				$display = $other;
+                  				$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES6)');
+                  			}
+                  		}
+                  	}
                     /* Only Author */
                   } else if ( count($act_author) > 0 && count($act_category == 0) ) {
                     if ( in_array($post->post_author, $act_author) ) {
@@ -400,6 +392,12 @@
                     if ( (bool) array_intersect($post_category, $act_category) ) {
                       $display = $other;
                       $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES3)');
+                    } else if ( count($act_category_childs) > 0 ) {
+                    	$parents = $DW->getPostCatParents($post_category);
+                    	if ( (bool) array_intersect($act_category_childs, $parents) ) {
+                    		$display = $other;
+                    		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES7)');
+                    	}
                     }
                     /* None or individual checked - individual is not included in the $opt */
                   } else {
@@ -485,6 +483,9 @@
 
                 case 'category':
                   if ( count($act) > 0 ) {
+                  	$act_cat = array();
+                  	$act_childs = array();
+
                     $id = get_query_var('cat');
                     $DW->message('CatID: ' . $id);
                     if ( $DW->wpml ) {
@@ -492,9 +493,29 @@
                       $DW->message('WPML ObjectID: ' . $id);
                     }
 
-                    if ( in_array($id, $act) ) {
+                  	foreach ( $opt as $condition ) {
+                  		if ( $condition->name != 'default' ) {
+                  			switch ( $condition->maintype ) {
+                  				case 'category':
+                  					$act_cat[ ] = $condition->name;
+                  					break;
+
+                  				case 'category-childs':
+                  					$act_childs[ ] = $condition->name;
+                  					break;
+                  			}
+                  		}
+                  	}
+
+                    if ( in_array($id, $act_cat) ) {
                       $display = $other;
                       $DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EC1)');
+                    } else if ( count($act_childs) > 0 ) {
+                    	$parents = $DW->getTaxParents('category', array(), $id);
+                    	if ( (bool) array_intersect($act_childs, $parents) ) {
+                    		$display = $other;
+                    		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EC2)');
+                    	}
                     }
                   }
                   break;

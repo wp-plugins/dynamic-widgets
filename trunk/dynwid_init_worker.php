@@ -1,5 +1,4 @@
 <?php
-
 /**
  * dynwid_init_worker.php
  *
@@ -10,16 +9,11 @@
 	$DW->message('Dynamic Widgets INIT');
 	echo "\n" . '<!-- Dynamic Widgets v' . DW_VERSION . ' //-->' . "\n";
 
+	// Register the overrule maintypes
+	$DW->registerOverrulers();
+
 	// UserAgent detection
 	$DW->message('UserAgent: ' . $DW->useragent);
-
-	// WPML Plugin Support
-	include_once(DW_MODULES . 'wpml_module.php');
-	DW_WPML::detectLanguage();
-
-	// QT Plugin Support
-	include_once(DW_MODULES . 'qt_module.php');
-	DW_QT::detectLanguage();
 
 	$DW->message('User has role(s): ' . implode(', ', $DW->userrole));
 

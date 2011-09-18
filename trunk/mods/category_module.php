@@ -18,25 +18,11 @@
 
 			parent::admin();
 
-			$list = get_categories( array('hide_empty' => FALSE) );
-			$catmap = self::getCatChilds(array(), 0, array());
 			self::$opt = $DW->getDWOpt($_GET['id'], self::$name);
 
 			self::GUIHeader(self::$option[self::$name], self::$question, FALSE);
 			self::GUIOption();
-
-			// Needs an own complex list
-			if ( count($list) > DW_LIST_LIMIT ) {
-				$select_style = DW_LIST_STYLE;
-			}
-
-			echo '<br />' . "\n";
-			_e(self::$except, DW_L10N_DOMAIN);
-			echo '<br />';
-			echo '<div id="' . self::$name . '-select" class="condition-select" ' . ( (isset($select_style)) ? $select_style : '' ) . ' />';
-			self::prtCat($catmap, self::$opt->act);
-			echo '</div>' . "\n";
-
+			self::GUIComplex();
 			self::GUIFooter();
 		}
 
@@ -53,7 +39,38 @@
 			return $arr;
 		}
 
-		public static function prtCat($categories, $category_act, $single = FALSE) {
+		public static function GUIComplex($single = FALSE, $opt = NULL) {
+			$DW = &$GLOBALS['DW'];
+
+			// Needs an own complex list
+			$list = get_categories( array('hide_empty' => FALSE) );
+			$catmap = self::getCatChilds(array(), 0, array());
+
+			if (! is_null($opt) ) {
+				self::$opt = $opt;
+			}
+			if ( self::$opt->count > 0 ) {
+				$opt_category_childs = $DW->getDWOpt($_GET['id'], ( $single ? 'single-' : '' ) . 'category-childs');
+				$childs = $opt_category_childs->act;
+
+				$DW->dumpOpt($opt_category_childs);
+			} else {
+				$childs = array();
+			}
+
+			if ( count($list) > DW_LIST_LIMIT ) {
+				$select_style = DW_LIST_STYLE;
+			}
+
+			echo '<br />' . "\n";
+			_e(self::$except, DW_L10N_DOMAIN);
+			echo '<br />';
+			echo '<div id="' . self::$name . '-select" class="condition-select" ' . ( (isset($select_style)) ? $select_style : '' ) . ' />';
+			self::prtCat($catmap, self::$opt->act, $childs, $single);
+			echo '</div>' . "\n";
+		}
+
+		public static function prtCat($categories, $category_act, $category_childs_act, $single = FALSE) {
 			$DW = &$GLOBALS['DW'];
 
 			foreach ( $categories as $pid => $childs ) {
@@ -70,10 +87,14 @@
 				if ( $run ) {
 					$cat = get_category($pid);
 					echo '<div style="position:relative;left:15px;">';
-					echo '<input type="checkbox" id="' . ( $single ? 'single_' : '' ) . 'category_act_' . $cat->cat_ID . '" name="' . ( $single ? 'single_' : '' ) . 'category_act[]" value="' . $cat->cat_ID . '" ' . ( isset($category_act) && count($category_act) > 0 && in_array($cat->cat_ID, $category_act) ? 'checked="checked"' : '' ) . ( $single ? ' onclick="ci(\'single_category_act_' . $cat->cat_ID . '\')"' : '' ) . ' /> <label for="' . ( $single ? 'single_' : '' ) . 'category_act_' . $cat->cat_ID . '">' . $cat->name . '</label><br />';
+					echo '<input type="checkbox" id="' . ( $single ? 'single_' : '' ) . 'category_act_' . $cat->cat_ID . '" name="' . ( $single ? 'single_' : '' ) . 'category_act[]" value="' . $cat->cat_ID . '" ' . ( isset($category_act) && count($category_act) > 0 && in_array($cat->cat_ID, $category_act) ? 'checked="checked"' : '' ) . '  onchange="chkChild(\'' . ( $single ? 'single_' : '' ) . 'category\', ' . $pid . ');' . ( $single ? 'ci(\'single_category_act_' . $cat->cat_ID . '\')' : '' ) . '" /> <label for="' . ( $single ? 'single_' : '' ) . 'category_act_' . $cat->cat_ID . '">' . $cat->name . '</label><br />';
+
+					echo '<div style="position:relative;left:15px;">';
+					echo '<input type="checkbox" id="' . ( $single ? 'single_' : '' ) . 'category_childs_act_' . $cat->cat_ID . '" name="' . ( $single ? 'single_' : '' ) . 'category_childs_act[]" value="' . $cat->cat_ID . '" ' . ( isset($category_childs_act) && count($category_childs_act) > 0 && in_array($cat->cat_ID, $category_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(\'' . ( $single ? 'single_' : '' ) . 'category\', ' . $cat->cat_ID . ');' . ( $single ? 'ci(\'single_category_act_' . $cat->cat_ID . '\')' : '' ) . '" /> <label for="' . ( $single ? 'single_' : '' ) . 'category_childs_act_' . $cat->cat_ID . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></label><br />';
+					echo '</div>';
 
 					if ( count($childs) > 0 ) {
-						self::prtCat($childs, $category_act, $single);
+						self::prtCat($childs, $category_act, $category_childs_act, $single);
 					}
 					echo '</div>';
 				}
