@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5b2
+ * Version: 1.5b3
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -64,7 +64,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5b2');
+  define('DW_VERSION', '1.5b3');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -131,6 +131,18 @@
 					$query = "INSERT INTO " . $dbtable . "(widget_id, maintype, name, value) VALUES ('" . $myrow->widget_id . "', 'browser', 'msie6', '" . $myrow->value . "')";
 					$wpdb->query($query);
 				}
+			}
+
+/*    1.5b3 > Added support for widget display setting options for Tag Pages.
+   		Need to apply archive rule to tag also to keep same behavior. */
+			if ( version_compare($version, '1.5b3', '<') ) {
+				$query = "SELECT widget_id FROM " . $dbtable . " WHERE maintype = 'archive'";
+				$results = $wpdb->get_results($query);
+				foreach ( $results as $myrow ) {
+					$query = "INSERT INTO " . $dbtable . "(widget_id, maintype, value) VALUES ('" . $myrow->widget_id . "', 'tag', '0')";
+					$wpdb->query($query);
+				}
+
 			}
 		}
 		update_option('dynwid_version', DW_VERSION);
