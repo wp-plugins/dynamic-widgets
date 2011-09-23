@@ -266,11 +266,13 @@
 				return 'author';
 			} else if ( is_category() ) {
 				return 'category';
+			} else if ( is_tag() ) {
+				return 'tag';
 			} else if ( function_exists('is_post_type_archive') && is_post_type_archive() ) {
 				return 'cp_archive';				// must be before is_archive(), otherwise detects as 'archive' in WP 3.1.0
 			} else if ( function_exists('is_tax') && is_tax() ) {
 				return 'tax_archive';
-			} else if ( is_archive() && ! is_category() && ! is_author() ) {
+			} else if ( is_archive() && ! is_category() && ! is_author() && ! is_tag() ) {
 				return 'archive';
 			} else if ( is_404() ) {
 				return 'e404';
@@ -431,6 +433,7 @@
 			DWModule::registerOption(DW_Role::$option);
 			DWModule::registerOption(DW_Search::$option);
 			DWModule::registerOption(DW_Single::$option);
+			DWModule::registerOption(DW_Tag::$option);
 			DWModule::registerOption(DW_Tpl::$option);
 			DWModule::registerOption(DW_WPSC::$option);
 			DWModule::registerOption(DW_WPML::$option);

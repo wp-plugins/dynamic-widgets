@@ -170,6 +170,7 @@ h4 {
 	DW_Page::admin();
 	DW_Author::admin();
 	DW_Category::admin();
+	DW_Tag::admin();
 	DW_Archive::admin();
 	DW_E404::admin();
 	DW_Search::admin();

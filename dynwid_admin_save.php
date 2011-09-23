@@ -132,6 +132,9 @@
 	DWModule::save('category', 'complex');
 	DWModule::childSave('category');		// -- Childs
 
+	// Tags
+	DWModule::save('tag', 'complex');
+
   // Archive
 	DWModule::save('archive');
 
