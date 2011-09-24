@@ -49,10 +49,8 @@
 					self::GUIComplex(self::$except, $list, NULL, 'bp_group');
 
 					echo '</td></tr></table>';
-
+					self::GUIFooter();
 				}
-
-				self::GUIFooter();
 			}
 		}
 
@@ -100,12 +98,16 @@
 			$DW = &$GLOBALS['DW'];
 			$components = array();
 
-			if ( in_array('groups', $bp->active_components) && $update ) {
-				$DW->bp_groups = TRUE;
-			}
-			foreach ( $bp->active_components as $c ) {
+			foreach ( $bp->active_components as $key => $value ) {
+				if ( version_compare(BP_VERSION, '1.5', '<') ) {
+					$c = &$value;
+				} else {
+					$c = &$key;
+				}
+				
 				if ( $c == 'groups' ) {
 					$components[$c] = ucfirst($c) . ' (only main page)';
+					$DW->bp_groups = TRUE;
 				} else {
 					$components[$c] = ucfirst($c);
 				}
