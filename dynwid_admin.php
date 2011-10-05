@@ -15,10 +15,16 @@
 
 <div class="wrap">
 <div class="icon32" id="icon-themes"><br></div>
-<h2>
+<div style="float:left"><h2>
 	<?php _e('Dynamic Widgets', DW_L10N_DOMAIN); ?>
 	<input type="image" style="vertical-align: middle;" title="Donate for this plugin via PayPal" alt="Donate" name="submit" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" onclick="jQuery('#paypal').submit()">
-</h2>
+</h2></div>
+<div style="border-color: #E3E3E3;border-radius: 6px 6px 6px 6px;border-style: solid;border-width: 1px;padding: 5px;width:350px;float:left;margin-top:5px;">
+<strong>Did you know?</strong><br />
+I also provide other services. See <a href="<?php echo DW_URL; ?>/services/" target="_blank">my site</a> for details.
+</div>
+
+<br style="clear:both" />
 <?php
 	if ( $DW->enabled ) {
 		if ( dynwid_sql_mode() ) {

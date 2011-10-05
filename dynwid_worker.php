@@ -271,7 +271,7 @@
                 unset($act_custom, $act_childs, $act_tax);
               } // END count($act)
             } else if ( $DW->custom_taxonomy ) {		// Custom Taxonomy Archive
-            	$wp_query = $GLOBALS['wp_query'];
+            	$wp_query = &$GLOBALS['wp_query'];
             	$taxonomy = $wp_query->get('taxonomy');
             	$term = $wp_query->get_queried_object_id();
             	if ( $DW->wpml ) {
