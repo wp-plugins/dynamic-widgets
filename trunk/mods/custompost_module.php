@@ -52,7 +52,7 @@
 				self::$opt = $DW->getDWOpt($_GET['id'], $type);
 
 				// -- Childs
-				if ( $ctid->hierarchical ) {
+				/* if ( $ctid->hierarchical ) {
 					$opt_custom_childs = $DW->getDWOpt($_GET['id'], $type . '-childs');
 				} else {
 					unset($opt_custom_childs);
@@ -63,7 +63,7 @@
 					$custom_condition_select_style = DW_LIST_STYLE;
 				}
 
-				$cpmap = self::getCPostChilds($type, array(), 0, array());
+				$cpmap = self::getCPostChilds($type, array(), 0, array()); */
 				$tax_list = get_object_taxonomies($type, 'objects');
 
 				// Output
@@ -81,7 +81,7 @@
 				self::GUIOption($type);
 				echo '<br />';
 
-				if ( isset($opt_custom_childs) ) {
+				/* if ( isset($opt_custom_childs) ) {
 					$DW->dumpOpt($opt_custom_childs);
 				}
 
@@ -98,9 +98,9 @@
 					}
 					self::prtCPost($type, $ctid, $cpmap, self::$opt->act, $childs);
 
-					echo '</div>';
-					echo '</div>';
-				}
+					echo '</div>'; 
+					echo '</div>'; 
+				} */
 
 				// Taxonomy in Custom Post Type
 				foreach ( $tax_list as $tax_type ) {
