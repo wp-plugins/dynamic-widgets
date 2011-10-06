@@ -655,10 +655,10 @@
 			include_once(DW_MODULES . 'date_module.php');
 			include_once(DW_MODULES . 'role_module.php');
 			include_once(DW_MODULES . 'tpl_module.php');
-			DW_Browser::checkOverrule();
-			DW_Date::checkOverrule();
-			DW_Role::checkOverrule();
-			DW_Tpl::checkOverrule();
+			DW_Browser::checkOverrule('DW_Browser');
+			DW_Date::checkOverrule('DW_Date');
+			DW_Role::checkOverrule('DW_Role');
+			DW_Tpl::checkOverrule('DW_Tpl');
 
 			// WPML Plugin Support
 			include_once(DW_MODULES . 'wpml_module.php');

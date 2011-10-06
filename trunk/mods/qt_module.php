@@ -34,7 +34,7 @@
 			$DW->qt = FALSE;
 
 			if ( defined('QTRANS_INIT') ) {
-				self::checkOverrule();
+				self::checkOverrule('DW_QT');
 				if ( $update ) {
 					$DW->qt = TRUE;
 				}

@@ -39,7 +39,7 @@
 			$DW->wpml = FALSE;
 
 			if ( defined('ICL_PLUGIN_PATH') && file_exists(ICL_PLUGIN_PATH . DW_WPML_API) ) {
-				self::checkOverrule();
+				self::checkOverrule('DW_WPML');
 				if ( $update ) {
 					$DW->wpml = TRUE;
 				}
