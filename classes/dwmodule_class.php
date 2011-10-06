@@ -7,6 +7,7 @@
  */
 
 	abstract class DWModule {
+		protected static $classname;
 		protected static $info = FALSE;
 		protected static $name;
 		public static $option;
@@ -16,6 +17,10 @@
 		protected static $type = 'simple';
 		protected static $wpml = FALSE;
 
+		public function __construct() {
+			self::$classname = get_class($this);
+		}
+
 		/**
 		 * DWModule::admin() Basic admin init
 		 *
@@ -23,9 +28,9 @@
 		public static function admin() {
 			$DW = &$GLOBALS['DW'];
 
-			$classname = self::getClassName();
-			$vars = self::getVars($classname);
-			self::setName($classname);
+			// $classname = self::getClassName();
+			$vars = self::getVars(self::$classname);
+			self::setName(self::$classname);
 
 			// Would be so much easier if we could require PHP > 5.3: $name::
 			self::checkOverrule();
@@ -43,12 +48,16 @@
 		 * DWModule::checkOverrule() Registers an overrule module to $DW
 		 *
 		 */
-		public static function checkOverrule() {
+		public static function checkOverrule($classname = NULL) {
 			$DW = &$GLOBALS['DW'];
 
-			$classname = self::getClassName();
-			$vars = self::getVars($classname);
-			self::setName($classname);
+			if (! is_null($classname) ) {
+				self::$classname = $classname;
+			}
+			// $classname = self::getClassName();
+
+			$vars = self::getVars(self::$classname);
+			self::setName(self::$classname);
 
 			if ( isset($vars['overrule']) && $vars['overrule'] && ! in_array(self::$name, $DW->overrule_maintype) ) {
 				$DW->overrule_maintype[ ] = self::$name;
@@ -61,7 +70,8 @@
 		 * @return string
 		 */
 		protected static function getClassName() {
-			$classname = get_called_class();
+			// $classname = get_called_class();
+			$classname = get_class($this);
 			return $classname;
 		}
 
@@ -125,8 +135,8 @@
 		public static function GUIHeader($title, $question, $info, $post_title = NULL, $opt = NULL) {
 			$DW = &$GLOBALS['DW'];
 
-			$classname = self::getClassName();
-			$vars = self::getVars($classname);
+			// $classname = self::getClassName();
+			$vars = self::getVars(self::$classname);
 			if ( $vars['wpml'] !== FALSE ) {
 				$wpml = TRUE;
 			}

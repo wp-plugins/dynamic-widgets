@@ -158,26 +158,65 @@ h4 {
 
 <div id="dynwid">
 <?php
-	DW_Role::admin();
-	DW_Date::admin();
-	DW_WPML::admin();
-	DW_QT::admin();
-	DW_Browser::admin();
-	DW_Tpl::admin();
-	DW_Front_page::admin();
-	DW_Single::admin();
-	DW_Attachment::admin();
-	DW_Page::admin();
-	DW_Author::admin();
-	DW_Category::admin();
-	DW_Tag::admin();
-	DW_Archive::admin();
-	DW_E404::admin();
-	DW_Search::admin();
-	DW_CustomPost::admin();
-	DW_WPSC::admin();
-	DW_BP::admin();
-	DW_Pods::admin();
+	$DW_Role = new DW_Role();
+	$DW_Role->admin();
+
+	$DW_Date = new DW_Date();
+	$DW_Date->admin();
+
+	$DW_WPML = new DW_WPML();
+	$DW_WPML->admin();
+
+	$DW_QT = new DW_QT();
+	$DW_QT->admin();
+
+	$DW_Browser = new DW_Browser();
+	$DW_Browser->admin();
+
+	$DW_Tpl = new DW_Tpl();
+	$DW_Tpl->admin();
+
+	$DW_Front_page = new DW_Front_page();
+	$DW_Front_page->admin();
+
+	$DW_Single = new DW_Single();
+	$DW_Single->admin();
+
+	$DW_Attachment = new DW_Attachment();
+	$DW_Attachment->admin();
+
+	$DW_Page = new DW_Page();
+	$DW_Page->admin();
+
+	$DW_Author = new DW_Author();
+	$DW_Author->admin();
+
+	$DW_Category = new DW_Category();
+	$DW_Category->admin();
+
+	$DW_Tag = new DW_Tag();
+	$DW_Tag->admin();
+
+	$DW_Archive = new DW_Archive();
+	$DW_Archive->admin();
+
+	$DW_E404 = new DW_E404();
+	$DW_E404->admin();
+
+	$DW_Search = new DW_Search();
+	$DW_Search->admin();
+
+	$DW_CustomPost = new DW_CustomPost();
+	$DW_CustomPost->admin();
+
+	$DW_WPSC = new DW_WPSC();
+	$DW_WPSC->admin();
+
+	$DW_BP = new DW_BP();
+	$DW_BP->admin();
+
+	$DW_Pods = new DW_Pods();
+	$DW_Pods->admin();
 
 	// For JS exclOff
 	$excl = array();
