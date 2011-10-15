@@ -222,9 +222,12 @@
 		 */
 		public static function registerOption($dwoption) {
 			$DW = &$GLOBALS['DW'];
-
-			foreach ( $dwoption as $key => $value ) {
-				$DW->dwoptions[$key] = __($value, DW_L10N_DOMAIN);
+			
+			// For some reason when a widget is just added to the sidebar $dwoption is not an array
+			if ( is_array($dwoption) ) {
+				foreach ( $dwoption as $key => $value ) {
+					$DW->dwoptions[$key] = __($value, DW_L10N_DOMAIN);
+				}
 			}
 		}
 
