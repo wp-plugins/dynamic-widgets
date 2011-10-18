@@ -81,7 +81,7 @@
 	DWModule::save('tpl', 'complex');
 
   // Front Page
-  DWModule::save('front-page');
+  DWModule::save('front-page', 'complex');
 
   // Single Post
 	DWModule::save('single');

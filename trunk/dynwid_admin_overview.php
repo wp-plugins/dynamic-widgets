@@ -40,6 +40,12 @@
 		} // switch
 	}
 
+	if ( isset($_GET['dynwid_save']) && $_GET['dynwid_save'] == 'yes' ) {
+		$lead = __('Widget options saved.', DW_L10N_DOMAIN);
+		$msg = '';
+		DWMessageBox::create($lead, $msg);
+	}
+
   foreach ( $DW->sidebars as $sidebar_id => $widgets ) {
     if ( count($widgets) > 0 ) {
       if ( $sidebar_id == 'wp_inactive_widgets' ) {
