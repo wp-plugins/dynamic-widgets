@@ -95,6 +95,12 @@ h4 {
     }
   }
 
+  function saveandreturn() {
+		var returnurl = '<?php echo trailingslashit(admin_url()) . 'themes.php?page=dynwid-config'; ?>';
+		jQuery('#returnurl').val(returnurl);
+		jQuery('#dwsave').submit();
+  }
+
   function swTxt(c, s) {
   	for ( i = 0; i < c.length; i++ ) {
   	  if ( s == true ) {
@@ -150,11 +156,11 @@ h4 {
 </p>
 </div><br />
 
-<form action="<?php echo trailingslashit(admin_url()) . 'themes.php?page=dynwid-config&action=edit&id=' . $_GET['id']; ?>" method="post">
+<form id="dwsave" action="<?php echo trailingslashit(admin_url()) . 'themes.php?page=dynwid-config&action=edit&id=' . $_GET['id']; ?>" method="post">
 <?php wp_nonce_field('plugin-name-action_edit_' . $_GET['id']); ?>
 <input type="hidden" name="dynwid_save" value="yes" />
 <input type="hidden" name="widget_id" value="<?php echo $_GET['id']; ?>" />
-<input type="hidden" name="returnurl" value="<?php echo ( isset($_GET['returnurl']) ? trailingslashit(admin_url()) . $_GET['returnurl'] : '' ); ?>" />
+<input type="hidden" id="returnurl" name="returnurl" value="<?php echo ( (isset($_GET['returnurl'])) ? trailingslashit(admin_url()) . $_GET['returnurl'] : '' ); ?>" />
 
 <div id="dynwid">
 <?php
@@ -236,7 +242,14 @@ Save as a quick setting <input type="text" name="qsetting" value="" />
 <div style="float:left">
 <input class="button-primary" type="submit" value="<?php _e('Save'); ?>" /> &nbsp;&nbsp;
 </div>
-<?php $url = (! empty($_GET['returnurl']) ? trailingslashit(admin_url()) . $_GET['returnurl'] : trailingslashit(admin_url()) . 'themes.php?page=dynwid-config' ); ?>
+<?php $url = (! empty($_GET['returnurl']) ) ? trailingslashit(admin_url()) . $_GET['returnurl'] : trailingslashit(admin_url()) . 'themes.php?page=dynwid-config'; ?>
+
+<?php if ( empty($_GET['returnurl']) ) { ?>
+<div style="float:left">
+<input class="button-primary" type="button" value="<?php _e('Save'); ?> & <?php _e('Return', DW_L10N_DOMAIN); ?>" onclick="saveandreturn()" /> &nbsp;&nbsp;
+</div>
+<?php } ?>
+
 <div style="float:left">
 <input class="button-secondary" type="button" value="<?php _e('Return', DW_L10N_DOMAIN); ?>" onclick="location.href='<?php echo $url; ?>'" />
 </div>

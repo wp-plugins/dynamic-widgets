@@ -36,6 +36,9 @@
 		$curlang = DW_QT::detectLanguage();
 	}
 
+	// Hide title
+	$dw_hide_title = get_option('dw_hide_title');
+
   foreach ( $sidebars as $sidebar_id => $widgets ) {
     // Only processing active sidebars with widgets
     if ( $sidebar_id != 'wp_inactive_widgets' && count($widgets) > 0 && is_array($widgets) ) {
@@ -417,6 +420,16 @@
                     }
                   }
                   break;
+                  
+                case 'front-page':
+                	if ( count($act) > 0 ) {
+                		$pagenr = ( get_query_var('paged') == 0 ) ? 1 : get_query_var('paged');
+                  	if ( in_array($pagenr, $act) ) {
+                  		$display = $other;
+                    	$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EFP1)');
+                    }
+                  }                	
+                	break;
 
                 case 'home':
                   if ( count($act) > 0 ) {
@@ -640,6 +653,12 @@
           	}
           }
         } // END if ( in_array($widget_id, $DW->dynwid_list) )
+
+      	// Hide title
+      	/* if ( in_array($widget_id, $dw_hide_title) ) {
+
+      	} */
+
       } // END foreach ( $widgets as $widget_id )
     } // END if ( $sidebar_id != 'wp_inactive_widgets' && count($widgets) > 0 )
   } // END foreach ( $DW->sidebars as $sidebar_id => $widgets )

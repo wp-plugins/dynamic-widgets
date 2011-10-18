@@ -148,6 +148,12 @@
 			$bp = &$GLOBALS['bp'];
 
 			$group = $bp->current_item;
+			
+			// Check if there is an hierarchy in the groups (Plugin: BP Group Hierarchy)
+			if ( strpos($group, '/') !== FALSE ) {
+				$group = substr( strrchr($group, '/'), 1 );
+			}
+			
 			if ( in_array($group, $id) ) {
 				return TRUE;
 			}

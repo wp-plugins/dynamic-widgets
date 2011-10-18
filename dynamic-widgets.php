@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5b7
+ * Version: 1.5b8
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -64,7 +64,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5b7');
+  define('DW_VERSION', '1.5b8');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -356,6 +356,25 @@
     if ( isset($_GET['dynwid_save']) && $_GET['dynwid_save'] == 'yes' ) {
       add_action('sidebar_admin_page', 'dynwid_add_widget_page');
     }
+
+  	// Saving state of hide title checkbox -> maybe use filter "widget_update_callback"
+  	/* if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+  		$dw_hide_title = get_option('dw_hide_title');
+  		if ( $dw_hide_title === FALSE ) {
+  			$dw_hide_title = array();
+  		}
+  		$widget_id = $_POST['widget-id'];
+
+  		$var = 'dw_hide_title_' . $widget_id;
+  		if ( isset($_POST[$var])  && $_POST[$var] == 'on' && ! in_array($widget_id, $dw_hide_title) ) {
+  			$dw_hide_title[ ] = $widget_id;
+  		} else if (! isset($_POST[$var]) && in_array($widget_id, $dw_hide_title) ) {
+  			$key = array_search($widget_id, $dw_hide_title);
+  			unset($dw_hide_title[$key]);
+  		}
+
+  		update_option('dw_hide_title', $dw_hide_title);
+  	} */
   }
 
   /**
@@ -717,10 +736,18 @@
 	  $widget_id = $args[0]['widget_id'];
 	  $wp_callback = $DW->registered_widget_controls[$widget_id]['wp_callback'];
 
+		// Hide title option
+/*		$dw_hide_title = get_option('dw_hide_title');
+		$checked = FALSE;
+		if ( in_array($widget_id, $dw_hide_title) ) {
+			$checked = TRUE;
+		} */
+
 	  // Calling original callback first
     call_user_func_array($wp_callback, $args);
 
 	  // Now adding the dynwid text & link
+		// echo '<p><input id="dw_hide_title_' . str_replace('-', '_', $widget_id) . '" type="checkbox" name="dw_hide_title_' . $widget_id . '" ' . ( ($checked ? ' checked="checked"' : '' ) ) . ' /> <label for="dw_hide_title_' . str_replace('-', '_', $widget_id) . '">Hide the title</label></p>';
 	  echo '<p>' . __('Dynamic Widgets', DW_L10N_DOMAIN) . ': ';
 		echo '<a style="text-decoration:none;" title="' . __('Edit Dynamic Widgets Options', DW_L10N_DOMAIN) . '" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=widgets.php' . '">';
 		echo ( $DW->hasOptions($widget_id) ) ? __('Dynamic', DW_L10N_DOMAIN) : __('Static', DW_L10N_DOMAIN);
