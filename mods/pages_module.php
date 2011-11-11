@@ -57,7 +57,8 @@
 					$id = get_option('page_on_front');
 					$static_page[$id] = __('Front page', DW_L10N_DOMAIN);
 					$id = get_option('page_for_posts');
-					$static_page[$id] = __('Posts page', DW_L10N_DOMAIN);
+					// $static_page[$id] = __('Posts page', DW_L10N_DOMAIN);
+					unset($pages[$id]);
 				}
 			}
 

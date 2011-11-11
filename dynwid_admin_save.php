@@ -15,10 +15,12 @@
   /* Checking basic stuff */
 	$DW->registerOverrulers();
   foreach ( $DW->overrule_maintype as $o ) {
-  	$act_field = $o . '_act';
-  	if ( $_POST[$o] == 'no' && count($_POST[$act_field]) == 0 ) {
-  		wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
-  		die();
+  	if ( $o != 'date' ) {
+  		$act_field = $o . '_act';
+  		if ( $_POST[$o] == 'no' && count($_POST[$act_field]) == 0 ) {
+  			wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
+  			die();
+  		}
   	}
   }
 
