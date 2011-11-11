@@ -255,7 +255,7 @@
 			if ( is_front_page() && get_option('show_on_front') == 'posts' ) {
 				return 'front-page';
 			} else if ( is_home() && get_option('show_on_front') == 'page' ) {
-				return 'home';
+				return 'front-page';
 			} else if ( is_attachment() ) {
 				return 'attachment';					// must be before is_single(), otherwise detects as 'single'
 			} else if ( is_single() ) {

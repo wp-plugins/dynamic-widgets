@@ -18,9 +18,11 @@
 			
 			$list = array( 1 => __('First page') );
 
-			if ( get_option('show_on_front') != 'page' ) {
-				self::mkGUI(self::$type, self::$option[self::$name], self::$question, self::$info, self::$except, $list);
+			if ( get_option('show_on_front') == 'page' ) {
+				self::$option = array( 'front-page' => 'Posts Page' );
+				self::$question = 'Show widget on the posts page?';
 			}
+			self::mkGUI(self::$type, self::$option[self::$name], self::$question, NULL, self::$except, $list);
 		}
 	}
 ?>
