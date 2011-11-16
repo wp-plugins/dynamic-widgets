@@ -155,8 +155,8 @@
 					// apply default option to posts page
 					// apply exception to posts page and check default
 				}
-			}
-		} */
+			} */
+		} 
 		update_option('dynwid_version', DW_VERSION);
 	}
 
