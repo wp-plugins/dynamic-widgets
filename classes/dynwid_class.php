@@ -274,6 +274,8 @@
 				return 'tax_archive';
 			} else if ( is_archive() && ! is_category() && ! is_author() && ! is_tag() ) {
 				return 'archive';
+			} else if ( function_exists('bbp_is_single_user') && bbp_is_single_user() ) {	// must be before is_404(), otherwise bbPress profile page is detected as 'e404'.
+				return 'bbp_profile';
 			} else if ( is_404() ) {
 				return 'e404';
 			} else if ( is_search() ) {
@@ -420,6 +422,7 @@
 			DWModule::registerOption(DW_Archive::$option);
 			DWModule::registerOption(DW_Attachment::$option);
 			DWModule::registerOption(DW_Author::$option);
+			DWModule::registerOption(DW_bbPress::$option);
 			DWModule::registerOption(DW_BP::$option);
 			DWModule::registerOption(DW_Browser::$option);
 			DWModule::registerOption(DW_Category::$option);
