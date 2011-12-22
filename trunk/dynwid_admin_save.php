@@ -228,6 +228,9 @@
 
   // WPSC/WPEC Plugin support
 	DWModule::save('wpsc', 'complex');
+	
+	// bbPress Plugin support
+	DWModule::save('bbp_profile', 'simple');
 
 	// BP Plugin support
 	DWModule::save('bp', 'complex');

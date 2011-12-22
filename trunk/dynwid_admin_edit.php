@@ -220,6 +220,9 @@ h4 {
 
 	$DW_BP = new DW_BP();
 	$DW_BP->admin();
+	
+	$DW_bbPress = new DW_bbPress();
+	$DW_bbPress->admin();
 
 	$DW_Pods = new DW_Pods();
 	$DW_Pods->admin();
