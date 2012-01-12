@@ -274,7 +274,7 @@
 				return 'tax_archive';
 			} else if ( is_archive() && ! is_category() && ! is_author() && ! is_tag() ) {
 				return 'archive';
-			} else if ( function_exists('bbp_is_single_user') && bbp_is_single_user() ) {	// must be before is_404(), otherwise bbPress profile page is detected as 'e404'.
+			} else if ( function_exists('bbp_is_single_user') && (bbp_is_single_user() || bbp_is_single_user_edit()) ) {	// must be before is_404(), otherwise bbPress profile page is detected as 'e404'.
 				return 'bbp_profile';
 			} else if ( is_404() ) {
 				return 'e404';

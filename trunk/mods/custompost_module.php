@@ -223,7 +223,7 @@
 				if (! in_array($p->ID, $i) ) {
 					$i[ ] = $p->ID;
 					$arr[$p->ID] = array();
-					self::getCPostChilds($type, &$arr[$p->ID], $p->ID, &$i);
+					self::getCPostChilds($type, &$arr[$p->ID], $p->ID, $i);
 				}
 			}
 			return $arr;
@@ -271,7 +271,7 @@
 					$i[ ] = $t->term_id;
 					$arr[$t->term_id] = array();
 					$a = &$arr[$t->term_id];
-					$a = self::getTaxChilds($term, $a, $t->term_id, &$i);
+					$a = self::getTaxChilds($term, $a, $t->term_id, $i);
 				}
 			}
 

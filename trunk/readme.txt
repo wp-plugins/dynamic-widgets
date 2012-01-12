@@ -1,16 +1,18 @@
 === Plugin Name ===
 Contributors: Qurl
 Donate link:
-Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
+Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods, bbpress
 Requires at least: 3.0.0
-Tested up to: 3.2.1
-Stable tag: 1.4.2
+Tested up to: 3.3.1
+Stable tag: 1.5.0
 
 Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
 
 == Description ==
 
-Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamically show or hide widgets on WordPress pages by setting conditional logic rules with just a few mouse clicks. No knowledge of PHP required. No fiddling around with conditional tags. You can set conditional rules by Role, Dates, Browser, Language (WPML or QTranslate), for the Homepage, Single Posts, Attachments, Pages, Authors, Categories, Archives, Error Page, Search Page, Custom Post Types, Custom Post Type Archives, Custom Taxonomies in Custom Post Types, Custom Taxonomies Archives, WPEC/WPSC Categories, BuddyPress Components, BuddyPress Groups and Pods pages.
+Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamically show or hide widgets on WordPress pages by setting conditional logic rules with just a few mouse clicks. No knowledge of PHP required. No fiddling around with conditional tags. You can set conditional rules by Role, Dates, Browser, Language (WPML or QTranslate), for the Homepage, Single Posts, Attachments, Pages, Authors, Categories, Tags, Archives, Error Page, Search Page, Custom Post Types, Custom Post Type Archives, Custom Taxonomies in Custom Post Types, Custom Taxonomies Archives, WPEC/WPSC Categories, BuddyPress Components, BuddyPress Groups, Pods pages and bbPress.
+
+For the latest news about Dynamic Widgets visit [my website](http://www.qurl.nl/).
 
 * Default widget display setting is supported for:
   - User roles
@@ -24,6 +26,7 @@ Dynamic Widgets gives you full control on which pages your widgets will appear. 
   - Pages
   - Author pages
   - Category pages
+  - Tag pages
   - Archive pages
   - Error Page
   - Search Page
@@ -34,6 +37,7 @@ Dynamic Widgets gives you full control on which pages your widgets will appear. 
   - BuddyPress Components pages
   - BuddyPress Groups
   - Pods pages
+  - bbPress User Profile pages
 
 * Exception rules can be created for:
   - User roles on role, including not logged in (anonymous) users
@@ -41,28 +45,34 @@ Dynamic Widgets gives you full control on which pages your widgets will appear. 
   - Browsers on browser name
   - Theme Templates on template name
   - Languages (WPML or QTranslate) on language
-  - Single post pages on Author, Categories, Tags and/or Individual posts
+  - Front page on first page
+  - Single post pages on Author, Categories (including inheritance from hierarchical parents), Tags and/or Individual posts
   - Pages on Page Title, including inheritance from hierarchical parents
   - Author pages on Author
-  - Category pages on Category name
+  - Category pages on Category name, including inheritance from hierarchical parents
+  - Tag pages on Tag
   - Custom Posts Type on Custom Taxonomy and Custom Post Name, including inheritance from hierarchical parents
   - Custom Post Type Archive pages on Custom Post Type
   - Custom Taxonomy Archive pages on Custom Taxonomy Name, including inheritance from hierarchical parents
   - WP Shopping Cart / WP E-Commerce Categories on Category name
   - BuddyPress Component pages on Component
-  - BuddyPress Groups on Group or Component
+  - BuddyPress Groups on Group, including hierarchical Groups provided by BP Group Hierarchy or Component
   - Pods pages on page
 
 * Plugin support for:
+	- bbPress
 	- BuddyPress
+	- BuddyPress Group Hierarchy
 	- QTranslate
 	- Pods
   - WP MultiLingual (WPML)
   - WP Shopping Cart / WP E-Commerce (WPSC / WPEC)
 
 * Language files provided:
+	- Chinese (Simplified) (zh_CN) by Hanolex
 	- French (fr_FR) by Alexis Nomine
 	- German (de_DE) by Daniel Bihler
+	- Lithuanian (lt_LT) by Liudas Ališauskas
 	- Spanish (es_ES) by Eduardo Larequi
 
 == Installation ==
@@ -153,13 +163,21 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 = Version 1.5.0bx =
 
 * Added Pods plugin support.
+* Added Tag Archive Pages support.
 * Added hierarchical inheritance for Categories.
 * Added workaround to detect correct template when using Pods.
 * Added negative exceptions for Role.
+* Added an "Only on first page" exception for Front Page.
+* Added support for BP Group Hierarchy.
+* Added support for bbPress User Profile pages.
+* Added Chinese (Simplified) language files (locale: zh_CN) - xie xie Hanolex!
+* Added Lithuanian language files (locale: lt_LT) - dekoju Liudas! 
+* Added a "Save & Return" button to the widget options page.
 * Bugfix for subscribers show up in the author lists in WP > 3.1.
 * Bugfix for Taxonomies in Custom Post Types are not always saved.
 * Bugfix for Custom Posts box is sometimes empty.
 * Fixed several PHP notices about undefined variables.
+* Removed support for individual Custom Posts.
 * Removed PHP4 support, minimum PHP version is now 5.1.0.
 * Removed WP < 3.0 support. Minimum WordPress version is now 3.0.
 
@@ -192,7 +210,7 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 * Bugfix for not correct displaying of options string in the widget admin when having options set for Custom Post Type Archives, BuddyPress, BuddyPress Groups.
 * Bugfix for losing exception rules for single posts and tags in rare cases.
 * Bugfix for showing empty Custom Post Type Archives option in settings screen.
-* Bugfix for unexptected behaviour when setting BP groups default to 'No'.
+* Bugfix for unexpected behaviour when setting BP groups default to 'No'.
 * Bugfix for only showing the last Custom Posts in the list.
 * Limited the list of authors to users with user level > 0. (WP 3.1 and higher)
 * Security fix in the usage of the returnURL.
@@ -322,12 +340,12 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 
 == Release notes ==
 
-Change of requirements: PHP 5.1.0 or higher and WordPress 3.0 or higher.
+Change of requirements: PHP 5.1.0 or higher and WordPress 3.0 or higher. This version has 7 features added and 3 bugs fixed.
 
 == Upgrade Notice ==
 
-= 1.5.1 =
-
+= 1.5.0 =
+Change of requirements: PHP 5.1.0 or higher and WordPress 3.0 or higher. This version has 7 features added and 3 bugs fixed. When you upgrade manually, be sure to remove the whole dynamic-widgets directory. Do a fresh copy of this version. Some files have been renamed. Old files remaining might lead to unexpected behaviour.
 
 == Screenshots ==
 
