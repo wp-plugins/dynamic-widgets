@@ -33,7 +33,7 @@
 					$i[ ] = $c->cat_ID;
 					$arr[$c->cat_ID] = array();
 					$a = &$arr[$c->cat_ID];
-					$a = self::getCatChilds($a, $c->cat_ID, &$i);
+					$a = self::getCatChilds($a, $c->cat_ID, $i);
 				}
 			}
 			return $arr;

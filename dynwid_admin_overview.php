@@ -141,7 +141,7 @@
 <form action="" method="get">
 <input type="hidden" name="page" value="dynwid-config" />
 <input type="hidden" name="action" value="dynwid_set_page_limit" />
-<b><?php _e('Page limit') ?></b>: <input type="text" name="page_limit" value="<?php echo ( isset($_GET['page_limit']) ) ? $_GET['page_limit'] : DW_PAGE_LIMIT; ?>" style="width:50px" maxlength="4" /> <input class="button-primary" type="submit" value="<? _e('Save'); ?>" />
+<b><?php _e('Page limit', DW_L10N_DOMAIN) ?></b>: <input type="text" name="page_limit" value="<?php echo ( isset($_GET['page_limit']) ) ? $_GET['page_limit'] : DW_PAGE_LIMIT; ?>" style="width:50px" maxlength="4" /> <input class="button-primary" type="submit" value="<? _e('Save'); ?>" />
 <br />
 <?php _e('The page limit sets the limit of number of pages to prevent a timeout when building the hierarchical tree. When the number of pages is above this limit, a flat list will be displayed which is less time consuming.', DW_L10N_DOMAIN); ?>
 <br />

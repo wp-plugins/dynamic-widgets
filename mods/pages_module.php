@@ -103,7 +103,7 @@
 					$i[ ] = $p->ID;
 					$arr[$p->ID] = array();
 					$a = &$arr[$p->ID];
-					$a = self::getPageChilds($a, $p->ID, &$i);
+					$a = self::getPageChilds($a, $p->ID, $i);
 				}
 			}
 			return $arr;

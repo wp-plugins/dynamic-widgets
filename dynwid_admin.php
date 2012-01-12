@@ -19,10 +19,12 @@
 	<?php _e('Dynamic Widgets', DW_L10N_DOMAIN); ?>
 	<input type="image" style="vertical-align: middle;" title="Donate for this plugin via PayPal" alt="Donate" name="submit" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" onclick="jQuery('#paypal').submit()">
 </div></h2>
-<div style="border-color: #E3E3E3;border-radius: 6px 6px 6px 6px;border-style: solid;border-width: 1px;padding: 5px;width:350px;float:left;position:relative;top:-7px;">
+<div style="border-color: #E3E3E3;border-radius: 6px 6px 6px 6px;border-style: solid;border-width: 1px;padding: 5px;width:360px;float:left;position:relative;top:-7px;">
+<div style="float:left"><a href="<?php echo DW_URL; ?>/"><img src="<?php echo $DW->plugin_url; ?>/img/qurl.png" alt="" title="QURL - Quality and Reliability" /></a></div>
+<div style="float:left;margin-left:7px;">
 <strong>Did you know?</strong><br />
-I also provide other services. See <a href="<?php echo DW_URL; ?>/services/" target="_blank">my site</a> for details.
-</div>
+I also provide other services. See <a href="<?php echo DW_URL; ?>/services/" target="_blank">my website</a> for details.
+</div></div>
 
 <br style="clear:both" />
 <?php
