@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.0
+ * Version: 1.5.0.1
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -66,7 +66,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5.0');
+  define('DW_VERSION', '1.5.0.1');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -161,33 +161,60 @@
 		} 
 		update_option('dynwid_version', DW_VERSION);
 	}
+	
+	
+	/**
+   * dynwid_add_admin_help_tab() Add help tab for WP >= 3.3
+   * @since 1.5.0
+   */
+	function dynwid_add_admin_help_tab() {
+		$dw_admin_screen = $GLOBALS['dw_admin_screen'];
+		$screen = get_current_screen();
+		
+		if ( $screen->id == $dw_admin_screen ) {
+			// Contextual help
+  		if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
+  			$dw_help = dynwid_contextual_help_text('edit');
+  		} else {
+				$dw_help = dynwid_contextual_help_text('overview');
+  		}
+			
+			$args = array(	'id'	=> 'dw_help_tab',
+											'title'	=> 'Dynamic Widgets',
+											'content'	=> $dw_help
+										);
+			$screen->add_help_tab($args);
+		}	
+	}
 
   /**
    * dynwid_add_admin_menu() Add plugin link to admin menu
    * @since 1.0
    */
   function dynwid_add_admin_menu() {
+  	global $dw_admin_screen;
+  	
     $DW = &$GLOBALS['DW'];
 
-    $screen = add_submenu_page('themes.php', __('Dynamic Widgets', DW_L10N_DOMAIN), __('Dynamic Widgets', DW_L10N_DOMAIN), 'edit_theme_options', 'dynwid-config', 'dynwid_admin_page');
+    $dw_admin_screen = add_submenu_page('themes.php', __('Dynamic Widgets', DW_L10N_DOMAIN), __('Dynamic Widgets', DW_L10N_DOMAIN), 'edit_theme_options', 'dynwid-config', 'dynwid_admin_page');
 
   	if ( $DW->enabled ) {
-  		add_action('admin_print_styles-' . $screen, 'dynwid_add_admin_styles');
-  		add_action('admin_print_scripts-' . $screen, 'dynwid_add_admin_scripts');
+  		add_action('admin_print_styles-' . $dw_admin_screen, 'dynwid_add_admin_styles');
+  		add_action('admin_print_scripts-' . $dw_admin_screen, 'dynwid_add_admin_scripts');
 
   		// Contextual help
   		if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
-  			$help  = __('Widgets are always displayed by default', DW_L10N_DOMAIN) . ' (' . __('The \'<em>Yes</em>\' selection', DW_L10N_DOMAIN) . ')'  . '<br />';
-  			$help .= __('Click on the', DW_L10N_DOMAIN) . ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" /> ' . __('next to the options for more info', DW_L10N_DOMAIN) . '.<br />';
-  			$help .= __('The') . ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" /> ' . __('next to a section means it has options set.', DW_L10N_DOMAIN);
+  			$dw_help = dynwid_contextual_help_text('edit');
   		} else {
-  			$help  = '<p><strong>' . __('Static', DW_L10N_DOMAIN) . ' / ' . __('Dynamic', DW_L10N_DOMAIN) . '</strong><br />';
-  			$help .= __('When a widget is', DW_L10N_DOMAIN) . ' <em>' . __('Static', DW_L10N_DOMAIN) . '</em>, ' . __('the widget uses the WordPress default. In other words, it\'s shown everywhere', DW_L10N_DOMAIN) . '.<br />';
-  			$help .=  __('A widget is', DW_L10N_DOMAIN) . ' <em>' . __('Dynamic', DW_L10N_DOMAIN) . '</em> ' . __('when there are options set, i.e. not showing on the front page.', DW_L10N_DOMAIN) . '</p>';
-  			$help .= '<p><strong>' . __('Reset', DW_L10N_DOMAIN) . '</strong><br />';
-  			$help .= __('Reset makes the widget return to', DW_L10N_DOMAIN) . ' <em>' . __('Static', DW_L10N_DOMAIN) . '</em>.</p>';
+				$dw_help = dynwid_contextual_help_text('overview');
   		}
-  		add_contextual_help($screen, $help);
+  		
+  		// Since WP 3.3 contextual help is handled different
+  		if ( version_compare($GLOBALS['wp_version'], '3.3', '>=') ) {
+  			add_action('load-' . $dw_admin_screen, 'dynwid_add_admin_help_tab');
+  		} else {
+  			add_contextual_help($dw_admin_screen, $dw_help);
+  		}
 
   		// Only show meta box in posts panel when there are widgets enabled.
   		$opt = $DW->getOpt('%','individual');
@@ -331,10 +358,6 @@
   function dynwid_add_widget_control() {
     $DW = &$GLOBALS['DW'];
 
-  	// Loading the options strings from the modules
-  	$DW->loadModules();
-  	$DW->getModuleName();
-
     /*
       Hooking into the callback of the widgets by moving the existing callback to wp_callback
       and setting callback with own callback function.
@@ -357,7 +380,7 @@
 
         if ( count($DW->registered_widget_controls[$widget_id]['params']) == 0 ) {
           $DW->registered_widget_controls[$widget_id]['params'][ ] = array('widget_id' => $widget_id);
-        /* Fixing params[0] */
+        // Fixing params[0]
         } else if (! is_array($DW->registered_widget_controls[$widget_id]['params'][0]) ) {
           $DW->registered_widget_controls[$widget_id]['params'][0] = array('widget_id' => $widget_id);
         } else {
@@ -498,6 +521,32 @@
       echo $check;
       echo '</div>';
     }
+  }
+  
+  /**
+   * dynwid_contextual_help_text() Actual text to place into the contextual help screen
+   * @param string $screen
+   * @return string
+   * @since 1.5.0
+   *
+   */
+  function dynwid_contextual_help_text($screen) {
+  	$DW = &$GLOBALS['DW'];
+  	
+  	// Contextual help
+		if ( $screen == 'edit' ) {
+			$dw_help  = __('Widgets are always displayed by default', DW_L10N_DOMAIN) . ' (' . __('The \'<em>Yes</em>\' selection', DW_L10N_DOMAIN) . ')'  . '<br />';
+			$dw_help .= __('Click on the', DW_L10N_DOMAIN) . ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" /> ' . __('next to the options for more info', DW_L10N_DOMAIN) . '.<br />';
+			$dw_help .= __('The') . ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" /> ' . __('next to a section means it has options set.', DW_L10N_DOMAIN);
+		} else {
+			$dw_help  = '<p><strong>' . __('Static', DW_L10N_DOMAIN) . ' / ' . __('Dynamic', DW_L10N_DOMAIN) . '</strong><br />';
+			$dw_help .= __('When a widget is', DW_L10N_DOMAIN) . ' <em>' . __('Static', DW_L10N_DOMAIN) . '</em>, ' . __('the widget uses the WordPress default. In other words, it\'s shown everywhere', DW_L10N_DOMAIN) . '.<br />';
+			$dw_help .=  __('A widget is', DW_L10N_DOMAIN) . ' <em>' . __('Dynamic', DW_L10N_DOMAIN) . '</em> ' . __('when there are options set, i.e. not showing on the front page.', DW_L10N_DOMAIN) . '</p>';
+			$dw_help .= '<p><strong>' . __('Reset', DW_L10N_DOMAIN) . '</strong><br />';
+			$dw_help .= __('Reset makes the widget return to', DW_L10N_DOMAIN) . ' <em>' . __('Static', DW_L10N_DOMAIN) . '</em>.</p>';
+		}
+		
+		return $dw_help;
   }
 
   /**
@@ -745,6 +794,9 @@
 	 */
 	function dynwid_widget_callback() {
 	  $DW = &$GLOBALS['DW'];
+  
+ 		$DW->loadModules();
+  	$DW->getModuleName();
 
 	  $args = func_get_args();
 	  $widget_id = $args[0]['widget_id'];
@@ -792,7 +844,9 @@
 	    	$string .= ( ($last - 1) == $i ) ? ' ' . __('and', DW_L10N_DOMAIN) . ' ' : ', ';
 	    }
 	    $type = $s[$last];
-	    $string .= $DW->dwoptions[$type];
+	    if ( isset($DW->dwoptions[$type]) ) {
+	    	$string .= $DW->dwoptions[$type];
+	    }
 
 	    $output  = '<br /><small>';
 	    $output .= ( count($opt) > 1 ) ? __('Options set for', DW_L10N_DOMAIN) : __('Option set for', DW_L10N_DOMAIN);

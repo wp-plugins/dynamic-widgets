@@ -17,10 +17,12 @@
   foreach ( $DW->overrule_maintype as $o ) {
   	if ( $o != 'date' ) {
   		$act_field = $o . '_act';
-  		if ( $_POST[$o] == 'no' && count($_POST[$act_field]) == 0 ) {
-  			wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
-  			die();
-  		}
+  		if ( isset($_POST[$act_field]) ) {
+	  		if ( $_POST[$o] == 'no' && count($_POST[$act_field]) == 0 ) {
+	  			wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
+	  			die();
+	  		}
+	  	}
   	}
   }
 
@@ -155,11 +157,13 @@
     	// Go through the tax_list - Workaround as for some reason get_object_taxonomies() is not always filled
     	$tax_list = array();
     	$len = strlen($type);
-    	foreach ( $_POST['tax_list'] as $tl ) {
-    		if ( substr($tl, 0, $len) == $type ) {
-    			$tax_list [] = $tl;
-    		}
-    	}
+    	if ( isset($_POST['tax_list']) && count($_POST['tax_list']) > 0 ) {
+	    	foreach ( $_POST['tax_list'] as $tl ) {
+	    		if ( substr($tl, 0, $len) == $type ) {
+	    			$tax_list[] = $tl;
+	    		}
+	    	}
+	    }
 
     	foreach ( $tax_list as $tax ) {
     		$act_tax_field = $tax . '_act';
@@ -202,8 +206,8 @@
   }
 
 	// Custom Taxonomies
-	if ( isset($_POST['taxonomy']) ) {
-		foreach ( $_POST['taxonomy'] as $tax ) {
+	if ( isset($_POST['dw_taxonomy']) ) {
+		foreach ( $_POST['dw_taxonomy'] as $tax ) {
 			$type = 'tax_' . $tax;
 			$act_field = $type . '_act';
 			if ( isset($_POST[$act_field]) && count($_POST[$act_field]) > 0 ) {
