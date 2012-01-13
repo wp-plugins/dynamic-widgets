@@ -180,7 +180,7 @@
 						echo '<h4><b>' . $tax->label . '</b> (<em>' . implode(', ', $cpt_label) . '</em>)' . ( ($opt_ct_archive->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
 						echo '<div class="dynwid_conf">';
 						echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $tax->label . '?' . ( ($tax->hierarchical || count($t) > 0) ? ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $ct . '\');" />' : '' ) . '<br />';
-						echo '<input type="hidden" name="taxonomy[]" value="' . $tax_id . '" />';
+						echo '<input type="hidden" name="dw_taxonomy[]" value="' . $tax_id . '" />';
 						$DW->dumpOpt($opt_ct_archive);
 						if ( isset($opt_ct_archive_childs) ) {
 							$DW->dumpOpt($opt_ct_archive_childs);
@@ -216,7 +216,7 @@
 			}
 		}
 
-		public static function getCPostChilds($type, $arr, $id, $i) {
+/*		public static function getCPostChilds($type, $arr, $id, $i) {
 			$post = get_posts('post_type=' . $type . '&post_parent=' . $id . '&posts_per_page=-1');
 
 			foreach ($post as $p ) {
@@ -227,9 +227,9 @@
 				}
 			}
 			return $arr;
-		}
+		} */
 
-		public static function prtCPost($type, $ctid, $posts, $posts_act, $posts_childs_act) {
+/*		public static function prtCPost($type, $ctid, $posts, $posts_act, $posts_childs_act) {
 			$DW = &$GLOBALS['DW'];
 
 			foreach ( $posts as $pid => $childs ) {
@@ -261,7 +261,7 @@
 					echo '</div>';
 				}
 			}
-		}
+		} */
 
 		public static function getTaxChilds($term, $arr, $id, $i) {
 			$tax = get_terms($term, array('hide_empty' => FALSE, 'parent' => $id));

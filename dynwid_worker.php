@@ -194,7 +194,7 @@
             // Display exceptions (custom post type)
             if ( $DW->custom_post_type ) {
               // Custom Post Type behaves the same as a single post
-              $post = $GLOBALS['post'];
+               $post = $GLOBALS['post'];
               if ( count($act) > 0 ) {
                 $id = $post->ID;
                 $DW->message('PostID: ' . $id);
@@ -205,7 +205,7 @@
 
               	$act_custom = array();
               	$act_childs = array();
-              	foreach ( $opt as $condition ) {
+              	/* foreach ( $opt as $condition ) {
               		if ( $condition->name != 'default' ) {
               			switch ( $condition->maintype ) {
               				case $DW->whereami:
@@ -217,7 +217,7 @@
               					break;
               			}
               		}
-              	}
+              	} */
 
               	// Taxonomies within CPT
               	$act_tax = array();
