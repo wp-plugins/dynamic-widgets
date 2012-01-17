@@ -175,7 +175,7 @@
 
       $act_field = $type . '_act';
       if ( (isset($_POST[$act_field]) && count($_POST[$act_field]) > 0) || $taxonomy ) {
-      	if (! is_array($_POST[$act_field]) ) {
+      	if (! isset($_POST[$act_field]) ) {
       		$_POST[$act_field] = array();
       	}
 

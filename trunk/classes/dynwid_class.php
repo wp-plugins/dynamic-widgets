@@ -631,12 +631,21 @@
 				}
 			}
 		}
+		
+		/**
+		 * dynWid::log() Write text to debug log
+		 *
+		 */		
+		public function log($text) {
+			if ( WP_DEBUG && DW_DEBUG ) {
+				error_log($text);
+			}
+		}
 
 		/**
 		 * dynWid::message() Debug message
 		 *
-		 * @param string $text Message
-		 * @return Message
+		 * @param string $text
 		 */
 		public function message($text) {
 			if ( DW_DEBUG ) {
