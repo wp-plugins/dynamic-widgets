@@ -21,7 +21,7 @@
 				$list[$t->term_id] = $t->name;
 			}
 			
-			self::mkGUI(self::$type, self::$option[self::$name], self::$question, NULL, self::$except, $list);
+			self::mkGUI(self::$type, self::$option[self::$name], self::$question, FALSE, self::$except, $list);
 		}
 	}
 ?>

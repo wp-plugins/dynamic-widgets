@@ -49,7 +49,7 @@
 			self::$post_types = get_post_types($args, 'objects', 'and');
 			foreach ( self::$post_types as $type => $ctid ) {
 				// Prepare
-				self::$opt = $DW->getDWOpt($_GET['id'], $type);
+				// self::$opt = $DW->getDWOpt($_GET['id'], $type);
 
 				// -- Childs
 				/* if ( $ctid->hierarchical ) {
@@ -79,7 +79,7 @@
 				echo '</div>';
 
 				self::GUIOption($type);
-				echo '<br />';
+				echo '<br />'; 
 
 				/* if ( isset($opt_custom_childs) ) {
 					$DW->dumpOpt($opt_custom_childs);
@@ -131,7 +131,7 @@
 						echo '<div id="' . $type . '-tax_' . $tax_type->name . '-select" class="condition-select" ' . ( (isset($tax_condition_select_style)) ? $tax_condition_select_style : '' ) . '>';
 						echo '<div style="position:relative;left:-15px">';
 						if (! isset($opt_tax_childs) ) {
-							$childs = array();
+							$childs = FALSE;
 						} else {
 							$childs = $opt_tax_childs->act;
 						}
@@ -201,7 +201,7 @@
 							echo '<div id="' . $ct . '-select" class="condition-select" ' . ( (isset($ct_archive_condition_select_style)) ? $ct_archive_condition_select_style : '' ) . '>';
 							echo '<div style="position:relative;left:-15px">';
 							if (! isset($opt_ct_archive_childs) ) {
-								$childs = array();
+								$childs = FALSE;
 							} else {
 								$childs = $opt_ct_archive_childs->act;
 							}
@@ -223,7 +223,7 @@
 				if (! in_array($p->ID, $i) ) {
 					$i[ ] = $p->ID;
 					$arr[$p->ID] = array();
-					self::getCPostChilds($type, &$arr[$p->ID], $p->ID, $i);
+					$arr[$p->ID] = self::getCPostChilds($type, $arr[$p->ID], $p->ID, $i);
 				}
 			}
 			return $arr;
@@ -298,12 +298,14 @@
 					echo '<div style="position:relative;left:15px;">';
 					echo '<input type="checkbox" id="' . $prefix . '_act_' . $pid . '" name="' . $prefix . '_act[]" value="' . $pid . '" ' . ( isset($terms_act) && count($terms_act) > 0 && in_array($pid, $terms_act) ? 'checked="checked"' : '' ) . ' onchange="chkChild(\'' . $prefix . '\', ' . $pid . ')" /> <label for="' . $prefix . '_act_' . $pid . '">' . $term->name . '</label><br />';;
 
-					echo '<div style="position:relative;left:15px;">';
-					echo '<input type="checkbox" id="' . $prefix . '_childs_act_' . $pid . '" name="' . $prefix . '_childs_act[]" value="' . $pid . '" ' . ( isset($terms_childs_act) && count($terms_childs_act) > 0 && in_array($pid, $terms_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(\'' . $prefix . '\', ' . $pid . ')" /> <label for="' . $prefix . '_childs_act_' . $pid . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></label><br />';
-					echo '</div>';
+					if ( $terms_childs_act !== FALSE ) {
+						echo '<div style="position:relative;left:15px;">';
+						echo '<input type="checkbox" id="' . $prefix . '_childs_act_' . $pid . '" name="' . $prefix . '_childs_act[]" value="' . $pid . '" ' . ( isset($terms_childs_act) && count($terms_childs_act) > 0 && in_array($pid, $terms_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(\'' . $prefix . '\', ' . $pid . ')" /> <label for="' . $prefix . '_childs_act_' . $pid . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></label><br />';
+						echo '</div>';
 
-					if ( count($childs) > 0 ) {
-						self::prtTax($tax, $childs, $terms_act, $terms_childs_act, $prefix);
+						if ( count($childs) > 0 ) {
+							self::prtTax($tax, $childs, $terms_act, $terms_childs_act, $prefix);
+						}
 					}
 					echo '</div>';
 				}

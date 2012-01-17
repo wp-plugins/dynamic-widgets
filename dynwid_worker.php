@@ -259,13 +259,13 @@
                 } else if ( count($act_tax) > 0 ) {
                 	// bcause $id has already been moved to default language, term doesn't need to be converted. WPML takes care of default language term
 									foreach ( $term as $t ) {
-										if ( is_array($act_tax[$t->taxonomy]) && in_array($t->term_id, $act_tax[$t->taxonomy]) ) {
+										if ( isset($act_tax[$t->taxonomy]) && is_array($act_tax[$t->taxonomy]) && in_array($t->term_id, $act_tax[$t->taxonomy]) ) {
 											$display = $other;
 											$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP3)');
 											break;
 										}
 										$parents = $DW->getTaxParents($t->taxonomy, array(), $t->term_id);
-										if ( is_array($act_tax_childs[$t->taxonomy]) && (bool) array_intersect($act_tax_childs[$t->taxonomy], $parents) ) {
+										if ( isset($act_tax_childs[$t->taxonomy]) && is_array($act_tax_childs[$t->taxonomy]) && (bool) array_intersect($act_tax_childs[$t->taxonomy], $parents) ) {
 											$display = $other;
 											$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ECP4)');
 										}
