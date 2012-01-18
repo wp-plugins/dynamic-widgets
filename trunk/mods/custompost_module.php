@@ -49,7 +49,7 @@
 			self::$post_types = get_post_types($args, 'objects', 'and');
 			foreach ( self::$post_types as $type => $ctid ) {
 				// Prepare
-				// self::$opt = $DW->getDWOpt($_GET['id'], $type);
+				self::$opt = $DW->getDWOpt($_GET['id'], $type);
 
 				// -- Childs
 				/* if ( $ctid->hierarchical ) {
