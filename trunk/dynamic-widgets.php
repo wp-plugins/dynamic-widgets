@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.0.3
+ * Version: 1.5.0.4
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -66,7 +66,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5.0.3');
+  define('DW_VERSION', '1.5.0.4');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -145,7 +145,7 @@
 					$wpdb->query($query);
 				}
 			}
-			
+
 /*		1.5b10 > Added exclusion rule for first posts page by moving the static posts page out of pages
 			Need to apply the setting of the static posts page to posts page (type 'front-page') to keep same behavior. */
 /*			if ( version_compare($version, '1.5b10', '<') ) {
@@ -158,11 +158,11 @@
 					// apply exception to posts page and check default
 				}
 			} */
-		} 
+		}
 		update_option('dynwid_version', DW_VERSION);
 	}
-	
-	
+
+
 	/**
    * dynwid_add_admin_help_tab() Add help tab for WP >= 3.3
    * @since 1.5.0
@@ -170,7 +170,7 @@
 	function dynwid_add_admin_help_tab() {
 		$dw_admin_screen = $GLOBALS['dw_admin_screen'];
 		$screen = get_current_screen();
-		
+
 		if ( $screen->id == $dw_admin_screen ) {
 			// Contextual help
   		if ( isset($_GET['action']) && $_GET['action'] == 'edit' ) {
@@ -178,13 +178,13 @@
   		} else {
 				$dw_help = dynwid_contextual_help_text('overview');
   		}
-			
+
 			$args = array(	'id'	=> 'dw_help_tab',
 											'title'	=> 'Dynamic Widgets',
 											'content'	=> $dw_help
 										);
 			$screen->add_help_tab($args);
-		}	
+		}
 	}
 
   /**
@@ -193,7 +193,7 @@
    */
   function dynwid_add_admin_menu() {
   	global $dw_admin_screen;
-  	
+
     $DW = &$GLOBALS['DW'];
 
     $dw_admin_screen = add_submenu_page('themes.php', __('Dynamic Widgets', DW_L10N_DOMAIN), __('Dynamic Widgets', DW_L10N_DOMAIN), 'edit_theme_options', 'dynwid-config', 'dynwid_admin_page');
@@ -208,7 +208,7 @@
   		} else {
 				$dw_help = dynwid_contextual_help_text('overview');
   		}
-  		
+
   		// Since WP 3.3 contextual help is handled different
   		if ( version_compare($GLOBALS['wp_version'], '3.3', '>=') ) {
   			add_action('load-' . $dw_admin_screen, 'dynwid_add_admin_help_tab');
@@ -522,7 +522,7 @@
       echo '</div>';
     }
   }
-  
+
   /**
    * dynwid_contextual_help_text() Actual text to place into the contextual help screen
    * @param string $screen
@@ -532,7 +532,7 @@
    */
   function dynwid_contextual_help_text($screen) {
   	$DW = &$GLOBALS['DW'];
-  	
+
   	// Contextual help
 		if ( $screen == 'edit' ) {
 			$dw_help  = __('Widgets are always displayed by default', DW_L10N_DOMAIN) . ' (' . __('The \'<em>Yes</em>\' selection', DW_L10N_DOMAIN) . ')'  . '<br />';
@@ -545,7 +545,7 @@
 			$dw_help .= '<p><strong>' . __('Reset', DW_L10N_DOMAIN) . '</strong><br />';
 			$dw_help .= __('Reset makes the widget return to', DW_L10N_DOMAIN) . ' <em>' . __('Static', DW_L10N_DOMAIN) . '</em>.</p>';
 		}
-		
+
 		return $dw_help;
   }
 
@@ -794,7 +794,7 @@
 	 */
 	function dynwid_widget_callback() {
 	  $DW = &$GLOBALS['DW'];
-  
+
  		$DW->loadModules();
   	$DW->getModuleName();
 

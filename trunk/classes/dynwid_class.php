@@ -426,7 +426,8 @@
 			DWModule::registerOption(DW_BP::$option);
 			DWModule::registerOption(DW_Browser::$option);
 			DWModule::registerOption(DW_Category::$option);
-			DWModule::registerOption(DW_CustomPost::$option);
+			// DWModule::registerOption(DW_CustomPost::$option);
+			DW_CustomPost::registerOption();
 			DWModule::registerOption(DW_Date::$option);
 			DWModule::registerOption(DW_E404::$option);
 			DWModule::registerOption(DW_Front_page::$option);

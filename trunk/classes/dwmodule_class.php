@@ -137,6 +137,7 @@
 
 			// $classname = self::getClassName();
 			$vars = self::getVars(self::$classname);
+			$wpml = FALSE;
 			if ( $vars['wpml'] !== FALSE ) {
 				$wpml = TRUE;
 			}
