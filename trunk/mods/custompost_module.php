@@ -158,59 +158,67 @@
 
 				if ( count($taxlist) > 0 ) {
 					foreach ( $taxlist as $tax_id => $tax ) {
-						$ct = 'tax_' . $tax_id;
-						$ct_archive_yes_selected = 'checked="checked"';
-						$opt_ct_archive = $DW->getDWOpt($_GET['id'], $ct);
-						if ( $tax->hierarchical ) {
-							$opt_ct_archive_childs = $DW->getDWOpt($_GET['id'], $ct . '-childs');
-						}
-
-						$t = get_terms($tax->name, array('get' => 'all'));
-						if ( count($t) > DW_LIST_LIMIT ) {
-							$ct_archive_condition_select_style = DW_LIST_STYLE;
-						}
-
-						$tree = self::getTaxChilds($tax->name, array(), 0, array());
-
+						
+						// Getting the linked post type : Only Pages and CPT supported
 						$cpt_label = array();
 						foreach ( $tax->object_type as $obj ) {
-							$cpt_label[ ] = self::$post_types[$obj]->label;
-						}
-
-						echo '<h4><b>' . $tax->label . '</b> (<em>' . implode(', ', $cpt_label) . '</em>)' . ( ($opt_ct_archive->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
-						echo '<div class="dynwid_conf">';
-						echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $tax->label . '?' . ( ($tax->hierarchical || count($t) > 0) ? ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $ct . '\');" />' : '' ) . '<br />';
-						echo '<input type="hidden" name="dw_taxonomy[]" value="' . $tax_id . '" />';
-						$DW->dumpOpt($opt_ct_archive);
-						if ( isset($opt_ct_archive_childs) ) {
-							$DW->dumpOpt($opt_ct_archive_childs);
-						}
-
-						echo '<div>';
-						echo '<div id="custom_' . $ct . '" class="infotext">';
-						echo ( $tax->hierarchical ? '<p>' . DW_Page::infoText() . '</p>' : '' );
-						echo ( (count($t) > 0) ? '<p>' . __('All exceptions work in a logical OR condition. That means when one of the exceptions is met, the exception rule is applied.', DW_L10N_DOMAIN) . '</p>' : '' );
-						echo '</div>';
-						echo '</div>';
-
-						echo '<input type="radio" name="' . $ct . '" value="yes" id="' . $ct . '-yes" ' . ( ($opt_ct_archive->selectYes()) ? $opt_ct_archive->checked : '' ) . ' /> <label for="' . $ct . '-yes">' . __('Yes') . '</label> ';
-						echo '<input type="radio" name="' . $ct . '" value="no" id="' . $ct . '-no" ' . ( ($opt_ct_archive->selectNo()) ? $opt_ct_archive->checked : '' ) . ' /> <label for="' . $ct . '-no">' . __('No') . '</label><br />';
-
-						if ( count($t) > 0 ) {
-							echo __('Except for', DW_L10N_DOMAIN) . ':<br />';
-							echo '<div id="' . $ct . '-select" class="condition-select" ' . ( (isset($ct_archive_condition_select_style)) ? $ct_archive_condition_select_style : '' ) . '>';
-							echo '<div style="position:relative;left:-15px">';
-							if (! isset($opt_ct_archive_childs) ) {
-								$childs = FALSE;
-							} else {
-								$childs = $opt_ct_archive_childs->act;
+							if ( $obj == 'page' ) {
+								$cpt_label[ ] = _('Pages');
+							} else if ( isset(self::$post_types[$obj]) ) {
+								$cpt_label[ ] = self::$post_types[$obj]->label;
 							}
-							self::prtTax($tax->name, $tree, $opt_ct_archive->act, $childs, $ct);
-							echo '</div>';
-							echo '</div>';
 						}
-						// echo '</div><!-- end dynwid_conf -->';
-						self::GUIFooter();
+						
+						if ( count($cpt_label) > 0 ) {
+							$ct = 'tax_' . $tax_id;
+							$ct_archive_yes_selected = 'checked="checked"';
+							$opt_ct_archive = $DW->getDWOpt($_GET['id'], $ct);
+							if ( $tax->hierarchical ) {
+								$opt_ct_archive_childs = $DW->getDWOpt($_GET['id'], $ct . '-childs');
+							}
+	
+							$t = get_terms($tax->name, array('get' => 'all'));
+							if ( count($t) > DW_LIST_LIMIT ) {
+								$ct_archive_condition_select_style = DW_LIST_STYLE;
+							}
+	
+							$tree = self::getTaxChilds($tax->name, array(), 0, array());
+	
+							echo '<h4><b>' . $tax->label . '</b> (<em>' . implode(', ', $cpt_label) . '</em>)' . ( ($opt_ct_archive->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
+							echo '<div class="dynwid_conf">';
+							echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $tax->label . '?' . ( ($tax->hierarchical || count($t) > 0) ? ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $ct . '\');" />' : '' ) . '<br />';
+							echo '<input type="hidden" name="dw_taxonomy[]" value="' . $tax_id . '" />';
+							$DW->dumpOpt($opt_ct_archive);
+							if ( isset($opt_ct_archive_childs) ) {
+								$DW->dumpOpt($opt_ct_archive_childs);
+							}
+	
+							echo '<div>';
+							echo '<div id="custom_' . $ct . '" class="infotext">';
+							echo ( $tax->hierarchical ? '<p>' . DW_Page::infoText() . '</p>' : '' );
+							echo ( (count($t) > 0) ? '<p>' . __('All exceptions work in a logical OR condition. That means when one of the exceptions is met, the exception rule is applied.', DW_L10N_DOMAIN) . '</p>' : '' );
+							echo '</div>';
+							echo '</div>';
+	
+							echo '<input type="radio" name="' . $ct . '" value="yes" id="' . $ct . '-yes" ' . ( ($opt_ct_archive->selectYes()) ? $opt_ct_archive->checked : '' ) . ' /> <label for="' . $ct . '-yes">' . __('Yes') . '</label> ';
+							echo '<input type="radio" name="' . $ct . '" value="no" id="' . $ct . '-no" ' . ( ($opt_ct_archive->selectNo()) ? $opt_ct_archive->checked : '' ) . ' /> <label for="' . $ct . '-no">' . __('No') . '</label><br />';
+	
+							if ( count($t) > 0 ) {
+								echo __('Except for', DW_L10N_DOMAIN) . ':<br />';
+								echo '<div id="' . $ct . '-select" class="condition-select" ' . ( (isset($ct_archive_condition_select_style)) ? $ct_archive_condition_select_style : '' ) . '>';
+								echo '<div style="position:relative;left:-15px">';
+								if (! isset($opt_ct_archive_childs) ) {
+									$childs = FALSE;
+								} else {
+									$childs = $opt_ct_archive_childs->act;
+								}
+								self::prtTax($tax->name, $tree, $opt_ct_archive->act, $childs, $ct);
+								echo '</div>';
+								echo '</div>';
+							}
+							// echo '</div><!-- end dynwid_conf -->';
+							self::GUIFooter();
+						}
 					}
 				}
 			}
