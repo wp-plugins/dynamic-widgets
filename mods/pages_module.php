@@ -78,6 +78,45 @@
 				echo '</div>';
 			}
 
+			$tax_list = get_object_taxonomies('page', 'objects');
+			foreach ( $tax_list as $tax_type ) {
+				// Prepare
+				$opt_tax = $DW->getDWOpt($_GET['id'], 'page-tax_' . $tax_type->name);
+				if ( $tax_type->hierarchical ) {
+					$opt_tax_childs = $DW->getDWOpt($_GET['id'], 'page-tax_' . $tax_type->name . '-childs');
+				} else {
+					unset($opt_tax_childs);
+				}
+
+				$tax = get_terms($tax_type->name, array('get' => 'all'));
+				if ( count($tax) > 0 ) {
+					if ( count($tax) > DW_LIST_LIMIT ) {
+						$tax_condition_select_style = DW_LIST_STYLE;
+					}
+
+					$tree = DW_CustomPost::getTaxChilds($tax_type->name, array(), 0, array());
+
+					echo '<br />';
+					$DW->dumpOpt($opt_tax);
+					if ( isset($opt_tax_childs) ) {
+						$DW->dumpOpt($opt_tax_childs);
+					}
+
+					echo '<input type="hidden" name="page_tax_list[]" value="page-tax_' . $tax_type->name . '" />';
+					echo __('Except for', DW_L10N_DOMAIN) . ' ' . $tax_type->label . ':<br />';
+					echo '<div id="page-tax_' . $tax_type->name . '-select" class="condition-select" ' . ( (isset($tax_condition_select_style)) ? $tax_condition_select_style : '' ) . '>';
+					echo '<div style="position:relative;left:-15px">';
+					if (! isset($opt_tax_childs) ) {
+						$childs = FALSE;
+					} else {
+						$childs = $opt_tax_childs->act;
+					}
+					DW_CustomPost::prtTax($tax_type->name, $tree, $opt_tax->act, $childs, 'page-tax_' . $tax_type->name);
+					echo '</div>';
+					echo '</div>';
+				}
+			}
+
 			self::GUIFooter();
 		}
 

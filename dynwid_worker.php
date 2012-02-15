@@ -420,7 +420,7 @@
                     }
                   }
                   break;
-                  
+
                 case 'front-page':
                 	if ( count($act) > 0 ) {
                 		$pagenr = ( get_query_var('paged') == 0 ) ? 1 : get_query_var('paged');
@@ -428,7 +428,7 @@
                   		$display = $other;
                     	$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EFP1)');
                     }
-                  }                	
+                  }
                 	break;
 
                 case 'home':
@@ -455,6 +455,10 @@
                     $post = $GLOBALS['post'];
                     $id = $post->ID;
                   	$DW->message('ID = ' . $id);
+
+		                $page_act_tax = array();
+		              	$page_act_tax_childs = array();
+
                     if ( $DW->wpml ) {
                       $id = DW_WPML::getID($id);
                       $DW->message('WPML ObjectID: ' . $id);
@@ -483,7 +487,50 @@
                     		$display = $other;
                     		$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP2)');
                     	}
-                    }
+                    } else {
+                    	$term = wp_get_object_terms($id, get_object_taxonomies($DW->whereami), array('fields' => 'all'));
+		              		if ( count($term) > 0 ) {
+												foreach ( get_object_taxonomies($DW->whereami) as $t ) {
+		              				$m = $DW->whereami . '-tax_' . $t;
+		              				foreach ( $opt as $condition ) {
+		              					if ( $condition->maintype == $m ) {
+		              						if (! key_exists($t, $page_act_tax) ) {
+		              							$page_act_tax[$t] = array();
+		              							$page_act_tax_childs[$t] = array();
+		              						}
+		              					}
+
+		              					if ( $condition->name != 'default' ) {
+		              						switch ( $condition->maintype ) {
+		              							case $m:
+		              								$page_act_tax[$t][ ] = $condition->name;
+		              								break;
+		              							case $m . '-childs':
+		              								$page_act_tax_childs[$t][ ] = $condition->name;
+		              								break;
+		              						} // END switch
+		              					}
+
+		              				} // END $opt
+		              			}
+
+		              		} // END count($term)
+		              	}
+
+                  	foreach ( $term as $t ) {
+                  		if ( isset($page_act_tax[$t->taxonomy]) && is_array($page_act_tax[$t->taxonomy]) && in_array($t->term_id, $page_act_tax[$t->taxonomy]) ) {
+                  			$display = $other;
+                  			$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP3)');
+                  			break;
+                  		}
+                  		$page_parents = $DW->getTaxParents($t->taxonomy, array(), $t->term_id);
+                  		if ( isset($page_act_tax_childs[$t->taxonomy]) && is_array($page_act_tax_childs[$t->taxonomy]) && (bool) array_intersect($page_act_tax_childs[$t->taxonomy], $page_parents) ) {
+                  			$display = $other;
+                  			$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP4)');
+                  		}
+                  	}
+
+
                   }
                   break;
 
