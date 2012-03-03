@@ -517,19 +517,20 @@
 		              		} // END count($term)
 		              	}
 
-                  	foreach ( $term as $t ) {
-                  		if ( isset($page_act_tax[$t->taxonomy]) && is_array($page_act_tax[$t->taxonomy]) && in_array($t->term_id, $page_act_tax[$t->taxonomy]) ) {
-                  			$display = $other;
-                  			$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP3)');
-                  			break;
-                  		}
-                  		$page_parents = $DW->getTaxParents($t->taxonomy, array(), $t->term_id);
-                  		if ( isset($page_act_tax_childs[$t->taxonomy]) && is_array($page_act_tax_childs[$t->taxonomy]) && (bool) array_intersect($page_act_tax_childs[$t->taxonomy], $page_parents) ) {
-                  			$display = $other;
-                  			$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP4)');
-                  		}
-                  	}
-
+										if (! is_wp_error($term) ) {
+	                  	foreach ( $term as $t ) {
+	                  		if ( isset($page_act_tax[$t->taxonomy]) && is_array($page_act_tax[$t->taxonomy]) && in_array($t->term_id, $page_act_tax[$t->taxonomy]) ) {
+	                  			$display = $other;
+	                  			$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP3)');
+	                  			break;
+	                  		}
+	                  		$page_parents = $DW->getTaxParents($t->taxonomy, array(), $t->term_id);
+	                  		if ( isset($page_act_tax_childs[$t->taxonomy]) && is_array($page_act_tax_childs[$t->taxonomy]) && (bool) array_intersect($page_act_tax_childs[$t->taxonomy], $page_parents) ) {
+	                  			$display = $other;
+	                  			$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP4)');
+	                  		}
+	                  	}
+										}
 
                   }
                   break;
