@@ -184,9 +184,9 @@
 	
 							$tree = self::getTaxChilds($tax->name, array(), 0, array());
 	
-							echo '<h4><b>' . $tax->label . '</b> (<em>' . implode(', ', $cpt_label) . '</em>)' . ( ($opt_ct_archive->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
+							echo '<h4><b>' . $tax->label . ' ' . _('archive') . '</b> (<em>' . implode(', ', $cpt_label) . '</em>)' . ( ($opt_ct_archive->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
 							echo '<div class="dynwid_conf">';
-							echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $tax->label . '?' . ( ($tax->hierarchical || count($t) > 0) ? ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $ct . '\');" />' : '' ) . '<br />';
+							echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $tax->label . ' ' . _('archive') . '?' . ( ($tax->hierarchical || count($t) > 0) ? ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $ct . '\');" />' : '' ) . '<br />';
 							echo '<input type="hidden" name="dw_taxonomy[]" value="' . $tax_id . '" />';
 							$DW->dumpOpt($opt_ct_archive);
 							if ( isset($opt_ct_archive_childs) ) {

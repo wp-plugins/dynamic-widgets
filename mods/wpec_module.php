@@ -39,6 +39,8 @@
 		}
 
 		public static function detectCategory() {
+			$DW = &$GLOBALS['DW'];
+			
 			if ( self::detect(FALSE) ) {
 				$wpsc_query = &$GLOBALS['wpsc_query'];
 

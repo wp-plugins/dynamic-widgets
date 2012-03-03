@@ -157,16 +157,18 @@
 	DWModule::childSave('page');
 
 	// -- Page Taxonomies
-	foreach ( $_POST['page_tax_list'] as $tax ) {
-		$act_tax_field = $tax . '_act';
-		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
-			$DW->addMultiOption($_POST['widget_id'], $tax, $_POST['page'], $_POST[$act_tax_field]);
-		}
-
-		// ---- Childs >> Can't use DWModule::childSave() cause of $name != $tax, but $name == 'page'
-		$act_tax_childs_field = $tax . '_childs_act';
-		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
-			$DW->addChilds($_POST['widget_id'], $tax . '-childs', $_POST['page'], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
+	if ( isset($_POST['page_tax_list']) && count($_POST['page_tax_list']) > 0 ) {
+		foreach ( $_POST['page_tax_list'] as $tax ) {
+			$act_tax_field = $tax . '_act';
+			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
+				$DW->addMultiOption($_POST['widget_id'], $tax, $_POST['page'], $_POST[$act_tax_field]);
+			}
+	
+			// ---- Childs >> Can't use DWModule::childSave() cause of $name != $tax, but $name == 'page'
+			$act_tax_childs_field = $tax . '_childs_act';
+			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
+				$DW->addChilds($_POST['widget_id'], $tax . '-childs', $_POST['page'], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
+			}
 		}
 	}
 
