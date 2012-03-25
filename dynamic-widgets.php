@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.0.6
+ * Version: 1.5.1
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -67,7 +67,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5.0.6');
+  define('DW_VERSION', '1.5.1');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -147,18 +147,6 @@
 				}
 			}
 
-/*		1.5b10 > Added exclusion rule for first posts page by moving the static posts page out of pages
-			Need to apply the setting of the static posts page to posts page (type 'front-page') to keep same behavior. */
-/*			if ( version_compare($version, '1.5b10', '<') ) {
-				if ( get_option('show_on_front') == 'page' ) {
-					$id = get_option('page_for_posts');
-					$query = "SELECT widget_id"; // get the widget_id(s) which have option set for posts page
-					// get the widget_id(s) which have default option set for pages
-					// do an array_intersect for combination
-					// apply default option to posts page
-					// apply exception to posts page and check default
-				}
-			} */
 		}
 		update_option('dynwid_version', DW_VERSION);
 	}
