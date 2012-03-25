@@ -297,5 +297,4 @@
 			self::$name = str_replace('_', '-', self::$name);
 		}
 	}
-
 ?>

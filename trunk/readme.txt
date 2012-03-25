@@ -1,10 +1,10 @@
 === Plugin Name ===
 Contributors: Qurl
-Donate link:
+Donate link: http://www.qurl.nl/dynamic-widgets/donate/
 Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods, bbpress
 Requires at least: 3.0.0
 Tested up to: 3.3.1
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 
 Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
 
@@ -13,6 +13,12 @@ Dynamic Widgets gives you full control on which pages your widgets will appear. 
 Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamically show or hide widgets on WordPress pages by setting conditional logic rules with just a few mouse clicks. No knowledge of PHP required. No fiddling around with conditional tags. You can set conditional rules by Role, Dates, Browser, Language (WPML or QTranslate), for the Homepage, Single Posts, Attachments, Pages, Authors, Categories, Tags, Archives, Error Page, Search Page, Custom Post Types, Custom Post Type Archives, Custom Taxonomies in Custom Post Types, Custom Taxonomies Archives, WPEC/WPSC Categories, BuddyPress Components, BuddyPress Groups, Pods pages and bbPress.
 
 For the latest news about Dynamic Widgets visit [my website](http://www.qurl.nl/).
+
+= I need your support =
+
+It is very hard to continue development and support for this plugin without contributions from users like you. If you enjoy using Dynamic Widgets and find it useful, please consider [making a donation](http://www.qurl.nl/dynamic-widgets/donate/). Your donation will help encourage and support the plugin's continued development and better user support.
+
+= Features =
 
 * Default widget display setting is supported for:
   - User roles
@@ -47,12 +53,12 @@ For the latest news about Dynamic Widgets visit [my website](http://www.qurl.nl/
   - Languages (WPML or QTranslate) on language
   - Front page on first page
   - Single post pages on Author, Categories (including inheritance from hierarchical parents), Tags and/or Individual posts
-  - Pages on Page Title, including inheritance from hierarchical parents
+  - Pages on Page Title and Custom Taxonomies, including inheritance from hierarchical parents
   - Author pages on Author
   - Category pages on Category name, including inheritance from hierarchical parents
   - Tag pages on Tag
   - Custom Posts Type on Custom Taxonomy and Custom Post Name, including inheritance from hierarchical parents
-  - Custom Post Type Archive pages on Custom Post Type
+  - Custom Posts Type Archive pages on Custom Post Type
   - Custom Taxonomy Archive pages on Custom Taxonomy Name, including inheritance from hierarchical parents
   - WP Shopping Cart / WP E-Commerce Categories on Category name
   - BuddyPress Component pages on Component
@@ -73,6 +79,7 @@ For the latest news about Dynamic Widgets visit [my website](http://www.qurl.nl/
 	- French (fr_FR) by Alexis Nomine
 	- German (de_DE) by Daniel Bihler
 	- Lithuanian (lt_LT) by Liudas Ališauskas
+	- Portuguese (pt_PT) by Pedro Nave
 	- Spanish (es_ES) by Eduardo Larequi
 
 == Installation ==
@@ -160,7 +167,20 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 
 == Changelog ==
 
-= Version 1.5.0bx =
+= Version 1.5.1 =
+
+* Added Custom Taxonomies support for Pages
+* Added Portuguese language files (locale: pt_PT) - Obrigado Pedro!
+* Bugfix for Illegal offset type in isset or empty in /wp-includes/taxonomy.php on line 211.
+* Bugfix for Options disappear when adding a widget to a sidebar.
+* Bugfix for Taxonomy childs are displayed when Taxonomy is not hierarchical.
+* Bugfix for deprecated call-time pass-by-reference in custompost_module.php on line 226.
+* Bugfix for showing info balloon at Tag archive Pages.
+* Bugfix for Invalid argument supplied for foreach() in dynwid_admin_save.php on line 158.
+* Bugfix for Cannot modify header information - headers already sent,
+* Changed the way the hierarchical tree for static pages is build. It should be faster now.
+
+= Version 1.5.0 =
 
 * Added Pods plugin support.
 * Added Tag Archive Pages support.
@@ -171,7 +191,7 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 * Added support for BP Group Hierarchy.
 * Added support for bbPress User Profile pages.
 * Added Chinese (Simplified) language files (locale: zh_CN) - xie xie Hanolex!
-* Added Lithuanian language files (locale: lt_LT) - dekoju Liudas! 
+* Added Lithuanian language files (locale: lt_LT) - dekoju Liudas!
 * Added a "Save & Return" button to the widget options page.
 * Bugfix for subscribers show up in the author lists in WP > 3.1.
 * Bugfix for Taxonomies in Custom Post Types are not always saved.
@@ -340,12 +360,12 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 
 == Release notes ==
 
-Change of requirements: PHP 5.1.0 or higher and WordPress 3.0 or higher. This version has 7 features added and 3 bugs fixed.
+This version has 2 features added and 7 bugs fixed.
 
 == Upgrade Notice ==
 
-= 1.5.0 =
-Change of requirements: PHP 5.1.0 or higher and WordPress 3.0 or higher. This version has 7 features added and 3 bugs fixed. When you upgrade manually, be sure to remove the whole dynamic-widgets directory. Do a fresh copy of this version. Some files have been renamed. Old files remaining might lead to unexpected behaviour.
+= 1.5.1 =
+This version has 2 features added and 7 bugs fixed.
 
 == Screenshots ==
 

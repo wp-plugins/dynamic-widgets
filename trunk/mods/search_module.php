@@ -11,4 +11,3 @@
 		protected static $question = 'Show widget on the search page?';
 	}
 ?>
-

@@ -12,4 +12,3 @@
 		protected static $question = 'Show widget on archive pages?';
 	}
 ?>
-
