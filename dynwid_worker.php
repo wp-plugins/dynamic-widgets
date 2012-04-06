@@ -583,8 +583,9 @@
 
               	case 'tag':
               		if ( count($act) > 0 ) {
-              			$tag = array_keys( get_the_tags() );
-              			if ( (bool) array_intersect($tag, $act) ) {
+              			global $wp_query;
+              			$tag = $wp_query->get_queried_object_id();
+              			if ( in_array($tag, $act) ) {
               				$display = $other;
               				$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule T1)');
               			}
