@@ -4,7 +4,7 @@ Donate link: http://www.qurl.nl/dynamic-widgets/donate/
 Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods, bbpress
 Requires at least: 3.0.0
 Tested up to: 3.3.1
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 
 Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
 
@@ -166,6 +166,12 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.5.2 =
+
+* Bugfix for Tag archive rules are not followed correctly.
+* Bugfix to prevent the error: WidgetID is invalid.
+* Security fix for a possible XSS vulnerability.
 
 = Version 1.5.1 =
 
@@ -360,12 +366,12 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 
 == Release notes ==
 
-This version has 2 features added and 7 bugs fixed.
+This version has 3 bugs fixed.
 
 == Upgrade Notice ==
 
-= 1.5.1 =
-This version has 2 features added and 7 bugs fixed.
+= 1.5.2 =
+It's highly recommended to update asap. A possible security vulnerability has been found in all previous versions.
 
 == Screenshots ==
 

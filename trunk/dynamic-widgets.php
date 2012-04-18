@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.1.1
+ * Version: 1.5.2
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -67,7 +67,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5.1.1');
+  define('DW_VERSION', '1.5.2');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -150,7 +150,6 @@
 		}
 		update_option('dynwid_version', DW_VERSION);
 	}
-
 
 	/**
    * dynwid_add_admin_help_tab() Add help tab for WP >= 3.3
@@ -804,44 +803,49 @@
 	  // Now adding the dynwid text & link
 		// echo '<p><input id="dw_hide_title_' . str_replace('-', '_', $widget_id) . '" type="checkbox" name="dw_hide_title_' . $widget_id . '" ' . ( ($checked ? ' checked="checked"' : '' ) ) . ' /> <label for="dw_hide_title_' . str_replace('-', '_', $widget_id) . '">Hide the title</label></p>';
 	  echo '<p>' . __('Dynamic Widgets', DW_L10N_DOMAIN) . ': ';
-		echo '<a style="text-decoration:none;" title="' . __('Edit Dynamic Widgets Options', DW_L10N_DOMAIN) . '" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=widgets.php' . '">';
-		echo ( $DW->hasOptions($widget_id) ) ? __('Dynamic', DW_L10N_DOMAIN) : __('Static', DW_L10N_DOMAIN);
-		echo '</a>';
-	  if ( $DW->hasOptions($widget_id) ) {
-	    $s = array();
-	    $opt = $DW->getOpt($widget_id, NULL);
-	    foreach ( $opt as $widget ) {
-	      $type = $widget->maintype;
-	      if ( $type != 'individual' && substr($type, -6) != 'childs' && ! preg_match('/.*-tax_.*/', $type) ) {
-	        $single = array('single-author', 'single-category', 'single-tag', 'single-post');
-	        if ( in_array($type, $single) ) {
-	          $type = 'single';
-	        }
-	        if (! in_array($type, $s) ) {
-	          $s[ ] = $type;
-	        }
-	      }
-	    }
 
-	    $last = count($s) - 1;
-	    $string = '';
-	    for ( $i = 0; $i < $last; $i++ ) {
-	      $type = $s[$i];
-	      if (! empty($DW->dwoptions[$type]) ) {
-	        $string .= $DW->dwoptions[$type];
-				}
-	    	$string .= ( ($last - 1) == $i ) ? ' ' . __('and', DW_L10N_DOMAIN) . ' ' : ', ';
-	    }
-	    $type = $s[$last];
-	    if ( isset($DW->dwoptions[$type]) ) {
-	    	$string .= $DW->dwoptions[$type];
-	    }
+		if ( array_key_exists($widget_id, $DW->registered_widgets) ) {
+			echo '<a style="text-decoration:none;" title="' . __('Edit Dynamic Widgets Options', DW_L10N_DOMAIN) . '" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=widgets.php' . '">';
+			echo ( $DW->hasOptions($widget_id) ) ? __('Dynamic', DW_L10N_DOMAIN) : __('Static', DW_L10N_DOMAIN);
+			echo '</a>';
+		  if ( $DW->hasOptions($widget_id) ) {
+		    $s = array();
+		    $opt = $DW->getOpt($widget_id, NULL);
+		    foreach ( $opt as $widget ) {
+		      $type = $widget->maintype;
+		      if ( $type != 'individual' && substr($type, -6) != 'childs' && ! preg_match('/.*-tax_.*/', $type) ) {
+		        $single = array('single-author', 'single-category', 'single-tag', 'single-post');
+		        if ( in_array($type, $single) ) {
+		          $type = 'single';
+		        }
+		        if (! in_array($type, $s) ) {
+		          $s[ ] = $type;
+		        }
+		      }
+		    }
 
-	    $output  = '<br /><small>';
-	    $output .= ( count($opt) > 1 ) ? __('Options set for', DW_L10N_DOMAIN) : __('Option set for', DW_L10N_DOMAIN);
-      $output .= ' ' . $string . '.</small>';
-	    echo $output;
-	  }
+		    $last = count($s) - 1;
+		    $string = '';
+		    for ( $i = 0; $i < $last; $i++ ) {
+		      $type = $s[$i];
+		      if (! empty($DW->dwoptions[$type]) ) {
+		        $string .= $DW->dwoptions[$type];
+					}
+		    	$string .= ( ($last - 1) == $i ) ? ' ' . __('and', DW_L10N_DOMAIN) . ' ' : ', ';
+		    }
+		    $type = $s[$last];
+		    if ( isset($DW->dwoptions[$type]) ) {
+		    	$string .= $DW->dwoptions[$type];
+		    }
+
+		    $output  = '<br /><small>';
+		    $output .= ( count($opt) > 1 ) ? __('Options set for', DW_L10N_DOMAIN) : __('Option set for', DW_L10N_DOMAIN);
+	      $output .= ' ' . $string . '.</small>';
+		    echo $output;
+		  }
+	  } else {
+		  echo '<em>' . __('Save the widget first', DW_L10N_DOMAIN) . '...</em>';
+		}
 	  echo '</p>';
 	}
 
