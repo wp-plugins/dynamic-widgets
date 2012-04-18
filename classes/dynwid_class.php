@@ -126,7 +126,7 @@
 				$query = "INSERT INTO " . $this->dbtable . "
                     (widget_id, maintype, name, value)
                   VALUES
-                    ('" . $widget_id . "', 'date', '" . $name . "', '" . $date . "')";
+                    ('" . $this->wpdb->escape($widget_id) . "', 'date', '" . $this->wpdb->escape($name) . "', '" . $this->wpdb->escape($date) . "')";
 				$this->wpdb->query($query);
 			}
 		}
@@ -163,14 +163,14 @@
 				$query = "INSERT INTO " . $this->dbtable . "
                       (widget_id, maintype, name, value)
                     VALUES
-                      ('" . $widget_id . "', '" . $maintype . "', 'default', '" . $opt_default . "')";
+                      ('" . $this->wpdb->escape($widget_id) . "', '" . $this->wpdb->escape($maintype) . "', 'default', '" . $this->wpdb->escape($opt_default) . "')";
 				$this->wpdb->query($query);
 			}
 			foreach ( $act as $option ) {
 				$query = "INSERT INTO " . $this->dbtable . "
                       (widget_id, maintype, name, value)
                     VALUES
-                      ('" . $widget_id . "', '" . $maintype . "', '" . $option . "', '" . $opt_act . "')";
+                      ('" . $this->wpdb->escape($widget_id) . "', '" . $this->wpdb->escape($maintype) . "', '" . $this->wpdb->escape($option) . "', '" . $this->wpdb->escape($opt_act) . "')";
 				$this->wpdb->query($query);
 			}
 		}
@@ -186,7 +186,7 @@
 			$query = "INSERT INTO " . $this->dbtable . "
                     (widget_id, maintype, value)
                   VALUES
-                    ('" . $widget_id . "', '" . $maintype . "', '" . $value . "')";
+                    ('" . $this->wpdb->escape($widget_id) . "', '" . $this->wpdb->escape($maintype) . "', '" . $this->wpdb->escape($value) . "')";
 			$this->wpdb->query($query);
 		}
 

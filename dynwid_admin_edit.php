@@ -11,6 +11,14 @@
 	DW_QT::detect();
 	DW_WPSC::detect();
 	DW_WPML::detect();
+
+	// Sanitizing some stuff
+	$widget_id = ( isset($_GET['id']) && ! empty($_GET['id']) ) ? esc_attr($_GET['id']) : '';
+	$return_url = ( isset($_GET['returnurl']) && ! empty($_GET['returnurl']) ) ? esc_url($_GET['returnurl']) : '';
+	
+	if (! array_key_exists($widget_id, $DW->registered_widgets) ) {
+  	wp_die('WidgetID is not valid');
+  }
 ?>
 
 <style type="text/css">
@@ -146,8 +154,8 @@ h4 {
 	}
 ?>
 
-<h3><?php _e('Edit options for the widget', DW_L10N_DOMAIN); ?>: <em><?php echo $DW->getName($_GET['id']); ?></em></h3>
-<?php echo ( DW_DEBUG ) ? '<pre>ID = ' . $_GET['id'] . '</pre><br />' : ''; ?>
+<h3><?php _e('Edit options for the widget', DW_L10N_DOMAIN); ?>: <em><?php echo $DW->getName($widget_id); ?></em></h3>
+<?php echo ( DW_DEBUG ) ? '<pre>ID = ' . $widget_id . '</pre><br />' : ''; ?>
 
 <div style="border-color: #E3E3E3;border-radius: 6px 6px 6px 6px;border-style: solid;border-width: 1px;padding: 5px;">
 <b><?php _e('Quick settings', DW_L10N_DOMAIN); ?></b>
@@ -156,11 +164,11 @@ h4 {
 </p>
 </div><br />
 
-<form id="dwsave" action="<?php echo trailingslashit(admin_url()) . 'themes.php?page=dynwid-config&action=edit&id=' . $_GET['id']; ?>" method="post">
-<?php wp_nonce_field('plugin-name-action_edit_' . $_GET['id']); ?>
+<form id="dwsave" action="<?php echo trailingslashit(admin_url()) . 'themes.php?page=dynwid-config&action=edit&id=' . $widget_id; ?>" method="post">
+<?php wp_nonce_field('plugin-name-action_edit_' . $widget_id); ?>
 <input type="hidden" name="dynwid_save" value="yes" />
-<input type="hidden" name="widget_id" value="<?php echo $_GET['id']; ?>" />
-<input type="hidden" id="returnurl" name="returnurl" value="<?php echo ( (isset($_GET['returnurl'])) ? trailingslashit(admin_url()) . $_GET['returnurl'] : '' ); ?>" />
+<input type="hidden" name="widget_id" value="<?php echo $widget_id; ?>" />
+<input type="hidden" id="returnurl" name="returnurl" value="<?php echo ( (! empty($return_url)) ? trailingslashit(admin_url()) . $return_url : '' ); ?>" />
 
 <div id="dynwid">
 <?php
@@ -245,9 +253,9 @@ Save as a quick setting <input type="text" name="qsetting" value="" />
 <div style="float:left">
 <input class="button-primary" type="submit" value="<?php _e('Save'); ?>" /> &nbsp;&nbsp;
 </div>
-<?php $url = (! empty($_GET['returnurl']) ) ? trailingslashit(admin_url()) . $_GET['returnurl'] : trailingslashit(admin_url()) . 'themes.php?page=dynwid-config'; ?>
+<?php $url = (! empty($return_url) ) ? trailingslashit(admin_url()) . $return_url : trailingslashit(admin_url()) . 'themes.php?page=dynwid-config'; ?>
 
-<?php if ( empty($_GET['returnurl']) ) { ?>
+<?php if ( empty($return_url) ) { ?>
 <div style="float:left">
 <input class="button-primary" type="button" value="<?php _e('Save'); ?> & <?php _e('Return', DW_L10N_DOMAIN); ?>" onclick="saveandreturn()" /> &nbsp;&nbsp;
 </div>

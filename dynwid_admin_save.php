@@ -7,8 +7,11 @@
  */
 
   // Security - nonce, etc.
-  check_admin_referer('plugin-name-action_edit_' . $_POST['widget_id']);
-  if (! array_key_exists($_POST['widget_id'], $DW->registered_widgets) ) {
+  $widget_id = ( isset($_POST['widget_id']) && ! empty($_POST['widget_id']) ) ? esc_attr($_POST['widget_id']) : '';
+  $returnurl = ( isset($_POST['returnurl']) && ! empty($_POST['returnurl']) ) ? esc_url($_POST['returnurl']) : '';
+  
+  check_admin_referer('plugin-name-action_edit_' . $widget_id);
+  if (! array_key_exists($widget_id, $DW->registered_widgets) ) {
   	wp_die('WidgetID is not valid');
   }
 
@@ -28,8 +31,8 @@
 
   // Date check
   if ( $_POST['date'] == 'no' ) {
-    $date_start = trim($_POST['date_start']);
-    $date_end = trim($_POST['date_end']);
+    $date_start = trim(esc_attr($_POST['date_start']));
+    $date_end = trim(esc_attr($_POST['date_end']));
 
     if (! preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $date_start) && ! preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $date_end) ) {
       wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
@@ -58,7 +61,7 @@
   }
 
   // Removing already set options
-  $DW->resetOptions($_POST['widget_id']);
+  $DW->resetOptions($widget_id);
 
   // Role
 	DWModule::save('role', 'complex');
@@ -74,7 +77,7 @@
     }
 
     if ( count($dates) > 0 ) {
-      $DW->addDate($_POST['widget_id'], $dates);
+      $DW->addDate($widget_id, $dates);
     }
   }
 
@@ -93,32 +96,32 @@
   // -- Author
   if ( isset($_POST['single_author_act']) && count($_POST['single_author_act']) > 0 ) {
     if ( $_POST['single'] == 'yes' ) {
-      $DW->addSingleOption($_POST['widget_id'], 'single', '1');
+      $DW->addSingleOption($widget_id, 'single', '1');
     }
-    $DW->addMultiOption($_POST['widget_id'], 'single-author', $_POST['single'], $_POST['single_author_act']);
+    $DW->addMultiOption($widget_id, 'single-author', $_POST['single'], $_POST['single_author_act']);
   }
 
   // -- Category
   if ( isset($_POST['single_category_act']) && count($_POST['single_category_act']) > 0 ) {
     if ( $_POST['single'] == 'yes' && count($_POST['single_author_act']) == 0 ) {
-      $DW->addSingleOption($_POST['widget_id'], 'single', '1');
+      $DW->addSingleOption($widget_id, 'single', '1');
     }
-    $DW->addMultiOption($_POST['widget_id'], 'single-category', $_POST['single'], $_POST['single_category_act']);
+    $DW->addMultiOption($widget_id, 'single-category', $_POST['single'], $_POST['single_category_act']);
   }
 
 	// ---- Childs
 	if ( isset($_POST['single_category_act']) && count($_POST['single_category_act']) > 0 && isset($_POST['single_category_childs_act']) && count($_POST['single_category_childs_act']) > 0 ) {
-		$DW->addChilds($_POST['widget_id'], 'single-category-childs', $_POST['single'], $_POST['single_category_act'], $_POST['single_category_childs_act']);
+		$DW->addChilds($widget_id, 'single-category-childs', $_POST['single'], $_POST['single_category_act'], $_POST['single_category_childs_act']);
 	}
 
   // -- Individual / Posts / Tag
   if ( isset($_POST['individual']) && $_POST['individual'] == '1' ) {
-    $DW->addSingleOption($_POST['widget_id'], 'individual', '1');
+    $DW->addSingleOption($widget_id, 'individual', '1');
     if ( isset($_POST['single_post_act']) && count($_POST['single_post_act']) > 0 ) {
-      $DW->addMultiOption($_POST['widget_id'], 'single-post', $_POST['single'], $_POST['single_post_act']);
+      $DW->addMultiOption($widget_id, 'single-post', $_POST['single'], $_POST['single_post_act']);
     }
     if ( isset($_POST['single_tag_act']) && count($_POST['single_tag_act']) > 0 ) {
-      $DW->addMultiOption($_POST['widget_id'], 'single-tag', $_POST['single'], $_POST['single_tag_act']);
+      $DW->addMultiOption($widget_id, 'single-tag', $_POST['single'], $_POST['single_tag_act']);
     }
   }
 
@@ -148,9 +151,9 @@
 			$_POST['page_act'] = array();
 		}
 
-		$DW->addMultiOption($_POST['widget_id'], 'page', $_POST['page'], $_POST['page_act']);
+		$DW->addMultiOption($widget_id, 'page', $_POST['page'], $_POST['page_act']);
 	} else if ( $_POST['page'] == 'no' ) {
-		$DW->addSingleOption($_POST['widget_id'], 'page');
+		$DW->addSingleOption($widget_id, 'page');
 	}
 
 	// -- Childs
@@ -161,13 +164,13 @@
 		foreach ( $_POST['page_tax_list'] as $tax ) {
 			$act_tax_field = $tax . '_act';
 			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
-				$DW->addMultiOption($_POST['widget_id'], $tax, $_POST['page'], $_POST[$act_tax_field]);
+				$DW->addMultiOption($widget_id, $tax, $_POST['page'], $_POST[$act_tax_field]);
 			}
 	
 			// ---- Childs >> Can't use DWModule::childSave() cause of $name != $tax, but $name == 'page'
 			$act_tax_childs_field = $tax . '_childs_act';
 			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
-				$DW->addChilds($_POST['widget_id'], $tax . '-childs', $_POST['page'], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
+				$DW->addChilds($widget_id, $tax . '-childs', $_POST['page'], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
 			}
 		}
 	}
@@ -222,9 +225,9 @@
       		$_POST[$act_field] = array();
       	}
 
-        $DW->addMultiOption($_POST['widget_id'], $type, $_POST[$type], $_POST[$act_field]);
+        $DW->addMultiOption($widget_id, $type, $_POST[$type], $_POST[$act_field]);
       } else if ( $_POST[$type] == 'no' ) {
-        $DW->addSingleOption($_POST['widget_id'], $type);
+        $DW->addSingleOption($widget_id, $type);
       }
 
     	// -- Childs
@@ -234,13 +237,13 @@
     	foreach ( $tax_list as $tax ) {
     		$act_tax_field = $tax . '_act';
     		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
-					$DW->addMultiOption($_POST['widget_id'], $tax, $_POST[$type], $_POST[$act_tax_field]);
+					$DW->addMultiOption($widget_id, $tax, $_POST[$type], $_POST[$act_tax_field]);
     		}
 
     		// ---- Childs >> Can't use DWModule::childSave() cause of $name != $tax, but $name == $type
     		$act_tax_childs_field = $tax . '_childs_act';
     		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
-    			$DW->addChilds($_POST['widget_id'], $tax . '-childs', $_POST[$type], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
+    			$DW->addChilds($widget_id, $tax . '-childs', $_POST[$type], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
     		}
     	}
     }
@@ -258,9 +261,9 @@
 					$_POST[$act_field] = array();
 				}
 
-				$DW->addMultiOption($_POST['widget_id'], $type, $_POST[$type], $_POST[$act_field]);
+				$DW->addMultiOption($widget_id, $type, $_POST[$type], $_POST[$act_field]);
 			} else if ( $_POST[$type] == 'no' ) {
-				$DW->addSingleOption($_POST['widget_id'], $type);
+				$DW->addSingleOption($widget_id, $type);
 			}
 
 			DWModule::childSave($type);
@@ -289,14 +292,14 @@
 	DWModule::save('pods', 'complex');
 
   // Redirect to ReturnURL
-  if (! empty($_POST['returnurl']) ) {
+  if (! empty($returnurl) ) {
     $q = array();
 
     // Checking if there are arguments set
-    $pos = strpos($_POST['returnurl'],'?');
+    $pos = strpos($returnurl, '?');
     if ( $pos !== FALSE ) {
       // evaluate the args
-      $query_string = substr($_POST['returnurl'], ($pos+1));
+      $query_string = substr($returnurl, ($pos+1));
       $args = explode('&', $query_string);
       foreach ( $args as $arg ) {
         @list($name, $value) = explode('=', $arg);
@@ -304,12 +307,12 @@
           $q[ ] = $name . '=' . $value;
         }
       }
-      $script_url = substr($_POST['returnurl'],0,$pos);
+      $script_url = substr($returnurl, 0, $pos);
     } else {
-      $script_url = $_POST['returnurl'];
+      $script_url = $returnurl;
     }
     $q[ ] = 'dynwid_save=yes';
-    $q[ ] = 'widget_id=' . $_POST['widget_id'];
+    $q[ ] = 'widget_id=' . $widget_id;
 
     wp_redirect( $script_url . '?' . implode('&', $q) );
     die();
