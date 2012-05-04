@@ -18,7 +18,7 @@
   /* Checking basic stuff */
 	$DW->registerOverrulers();
   foreach ( $DW->overrule_maintype as $o ) {
-  	if ( $o != 'date' ) {
+  	if ( $o != 'date' && $o != 'url' ) {
   		$act_field = $o . '_act';
   		if ( isset($_POST[$act_field]) ) {
 	  		if ( $_POST[$o] == 'no' && count($_POST[$act_field]) == 0 ) {
@@ -59,6 +59,12 @@
       }
     }
   }
+  
+  // URL
+  if ( $_POST['url'] == 'no' && empty($_POST['url_values']) ) {
+  	wp_redirect( $_SERVER['REQUEST_URI'] . '&work=nonedate' );
+  	die();
+  }
 
   // Removing already set options
   $DW->resetOptions($widget_id);
@@ -86,6 +92,26 @@
 
 	// Template
 	DWModule::save('tpl', 'complex');
+
+	// URL
+	if (! empty($_POST['url_value']) ) {
+		$urls = array();
+		
+		$url_values = trim($_POST['url_value']);
+		$url_values = str_replace("\r", "", $url_values);
+		$url_values = explode("\n", $url_values);
+		
+		foreach ( $url_values as $url ) {
+			$url = trim($url);
+			if (! empty($url) ) {
+				$urls[ ] = $url;	
+			}
+		}
+		
+		if ( count($urls) > 0 ) {
+			$DW->addUrls($widget_id, $_POST['url'], $urls);
+		}
+	}
 
   // Front Page
   DWModule::save('front-page', 'complex');

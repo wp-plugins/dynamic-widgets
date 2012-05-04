@@ -68,8 +68,8 @@
 
 				// Output
 				echo '<input type="hidden" name="post_types[]" value="' . $type . '" />';
-				echo '<h4><b>' . $ctid->label . '</b> ' . ( self::$opt->count > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ( $DW->wpml ? DW_WPML::$icon : '' ) . '</h4>';
-				echo '<div class="dynwid_conf">';
+				echo '<h4 id="cpt_' . $type . '" title=" Click to toggle " class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all"><b>' . $ctid->label . '</b> ' . ( self::$opt->count > 0 ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ( $DW->wpml ? DW_WPML::$icon : '' ) . '</h4>';
+				echo '<div id="cpt_' . $type . '_conf" class="dynwid_conf ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom">';
 				echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $ctid->label . '? ' . ( ($ctid->hierarchical || count($tax_list) > 0) ? '<img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $type . '\');" />' : '' ) . '<br />';
 				echo '<div>';
 				echo '<div id="custom_' . $type . '" class="infotext">';
@@ -184,8 +184,8 @@
 	
 							$tree = self::getTaxChilds($tax->name, array(), 0, array());
 	
-							echo '<h4><b>' . $tax->label . ' ' . _('archive') . '</b> (<em>' . implode(', ', $cpt_label) . '</em>)' . ( ($opt_ct_archive->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
-							echo '<div class="dynwid_conf">';
+							echo '<h4 id="' . $ct . '" title=" Click to toggle " class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all"><b>' . $tax->label . ' ' . _('archive') . '</b> (<em>' . implode(', ', $cpt_label) . '</em>)' . ( ($opt_ct_archive->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . '</h4>';
+							echo '<div id="' . $ct . '_conf" class="dynwid_conf ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom">';
 							echo __('Show widget on', DW_L10N_DOMAIN) . ' ' . $tax->label . ' ' . _('archive') . '?' . ( ($tax->hierarchical || count($t) > 0) ? ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" onclick="divToggle(\'custom_' . $ct . '\');" />' : '' ) . '<br />';
 							echo '<input type="hidden" name="dw_taxonomy[]" value="' . $tax_id . '" />';
 							$DW->dumpOpt($opt_ct_archive);

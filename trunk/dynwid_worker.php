@@ -14,15 +14,17 @@
 	DWModule::registerPlugin(DW_CustomPost::$plugin);
 
 	// Template
-	$tpl = get_page_template();
-	if ( $DW->whereami == 'pods' ) {
-		global $pod_page_exists;
-		if (! empty($pod_page_exists['page_template']) ) {
-			$tpl = $pod_page_exists['page_template'];
+	if (! is_archive() ) {
+		$tpl = get_page_template();
+		if ( $DW->whereami == 'pods' ) {
+			global $pod_page_exists;
+			if (! empty($pod_page_exists['page_template']) ) {
+				$tpl = $pod_page_exists['page_template'];
+			}
 		}
+		$DW->template = basename($tpl);
+		$DW->message('Template = ' . $DW->template);
 	}
-	$DW->template = basename($tpl);
-	$DW->message('Template = ' . $DW->template);
 
 	// WPML Plugin support
 	include_once(DW_MODULES . 'wpml_module.php');
@@ -167,12 +169,30 @@
           	}
           	unset($qt_tmp);
 
-          	// Browser and Template
+          	// Browser, Template and URL
           	foreach ( $opt as $condition ) {
           		if ( $condition->maintype == 'browser' && $condition->name == $DW->useragent ) {
           			(bool) $browser_tmp = $condition->value;
           		} else if ( $condition->maintype == 'tpl' && $condition->name == $DW->template ) {
           			(bool) $tpl_tmp = $condition->value;
+          		} else if ( $condition->maintype == 'url' && $condition->name == 'url' ) {
+          			$urls = unserialize($condition->value);
+          			$other_url = ( $url ) ? FALSE : TRUE;
+          			foreach ( $urls as $u ) {
+          				$u = $DW->getURLPrefix() . $u;
+          				$like = substr($u, -1);
+          				if ( $like == '*' ) {
+          					if ( stripos($DW->url, substr($u, 0, strlen($u) - 1)) !== FALSE ) {
+          						$DW->message('Starts with URL found');
+          						$url_tmp = $other_url;
+          					}
+          				} else {
+          					if ( $DW->url == $u ) {
+          						$DW->message('Exact match URL found');
+          						$url_tmp = $other_url;
+          					}
+          				}
+          			}
           		}
           	}
 
@@ -187,6 +207,12 @@
           		$tpl = $tpl_tmp;
           	}
           	unset($tpl_tmp);
+          	
+          	if ( isset($url_tmp) && $url_tmp != $url ) {
+          		$DW->message('Exception triggered for url, sets display to ' . ( ($url_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EURL1)');
+          		$url = $url_tmp;
+          	}
+          	unset($url_tmp, $other_url);
 
             // For debug messages
             $e = ( isset($other) && $other ) ? 'TRUE' : 'FALSE';

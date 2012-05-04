@@ -47,6 +47,7 @@ label {
 
 h4 {
 	text-indent : 30px;
+	cursor: pointer;
 }
 
 .hasoptions {
@@ -56,6 +57,12 @@ h4 {
 #dynwid {
 	font-family : 'Lucida Grande', Verdana, Arial, 'Bitstream Vera Sans', sans-serif;
 	font-size : 13px;
+}
+
+.dynwid_conf {
+	display: none;
+	padding: 15px;
+	padding-left: 30px;
 }
 
 .ui-datepicker {
@@ -127,11 +134,25 @@ h4 {
   	alert('All options set to \'No\'.\nDon\'t forget to make changes, otherwise you\'ll receive an error when saving.');
   }
 
-  jQuery(document).ready(function() {
-		jQuery('#dynwid').accordion({
+  jQuery(document).ready( function() {
+		/* jQuery('#dynwid').accordion({
 			header: 'h4',
 			autoHeight: false,
+		}); */
+		
+		jQuery( 'h4' ).click( function() {
+			var id = this.id;
+			jQuery( '#' + id + '_conf' ).slideToggle('slow');
 		});
+		
+		jQuery( 'h4' ).mouseover( function() {
+			jQuery(this).addClass('ui-state-hover');
+		});
+		
+		jQuery( 'h4' ).mouseleave( function() {
+			jQuery(this).removeClass('ui-state-hover');
+		});
+		
 	});
 /* ]]> */
 </script>
@@ -189,6 +210,9 @@ h4 {
 
 	$DW_Tpl = new DW_Tpl();
 	$DW_Tpl->admin();
+	
+	$DW_URL = new DW_URL();
+	$DW_URL->admin();
 
 	$DW_Front_page = new DW_Front_page();
 	$DW_Front_page->admin();

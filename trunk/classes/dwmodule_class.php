@@ -152,13 +152,13 @@
 			}
 
 			echo '<!-- ' . $title . '//-->' . "\n";
-			echo '<h4><b>' . __($title, DW_L10N_DOMAIN) . '</b>' . ( (self::$opt->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ' ' . ( ($DW->wpml && $wpml) ? DW_WPML::$icon : '' ) . '</h4>' . "\n";
-			echo '<div class="dynwid_conf">' . "\n";
+			echo '<h4 id="' . self::$name . '" title=" Click to toggle " class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all"><b>' . __($title, DW_L10N_DOMAIN) . '</b>' . ( (self::$opt->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ' ' . ( ($DW->wpml && $wpml) ? DW_WPML::$icon : '' ) . '</h4>' . "\n";
+			echo '<div id="' . self::$name . '_conf" class="dynwid_conf ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom">' . "\n";
 			_e($question, DW_L10N_DOMAIN);
 
 			if ( $info !== FALSE ) {
-				echo ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" title="' . __('Click to toggle info', DW_L10N_DOMAIN) . '" onclick="divToggle(\'' . self::$name . '\')" /><br />' . "\n";
-				echo '<div><div id="' . self::$name . '" class="infotext">' . "\n";
+				echo ' <img src="' . $DW->plugin_url . 'img/info.gif" alt="info" title="' . __('Click to toggle info', DW_L10N_DOMAIN) . '" onclick="divToggle(\'' . self::$name . '_info\')" /><br />' . "\n";
+				echo '<div><div id="' . self::$name . '_info" class="infotext">' . "\n";
 				_e($info, DW_L10N_DOMAIN);
 				echo '</div></div>' . "\n";
 			} else {
