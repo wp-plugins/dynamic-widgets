@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.2
+ * Version: 1.5.2.1
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -67,7 +67,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5.2');
+  define('DW_VERSION', '1.5.2.1');
   define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -236,10 +236,10 @@
   	wp_enqueue_script('jquery-ui-core');
   	if ( version_compare(substr($GLOBALS['wp_version'], 0, 3), '3.1', '>=') ) {
   		wp_enqueue_script('jquery-ui-widget');
-  		wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'ui.accordion.1.8.7.js', array('jquery-ui-widget'));
+  		// wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'ui.accordion.1.8.7.js', array('jquery-ui-widget'));
   		wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'ui.datepicker.1.8.7.js', array('jquery-ui-widget'));
   	} else {
-  		wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'ui.accordion.1.7.3.js', array('jquery-ui-core'));
+  		//  wp_enqueue_script('jquery-ui-accordion', $DW->plugin_url . 'ui.accordion.1.7.3.js', array('jquery-ui-core'));
   		wp_enqueue_script('jquery-ui-datepicker', $DW->plugin_url . 'ui.datepicker.1.7.3.js', array('jquery-ui-core'));
   	}
 	}

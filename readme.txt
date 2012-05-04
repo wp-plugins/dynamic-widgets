@@ -167,6 +167,11 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 
 == Changelog ==
 
+= Version 1.5.2.x =
+* Added URL support
+* Bugfix for Notice: Undefined property: stdClass::$post_name
+* Bugfix for Missing options (Archive, Error, Search); Stopped using the accordion.
+
 = Version 1.5.2 =
 
 * Bugfix for Tag archive rules are not followed correctly.

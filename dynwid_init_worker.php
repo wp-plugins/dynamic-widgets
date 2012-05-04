@@ -19,6 +19,8 @@
 
 	$DW->whereami = $DW->detectPage();
 	$DW->message('Page is ' . $DW->whereami);
+	$DW->message('Path URL is ' . $DW->url);
+	$DW->message('Prefix is ' . $DW->getURLPrefix());
 
 	if ( $DW->whereami == 'single' ) {
 		$post = $GLOBALS['post'];
