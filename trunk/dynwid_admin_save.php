@@ -61,8 +61,8 @@
   }
   
   // URL
-  if ( $_POST['url'] == 'no' && empty($_POST['url_values']) ) {
-  	wp_redirect( $_SERVER['REQUEST_URI'] . '&work=nonedate' );
+  if ( $_POST['url'] == 'no' && empty($_POST['url_value']) ) {
+  	wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
   	die();
   }
 
