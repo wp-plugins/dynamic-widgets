@@ -22,7 +22,7 @@
 				self::$option = array( 'front-page' => 'Posts Page' );
 				self::$question = 'Show widget on the posts page?';
 			}
-			self::mkGUI(self::$type, self::$option[self::$name], self::$question, NULL, self::$except, $list);
+			self::mkGUI(self::$type, self::$option[self::$name], self::$question, self::$info, self::$except, $list);
 		}
 	}
 ?>
