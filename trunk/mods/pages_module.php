@@ -70,9 +70,9 @@
 				echo '<div id="page-select" class="condition-select" ' . ( (isset($page_condition_select_style)) ? $page_condition_select_style : '' ) . ' />';
 
 				if ( $num_pages < DW_PAGE_LIMIT ) {
-					wp_list_pages( array('title_li' => '', 'walker' => new DW_Page_Walker()) );
+					wp_list_pages( array('title_li' => '', 'post_status' => 'publish,private', 'walker' => new DW_Page_Walker()) );
 				} else {
-					wp_list_pages( array('title_li' => '', 'depth' => -1, 'walker' => new DW_Page_Walker()) );
+					wp_list_pages( array('title_li' => '', 'post_status' => 'publish,private', 'depth' => -1, 'walker' => new DW_Page_Walker()) );
 				}
 
 				echo '</div>';

@@ -132,7 +132,7 @@
 		 * @param string $post_title Extra title info
 		 * @param object $opt DWOpt object
 		 */
-		public static function GUIHeader($title, $question, $info, $post_title = NULL, $opt = NULL) {
+		public static function GUIHeader($title, $question, $info, $post_title = NULL, $opt = NULL, $name = NULL) {
 			$DW = &$GLOBALS['DW'];
 
 			// $classname = self::getClassName();
@@ -149,6 +149,10 @@
 
 			if (! is_null($opt) ) {
 				self::$opt = $opt;
+			}
+			
+			if (! is_null($name) ) {
+				self::$name = $name;
 			}
 
 			echo '<!-- ' . $title . '//-->' . "\n";
