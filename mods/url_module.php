@@ -32,12 +32,16 @@
 ?>
 <h4 id="url" title=" Click to toggle " class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all"><b><?php _e('URL'); ?></b><?php echo ( count($opt_url) > 0 ) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : ''; ?></h4>
 <div id="url_conf" class="dynwid_conf ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom">
-<?php _e('Show widget at this URL?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN) ?>" onclick="divToggle('url');" /><br />
+<?php _e('Show widget at this URL?', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/info.gif" alt="info" title="<?php _e('Click to toggle info', DW_L10N_DOMAIN) ?>" onclick="divToggle('url_info');" /><br />
 <?php $DW->dumpOpt($opt_url); ?>
 <div>
-	<div id="url" class="infotext">
-		Separate URLs on each line and start from the home url with a slash ( / ). E.g. /tag/a-tag<br />
-		Use an asterisk ( * ) at the end of an URL as 'Starts with'. Without it, it means 'Exact match'.<br />
+	<div id="url_info" class="infotext">
+		Separate URLs on each line.<br />
+		Use an asterisk ( * ) at the end of an URL as 'Starts with'.<br /> 
+		Use an asterisk at the start of an URL as 'Ends with'.<br />
+		Using an asterisk at the start and end of an url means 'Somewhere within'.<br />
+		Without any asterisk means 'Exact match'.<br />
+		When you don't start with an asterisk, start with a slash ( / ).<br />
 		Beware of double rules! Especially when you set the default to 'No'. This means the widget will be shown NOWHERE.
 	</div>
 </div>

@@ -15,6 +15,8 @@
 	// UserAgent detection
 	$DW->message('UserAgent: ' . $DW->useragent);
 
+	$DW->message('Today it is ' . date('l') . ' (' . date('N') . '), Week: ' . date('W'));
+
 	$DW->message('User has role(s): ' . implode(', ', $DW->userrole));
 
 	$DW->whereami = $DW->detectPage();

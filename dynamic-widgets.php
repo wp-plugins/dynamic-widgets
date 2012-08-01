@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.2.3
+ * Version: 1.5.2.4
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -66,9 +66,9 @@
   define('DW_MODULES', dirname(__FILE__) . '/' . 'mods/');
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
-  define('DW_URL', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5.2.3');
-  define('DW_VERSION_URL_CHECK', DW_URL . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
+  define('DW_URL_AUTHOR', 'http://www.qurl.nl');
+  define('DW_VERSION', '1.5.2.4');
+  define('DW_VERSION_URL_CHECK', DW_URL_AUTHOR . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
 
@@ -551,7 +551,7 @@
   		echo '<div class="error" id="message"><p>';
   		_e('<b>ERROR</b> Your host is running a too low version of PHP. Dynamic Widgets needs at least version', DW_L10N_DOMAIN);
   		echo ' ' . DW_MINIMUM_PHP . '.';
-  		echo '<br />See <a href="' . DW_URL . '/question/my-hoster-is-still-using-php4-so-what/">this page</a> why.';
+  		echo '<br />See <a href="' . DW_URL_AUTHOR . '/question/my-hoster-is-still-using-php4-so-what/">this page</a> why.';
   		echo '</p></div>';
   	}
 
