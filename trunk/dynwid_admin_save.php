@@ -9,7 +9,7 @@
   // Security - nonce, etc.
   $widget_id = ( isset($_POST['widget_id']) && ! empty($_POST['widget_id']) ) ? esc_attr($_POST['widget_id']) : '';
   $returnurl = ( isset($_POST['returnurl']) && ! empty($_POST['returnurl']) ) ? esc_url($_POST['returnurl']) : '';
-  
+
   check_admin_referer('plugin-name-action_edit_' . $widget_id);
   if (! array_key_exists($widget_id, $DW->registered_widgets) ) {
   	wp_die('WidgetID is not valid');
@@ -59,7 +59,7 @@
       }
     }
   }
-  
+
   // URL
   if ( $_POST['url'] == 'no' && empty($_POST['url_value']) ) {
   	wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
@@ -87,6 +87,12 @@
     }
   }
 
+  // Day
+  DWModule::save('day', 'complex');
+  
+  // Week
+	DWModule::save('week', 'complex');
+
   // Browser
 	DWModule::save('browser', 'complex');
 
@@ -96,18 +102,18 @@
 	// URL
 	if (! empty($_POST['url_value']) ) {
 		$urls = array();
-		
+
 		$url_values = trim($_POST['url_value']);
 		$url_values = str_replace("\r", "", $url_values);
 		$url_values = explode("\n", $url_values);
-		
+
 		foreach ( $url_values as $url ) {
 			$url = trim($url);
 			if (! empty($url) ) {
-				$urls[ ] = $url;	
+				$urls[ ] = $url;
 			}
 		}
-		
+
 		if ( count($urls) > 0 ) {
 			$DW->addUrls($widget_id, $_POST['url'], $urls);
 		}
@@ -192,7 +198,7 @@
 			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
 				$DW->addMultiOption($widget_id, $tax, $_POST['page'], $_POST[$act_tax_field]);
 			}
-	
+
 			// ---- Childs >> Can't use DWModule::childSave() cause of $name != $tax, but $name == 'page'
 			$act_tax_childs_field = $tax . '_childs_act';
 			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {

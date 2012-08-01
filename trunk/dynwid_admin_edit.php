@@ -15,7 +15,7 @@
 	// Sanitizing some stuff
 	$widget_id = ( isset($_GET['id']) && ! empty($_GET['id']) ) ? esc_attr($_GET['id']) : '';
 	$return_url = ( isset($_GET['returnurl']) && ! empty($_GET['returnurl']) ) ? esc_url($_GET['returnurl']) : '';
-	
+
 	if (! array_key_exists($widget_id, $DW->registered_widgets) ) {
   	wp_die('WidgetID is not valid');
   }
@@ -139,20 +139,20 @@ h4 {
 			header: 'h4',
 			autoHeight: false,
 		}); */
-		
+
 		jQuery( 'h4' ).click( function() {
 			var id = this.id;
 			jQuery( '#' + id + '_conf' ).slideToggle('slow');
 		});
-		
+
 		jQuery( 'h4' ).mouseover( function() {
 			jQuery(this).addClass('ui-state-hover');
 		});
-		
+
 		jQuery( 'h4' ).mouseleave( function() {
 			jQuery(this).removeClass('ui-state-hover');
 		});
-		
+
 	});
 /* ]]> */
 </script>
@@ -199,6 +199,12 @@ h4 {
 	$DW_Date = new DW_Date();
 	$DW_Date->admin();
 
+	$DW_Day = new DW_Day();
+	$DW_Day->admin();
+	
+	$DW_Week = new DW_Week();
+	$DW_Week->admin();
+
 	$DW_WPML = new DW_WPML();
 	$DW_WPML->admin();
 
@@ -210,7 +216,7 @@ h4 {
 
 	$DW_Tpl = new DW_Tpl();
 	$DW_Tpl->admin();
-	
+
 	$DW_URL = new DW_URL();
 	$DW_URL->admin();
 
@@ -252,7 +258,7 @@ h4 {
 
 	$DW_BP = new DW_BP();
 	$DW_BP->admin();
-	
+
 	$DW_bbPress = new DW_bbPress();
 	$DW_bbPress->admin();
 

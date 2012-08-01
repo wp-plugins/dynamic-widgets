@@ -169,21 +169,44 @@
           	}
           	unset($qt_tmp);
 
-          	// Browser, Template and URL
+          	// Browser, Template, Day, Week and URL
           	foreach ( $opt as $condition ) {
           		if ( $condition->maintype == 'browser' && $condition->name == $DW->useragent ) {
           			(bool) $browser_tmp = $condition->value;
           		} else if ( $condition->maintype == 'tpl' && $condition->name == $DW->template ) {
           			(bool) $tpl_tmp = $condition->value;
+          		} else if ( $condition->maintype == 'day' && $condition->name == date('N') ) {
+          			(bool) $day_tmp = $condition->value;
+          		} else if ( $condition->maintype == 'week' && $condition->name == date('W') ) {
+          			(bool) $week_tmp = $condition->value;
           		} else if ( $condition->maintype == 'url' && $condition->name == 'url' ) {
           			$urls = unserialize($condition->value);
           			$other_url = ( $url ) ? FALSE : TRUE;
           			foreach ( $urls as $u ) {
           				$u = $DW->getURLPrefix() . $u;
-          				$like = substr($u, -1);
-          				if ( $like == '*' ) {
-          					if ( stripos($DW->url, substr($u, 0, strlen($u) - 1)) !== FALSE ) {
+          				$like_start = substr($u, 0, 1);
+          				$like_end = substr($u, -1);
+
+          				if ( $like_start == '*' && $like_end == '*' ) {
+          					$u = substr($u, 1, strlen($u) - 2);
+          					if ( stristr($DW->url, $u) !== FALSE ) {
+          						$DW->message('Anywhere within URL found');
+          						$url_tmp = $other_url;
+          					}
+          				} else if ( $like_end == '*' ) {
+          					$u = substr($u, 0, strlen($u) - 1);
+          					$u = addcslashes($u, '/?+.[]{}*^$');
+
+          					if ( preg_match('/^' . $u . '/', $DW->url) ) {
           						$DW->message('Starts with URL found');
+          						$url_tmp = $other_url;
+          					}
+          				} else if ( $like_start == '*' ) {
+          					$u = substr($u, 1);
+          					$u = addcslashes($u, '/?+.[]{}*^$');
+
+          					if ( preg_match('/' . $u . '$/', $DW->url) ) {
+          						$DW->message('Ends with URL found');
           						$url_tmp = $other_url;
           					}
           				} else {
@@ -207,7 +230,19 @@
           		$tpl = $tpl_tmp;
           	}
           	unset($tpl_tmp);
+
+          	if ( isset($day_tmp) && $day_tmp != $day ) {
+          		$DW->message('Exception triggered for day, sets display to ' . ( ($day_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EDAY1)');
+          		$day = $day_tmp;
+          	}
+          	unset($day_tmp);
           	
+          	if ( isset($week_tmp) && $week_tmp != $week ) {
+          		$DW->message('Exception triggered for day, sets display to ' . ( ($week_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EWK1)');
+          		$week = $week_tmp;
+          	}
+          	unset($day_tmp);
+
           	if ( isset($url_tmp) && $url_tmp != $url ) {
           		$DW->message('Exception triggered for url, sets display to ' . ( ($url_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EURL1)');
           		$url = $url_tmp;
@@ -515,7 +550,7 @@
                     	}
                     } else {
                     	$term = wp_get_object_terms($id, get_object_taxonomies($DW->whereami), array('fields' => 'all'));
-		              		if ( count($term) > 0 ) {
+		              		if (! is_wp_error($term) && count($term) > 0 ) {
 												foreach ( get_object_taxonomies($DW->whereami) as $t ) {
 		              				$m = $DW->whereami . '-tax_' . $t;
 		              				foreach ( $opt as $condition ) {
