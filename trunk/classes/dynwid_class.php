@@ -50,11 +50,7 @@
 			$query = "SHOW TABLES LIKE '" . $this->dbtable . "'";
 			$result = $this->wpdb->get_var($query);
 
-			if ( is_null($result) ) {
-				$this->enabled = FALSE;
-			} else {
-				$this->enabled = TRUE;
-			}
+			$this->enabled = ( is_null($result) ) ? FALSE : TRUE;
 		}
 
 		/**
@@ -174,8 +170,19 @@
 				$opt_act = '0';
 			}
 
-			// Check single-post or single-option coming from post or tag screen
-			if ( $maintype == 'single-post' || $maintype == 'single-tag' ) {
+			// Check single-post or single-option coming from posts or tags screen to prevent database polution
+			$types = array();
+			$args = array(
+								'public'   => TRUE,
+								'_builtin' => FALSE
+							);
+			$post_types = get_post_types($args, 'objects', 'and');
+			foreach ( array_keys($post_types) as $t ){
+				$types[ ] = $t . '-post';
+			}
+			$post_types = array_merge( $types, array('single-post', 'single-tag') );
+
+			if ( in_array($maintype, $post_types) ) {
 				$query = "SELECT COUNT(1) AS total FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = '" . $maintype . "' AND name = 'default'";
 				$count = $this->wpdb->get_var($this->wpdb->prepare($query));
 				if ( $count > 0 ) {
@@ -430,6 +437,7 @@
 			if ( $maintype == 'home' ) {
 				$maintype = 'page';
 			}
+
 			$query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
                  WHERE widget_id LIKE '" . $widget_id . "'
                    AND maintype LIKE '" . $maintype . "%'

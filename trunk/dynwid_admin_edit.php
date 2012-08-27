@@ -68,6 +68,14 @@ h4 {
 .ui-datepicker {
 	font-size : 10px;
 }
+
+div.settingbox {
+	border-color: #E3E3E3;
+	border-radius: 6px 6px 6px 6px;
+	border-style: solid;
+	border-width: 1px;
+	padding: 5px;
+}
 </style>
 
 <script type="text/javascript">
@@ -135,11 +143,6 @@ h4 {
   }
 
   jQuery(document).ready( function() {
-		/* jQuery('#dynwid').accordion({
-			header: 'h4',
-			autoHeight: false,
-		}); */
-
 		jQuery( 'h4' ).click( function() {
 			var id = this.id;
 			jQuery( '#' + id + '_conf' ).slideToggle('slow');
@@ -178,7 +181,7 @@ h4 {
 <h3><?php _e('Edit options for the widget', DW_L10N_DOMAIN); ?>: <em><?php echo $DW->getName($widget_id); ?></em></h3>
 <?php echo ( DW_DEBUG ) ? '<pre>ID = ' . $widget_id . '</pre><br />' : ''; ?>
 
-<div style="border-color: #E3E3E3;border-radius: 6px 6px 6px 6px;border-style: solid;border-width: 1px;padding: 5px;">
+<div class="settingbox">
 <b><?php _e('Quick settings', DW_L10N_DOMAIN); ?></b>
 <p>
 <a href="#" onclick="setOff(); return false;"><?php _e('Set all options to \'No\'', DW_L10N_DOMAIN); ?></a> (<?php _e('Except overriding options like Role, Date, etc.', DW_L10N_DOMAIN); ?>)
@@ -191,6 +194,31 @@ h4 {
 <input type="hidden" name="widget_id" value="<?php echo $widget_id; ?>" />
 <input type="hidden" id="returnurl" name="returnurl" value="<?php echo ( (! empty($return_url)) ? trailingslashit(admin_url()) . $return_url : '' ); ?>" />
 
+<div class="settingbox">
+<b><?php _e('Individual Posts, Custom Post Types and Tags', DW_L10N_DOMAIN); ?></b>
+<p>
+<?php
+	$opt_individual = $DW->getDWOpt($widget_id, 'individual');
+	$individual = ( $opt_individual->count > 0 ) ? TRUE : FALSE;
+	$DW->dumpOpt($opt_individual);
+
+	echo '<input type="checkbox" id="individual" name="individual" value="1" ' . ( ($individual)  ? 'checked="checked"' : '' ) . ' onclick="chkInPosts()" />';
+	echo ' <label for="individual">' . __('Make exception rule available to individual posts and tags.', DW_L10N_DOMAIN) . '</label>';
+	echo '<img src="' . $DW->plugin_url . 'img/info.gif" alt="info" title="' . __('Click to toggle info', DW_L10N_DOMAIN) . '" onclick="divToggle(\'individual_post_tag\')" />';
+
+	echo '<div>';
+	echo '<div id="individual_post_tag" class="infotext">';
+	_e('When you enable this option, you have the ability to apply an exception rule to tags and individual posts (Posts and Custom Post Types).
+					You can set the exception rule for tags in the single Edit Tag Panel (go to <a href="edit-tags.php?taxonomy=post_tag">Post Tags</a>,
+					click a tag), For individual posts in the <em>New</em> or <em>Edit</em> Posts panel.
+					Exception rules for tags and individual posts in any combination work independantly, but will always be counted as one exception.<br />
+	  					Please note when this is enabled, exception rules which are set within Posts for Author and/or Category will be disabled.
+	  				', DW_L10N_DOMAIN);
+	echo '</div></div>';
+?>
+</p>
+</div><br />
+
 <div id="dynwid">
 <?php
 	$DW_Role = new DW_Role();
@@ -201,7 +229,7 @@ h4 {
 
 	$DW_Day = new DW_Day();
 	$DW_Day->admin();
-	
+
 	$DW_Week = new DW_Week();
 	$DW_Week->admin();
 
