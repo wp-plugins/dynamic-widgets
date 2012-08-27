@@ -124,6 +124,22 @@
 
   // Single Post
 	DWModule::save('single');
+	
+	// -- Post Taxonomies
+	if ( isset($_POST['single_tax_list']) && count($_POST['single_tax_list']) > 0 ) {
+		foreach ( $_POST['single_tax_list'] as $tax ) {
+			$act_tax_field = $tax . '_act';
+			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
+				$DW->addMultiOption($widget_id, $tax, $_POST['single'], $_POST[$act_tax_field]);
+			}
+
+			// ---- Childs >> Can't use DWModule::childSave() cause of $name != $tax, but $name == 'post'
+			$act_tax_childs_field = $tax . '_childs_act';
+			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
+				$DW->addChilds($widget_id, $tax . '-childs', $_POST['single'], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
+			}
+		}
+	}
 
   // -- Author
   if ( isset($_POST['single_author_act']) && count($_POST['single_author_act']) > 0 ) {
@@ -135,7 +151,7 @@
 
   // -- Category
   if ( isset($_POST['single_category_act']) && count($_POST['single_category_act']) > 0 ) {
-    if ( $_POST['single'] == 'yes' && count($_POST['single_author_act']) == 0 ) {
+    if ( $_POST['single'] == 'yes' && isset($_POST['single_author_act']) && count($_POST['single_author_act']) == 0 ) {
       $DW->addSingleOption($widget_id, 'single', '1');
     }
     $DW->addMultiOption($widget_id, 'single-category', $_POST['single'], $_POST['single_category_act']);
@@ -229,6 +245,13 @@
   // Custom Types
   if ( isset($_POST['post_types']) ) {
     foreach ( $_POST['post_types'] as $type ) {
+    	
+	    if ( isset($_POST['individual']) && $_POST['individual'] == '1' ) {
+		    if ( isset($_POST[$type . '_act']) && count($_POST[$type . '_act']) > 0 ) {
+		      $DW->addMultiOption($widget_id, $type, $_POST[$type], $_POST[$type . '_act']);
+		    }
+		  }
+    	
     	// Check taxonomies
     	$taxonomy = FALSE;
 
