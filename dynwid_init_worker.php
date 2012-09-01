@@ -11,6 +11,7 @@
 
 	// Register the overrule maintypes
 	$DW->registerOverrulers();
+	$DW->message('Overrulers registered: ' . implode(', ', $DW->overrule_maintype) );
 
 	// UserAgent detection
 	$DW->message('UserAgent: ' . $DW->useragent);

@@ -15,6 +15,9 @@
 	// Sanitizing some stuff
 	$widget_id = ( isset($_GET['id']) && ! empty($_GET['id']) ) ? esc_attr($_GET['id']) : '';
 	$return_url = ( isset($_GET['returnurl']) && ! empty($_GET['returnurl']) ) ? esc_url($_GET['returnurl']) : '';
+	
+	// In some cases $widget_id appears not to be global (anymore)
+	$GLOBALS['widget_id'] = $widget_id;
 
 	if (! array_key_exists($widget_id, $DW->registered_widgets) ) {
   	wp_die('WidgetID is not valid');
