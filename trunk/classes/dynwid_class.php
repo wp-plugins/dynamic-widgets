@@ -729,7 +729,7 @@
 			include_once(DW_MODULES . 'url_module.php');
 			DW_Browser::checkOverrule('DW_Browser');
 			DW_Date::checkOverrule('DW_Date');
-			DW_Date::checkOverrule('DW_Day');
+			DW_Day::checkOverrule('DW_Day');
 			DW_Week::checkOverrule('DW_Week');
 			DW_Role::checkOverrule('DW_Role');
 			DW_Tpl::checkOverrule('DW_Tpl');

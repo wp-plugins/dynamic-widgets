@@ -9,6 +9,9 @@
   // Security - nonce, etc.
   $widget_id = ( isset($_POST['widget_id']) && ! empty($_POST['widget_id']) ) ? esc_attr($_POST['widget_id']) : '';
   $returnurl = ( isset($_POST['returnurl']) && ! empty($_POST['returnurl']) ) ? esc_url($_POST['returnurl']) : '';
+  
+  // In some cases $widget_id appears not to be global (anymore)
+	$GLOBALS['widget_id'] = $widget_id;
 
   check_admin_referer('plugin-name-action_edit_' . $widget_id);
   if (! array_key_exists($widget_id, $DW->registered_widgets) ) {
