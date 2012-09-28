@@ -609,7 +609,7 @@
 		              		} // END count($term)
 		              	}
 
-										if (! is_wp_error($term) && ! empty($term) ) {
+										if ( isset($term) && ! is_wp_error($term) && ! empty($term) ) {
 	                  	foreach ( $term as $t ) {
 	                  		if ( isset($page_act_tax[$t->taxonomy]) && is_array($page_act_tax[$t->taxonomy]) && in_array($t->term_id, $page_act_tax[$t->taxonomy]) ) {
 	                  			$display = $other;
