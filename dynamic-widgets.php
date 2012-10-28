@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.3
+ * Version: 1.5.3.1
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -24,6 +24,10 @@
  * Thanks to Hanolex for the contribution of the Chinese (Simplified) (zh_CN) language files.
  * Thanks to Liudas Ališauskas for the contribution of the Lithuanian (lt_LT) language files.
  * Thanks to Pedro Nave for the contribution of the Portuguese (pt_PT) language files.
+ * Thanks to Renato Tavares for the contribution of the Brazil Portuguese (pt_BR) language files.
+ * Thanks to Pavel Bilek for the contribution of the Chech (cs_CZ) language files.
+ * Thanks to Morten Nalholm for the contribution of the Danish (da_DK) language files.
+ 
  *
  * WPML Plugin support via API
  * Using constants	ICL_PLUGIN_PATH > mods/wpml_module.php
@@ -67,7 +71,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL_AUTHOR', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5.3');
+  define('DW_VERSION', '1.5.3.1');
   define('DW_VERSION_URL_CHECK', DW_URL_AUTHOR . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -88,7 +92,7 @@
 
 		$query = "CREATE TABLE IF NOT EXISTS " . $dbtable . " (
                 id int(11) NOT NULL auto_increment,
-                widget_id varchar(40) NOT NULL,
+                widget_id varchar(60) NOT NULL,
                 maintype varchar(50) NOT NULL,
                 `name` varchar(40) NOT NULL,
                 `value` longtext NOT NULL,
@@ -145,6 +149,15 @@
 					$query = "INSERT INTO " . $dbtable . "(widget_id, maintype, value) VALUES ('" . $myrow->widget_id . "', 'tag', '0')";
 					$wpdb->query($query);
 				}
+			}
+			
+			/*
+			1.5.3.1 > Widgets seems to be started using longer classnames to avoid clashing.
+			Widend up the width for widget_id from 40 to 60.
+			*/
+			if ( version_compare($version, '1.5.3.1', '<') ) {
+				$query = "ALTER TABLE " . $dbtable . " CHANGE `widget_id` `widget_id` VARCHAR(60) NOT NULL";
+				$wpdb->query($query);
 			}
 
 		}
