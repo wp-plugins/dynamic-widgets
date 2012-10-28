@@ -16,7 +16,7 @@
 	// UserAgent detection
 	$DW->message('UserAgent: ' . $DW->useragent);
 
-	$DW->message('Today it is ' . date('l') . ' (' . date('N') . '), Week: ' . date('W'));
+	$DW->message('Today it is ' . date('l', current_time('timestamp', 0)) . ' (' . date('N', current_time('timestamp', 0)) . '), Week: ' . date('W', current_time('timestamp', 0)));
 
 	$DW->message('User has role(s): ' . implode(', ', $DW->userrole));
 
