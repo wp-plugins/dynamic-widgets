@@ -78,7 +78,7 @@
 			if ( is_array($lang) ) {
 				$id = $lang[$language_code];
 			} else {
-				$id = 0;
+				$id = $content_id;
 			}
 
 			return $id;
