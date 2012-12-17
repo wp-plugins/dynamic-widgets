@@ -14,7 +14,7 @@
 	DWModule::registerPlugin(DW_CustomPost::$plugin);
 
 	// Template
-	if (! is_archive() ) {
+	if (! is_archive() && ! is_404() ) {
 		$tpl = get_page_template();
 		if ( $DW->whereami == 'pods' ) {
 			global $pod_page_exists;
