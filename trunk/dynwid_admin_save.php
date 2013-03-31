@@ -9,7 +9,7 @@
   // Security - nonce, etc.
   $widget_id = ( isset($_POST['widget_id']) && ! empty($_POST['widget_id']) ) ? esc_attr($_POST['widget_id']) : '';
   $returnurl = ( isset($_POST['returnurl']) && ! empty($_POST['returnurl']) ) ? esc_url($_POST['returnurl']) : '';
-  
+
   // In some cases $widget_id appears not to be global (anymore)
 	$GLOBALS['widget_id'] = $widget_id;
 
@@ -69,7 +69,36 @@
   	die();
   }
 
-  // Removing already set options
+  // Removing already set options, but keeping individual rules
+  $dbtable = $GLOBALS['wpdb']->prefix . DW_DB_TABLE;
+  $query = "SELECT COUNT(1) AS total FROM "  . $dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = 'individual'";
+  $count = $GLOBALS['wpdb']->get_var($query);
+  
+  if ( $count > 0 && isset($_POST['individual']) && $_POST['individual'] == '1' ) {
+  	$post_types = array_merge( array('single_post', 'single_tag'), $_POST['post_types'] );
+  	
+  	foreach ( $post_types as $t ) {
+ 			$maintype = (! preg_match('/^single/', $t) ) ? $t . '-post' : $t;
+  		
+  		$query = "SELECT name FROM " . $dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = '" . $maintype . "'";
+  		$results = $GLOBALS['wpdb']->get_results($query);
+  		
+  		foreach ( $results as $row ) {
+  			if ( is_numeric($row->name) ) {
+  				$a = $maintype . '_act';
+  				
+  				if (! is_array($_POST[$a]) ) {
+  					$_POST[$a] = array();
+  				}
+  				
+  				$_POST[$a][ ] = $row->name;
+  			}
+  		}
+
+  	}
+	
+  }
+  
   $DW->resetOptions($widget_id);
 
   // Role
@@ -92,7 +121,7 @@
 
   // Day
   DWModule::save('day', 'complex');
-  
+
   // Week
 	DWModule::save('week', 'complex');
 
@@ -127,19 +156,33 @@
 
   // Single Post
 	DWModule::save('single');
-	
+
 	// -- Post Taxonomies
 	if ( isset($_POST['single_tax_list']) && count($_POST['single_tax_list']) > 0 ) {
 		foreach ( $_POST['single_tax_list'] as $tax ) {
 			$act_tax_field = $tax . '_act';
-			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
-				$DW->addMultiOption($widget_id, $tax, $_POST['single'], $_POST[$act_tax_field]);
+			// if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
+			if ( isset($_POST[$act_tax_field]) && ! empty($_POST[$act_tax_field]) ) {
+				if ( substr($_POST[$act_tax_field], 0, 1) == ',' ) {
+					$_POST[$act_tax_field] = substr($_POST[$act_tax_field], 1);
+				}
+				$t = explode(',', $_POST[$act_tax_field]);
+				$t = array_unique($t);
+
+				$DW->addMultiOption($widget_id, $tax, $_POST['single'], $t);
 			}
 
 			// ---- Childs >> Can't use DWModule::childSave() cause of $name != $tax, but $name == 'post'
 			$act_tax_childs_field = $tax . '_childs_act';
-			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
-				$DW->addChilds($widget_id, $tax . '-childs', $_POST['single'], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
+			// if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
+			if ( isset($_POST[$act_tax_field]) && ! empty($_POST[$act_tax_field]) && isset($_POST[$act_tax_childs_field]) && ! empty($_POST[$act_tax_childs_field]) ) {
+				if ( substr($_POST[$act_tax_childs_field], 0, 1) == ',' ) {
+					$_POST[$act_tax_childs_field] = substr($_POST[$act_tax_childs_field], 1);
+				}
+				$t_childs = explode(',', $_POST[$act_tax_childs_field]);
+				$t_childs = array_unique($t_childs);
+
+				$DW->addChilds($widget_id, $tax . '-childs', $_POST['single'], $t, $t_childs);
 			}
 		}
 	}
@@ -180,9 +223,6 @@
 	DWModule::save('attachment');
 
   // Pages
-	// DWModule::save('page', 'complex');
-	// DWModule::childSave('page');				// -- Childs
-
 	// Go through the page_tax_list - Workaround as for some reason get_object_taxonomies() is not always filled
 	$page_taxonomy = FALSE;
 	$page_tax_list = array();
@@ -195,7 +235,6 @@
 			}
 		}
 	}
-
 
 	if ( (isset($_POST['page_act']) && count($_POST['page_act']) > 0) || $page_taxonomy ) {
 		if (! isset($_POST['page_act']) ) {
@@ -214,14 +253,28 @@
 	if ( isset($_POST['page_tax_list']) && count($_POST['page_tax_list']) > 0 ) {
 		foreach ( $_POST['page_tax_list'] as $tax ) {
 			$act_tax_field = $tax . '_act';
-			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
-				$DW->addMultiOption($widget_id, $tax, $_POST['page'], $_POST[$act_tax_field]);
+			if ( isset($_POST[$act_tax_field]) && ! empty($_POST[$act_tax_field]) ) {
+
+				if ( substr($_POST[$act_tax_field], 0, 1) == ',' ) {
+					$_POST[$act_tax_field] = substr($_POST[$act_tax_field], 1);
+				}
+				$t = explode(',', $_POST[$act_tax_field]);
+				$t = array_unique($t);
+
+				$DW->addMultiOption($widget_id, $tax, $_POST['page'], $t);
 			}
 
 			// ---- Childs >> Can't use DWModule::childSave() cause of $name != $tax, but $name == 'page'
 			$act_tax_childs_field = $tax . '_childs_act';
-			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
-				$DW->addChilds($widget_id, $tax . '-childs', $_POST['page'], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
+			if ( isset($_POST[$act_tax_field]) && ! empty($_POST[$act_tax_field]) && isset($_POST[$act_tax_childs_field]) && ! empty($_POST[$act_tax_childs_field]) ) {
+
+				if ( substr($_POST[$act_tax_childs_field], 0, 1) == ',' ) {
+					$_POST[$act_tax_childs_field] = substr($_POST[$act_tax_childs_field], 1);
+				}
+				$t_childs = explode(',', $_POST[$act_tax_childs_field]);
+				$t_childs = array_unique($t_childs);
+
+				$DW->addChilds($widget_id, $tax . '-childs', $_POST['page'], $t, $t_childs);
 			}
 		}
 	}
@@ -248,13 +301,13 @@
   // Custom Types
   if ( isset($_POST['post_types']) ) {
     foreach ( $_POST['post_types'] as $type ) {
-    	
+
 	    if ( isset($_POST['individual']) && $_POST['individual'] == '1' ) {
-		    if ( isset($_POST[$type . '_act']) && count($_POST[$type . '_act']) > 0 ) {
-		      $DW->addMultiOption($widget_id, $type, $_POST[$type], $_POST[$type . '_act']);
+		    if ( isset($_POST[$type . '-post_act']) && count($_POST[$type . '-post_act']) > 0 ) {
+		      $DW->addMultiOption($widget_id, $type . '-post', $_POST[$type], $_POST[$type . '-post_act']);
 		    }
 		  }
-    	
+
     	// Check taxonomies
     	$taxonomy = FALSE;
 
@@ -294,14 +347,28 @@
     	// -- Taxonomies
     	foreach ( $tax_list as $tax ) {
     		$act_tax_field = $tax . '_act';
-    		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
-					$DW->addMultiOption($widget_id, $tax, $_POST[$type], $_POST[$act_tax_field]);
+    		if ( isset($_POST[$act_tax_field]) && ! empty($_POST[$act_tax_field]) ) {
+
+    			if ( substr($_POST[$act_tax_field], 0, 1) == ',' ) {
+    				$_POST[$act_tax_field] = substr($_POST[$act_tax_field], 1);
+    			}
+    			$t = explode(',', $_POST[$act_tax_field]);
+    			$t = array_unique($t);
+
+					$DW->addMultiOption($widget_id, $tax, $_POST[$type], $t);
     		}
 
     		// ---- Childs >> Can't use DWModule::childSave() cause of $name != $tax, but $name == $type
     		$act_tax_childs_field = $tax . '_childs_act';
-    		if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 && isset($_POST[$act_tax_childs_field]) && count($_POST[$act_tax_childs_field]) > 0 ) {
-    			$DW->addChilds($widget_id, $tax . '-childs', $_POST[$type], $_POST[$act_tax_field], $_POST[$act_tax_childs_field]);
+    		if ( isset($_POST[$act_tax_field]) && ! empty($_POST[$act_tax_field]) && isset($_POST[$act_tax_childs_field]) && ! empty($_POST[$act_tax_childs_field]) ) {
+
+    			if ( substr($_POST[$act_tax_childs_field], 0, 1) == ',' ) {
+    				$_POST[$act_tax_childs_field] = substr($_POST[$act_tax_childs_field], 1);
+    			}
+    			$t_childs = explode(',', $_POST[$act_tax_childs_field]);
+    			$t_childs = array_unique($t_childs);
+
+    			$DW->addChilds($widget_id, $tax . '-childs', $_POST[$type], $t, $t_childs);
     		}
     	}
     }
@@ -314,12 +381,18 @@
 		foreach ( $_POST['dw_taxonomy'] as $tax ) {
 			$type = 'tax_' . $tax;
 			$act_field = $type . '_act';
-			if ( isset($_POST[$act_field]) && count($_POST[$act_field]) > 0 ) {
-				if (! is_array($_POST[$act_field]) ) {
+			if ( isset($_POST[$act_field]) && ! empty($_POST[$act_field]) ) {
+/*				if (! is_array($_POST[$act_field]) ) {
 					$_POST[$act_field] = array();
-				}
+				} */
 
-				$DW->addMultiOption($widget_id, $type, $_POST[$type], $_POST[$act_field]);
+				if ( substr($_POST[$act_field], 0, 1) == ',' ) {
+					$_POST[$act_field] = substr($_POST[$act_field], 1);
+				}
+				$t = explode(',', $_POST[$act_field]);
+				$t = array_unique($t);
+
+				$DW->addMultiOption($widget_id, $type, $_POST[$type], $t);
 			} else if ( $_POST[$type] == 'no' ) {
 				$DW->addSingleOption($widget_id, $type);
 			}

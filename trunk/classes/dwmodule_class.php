@@ -156,7 +156,7 @@
 			}
 
 			echo '<!-- ' . $title . ' //-->' . "\n";
-			echo '<h4 id="' . self::$name . '" title=" Click to toggle " class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all"><b>' . __($title, DW_L10N_DOMAIN) . '</b>' . ( (self::$opt->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ' ' . ( ($DW->wpml && $wpml) ? DW_WPML::$icon : '' ) . '</h4>' . "\n";
+			echo '<h3 id="' . self::$name . '" title=" Click to toggle " class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all"><b>' . __($title, DW_L10N_DOMAIN) . '</b>' . ( (self::$opt->count > 0) ? ' <img src="' . $DW->plugin_url . 'img/checkmark.gif" alt="Checkmark" />' : '' ) . ' ' . ( ($DW->wpml && $wpml) ? DW_WPML::$icon : '' ) . '</h4>' . "\n";
 			echo '<div id="' . self::$name . '_conf" class="dynwid_conf ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom">' . "\n";
 			_e($question, DW_L10N_DOMAIN);
 
@@ -289,8 +289,28 @@
 			$child_act = $name . '_childs_act';
 			$dwtype = $name . '-childs';
 
-			if ( isset($_POST[$act]) && count($_POST[$act]) > 0 && isset($_POST[$child_act]) && count($_POST[$child_act]) > 0 ) {
-				$DW->addChilds($widget_id, $dwtype, $_POST[$name], $_POST[$act], $_POST[$child_act]);
+			// Workaround for lazy taxonomy tree
+			if (! is_array($_POST[$act]) ) {
+
+				if ( substr($_POST[$act], 0, 1) == ',' ) {
+					$_POST[$act] = substr($_POST[$act], 1);
+				}
+				$t = explode(',', $_POST[$act]);
+				$t = array_unique($t);
+
+				if ( substr($_POST[$child_act], 0, 1) == ',' ) {
+					$_POST[$child_act] = substr($_POST[$child_act], 1);
+				}
+				$t_childs = explode(',', $_POST[$child_act]);
+				$t_childs = array_unique($t_childs);
+
+			} else {
+				$t = $_POST[$act];
+				$t_childs = $_POST[$child_act];
+			}
+
+			if ( isset($_POST[$act]) && count($t) > 0 && isset($_POST[$child_act]) && count($t_childs) > 0 ) {
+				$DW->addChilds($widget_id, $dwtype, $_POST[$name], $t, $t_childs);
 			}
 		}
 

@@ -614,16 +614,18 @@
 		 */
 		public function getTaxParents($tax_name, $arr, $id) {
 			$obj = get_term_by('id', $id, $tax_name);
+
 			if ( $obj->parent > 0 ) {
 				$arr[ ] = $obj->parent;
 				$a = &$arr;
 				$a = $this->getTaxParents($tax_name, $a, $obj->parent);
 			}
+
 			return $arr;
 		}
 
 		/**
-		 * dynWid::getURLPrefix() Gets the optionel prefix this blog is under
+		 * dynWid::getURLPrefix() Gets the optional prefix this blog is under
 		 *
 		 * @return string
 		 */
@@ -632,6 +634,9 @@
 			$name = ( isset($_SERVER['HTTP_HOST']) ) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
 			$server = $proto . '://' . $name;
 			$prefix = substr( home_url('/'), strlen($server) );
+
+			// Apply filters
+			$prefix = apply_filters('dynwid_urlprefix', $prefix);
 
 			if ( $prefix != '/' ) {
 				$prefix = substr($prefix, 0, strlen($prefix) - 1 );
