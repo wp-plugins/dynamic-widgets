@@ -52,7 +52,7 @@ I also provide other services. See <a href="<?php echo DW_URL_AUTHOR; ?>/service
 		require_once(dirname(__FILE__) . $dw_admin_script);
 	} else {
 		echo '<div class="error" id="message"><p>';
-		_e('Oops! Something went terrible wrong. Please reinstall Dynamic Widgets.', DW_L10N_DOMAIN);
+		_e('Oops! Something went horribly wrong. Please reinstall Dynamic Widgets.', DW_L10N_DOMAIN);
 		echo '</p></div>';
 	}
 ?>

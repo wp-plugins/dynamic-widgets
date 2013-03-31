@@ -182,6 +182,7 @@
           			$other_url = ( $url ) ? FALSE : TRUE;
           			foreach ( $urls as $u ) {
           				$u = $DW->getURLPrefix() . $u;
+          				$DW->message('URL matching: ' . $u);
           				$like_start = substr($u, 0, 1);
           				$like_end = substr($u, -1);
 

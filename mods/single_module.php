@@ -59,33 +59,6 @@
 			self::GUIHeader(self::$option[self::$name], self::$question, self::$info);
 			self::GUIOption();
 
-			// -- Individual / Posts / Tags
-/*			$opt_individual = $DW->getDWOpt($_GET['id'], 'individual');
-			if ( $opt_individual->count > 0 ) {
-				$individual = TRUE;
-				$count_individual = '(' . __('Posts: ', DW_L10N_DOMAIN) . $opt_single_post->count . ', ' . __('Tags: ', DW_L10N_DOMAIN) . $opt_single_tag->count . ')';
-			}
-
-			// Individual
-			$DW->dumpOpt($opt_individual);
-			echo '<br />';
-			echo '<input type="checkbox" id="individual" name="individual" value="1" ' . ( (isset($individual) && $individual)  ? 'checked="checked"' : '' ) . ' onclick="chkInPosts()" />';
-			echo '<label for="individual">' . __('Make exception rule available to individual posts and tags.', DW_L10N_DOMAIN) . ' ' . ( ($opt_individual->count > 0)  ? $count_individual : '' ) . '</label>';
-			echo '<img src="' . $DW->plugin_url . 'img/info.gif" alt="info" title="' . __('Click to toggle info', DW_L10N_DOMAIN) . '" onclick="divToggle(\'individual_post_tag\')" />';
-*/
-/*			echo '<div>';
-			echo '<div id="individual_post_tag" class="infotext">';
-			_e('When you enable this option, you have the ability to apply the exception rule for <em>Single Posts</em> to tags and individual posts.
-								You can set the exception rule for tags in the single Edit Tag Panel (go to <a href="edit-tags.php?taxonomy=post_tag">Post Tags</a>,
-								click a tag), For individual posts in the <a href="post-new.php">New</a> or <a href="edit.php">Edit</a> Posts panel.
-								Exception rules for tags and individual posts in any combination work independantly, but will always be counted as one exception.<br />
-		  					Please note when exception rules are set for Author and/or Category, these will be removed.
-		  				', DW_L10N_DOMAIN);
-		  echo '<br /><br />';
-		  _e('When you have other individual Custom Post Types rules set, this option will be enabled automatically', DW_L10N_DOMAIN);
-
-			echo '</div></div>'; */
-
 			// Individual posts and tags
 			foreach ( $opt_single_post->act as $singlepost ) {
 				echo '<input type="hidden" name="single_post_act[]" value="' . $singlepost . '" />';
@@ -118,6 +91,7 @@
 <?php
 	$type = 'post';
 	$tax_list = get_object_taxonomies($type, 'objects');
+	$tax_list = apply_filters('dynwid_taxonomies', $tax_list);
 
 	foreach ( $tax_list as $tax_type ) {
 		if ( $tax_type->name != 'post_tag' && $tax_type->name != 'category' ) {
@@ -147,19 +121,27 @@
 				echo __('Except for', DW_L10N_DOMAIN) . ' ' . $tax_type->label . ':<br />';
 				echo '<div id="single-tax_' . $tax_type->name . '-select" class="condition-select" ' . ( (isset($tax_condition_select_style)) ? $tax_condition_select_style : '' ) . '>';
 				echo '<div style="position:relative;left:-15px">';
+
 				if (! isset($opt_tax_childs) ) {
 					$childs = FALSE;
 				} else {
 					$childs = $opt_tax_childs->act;
 				}
-				DW_CustomPost::prtTax($tax_type->name, $tree, $opt_tax->act, $childs, 'single-tax_' . $tax_type->name);
+
+				echo '<input type="hidden" id="single-tax_' . $tax_type->name . '_act" name="single-tax_' . $tax_type->name . '_act" value="' . implode(',', $opt_tax->act) . '" />';
+				if ( isset($opt_tax_childs) ) {
+					echo '<input type="hidden" id="single-tax_' . $tax_type->name . '_childs_act" name="single-tax_' . $tax_type->name . '_childs_act" value="' . implode(',', $opt_tax_childs->act) . '" />';
+				}
+
+				DW_CustomPost::prtTax($widget_id, $tax_type->name, $tree, $opt_tax->act, $childs, 'single-tax_' . $tax_type->name);
+
 				echo '</div>';
 				echo '</div>';
 			}
 		}
-	}
+	} // foreach
 
-			self::GUIFooter();
+	self::GUIFooter();
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */

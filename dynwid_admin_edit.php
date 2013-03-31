@@ -15,7 +15,7 @@
 	// Sanitizing some stuff
 	$widget_id = ( isset($_GET['id']) && ! empty($_GET['id']) ) ? esc_attr($_GET['id']) : '';
 	$return_url = ( isset($_GET['returnurl']) && ! empty($_GET['returnurl']) ) ? esc_url($_GET['returnurl']) : '';
-	
+
 	// In some cases $widget_id appears not to be global (anymore)
 	$GLOBALS['widget_id'] = $widget_id;
 
@@ -46,6 +46,11 @@ label {
   display : none;
   color : #666666;
   font-style : italic;
+}
+
+#dynwid h3 {
+	text-indent : 30px;
+	cursor: pointer;
 }
 
 h4 {
@@ -84,18 +89,91 @@ div.settingbox {
 <script type="text/javascript">
 /* <![CDATA[ */
   function chkChild(prefix, pid) {
-  	if ( jQuery('#'+prefix+'_act_'+pid).is(':checked') == false ) {
-  		jQuery('#'+prefix+'_childs_act_'+pid).attr('checked', false);
+  	var add = true;
+  	var child = false;
+
+  	if ( jQuery( '#' + prefix + '_act_' + pid).is( ':checked' ) == false ) {
+  		if ( jQuery( '#' + prefix + '_childs_act_' + pid ).length > 0 ) {
+  			jQuery( '#' + prefix + '_childs_act_' + pid ).attr( 'checked', false );
+  			child = true;
+  		}
+
+  		add = false;
   	}
+
+  	var value = jQuery( '#' + prefix + '_act' ).val();
+  	var a = value.split(',');
+
+  	if ( child ) {
+  		var value_child = jQuery( '#' + prefix + '_childs_act' ).val();
+  		var a_child = value_child.split(',');
+  	}
+
+
+  	if ( add ) {
+
+  		if ( jQuery.inArray(pid, a) == -1 ) {
+  			a.push( pid );
+  		}
+
+  	} else {
+	  	a = jQuery.grep( a, function(v) {
+	  		return v != pid;
+	  	});
+
+			if ( child ) {
+				a_child = jQuery.grep( a_child, function(v) {
+		  		return v != pid;
+		  	});
+			}
+	  }
+
+  	value = a.join();
+  	jQuery( '#' + prefix + '_act' ).val( value );
+
+  	if ( child ) {
+  		value_child = a_child.join();
+  		jQuery( '#' + prefix + '_childs_act' ).val( value_child );
+  	}
+
   }
 
   function chkParent(prefix, pid) {
-  	if ( jQuery('#'+prefix+'_childs_act_'+pid).is(':checked') == true ) {
-  		jQuery('#'+prefix+'_act_'+pid).attr('checked', true);
+  	var add = false;
+
+  	if ( jQuery( '#' + prefix + '_childs_act_' + pid ).is( ':checked' ) == true ) {
+  		jQuery( '#' + prefix + '_act_' + pid ).attr('checked', true);
+  		add = true;
   	}
+
+  	var value = jQuery( '#' + prefix + '_act' ).val();
+  	var value_child = jQuery( '#' + prefix + '_childs_act' ).val();
+  	var a = value.split(',');
+  	var a_child = value_child.split(',');
+
+  	if ( add ) {
+
+  		if ( jQuery.inArray(pid, a) == -1 ) {
+  			a.push( pid );
+  		}
+
+  		if ( jQuery.inArray(pid, a_child) == -1 ) {
+  			a_child.push( pid );
+  		}
+
+  	} else {
+	  	a_child = jQuery.grep( a_child, function(v) {
+	  		return v != pid;
+	  	});
+  	}
+
+  	value = a.join();
+  	value_child = a_child.join();
+  	jQuery( '#' + prefix + '_act' ).val( value );
+  	jQuery( '#' + prefix + '_childs_act' ).val( value_child );
   }
 
-  function chkCPChild(type, pid) {
+/*  function chkCPChild(type, pid) {
   	if ( jQuery('#'+type+'_act_'+pid).is(':checked') == false ) {
   		jQuery('#'+type+'_childs_act_'+pid).attr('checked', false);
   	}
@@ -105,7 +183,7 @@ div.settingbox {
   	if ( jQuery('#'+type+'_childs_act_'+pid).is(':checked') == true ) {
   		jQuery('#'+type+'_act_'+pid).attr('checked', true);
   	}
-  }
+  } */
 
   function divToggle(div) {
     var div = '#'+div;
@@ -145,21 +223,54 @@ div.settingbox {
   	alert('All options set to \'No\'.\nDon\'t forget to make changes, otherwise you\'ll receive an error when saving.');
   }
 
+  function toggleAll() {
+		jQuery( 'h4, #dynwid h3' ).each( function() {
+			var id = this.id;
+
+			if ( closed_state ) {
+				jQuery( '#' + id + '_conf' ).slideDown('slow');
+			} else {
+				jQuery( '#' + id + '_conf' ).slideUp('slow');
+			}
+		});
+
+		if ( closed_state ) {
+			closed_state = false;
+		} else {
+			closed_state = true;
+		}
+  }
+
+  function term_tree(widget_id, name, id, prefix) {
+  	var display = jQuery( '#child_' + prefix + id ).css( 'display' );
+
+		if ( display == 'none' ) {
+  		jQuery.post( ajaxurl, { action: 'term_tree', id: id, name: name, widget_id: widget_id, prefix: prefix }, function(data) {
+  			jQuery( '#tree_' + prefix + id ).html( data );
+  			jQuery( '#child_' + prefix + id ).slideDown('slow');
+  		});
+  	} else {
+  		jQuery( '#child_' + prefix + id ).slideUp('slow');
+  	}
+  }
+
   jQuery(document).ready( function() {
-		jQuery( 'h4' ).click( function() {
+		jQuery( 'h4, #dynwid h3' ).click( function() {
 			var id = this.id;
 			jQuery( '#' + id + '_conf' ).slideToggle('slow');
 		});
 
-		jQuery( 'h4' ).mouseover( function() {
+		jQuery( 'h4, #dynwid h3' ).mouseover( function() {
 			jQuery(this).addClass('ui-state-hover');
 		});
 
-		jQuery( 'h4' ).mouseleave( function() {
+		jQuery( 'h4, #dynwid h3' ).mouseleave( function() {
 			jQuery(this).removeClass('ui-state-hover');
 		});
 
 	});
+
+	var closed_state = true;
 /* ]]> */
 </script>
 
@@ -222,79 +333,133 @@ div.settingbox {
 </p>
 </div><br />
 
+<input type="button" value="Toggle sections" onclick="toggleAll();" /><br />
+<br />
+
 <div id="dynwid">
 <?php
-	$DW_Role = new DW_Role();
-	$DW_Role->admin();
+	$DW->getModuleName();
+	$DW->dwoptions = apply_filters('dynwid_admin_modules', $DW->dwoptions);
 
-	$DW_Date = new DW_Date();
-	$DW_Date->admin();
+	if ( array_key_exists('role', $DW->dwoptions) ) {
+		$DW_Role = new DW_Role();
+		$DW_Role->admin();
+	}
 
-	$DW_Day = new DW_Day();
-	$DW_Day->admin();
+	if ( array_key_exists('date', $DW->dwoptions) ) {
+		$DW_Date = new DW_Date();
+		$DW_Date->admin();
+	}
 
-	$DW_Week = new DW_Week();
-	$DW_Week->admin();
+	if ( array_key_exists('day', $DW->dwoptions) ) {
+		$DW_Day = new DW_Day();
+		$DW_Day->admin();
+	}
 
-	$DW_WPML = new DW_WPML();
-	$DW_WPML->admin();
+	if ( array_key_exists('week', $DW->dwoptions) ) {
+		$DW_Week = new DW_Week();
+		$DW_Week->admin();
+	}
 
-	$DW_QT = new DW_QT();
-	$DW_QT->admin();
+	if ( array_key_exists('wpml', $DW->dwoptions) ) {
+		$DW_WPML = new DW_WPML();
+		$DW_WPML->admin();
+	}
 
-	$DW_Browser = new DW_Browser();
-	$DW_Browser->admin();
+	if ( array_key_exists('qt', $DW->dwoptions) ) {
+		$DW_QT = new DW_QT();
+		$DW_QT->admin();
+	}
 
-	$DW_Tpl = new DW_Tpl();
-	$DW_Tpl->admin();
+	if ( array_key_exists('browser', $DW->dwoptions) ) {
+		$DW_Browser = new DW_Browser();
+		$DW_Browser->admin();
+	}
 
-	$DW_URL = new DW_URL();
-	$DW_URL->admin();
+	if ( array_key_exists('tpl', $DW->dwoptions) ) {
+		$DW_Tpl = new DW_Tpl();
+		$DW_Tpl->admin();
+	}
 
-	$DW_Front_page = new DW_Front_page();
-	$DW_Front_page->admin();
+	if ( array_key_exists('url', $DW->dwoptions) ) {
+		$DW_URL = new DW_URL();
+		$DW_URL->admin();
+	}
 
-	$DW_Single = new DW_Single();
-	$DW_Single->admin();
+	if ( array_key_exists('front-page', $DW->dwoptions) ) {
+		$DW_Front_page = new DW_Front_page();
+		$DW_Front_page->admin();
+	}
 
-	$DW_Attachment = new DW_Attachment();
-	$DW_Attachment->admin();
+	if ( array_key_exists('single', $DW->dwoptions) ) {
+		$DW_Single = new DW_Single();
+		$DW_Single->admin();
+	}
 
-	$DW_Page = new DW_Page();
-	$DW_Page->admin();
+	if ( array_key_exists('attachment', $DW->dwoptions) ) {
+		$DW_Attachment = new DW_Attachment();
+		$DW_Attachment->admin();
+	}
 
-	$DW_Author = new DW_Author();
-	$DW_Author->admin();
+	if ( array_key_exists('page', $DW->dwoptions) ) {
+		$DW_Page = new DW_Page();
+		$DW_Page->admin();
+	}
 
-	$DW_Category = new DW_Category();
-	$DW_Category->admin();
+	if ( array_key_exists('author', $DW->dwoptions) ) {
+		$DW_Author = new DW_Author();
+		$DW_Author->admin();
+	}
 
-	$DW_Tag = new DW_Tag();
-	$DW_Tag->admin();
+	if ( array_key_exists('category', $DW->dwoptions) ) {
+		$DW_Category = new DW_Category();
+		$DW_Category->admin();
+	}
 
-	$DW_Archive = new DW_Archive();
-	$DW_Archive->admin();
+	if ( array_key_exists('tag', $DW->dwoptions) ) {
+		$DW_Tag = new DW_Tag();
+		$DW_Tag->admin();
+	}
 
-	$DW_E404 = new DW_E404();
-	$DW_E404->admin();
+	if ( array_key_exists('archive', $DW->dwoptions) ) {
+		$DW_Archive = new DW_Archive();
+		$DW_Archive->admin();
+	}
 
-	$DW_Search = new DW_Search();
-	$DW_Search->admin();
+
+	if ( array_key_exists('e404', $DW->dwoptions) ) {
+		$DW_E404 = new DW_E404();
+		$DW_E404->admin();
+	}
+
+	if ( array_key_exists('search', $DW->dwoptions) ) {
+		$DW_Search = new DW_Search();
+		$DW_Search->admin();
+	}
 
 	$DW_CustomPost = new DW_CustomPost();
 	$DW_CustomPost->admin();
 
-	$DW_WPSC = new DW_WPSC();
-	$DW_WPSC->admin();
+	if ( array_key_exists('wpsc', $DW->dwoptions) ) {
+		$DW_WPSC = new DW_WPSC();
+		$DW_WPSC->admin();
+	}
 
-	$DW_BP = new DW_BP();
-	$DW_BP->admin();
+	if ( array_key_exists('bp', $DW->dwoptions) ) {
+		$DW_BP = new DW_BP();
+		$DW_BP->admin();
+	}
 
-	$DW_bbPress = new DW_bbPress();
-	$DW_bbPress->admin();
+	if ( array_key_exists('bbp_profile', $DW->dwoptions) ) {
+		$DW_bbPress = new DW_bbPress();
+		$DW_bbPress->admin();
+	}
 
-	$DW_Pods = new DW_Pods();
-	$DW_Pods->admin();
+	if ( array_key_exists('pods', $DW->dwoptions) ) {
+		$DW_Pods = new DW_Pods();
+		$DW_Pods->admin();
+	}
+
 
 	// For JS exclOff
 	$excl = array();

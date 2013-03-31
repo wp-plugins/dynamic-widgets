@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.4.1
+ * Version: 1.5.4.2
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -28,6 +28,8 @@
  * Thanks to Pavel Bilek for the contribution of the Chech (cs_CZ) language files.
  * Thanks to Morten Nalholm for the contribution of the Danish (da_DK) language files.
  * Thanks to Scott Kingsley Clark for the help to get the Pods module upgraded to support Pods v2.
+ * Thanks to Sébastien Christy for the help finding a PHP bug preventing the exposure of class properties while in the right scope.
+ * Thanks to Rick Anderson from Build Your Own Business Website (http://www.byobwebsite.com/) for the financial contribution to implement the AJAX lazy load taxonomy tree and the modules filter
  *
  *
  * WPML Plugin support via API
@@ -66,13 +68,13 @@
   define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
   define('DW_OLD_METHOD', get_option('dynwid_old_method'));
   define('DW_PAGE_LIMIT', get_option('dynwid_page_limit', 500));
-  define('DW_MINIMUM_PHP', '5.1.0');
+  define('DW_MINIMUM_PHP', '5.2.7');
   define('DW_MINIMUM_WP', '3.0');
   define('DW_MODULES', dirname(__FILE__) . '/' . 'mods/');
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL_AUTHOR', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5.4.1');
+  define('DW_VERSION', '1.5.4.2');
   define('DW_VERSION_URL_CHECK', DW_URL_AUTHOR . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
@@ -151,7 +153,7 @@
 					$wpdb->query($query);
 				}
 			}
-			
+
 			/*
 			1.5.3.1 > Widgets seems to be started using longer classnames to avoid clashing.
 			Widend up the width for widget_id from 40 to 60.
@@ -635,6 +637,9 @@
   				add_action('plugin_action_links_' . plugin_basename(__FILE__), 'dynwid_add_plugin_actions');
   				add_action('save_post', 'dynwid_save_postdata');
   				add_action('sidebar_admin_setup', 'dynwid_add_widget_control');
+
+  				// AJAX calls
+  				add_action('wp_ajax_term_tree', 'dynwid_term_tree');
   			}
   		} else {
   			if ( $DW->enabled ) {
@@ -671,10 +676,10 @@
 	 */
 	function dynwid_save_postdata($post_id) {
 	  $DW = &$GLOBALS['DW'];
-	  
+
 	  if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] != 'autosave' ) {
 	  	$post_id = ( isset($_POST['post_ID']) && ! empty($_POST['post_ID']) ) ? intval($_POST['post_ID']) : 0;
-	  	
+
 	  	if ( $parent_id = wp_is_post_revision($post_id) ) {
 				$post_id = $parent_id;
 			}
@@ -687,18 +692,18 @@
 				} else {
 					$maintype = $post_type . '-post';
 				}
-		
+
 			  // Housekeeping
 			  $opt = $DW->getOpt('%','individual');
 			  foreach ( $opt as $widget ) {
 			    $DW->deleteOption($widget->widget_id, $maintype, $post_id);
 			  }
-		
+
 			  if ( array_key_exists('dw-single-post', $_POST) ) {
 			    $opt = $_POST['dw-single-post'];
 			    $default = 'yes';
 			    $default_single = '1';
-		
+
 			    foreach ( $opt as $widget_id ) {
 			      $opt_single = $DW->getOpt($widget_id, $post_type);
 			      if ( count($opt_single) > 0 ) {
@@ -707,16 +712,16 @@
 			            $default_single = $widget->value;
 			          }
 			        }
-		
+
 			        if ( $default_single == '0' ) {
 			          $default = 'no';
 			        }
 			      }
-		
+
 			      $DW->addMultiOption($widget_id, $maintype, $default, array($post_id));
 			    }
 			  } // END if array_key_exists
-			} // END if $post_id > 0 
+			} // END if $post_id > 0
 		} // END if ! autosave AND ! quick edit
 	}
 
@@ -782,6 +787,35 @@
 		} else {
 			return FALSE;
 		}
+	}
+
+	/**
+	 * dynwid_term_tree() AJAX lazy loader for Taxonomy terms tree
+	 * @since 1.5.4.2
+	 *
+	 * @return void
+	 */
+	function dynwid_term_tree() {
+		include_once(DW_MODULES . 'custompost_module.php');
+
+		$DW = &$GLOBALS['DW'];
+
+		$id = ( isset($_POST['id']) && ! empty($_POST['id']) ) ? sanitize_text_field( $_POST['id'] ) : 0;
+		$name = ( isset($_POST['name']) && ! empty($_POST['name']) ) ? sanitize_text_field( $_POST['name'] ) : '';
+		$prefix = ( isset($_POST['prefix']) && ! empty($_POST['prefix']) ) ? sanitize_text_field( $_POST['prefix'] ) : '';
+		$widget_id = ( isset($_POST['widget_id']) && ! empty($_POST['widget_id']) ) ? sanitize_text_field( $_POST['widget_id'] ) : '';
+
+		if ( intval($id) > 0 && ! empty($name) && ! empty($widget_id) ) {
+			$opt_tax = $DW->getDWOpt($widget_id, $prefix);
+			$opt_tax_childs = $DW->getDWOpt($widget_id, $prefix . '-childs');
+
+			$tree = DW_CustomPost::getTaxChilds($name, array(), $id, array());
+			if ( count($tree) > 0 ) {
+				DW_CustomPost::prtTax($widget_id, $name, $tree, $opt_tax->act, $opt_tax_childs->act, $prefix);
+			}
+		}
+
+		die();
 	}
 
 	/**
