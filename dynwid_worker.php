@@ -59,7 +59,6 @@
               $DW->message('Default for ' . $widget_id . ' set to FALSE (rule D1)');
               $display = FALSE;
               $other = TRUE;
-              break;
             } else if (! in_array($condition->maintype, $DW->overrule_maintype) ) {
               // Get default value
               if ( $condition->name == 'default' ) {
