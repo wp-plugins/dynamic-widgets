@@ -380,6 +380,13 @@
                   // Get the tags form the post
                   if ( has_tag() ) {
                     $tags = get_the_tags();
+                    
+                    /* For some reason WP reports the post has tags, but then returns not an array with tags. 
+                    Maybe because it's not in the loop anymore? */
+                    if (! is_array($tags) ) {
+                    	$tags = array();
+                    }
+                    
                     foreach ( $tags as $tag ) {
                       $post_tag[ ] = $tag->term_id;
                     }
