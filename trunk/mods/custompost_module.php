@@ -292,7 +292,8 @@
 			}
 		}
 
-		public static function registerOption() {
+		public static function registerOption($dwoption) {
+			// $dwoption not used, but needs to be in the argument list for strict PHP reasons (see Mantis #174).
 			$option = array( 'cp_archive'	=> 'Custom Post Type Archives' );
 
 			// Adding Custom Post Types to $DW->dwoptions
