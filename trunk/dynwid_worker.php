@@ -648,7 +648,8 @@
 
                     $id = get_query_var('cat');
                     $DW->message('CatID: ' . $id);
-                    if ( $DW->wpml ) {
+
+					if ( DW_WPML::detect(FALSE) ) {					
                       $id = DW_WPML::getID($id, 'tax_category');
                       $DW->message('WPML ObjectID: ' . $id);
                     }
