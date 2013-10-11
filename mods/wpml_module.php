@@ -72,6 +72,11 @@
 		}
 
 		public static function getID($content_id, $content_type = 'post_page') {
+			// WPML works with the taxonomy id, DW works with term_id
+			if ( $content_type == 'tax_category' ) {
+				$content_id = self::getTaxID($content_id);
+			}
+			
 			$language_code = wpml_get_default_language();
 			$lang = wpml_get_content_translation($content_type, $content_id, $language_code);
 
@@ -81,7 +86,31 @@
 				$id = $content_id;
 			}
 
+			if ( $content_type == 'tax_category' ) {
+				$id = self::getTermID($id);
+			}
+
 			return $id;
 		}
+		
+		private static function getTaxID($term_id) {
+			global $wpdb;
+			
+			$query = "SELECT term_taxonomy_id FROM " . $wpdb->term_taxonomy . " WHERE term_id = %s";
+			$query = $wpdb->prepare($query, $term_id);
+			$tax_id = $wpdb->get_var($query);
+			
+			return $tax_id;
+		}
+		
+		private static function getTermID($tax_id) {
+			global $wpdb;
+			
+			$query = "SELECT term_id FROM " . $wpdb->term_taxonomy . " WHERE term_taxonomy_id = %s";
+			$query = $wpdb->prepare($query, $tax_id);
+			$term_id = $wpdb->get_var($query);
+			
+			return $term_id;
+		}		
 	}
 ?>
