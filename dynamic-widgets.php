@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.4.4
+ * Version: 1.5.5
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -74,8 +74,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL_AUTHOR', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5.4.4');
-  define('DW_VERSION_URL_CHECK', DW_URL_AUTHOR . '/wp-content/uploads/php/dw_version.php?v=' . DW_VERSION . '&n=');
+  define('DW_VERSION', '1.5.5');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
 
@@ -517,22 +516,6 @@
   }
 
   /**
-   * dynwid_check_version() Displays changelog with latest version compared to installed version
-   * @param mixed $plugin_data
-   * @param object $r
-   * @since 1.3.1
-   */
-  function dynwid_check_version($plugin_data, $r) {
-    $check = wp_remote_fopen(DW_VERSION_URL_CHECK . $r->new_version);
-
-    if ( $check && ! empty($check) ) {
-      echo '<div style="font-weight:normal;">';
-      echo $check;
-      echo '</div>';
-    }
-  }
-
-  /**
    * dynwid_contextual_help_text() Actual text to place into the contextual help screen
    * @param string $screen
    * @return string
@@ -633,7 +616,6 @@
   				add_action('add_meta_boxes', 'dynwid_add_admin_custom_box');
   				add_action('edit_tag_form_fields', 'dynwid_add_tag_page');
   				add_action('edited_term', 'dynwid_save_tagdata');
-  				add_action('in_plugin_update_message-' . plugin_basename(__FILE__), 'dynwid_check_version', 10, 2);
   				add_action('plugin_action_links_' . plugin_basename(__FILE__), 'dynwid_add_plugin_actions');
   				add_action('save_post', 'dynwid_save_postdata');
   				add_action('sidebar_admin_setup', 'dynwid_add_widget_control');

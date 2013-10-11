@@ -3,8 +3,8 @@ Contributors: Qurl
 Donate link: http://www.qurl.nl/dynamic-widgets/donate/
 Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods, bbpress
 Requires at least: 3.0.0
-Tested up to: 3.5
-Stable tag: 1.5.4
+Tested up to: 3.6.1
+Stable tag: 1.5.5
 
 Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
 
@@ -56,7 +56,7 @@ It is very hard to continue development and support for this plugin without cont
   - Browsers on browser name
   - Theme Templates on template name
   - Languages (WPML or QTranslate) on language
-  - URL on URL
+  - URL on starting with URL, ending on URL or exact match
   - Front page on first page
   - Single post pages on Author, Categories (including inheritance from hierarchical parents), Tags, Custom Taxonomies and/or Individual posts
   - Pages on Page Title and Custom Taxonomies, including inheritance from hierarchical parents
@@ -175,6 +175,20 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.5.5 =
+
+* Added WordPress filter 'dynwid_urlprefix' in case Dynamic Widgets detects the URL wrong.
+* Added WordPress filter 'dynwid_taxonomies' to be able to remove taxonomies from the admin view.
+* Added WordPress filter 'dynwid_admin_modules' to be able to remove modules from the admin view by request of Rick Anderson from [Build Your Own Business Website](http://www.byobwebsite.com/) who made a financial contribution to make this possible.
+* Added Toggle all sections button for visually impaired users.
+* Bugfix for Notice: Trying to get property of non-object in post-template.php on line 1275.
+* Bugfix for not using a full PHP opening tag in dynwid_admin_overview.php.
+* Bugfix for exception rules in single post types sometimes not followed.
+* Bugfix for Warning: Declaration of DW_CustomPost::registerOption() should be compatible with DWModule::registerOption($dwoption)
+* Bugfix for WPML category fails to follow the rules with the help and financial support by [Advancis](http://advancis.net/).
+* Changed the taxonomy terms tree to use 'lazy loading' by request of Rick Anderson from [Build Your Own Business Website](http://www.byobwebsite.com/) who made a financial contribution to make this possible.
+* Moved minimum PHP version up to 5.2.7 because of a PHP bug in lower versions not exposing all class properties while in the right scope. Thanks Sébastien for finding out!
 
 = Version 1.5.4 =
 
@@ -398,7 +412,7 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 
 == Release notes ==
 
-This version has 3 bugs fixed.
+This version has 4 new features and 5 bugs fixed. See the changelog for details.
 
 == Upgrade Notice ==
 

@@ -461,7 +461,7 @@
 			DWModule::registerOption(DW_BP::$option);
 			DWModule::registerOption(DW_Browser::$option);
 			DWModule::registerOption(DW_Category::$option);
-			DW_CustomPost::registerOption();
+			DW_CustomPost::registerOption(NULL);
 			DWModule::registerOption(DW_Date::$option);
 			DWModule::registerOption(DW_Day::$option);
 			DWModule::registerOption(DW_E404::$option);
