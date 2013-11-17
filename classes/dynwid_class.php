@@ -122,7 +122,7 @@
 				$query = "INSERT INTO " . $this->dbtable . "
                     (widget_id, maintype, name, value)
                   VALUES
-                    ('" . $this->wpdb->escape($widget_id) . "', 'date', '" . $this->wpdb->escape($name) . "', '" . $this->wpdb->escape($date) . "')";
+                    ('" . esc_sql($widget_id) . "', 'date', '" . esc_sql($name) . "', '" . esc_sql($date) . "')";
 				$this->wpdb->query($query);
 			}
 		}
@@ -140,14 +140,14 @@
 				$query = "INSERT INTO " . $this->dbtable . "
 										(widget_id, maintype, name, value)
 									VALUES
-										('" . $this->wpdb->escape($widget_id) . "', 'url', 'default', '0')";
+										('" . esc_sql($widget_id) . "', 'url', 'default', '0')";
 				$this->wpdb->query($query);
 			}
 
 			$query = "INSERT INTO " . $this->dbtable . "
 										(widget_id, maintype, name, value)
 									VALUES
-										('" . $this->wpdb->escape($widget_id) . "', 'url', 'url', '" . $value . "')";
+										('" . esc_sql($widget_id) . "', 'url', 'url', '" . $value . "')";
 			$this->wpdb->query($query);
 		}
 
@@ -194,14 +194,14 @@
 				$query = "INSERT INTO " . $this->dbtable . "
                       (widget_id, maintype, name, value)
                     VALUES
-                      ('" . $this->wpdb->escape($widget_id) . "', '" . $this->wpdb->escape($maintype) . "', 'default', '" . $this->wpdb->escape($opt_default) . "')";
+                      ('" . esc_sql($widget_id) . "', '" . esc_sql($maintype) . "', 'default', '" . esc_sql($opt_default) . "')";
 				$this->wpdb->query($query);
 			}
 			foreach ( $act as $option ) {
 				$query = "INSERT INTO " . $this->dbtable . "
                       (widget_id, maintype, name, value)
                     VALUES
-                      ('" . $this->wpdb->escape($widget_id) . "', '" . $this->wpdb->escape($maintype) . "', '" . $this->wpdb->escape($option) . "', '" . $this->wpdb->escape($opt_act) . "')";
+                      ('" . esc_sql($widget_id) . "', '" . esc_sql($maintype) . "', '" . esc_sql($option) . "', '" . esc_sql($opt_act) . "')";
 				$this->wpdb->query($query);
 			}
 		}
@@ -217,7 +217,7 @@
 			$query = "INSERT INTO " . $this->dbtable . "
                     (widget_id, maintype, value)
                   VALUES
-                    ('" . $this->wpdb->escape($widget_id) . "', '" . $this->wpdb->escape($maintype) . "', '" . $this->wpdb->escape($value) . "')";
+                    ('" . esc_sql($widget_id) . "', '" . esc_sql($maintype) . "', '" . esc_sql($value) . "')";
 			$this->wpdb->query($query);
 		}
 

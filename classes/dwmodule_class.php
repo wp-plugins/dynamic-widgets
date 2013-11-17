@@ -290,28 +290,31 @@
 			$dwtype = $name . '-childs';
 
 			// Workaround for lazy taxonomy tree
-			if (! is_array($_POST[$act]) ) {
-
-				if ( substr($_POST[$act], 0, 1) == ',' ) {
-					$_POST[$act] = substr($_POST[$act], 1);
+			if ( isset($_POST[$act]) && isset($_POST[$child_act]) ) {
+				if (! is_array($_POST[$act]) ) {
+	
+					if ( substr($_POST[$act], 0, 1) == ',' ) {
+						$_POST[$act] = substr($_POST[$act], 1);
+					}
+					$t = explode(',', $_POST[$act]);
+					$t = array_unique($t);
+	
+					if ( substr($_POST[$child_act], 0, 1) == ',' ) {
+						$_POST[$child_act] = substr($_POST[$child_act], 1);
+					}
+					$t_childs = explode(',', $_POST[$child_act]);
+					$t_childs = array_unique($t_childs);
+	
+				} else {
+					$t = $_POST[$act];
+					$t_childs = $_POST[$child_act];
 				}
-				$t = explode(',', $_POST[$act]);
-				$t = array_unique($t);
-
-				if ( substr($_POST[$child_act], 0, 1) == ',' ) {
-					$_POST[$child_act] = substr($_POST[$child_act], 1);
-				}
-				$t_childs = explode(',', $_POST[$child_act]);
-				$t_childs = array_unique($t_childs);
-
-			} else {
-				$t = $_POST[$act];
-				$t_childs = $_POST[$child_act];
+	
+				if ( count($t) > 0 && count($t_childs) > 0 ) {
+					$DW->addChilds($widget_id, $dwtype, $_POST[$name], $t, $t_childs);
+				}				
 			}
 
-			if ( isset($_POST[$act]) && count($t) > 0 && isset($_POST[$child_act]) && count($t_childs) > 0 ) {
-				$DW->addChilds($widget_id, $dwtype, $_POST[$name], $t, $t_childs);
-			}
 		}
 
 		/**
