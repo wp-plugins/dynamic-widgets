@@ -159,7 +159,7 @@
 		 * @param string $default Default setting
 		 * @param array $act Options
 		 */
-		public function addMultiOption($widget_id, $maintype, $default, $act) {
+		public function addMultiOption($widget_id, $maintype, $default, $act = array()) {
 			$insert = TRUE;
 
 			if ( $default == 'no' ) {

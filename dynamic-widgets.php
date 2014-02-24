@@ -4,7 +4,7 @@
  * Plugin URI: http://www.qurl.nl/dynamic-widgets/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.6.2
+ * Version: 1.5.6.3
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -30,6 +30,8 @@
  * Thanks to Scott Kingsley Clark for the help to get the Pods module upgraded to support Pods v2.
  * Thanks to Sébastien Christy for the help finding a PHP bug preventing the exposure of class properties while in the right scope.
  * Thanks to Rick Anderson from Build Your Own Business Website (http://www.byobwebsite.com/) for the financial contribution to implement the AJAX lazy load taxonomy tree and the modules filter
+ * Thanks to Advancis (http://advancis.net/) for the help and financial contribution to find and fix a WPML category bug.
+ * Thanks to Borisa Djuraskovic for the contribution of the Serbo-Croatian (sr_RS) languages files.
  *
  *
  * WPML Plugin support via API
