@@ -127,6 +127,9 @@
 
   // Browser
 	DWModule::save('browser', 'complex');
+	
+	// Mobile
+	DWModule::save('mobile');
 
 	// Template
 	DWModule::save('tpl', 'complex');

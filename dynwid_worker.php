@@ -166,10 +166,12 @@
           	}
           	unset($qt_tmp);
 
-          	// Browser, Template, Day, Week and URL
+          	// Browser, Mobile device, Template, Day, Week and URL
           	foreach ( $opt as $condition ) {
           		if ( $condition->maintype == 'browser' && $condition->name == $DW->useragent ) {
           			(bool) $browser_tmp = $condition->value;
+				} else if ( $condition->maintype == 'mobile' && wp_is_mobile() ) {
+					(bool) $mobile_tmp = $condition->value;
           		} else if ( $condition->maintype == 'tpl' && $condition->name == $DW->template ) {
           			(bool) $tpl_tmp = $condition->value;
           		} else if ( $condition->maintype == 'day' && $condition->name == date('N', current_time('timestamp', 0)) ) {
@@ -222,6 +224,11 @@
           		$browser = $browser_tmp;
           	}
           	unset($browser_tmp);
+			
+			if ( isset($mobile_tmp) && $mobile_tmp != $mobile ) {
+				$DW->message('Exception triggered for mobile device, sets display to ' . ( ($browser_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EMD1)');
+				$mobile = $mobile_tmp;
+			}
 
           	if ( isset($tpl_tmp) && $tpl_tmp != $tpl ) {
           		$DW->message('Exception triggered for template, sets display to ' . ( ($tpl_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ETPL1)');

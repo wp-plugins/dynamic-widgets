@@ -376,6 +376,11 @@ div.settingbox {
 		$DW_Browser->admin();
 	}
 
+	if ( array_key_exists('mobile', $DW->dwoptions) ) {
+		$DW_Mobile = new DW_Mobile();
+		$DW_Mobile->admin();
+	}	
+
 	if ( array_key_exists('tpl', $DW->dwoptions) ) {
 		$DW_Tpl = new DW_Tpl();
 		$DW_Tpl->admin();

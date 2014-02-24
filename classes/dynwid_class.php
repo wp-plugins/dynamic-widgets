@@ -466,6 +466,7 @@
 			DWModule::registerOption(DW_Day::$option);
 			DWModule::registerOption(DW_E404::$option);
 			DWModule::registerOption(DW_Front_page::$option);
+			DWModule::registerOption(DW_Mobile::$option);
 			DWModule::registerOption(DW_Page::$option);
 			DWModule::registerOption(DW_Pods::$option);
 			DWModule::registerOption(DW_QT::$option);
@@ -732,6 +733,7 @@
 			include_once(DW_MODULES . 'role_module.php');
 			include_once(DW_MODULES . 'tpl_module.php');
 			include_once(DW_MODULES . 'url_module.php');
+			include_once(DW_MODULES . 'mobile_module.php');
 			DW_Browser::checkOverrule('DW_Browser');
 			DW_Date::checkOverrule('DW_Date');
 			DW_Day::checkOverrule('DW_Day');
@@ -739,6 +741,7 @@
 			DW_Role::checkOverrule('DW_Role');
 			DW_Tpl::checkOverrule('DW_Tpl');
 			DW_URL::checkOverrule('DW_URL');
+			DW_URL::checkOverrule('DW_Mobile');
 
 			// WPML Plugin Support
 			include_once(DW_MODULES . 'wpml_module.php');
