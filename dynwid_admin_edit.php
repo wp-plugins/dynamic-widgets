@@ -39,6 +39,7 @@ label {
   border-width : 1px;
   border-color : #E3E3E3;
   padding : 5px;
+  padding-right: 15px; /* for RTL? */
 }
 
 .infotext {
