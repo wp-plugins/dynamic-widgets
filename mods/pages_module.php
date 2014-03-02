@@ -27,7 +27,7 @@
 				self::$opt_page_childs = $DW->getDWOpt($_GET['id'], 'page-childs');
 			}
 
-			$pages = get_pages();
+			$pages = get_pages( array('post_status' => 'publish,private') );
 			$num_pages = count($pages);
 			unset($pages);
 
