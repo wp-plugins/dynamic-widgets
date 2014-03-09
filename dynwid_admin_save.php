@@ -75,7 +75,8 @@
   $count = $GLOBALS['wpdb']->get_var($query);
   
   if ( $count > 0 && isset($_POST['individual']) && $_POST['individual'] == '1' ) {
-  	$post_types = array_merge( array('single_post', 'single_tag'), $_POST['post_types'] );
+  	$post_types = ( is_array($_POST['post_types']) ) ? $_POST['post_types'] : array();
+  	$post_types = array_merge( array('single_post', 'single_tag'), $post_types );
   	
   	foreach ( $post_types as $t ) {
  			$maintype = (! preg_match('/^single/', $t) ) ? $t . '-post' : $t;
@@ -128,8 +129,8 @@
   // Browser
 	DWModule::save('browser', 'complex');
 	
-	// Mobile
-	DWModule::save('mobile');
+	// Device
+	DWModule::save('device', 'complex');
 
 	// Template
 	DWModule::save('tpl', 'complex');

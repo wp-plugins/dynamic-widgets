@@ -377,9 +377,9 @@ div.settingbox {
 		$DW_Browser->admin();
 	}
 
-	if ( array_key_exists('mobile', $DW->dwoptions) ) {
-		$DW_Mobile = new DW_Mobile();
-		$DW_Mobile->admin();
+	if ( array_key_exists('device', $DW->dwoptions) ) {
+		$DW_Device = new DW_Device();
+		$DW_Device->admin();
 	}	
 
 	if ( array_key_exists('tpl', $DW->dwoptions) ) {

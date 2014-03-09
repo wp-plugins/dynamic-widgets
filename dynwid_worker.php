@@ -12,6 +12,10 @@
 	// Registering Custom Post Type & Custom Taxonomy to $DW (object overload)
 	include(DW_MODULES . 'custompost_module.php');
 	DWModule::registerPlugin(DW_CustomPost::$plugin);
+	
+	// Device
+	$DW->device = ( wp_is_mobile() ) ? 'mobile' : 'desktop';
+	$DW->message('Device = ' . $DW->device);
 
 	// Template
 	if (! is_archive() && ! is_404() ) {
@@ -166,12 +170,12 @@
           	}
           	unset($qt_tmp);
 
-          	// Browser, Mobile device, Template, Day, Week and URL
+          	// Browser, Device, Template, Day, Week and URL
           	foreach ( $opt as $condition ) {
           		if ( $condition->maintype == 'browser' && $condition->name == $DW->useragent ) {
           			(bool) $browser_tmp = $condition->value;
-				} else if ( $condition->maintype == 'mobile' && wp_is_mobile() ) {
-					(bool) $mobile_tmp = $condition->value;
+							} else if ( $condition->maintype == 'device' && $condition->name == $DW->device  ) {
+								(bool) $device_tmp = $condition->value;
           		} else if ( $condition->maintype == 'tpl' && $condition->name == $DW->template ) {
           			(bool) $tpl_tmp = $condition->value;
           		} else if ( $condition->maintype == 'day' && $condition->name == date('N', current_time('timestamp', 0)) ) {
@@ -225,10 +229,10 @@
           	}
           	unset($browser_tmp);
 			
-			if ( isset($mobile_tmp) && $mobile_tmp != $mobile ) {
-				$DW->message('Exception triggered for mobile device, sets display to ' . ( ($browser_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EMD1)');
-				$mobile = $mobile_tmp;
-			}
+						if ( isset($device_tmp) && $device_tmp != $device ) {
+							$DW->message('Exception triggered for device, sets display to ' . ( ($device_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ED1)');
+							$device = $device_tmp;
+						}
 
           	if ( isset($tpl_tmp) && $tpl_tmp != $tpl ) {
           		$DW->message('Exception triggered for template, sets display to ' . ( ($tpl_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ETPL1)');
