@@ -18,7 +18,7 @@
 			parent::admin();
 
 			$url_yes_selected = 'checked="checked"';
-			$opt_url = $DW->getOpt($_GLOBALS['widget_id'], 'url');
+			$opt_url = $DW->getOpt($GLOBALS['widget_id'], 'url');
 			$prefix = $DW->getURLPrefix();
 			
 			foreach ( $opt_url as $opt ) {

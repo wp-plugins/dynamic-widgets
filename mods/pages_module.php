@@ -24,7 +24,7 @@
 			self::$opt = $DW->getDWOpt($_GET['id'], 'page');
 			self::$opt_page = self::$opt;
 			if ( self::$opt->count > 0 ) {
-				self::$opt_page_childs = $DW->getDWOpt($_GLOBALS['widget_id'], 'page-childs');
+				self::$opt_page_childs = $DW->getDWOpt($GLOBALS['widget_id'], 'page-childs');
 			}
 
 			$pages = get_pages( array('post_status' => 'publish,private') );
