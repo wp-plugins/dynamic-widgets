@@ -14,7 +14,7 @@
 
 		public static function admin() {
 			parent::admin();
-			self::mkGUI();
+			self::mkGUI(self::$type, self::$option[self::$name], self::$question);
 		}
 
 		public static function getAuthors() {
@@ -39,12 +39,12 @@
 			return $list;
 		}
 
-		public static function mkGUI($single = FALSE) {
+		public static function mkGUI($type, $title, $question, $info = FALSE) {
 			$DW = &$GLOBALS['DW'];
 			$list = self::getAuthors();
 
-			if ( $single ) {
-				self::$opt = $DW->getDWOpt($_GET['id'], 'single-author');
+			if ( $info ) {
+				self::$opt = $DW->getDWOpt($GLOBALS['widget_id'], 'single-author');
 
 				if ( count($list) > DW_LIST_LIMIT ) {
 					$select_style = DW_LIST_STYLE;

@@ -18,7 +18,7 @@
 			parent::admin();
 
 			$date_yes_selected = 'checked="checked"';
-			$opt_date = $DW->getOpt($_GET['id'], 'date');
+			$opt_date = $DW->getOpt($GLOBALS['widget_id'], 'date');
 
 			if ( count($opt_date) > 0 ) {
 				foreach ( $opt_date as $value ) {

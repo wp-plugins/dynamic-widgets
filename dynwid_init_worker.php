@@ -7,7 +7,7 @@
  */
 
 	$DW->message('Dynamic Widgets INIT');
-	echo "\n" . '<!-- Dynamic Widgets v' . DW_VERSION . ' by QURL - http://www.qurl.nl //-->' . "\n";
+	echo "\n" . '<!-- Dynamic Widgets by QURL - http://www.qurl.nl //-->' . "\n";
 
 	// Register the overrule maintypes
 	$DW->registerOverrulers();

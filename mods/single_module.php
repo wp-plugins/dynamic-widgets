@@ -77,13 +77,13 @@
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
   <td valign="top">
-  	<?php  DW_Author::mkGUI(TRUE); ?>
+  	<?php  DW_Author::mkGUI(self::$type, self::$option[self::$name], self::$question, TRUE); ?>
   </td>
   <td style="width:10px"></td>
   <td valign="top">
   	<?php $opt = $DW->getDWOpt($widget_id, 'single-category'); ?>
   	<?php $DW->dumpOpt($opt); ?>
-		<?php DW_Category::GUIComplex(TRUE, $opt); ?>
+		<?php DW_Category::GUIComplex(NULL, NULL, TRUE, $opt); ?>
     </div>
   </td>
 </tr>

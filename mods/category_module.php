@@ -18,11 +18,11 @@
 
 			parent::admin();
 
-			self::$opt = $DW->getDWOpt($_GET['id'], self::$name);
+			self::$opt = $DW->getDWOpt($GLOBALS['widget_id'], self::$name);
 
 			self::GUIHeader(self::$option[self::$name], self::$question, FALSE);
 			self::GUIOption();
-			self::GUIComplex();
+			self::GUIComplex(NULL, NULL);
 			self::GUIFooter();
 		}
 
@@ -39,7 +39,7 @@
 			return $arr;
 		}
 
-		public static function GUIComplex($single = FALSE, $opt = NULL) {
+		public static function GUIComplex($except, $list, $extra = FALSE, $name = NULL) {
 			$DW = &$GLOBALS['DW'];
 
 			// Needs an own complex list
@@ -47,10 +47,10 @@
 			$catmap = self::getCatChilds(array(), 0, array());
 
 			if (! is_null($opt) ) {
-				self::$opt = $opt;
+				self::$opt = $name;
 			}
 			if ( self::$opt->count > 0 ) {
-				$opt_category_childs = $DW->getDWOpt($_GET['id'], ( $single ? 'single-' : '' ) . 'category-childs');
+				$opt_category_childs = $DW->getDWOpt($GLOBALS['widget_id'], ( ($extra) ? 'single-' : '' ) . 'category-childs');
 				$childs = $opt_category_childs->act;
 
 				$DW->dumpOpt($opt_category_childs);
