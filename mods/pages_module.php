@@ -21,7 +21,7 @@
 
 			parent::admin();
 
-			self::$opt = $DW->getDWOpt($_GET['id'], 'page');
+			self::$opt = $DW->getDWOpt($GLOBALS['widget_id'], 'page');
 			self::$opt_page = self::$opt;
 			if ( self::$opt->count > 0 ) {
 				self::$opt_page_childs = $DW->getDWOpt($GLOBALS['widget_id'], 'page-childs');

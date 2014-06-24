@@ -66,7 +66,7 @@
 			_e(self::$except, DW_L10N_DOMAIN);
 			echo '<br />';
 			echo '<div id="' . self::$name . '-select" class="condition-select" ' . ( (isset($select_style)) ? $select_style : '' ) . ' />';
-			self::prtCat($catmap, self::$opt->act, $childs, $single);
+			self::prtCat($catmap, self::$opt->act, $childs, $extra);
 			echo '</div>' . "\n";
 		}
 
