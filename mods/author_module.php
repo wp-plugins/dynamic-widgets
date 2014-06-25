@@ -39,7 +39,7 @@
 			return $list;
 		}
 
-		public static function mkGUI($type, $title, $question, $info = FALSE) {
+		public static function mkGUI($type, $title, $question, $info = FALSE, $except = FALSE, $list = FALSE, $name = NULL) {
 			$DW = &$GLOBALS['DW'];
 			$list = self::getAuthors();
 
