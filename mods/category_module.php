@@ -46,7 +46,7 @@
 			$list = get_categories( array('hide_empty' => FALSE) );
 			$catmap = self::getCatChilds(array(), 0, array());
 
-			if (! is_null($opt) ) {
+			if (! is_null($name) ) {
 				self::$opt = $name;
 			}
 			if ( self::$opt->count > 0 ) {

@@ -102,11 +102,12 @@ div.settingbox {
   		add = false;
   	}
 
-  	var value = jQuery( '#' + prefix + '_act' ).val();
+  	var value = jQuery( 'input[name^="' + prefix + '_act"]' ).val();
+  	console.log( 'prefix: ' + prefix + ', value: ' + value );
   	var a = value.split(',');
 
   	if ( child ) {
-  		var value_child = jQuery( '#' + prefix + '_childs_act' ).val();
+  		var value_child = jQuery( 'input[name^="' + prefix + '_childs_act"]' ).val();
   		var a_child = value_child.split(',');
   	}
 
@@ -147,8 +148,10 @@ div.settingbox {
   		add = true;
   	}
 
-  	var value = jQuery( '#' + prefix + '_act' ).val();
-  	var value_child = jQuery( '#' + prefix + '_childs_act' ).val();
+  	// var value = jQuery( '#' + prefix + '_act' ).val();
+		var value = jQuery( 'input[name^="' + prefix + '_act"]' ).val();
+  	// var value_child = jQuery( '#' + prefix + '_childs_act' ).val();
+  	var value_child = jQuery( 'input[name^="' + prefix + '_childs_act"]' ).val();
   	var a = value.split(',');
   	var a_child = value_child.split(',');
 
