@@ -15,6 +15,9 @@
 
 	// UserAgent detection
 	$DW->message('UserAgent: ' . $DW->useragent);
+	
+	//IP 
+	$DW->message('IP: ' . $DW->ip_address);
 
 	$DW->message('Today it is ' . date('l', current_time('timestamp', 0)) . ' (' . date('N', current_time('timestamp', 0)) . '), Week: ' . date('W', current_time('timestamp', 0)));
 

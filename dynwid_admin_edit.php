@@ -30,7 +30,7 @@ label {
 }
 
 .condition-select {
-  width : 300px;
+  width : 450px;
   -moz-border-radius-topleft : 6px;
   -moz-border-radius-topright : 6px;
   -moz-border-radius-bottomleft : 6px;
@@ -379,6 +379,11 @@ div.settingbox {
 		$DW_Browser = new DW_Browser();
 		$DW_Browser->admin();
 	}
+	
+	if ( array_key_exists('ip', $DW->dwoptions) ) {
+		$DW_IP = new DW_IP();
+		$DW_IP->admin();
+	}	
 
 	if ( array_key_exists('device', $DW->dwoptions) ) {
 		$DW_Device = new DW_Device();

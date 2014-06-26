@@ -68,6 +68,12 @@
   	wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
   	die();
   }
+  
+  // IP
+  if ( $_POST['ip'] == 'no' && empty($_POST['ip_value']) ) {
+  	wp_redirect( $_SERVER['REQUEST_URI'] . '&work=none' );
+  	die();
+  }  
 
   // Removing already set options, but keeping individual rules
   $dbtable = $GLOBALS['wpdb']->prefix . DW_DB_TABLE;
@@ -154,6 +160,26 @@
 			$DW->addUrls($widget_id, $_POST['url'], $urls);
 		}
 	}
+	
+	// IP
+	if (! empty($_POST['ip_value']) ) {
+		$ips = array();
+
+		$ip_values = trim($_POST['ip_value']);
+		$ip_values = str_replace("\r", "", $ip_values);
+		$ip_values = explode("\n", $ip_values);
+
+		foreach ( $ip_values as $ip ) {
+			$ip = trim($ip);
+			if (! empty($ip) ) {
+				$ips[ ] = $ip;
+			}
+		}
+
+		if ( count($ips) > 0 ) {
+			$DW->addIPs($widget_id, $_POST['ip'], $ips);
+		}
+	}	
 
   // Front Page
   DWModule::save('front-page', 'complex');

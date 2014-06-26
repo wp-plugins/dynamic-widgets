@@ -170,7 +170,7 @@
           	}
           	unset($qt_tmp);
 
-          	// Browser, Device, Template, Day, Week and URL
+          	// Browser, Device, IP, Template, Day, Week and URL
           	foreach ( $opt as $condition ) {
           		if ( $condition->maintype == 'browser' && $condition->name == $DW->useragent ) {
           			(bool) $browser_tmp = $condition->value;
@@ -220,6 +220,16 @@
           					}
           				}
           			}
+          		} else if ( $condition->maintype == 'ip' && $condition->name == 'ip' && ! is_null($DW->ip_address) ) {
+          			$ips =  unserialize($condition->value);
+          			$other_ip = ( $ip ) ? FALSE : TRUE;
+          			
+          			foreach ( $ips as $range ) {
+						if ( $DW->IPinRange($DW->ip_address, $range) ) {
+							$ip_tmp = $other_ip;
+							break;
+						}
+					}
           		}
           	}
 
@@ -258,6 +268,12 @@
           	}
           	unset($url_tmp, $other_url);
 
+          	if ( isset($ip_tmp) && $ip_tmp != $ip ) {
+          		$DW->message('Exception triggered for ip, sets display to ' . ( ($ip_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EIP1)');
+          		$ip = $ip_tmp;
+          	}
+          	unset($ip_tmp, $other_ip);			
+			
             // For debug messages
             $e = ( isset($other) && $other ) ? 'TRUE' : 'FALSE';
 
