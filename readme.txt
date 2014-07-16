@@ -4,7 +4,7 @@ Donate link: http://www.qurl.nl/dynamic-widgets/donate/
 Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, display, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods, bbpress
 Requires at least: 3.0.0
 Tested up to: 3.9.1
-Stable tag: 1.5.8
+Stable tag: 1.5.9
 
 Dynamic Widgets gives you full control on which pages a widget will display. It lets you dynamicly show or hide widgets on WordPress pages.
 
@@ -30,6 +30,7 @@ It is very hard to continue development and support for this plugin without cont
   - Day of week
   - Weeknumbers
   - Browsers
+  - IP ranges
   - Devices (mobile, desktop)
   - Theme Templates
   - Languages (WPML or QTranslate)
@@ -59,6 +60,7 @@ It is very hard to continue development and support for this plugin without cont
   - Day of week on day
   - Weeknumer on number
   - Browsers on browser name
+  - IP on ranges
   - Devices on type
   - Theme Templates on template name
   - Languages (WPML or QTranslate) on language
@@ -182,6 +184,13 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.5.9 =
+
+* Added support for IP range
+* Bugfix for URL and Pages module does not show the green checkmark and not showing the settings made 
+* Bugfix for Single Post Catregory is saved wrong 
+* Bugfix for Strict warning notice in author_module.php at line 42
 
 = Version 1.5.8 =
 
