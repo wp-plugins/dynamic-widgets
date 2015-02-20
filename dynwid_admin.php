@@ -5,6 +5,8 @@
  * @version $Id$
  * @copyright 2011 Jacco Drabbe
  */
+ 
+	defined('ABSPATH') or die("No script kiddies please!");
 ?>
 
 <form id="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">

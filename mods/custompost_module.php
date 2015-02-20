@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_CustomPost extends DWModule {
 		public static $plugin = array( 'custom_post_type' => FALSE, 'custom_taxonomy' => FALSE );
 		protected static $post_types;

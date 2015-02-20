@@ -6,6 +6,8 @@
  * @copyright 2012 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_Day extends DWModule {
 		protected static $info = 'Beware of double rules!';
 		protected static $except = 'Except the days';

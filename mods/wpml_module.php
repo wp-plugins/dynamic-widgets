@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_WPML extends DWModule {
 		public static $icon;
 		protected static $info = 'Using this option can override all other options.';
@@ -76,7 +78,7 @@
 			if ( $content_type == 'tax_category' ) {
 				$content_id = self::getTaxID($content_id);
 			}
-			
+
 			$language_code = wpml_get_default_language();
 			$lang = wpml_get_content_translation($content_type, $content_id, $language_code);
 
@@ -92,25 +94,25 @@
 
 			return $id;
 		}
-		
+
 		private static function getTaxID($term_id) {
 			global $wpdb;
-			
+
 			$query = "SELECT term_taxonomy_id FROM " . $wpdb->term_taxonomy . " WHERE term_id = %s";
 			$query = $wpdb->prepare($query, $term_id);
 			$tax_id = $wpdb->get_var($query);
-			
+
 			return $tax_id;
 		}
-		
+
 		private static function getTermID($tax_id) {
 			global $wpdb;
-			
+
 			$query = "SELECT term_id FROM " . $wpdb->term_taxonomy . " WHERE term_taxonomy_id = %s";
 			$query = $wpdb->prepare($query, $tax_id);
 			$term_id = $wpdb->get_var($query);
-			
+
 			return $term_id;
-		}		
+		}
 	}
 ?>

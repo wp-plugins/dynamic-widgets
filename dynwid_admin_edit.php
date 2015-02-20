@@ -5,6 +5,8 @@
  * @version $Id$
  * @copyright 2011 Jacco Drabbe
  */
+ 
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	// Plugins support
 	DW_BP::detect();

@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_Role extends DWModule {
 		protected static $info = 'Setting options by role is very powerfull. It can override all other options!<br />Users who are not logged in, get the <em>Anonymous</em> role.';
 		protected static $except = 'Except for:';

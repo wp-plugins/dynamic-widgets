@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_Single extends DWModule {
 		protected static $info = 'When you use an author <b>AND</b> a category exception, both rules in the condition must be met. Otherwise the exception rule won\'t be applied. If you want to use the rules in a logical OR condition. Add the same widget again and apply the other rule to that.';
 		public static $option = array( 'single' => 'Single Posts' );

@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_Author extends DWModule {
 		protected static $except = 'Except the author(s)';
 		public static $option = array( 'author' => 'Author Pages' );

@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_QT extends DWModule {
 		protected static $except = 'Except the languages';
 		protected static $info = 'Using this option can override all other options.';

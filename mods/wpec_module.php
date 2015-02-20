@@ -7,6 +7,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_WPSC extends DWModule {
 		protected static $except = 'Except the categories';
 		public static $option = array( 'wpsc' => 'WPSC Category' );
@@ -40,7 +42,7 @@
 
 		public static function detectCategory() {
 			$DW = &$GLOBALS['DW'];
-			
+
 			if ( self::detect(FALSE) ) {
 				$wpsc_query = &$GLOBALS['wpsc_query'];
 

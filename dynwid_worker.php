@@ -6,13 +6,15 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	$DW->message('Worker START');
 	$DW->message('WhereAmI = ' . $DW->whereami);
 
 	// Registering Custom Post Type & Custom Taxonomy to $DW (object overload)
 	include(DW_MODULES . 'custompost_module.php');
 	DWModule::registerPlugin(DW_CustomPost::$plugin);
-	
+
 	// Device
 	$DW->device = ( wp_is_mobile() ) ? 'mobile' : 'desktop';
 	$DW->message('Device = ' . $DW->device);
@@ -57,7 +59,7 @@
         		$$m = TRUE;
         	}
 
-					// First run > The defaults
+			 // First run > The defaults
           foreach ( $opt as $condition ) {
             if ( empty($condition->name) && $condition->value == '0' && $condition->maintype == $DW->whereami ) {
               $DW->message('Default for ' . $widget_id . ' set to FALSE (rule D1)');
@@ -174,8 +176,8 @@
           	foreach ( $opt as $condition ) {
           		if ( $condition->maintype == 'browser' && $condition->name == $DW->useragent ) {
           			(bool) $browser_tmp = $condition->value;
-							} else if ( $condition->maintype == 'device' && $condition->name == $DW->device  ) {
-								(bool) $device_tmp = $condition->value;
+	            } else if ( $condition->maintype == 'device' && $condition->name == $DW->device  ) {
+						(bool) $device_tmp = $condition->value;
           		} else if ( $condition->maintype == 'tpl' && $condition->name == $DW->template ) {
           			(bool) $tpl_tmp = $condition->value;
           		} else if ( $condition->maintype == 'day' && $condition->name == date('N', current_time('timestamp', 0)) ) {
@@ -223,7 +225,7 @@
           		} else if ( $condition->maintype == 'ip' && $condition->name == 'ip' && ! is_null($DW->ip_address) ) {
           			$ips =  unserialize($condition->value);
           			$other_ip = ( $ip ) ? FALSE : TRUE;
-          			
+
           			foreach ( $ips as $range ) {
 						if ( $DW->IPinRange($DW->ip_address, $range) ) {
 							$ip_tmp = $other_ip;
@@ -238,11 +240,12 @@
           		$browser = $browser_tmp;
           	}
           	unset($browser_tmp);
-			
-						if ( isset($device_tmp) && $device_tmp != $device ) {
-							$DW->message('Exception triggered for device, sets display to ' . ( ($device_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ED1)');
-							$device = $device_tmp;
-						}
+
+				if ( isset($device_tmp) && $device_tmp != $device ) {
+					$DW->message('Exception triggered for device, sets display to ' . ( ($device_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ED1)');
+					$device = $device_tmp;
+				}
+				unset($device_tmp);
 
           	if ( isset($tpl_tmp) && $tpl_tmp != $tpl ) {
           		$DW->message('Exception triggered for template, sets display to ' . ( ($tpl_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ETPL1)');
@@ -272,8 +275,8 @@
           		$DW->message('Exception triggered for ip, sets display to ' . ( ($ip_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule EIP1)');
           		$ip = $ip_tmp;
           	}
-          	unset($ip_tmp, $other_ip);			
-			
+          	unset($ip_tmp, $other_ip);
+
             // For debug messages
             $e = ( isset($other) && $other ) ? 'TRUE' : 'FALSE';
 
@@ -407,13 +410,13 @@
                   // Get the tags form the post
                   if ( has_tag() ) {
                     $tags = get_the_tags();
-                    
-                    /* For some reason WP reports the post has tags, but then returns not an array with tags. 
+
+                    /* For some reason WP reports the post has tags, but then returns not an array with tags.
                     Maybe because it's not in the loop anymore? */
                     if (! is_array($tags) ) {
                     	$tags = array();
                     }
-                    
+
                     foreach ( $tags as $tag ) {
                       $post_tag[ ] = $tag->term_id;
                     }
@@ -676,7 +679,7 @@
                     $id = get_query_var('cat');
                     $DW->message('CatID: ' . $id);
 
-					if ( DW_WPML::detect(FALSE) ) {					
+					if ( DW_WPML::detect(FALSE) ) {
                       $id = DW_WPML::getID($id, 'tax_category');
                       $DW->message('WPML ObjectID: ' . $id);
                     }

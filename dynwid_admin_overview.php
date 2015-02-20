@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+ 
 	if ( isset($_GET['action']) ) {
 		switch ( $_GET['action'] ) {
 			case 'dynwid_set_method':

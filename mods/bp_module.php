@@ -7,6 +7,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_BP extends DWModule {
 		protected static $except = 'Except on the components pages';
 		public static $option = array( 'bp'	=> 'BuddyPress', 'bp-group'	=> 'BuddyPress Groups' );

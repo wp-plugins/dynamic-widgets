@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_Page extends DWModule {
 		protected static $info;
 		public static $option = array( 'page' => 'Pages' );

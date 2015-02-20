@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_Tpl extends DWModule {
 		protected static $info = 'This options takes precedence above other options like Pages and/or Single Posts.';
 		protected static $except = 'Except the templates';

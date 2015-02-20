@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+ 
 	$dh = opendir(DW_CLASSES);
 	while ( ($file = readdir($dh)) !== FALSE ) {
 		if ( $file != '.' && $file != '..' && substr(strrchr($file, '_'), 1) == 'class.php' ) {

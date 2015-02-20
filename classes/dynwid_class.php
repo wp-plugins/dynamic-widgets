@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class dynWid {
 		private $dbtable;
 		public  $device;
@@ -34,6 +36,8 @@
 		 *
 		 */
 		public function __construct() {
+			global $wpdb;
+
 			if ( is_user_logged_in() ) {
 				$this->userrole = $GLOBALS['current_user']->roles;
 			} else {
@@ -48,7 +52,7 @@
 			$this->ip_address = $this->getIP();
 
 			// DB init
-			$this->wpdb = $GLOBALS['wpdb'];
+			$this->wpdb = $wpdb;
 			$this->dbtable = $this->wpdb->prefix . DW_DB_TABLE;
 			$query = "SHOW TABLES LIKE '" . $this->dbtable . "'";
 			$result = $this->wpdb->get_var($query);
@@ -152,8 +156,8 @@
 									VALUES
 										('" . esc_sql($widget_id) . "', 'ip', 'ip', '" . $value . "')";
 			$this->wpdb->query($query);
-		}		
-		
+		}
+
 		/**
 		 * dynWid::addUrls() Saves url options
 		 *
@@ -407,7 +411,7 @@
 			}
 
 			$query = "SELECT DISTINCT widget_id FROM " . $this->dbtable . "
-                  WHERE  maintype LIKE '" . $whereami . "%'";
+                     WHERE  maintype LIKE '" . $whereami . "%'";
 
 			if ( count($this->overrule_maintype) > 0 ) {
 				$query .= " OR maintype IN ";
@@ -472,11 +476,11 @@
 			$results = new DWOpts($this->wpdb->get_results($query), $maintype);
 			return $results;
 		}
-		
+
 		private function getIP() {
 			$ip = $_SERVER['REMOTE_ADDR'];
 			$this->message( 'Raw IP: ' . $ip );
-			
+
 			return ( strstr($ip, '.') !== FALSE ) ? $ip : NULL;
 		}
 
@@ -622,7 +626,7 @@
 		 * @param string $type Type
 		 * @param array $arr
 		 * @param integer $id Child ID
-		 * @return
+		 * @return array
 		 */
 		public function getParents($type, $arr, $id) {
 			if ( $type == 'page' ) {
@@ -646,7 +650,7 @@
 		 * @param string $tax_name Taxonomy name
 		 * @param array $arr
 		 * @param integer $id Child ID
-		 * @return
+		 * @return array
 		 */
 		public function getTaxParents($tax_name, $arr, $id) {
 			$obj = get_term_by('id', $id, $tax_name);
@@ -679,7 +683,7 @@
 				return $prefix;
 			}
 
-			return;
+			return '';
 		}
 
 		/**
@@ -723,25 +727,25 @@
 		 * @param $ip string IP address
 		 * @param $range string IP range
 		 * @return boolean
-		 */		
+		 */
 		public function IPinRange($ip, $range) {
 		 /* Copyright 2008: Paul Gregg <pgregg@pgregg.com>
 		  * 10 January 2008
 		  * Version: 1.2
 		  *
 		  * Source website: http://www.pgregg.com/projects/php/ip_in_range/
-		  * Version 1.2			
+		  * Version 1.2
 		  */
-		 	
+
 		  if ( strpos($range, '/') !== FALSE ) {
 				// $range is in IP/NETMASK format
 				list($range, $netmask) = explode('/', $range, 2);
-				
+
 				if ( strpos($netmask, '.') !== FALSE ) {
 				  // $netmask is a 255.255.0.0 format
 				  $netmask = str_replace('*', '0', $netmask);
 				  $netmask_dec = ip2long($netmask);
-				  
+
 				  return ( (ip2long($ip) & $netmask_dec) == (ip2long($range) & $netmask_dec) );
 				} else {
 				  // $netmask is a CIDR size block
@@ -750,16 +754,16 @@
 				  while ( count($x) < 4 ) {
 						$x[ ] = '0';
 				  }
-				  
+
 				  list( $a, $b, $c, $d ) = $x;
 				  $range = sprintf( "%u.%u.%u.%u", empty($a) ? '0' : $a, empty($b) ? '0' : $b, empty($c) ? '0' : $c, empty($d) ? '0' : $d );
 				  $range_dec = ip2long($range);
 				  $ip_dec = ip2long($ip);
-		
+
 				  // Use math to create it
 				  $wildcard_dec = pow( 2, (32-$netmask) ) - 1;
 				  $netmask_dec = ~ $wildcard_dec;
-		
+
 				  return ( ($ip_dec & $netmask_dec) == ($range_dec & $netmask_dec) );
 				}
 		  } else {
@@ -770,7 +774,7 @@
 				  $upper = str_replace('*', '255', $range);
 				  $range = "$lower-$upper";
 				}
-		
+
 				if ( strpos($range, '-') !== FALSE ) { // A-B format
 				  list( $lower, $upper ) = explode('-', $range, 2);
 				  $lower_dec = (float) sprintf( "%u", ip2long($lower) );
@@ -778,17 +782,17 @@
 				  $ip_dec = (float) sprintf( "%u",ip2long($ip) );
 				  return ( ($ip_dec >= $lower_dec) && ($ip_dec <= $upper_dec) );
 				}
-				
+
 				// last resort
 				if ( substr($range, -3) != '/32' ) {
 					$range .= '/32';
 					return $this->IPinRange($ip, $range);
 				}
-		
+
 				$this->message('Range argument is not in 1.2.3.4/24 or 1.2.3.4/255.255.255.0 format');
 				return FALSE;
 		  }
-	
+
 		}
 		/**
 		 * dynWid::loadModules() Full load of all modules

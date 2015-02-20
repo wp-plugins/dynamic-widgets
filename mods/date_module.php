@@ -7,6 +7,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_Date extends DWModule {
 		public static $option = array( 'date' => 'Date' );
 		protected static $overrule = TRUE;

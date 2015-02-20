@@ -5,6 +5,8 @@
  * @version $Id$
  * @copyright 2011 Jacco Drabbe
  */
+ 
+	defined('ABSPATH') or die("No script kiddies please!");
 
   // Security - nonce, etc.
   $widget_id = ( isset($_POST['widget_id']) && ! empty($_POST['widget_id']) ) ? esc_attr($_POST['widget_id']) : '';

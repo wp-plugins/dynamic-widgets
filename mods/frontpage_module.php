@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_Front_page extends DWModule {
 		protected static $except = 'Except for:';
 		protected static $info = 'This option only applies when your front page is set to display your latest posts (See Settings &gt; Reading).<br />When a static page is set, you can use the options for the static pages below.';
@@ -15,7 +17,7 @@
 
 		public static function admin() {
 			parent::admin();
-			
+
 			$list = array( 1 => __('First page') );
 
 			if ( get_option('show_on_front') == 'page' ) {

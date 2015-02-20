@@ -6,6 +6,8 @@
  * @copyright 2011 Jacco Drabbe
  */
 
+	defined('ABSPATH') or die("No script kiddies please!");
+
 	class DW_Category extends DWModule {
 		private static $except = 'Except the categories';
 		public static $option = array( 'category' => 'Category Pages' );

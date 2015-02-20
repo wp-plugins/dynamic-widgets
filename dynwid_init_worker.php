@@ -5,6 +5,8 @@
  * @version $Id$
  * @copyright 2011 Jacco Drabbe
  */
+ 
+	defined('ABSPATH') or die("No script kiddies please!");
 
 	$DW->message('Dynamic Widgets INIT');
 	echo "\n" . '<!-- Dynamic Widgets by QURL - http://www.qurl.nl //-->' . "\n";
