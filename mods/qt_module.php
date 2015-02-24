@@ -35,7 +35,7 @@
 			$DW = $GLOBALS['DW'];
 			$DW->qt = FALSE;
 
-			if ( defined('QTRANS_INIT') ) {
+			if ( defined('QTRANS_INIT') || defined('QTRANSLATE_FILE') ) {
 				self::checkOverrule('DW_QT');
 				if ( $update ) {
 					$DW->qt = TRUE;

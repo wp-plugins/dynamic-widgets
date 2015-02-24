@@ -188,6 +188,7 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 = Version 1.5.x =
 
 * Added security preventing calling scripts creatively
+* Added detection of QTranslate-X
 
 
 = Version 1.5.9 =
