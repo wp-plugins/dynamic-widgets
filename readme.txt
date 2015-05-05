@@ -3,8 +3,8 @@ Contributors: Qurl
 Donate link: http://www.qurl.nl/dynamic-widgets/donate/
 Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, display, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods, bbpress
 Requires at least: 3.0.0
-Tested up to: 3.9.1
-Stable tag: 1.5.9
+Tested up to: 4.2.1
+Stable tag: 1.5.10
 
 Dynamic Widgets gives you full control on which pages a widget will display. It lets you dynamicly show or hide widgets on WordPress pages.
 
@@ -85,8 +85,8 @@ It is very hard to continue development and support for this plugin without cont
 	- BuddyPress Group Hierarchy
 	- QTranslate
 	- Pods
-  - WP MultiLingual (WPML)
-  - WP Shopping Cart / WP E-Commerce (WPSC / WPEC)
+	- WP MultiLingual (WPML)
+	- WP Shopping Cart / WP E-Commerce (WPSC / WPEC)
 
 * Language files provided:
 	- Brazil Portuguese (pt_BR) by [Renato Tavares](http://www.renatotavares.com)
@@ -95,6 +95,7 @@ It is very hard to continue development and support for this plugin without cont
 	- Danish (da_DK) by Morten Nalholm
 	- French (fr_FR) by Alexis Nomine
 	- German (de_DE) by Daniel Bihler
+	- Japanese (ja) by chacomv
 	- Lithuanian (lt_LT) by Liudas Ali�auskas
 	- Portuguese (pt_PT) by Pedro Nave
 	- Serbo-Croatian (sr_RS) by [Borisa Djuraskovic](http://www.webhostinghub.com/)
@@ -185,11 +186,11 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 
 == Changelog ==
 
-= Version 1.5.x =
+= Version 1.5.10 =
 
+* Added Japanese language file (locale: ja) - Arigato chacomv!
 * Added security preventing calling scripts creatively
 * Added detection of QTranslate-X
-
 
 = Version 1.5.9 =
 

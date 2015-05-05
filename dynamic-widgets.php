@@ -4,7 +4,7 @@
  * Plugin URI: http://dynamic-widgets.com/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.9.2
+ * Version: 1.5.10
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -79,7 +79,7 @@
   define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
   define('DW_TIME_LIMIT', 86400);				// 1 day
   define('DW_URL_AUTHOR', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5.9.2');
+  define('DW_VERSION', '1.5.10');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
 
@@ -652,6 +652,7 @@
 		         add_action('plugin_action_links_' . plugin_basename(__FILE__), 'dynwid_add_plugin_actions');
 		         add_action('save_post', 'dynwid_save_postdata');
 		         add_action('sidebar_admin_setup', 'dynwid_add_widget_control');
+			      // add_action('widgets_admin_page', 'dynwid_widgets_admin_page');
 
 		         // AJAX calls
 		         add_action('wp_ajax_term_tree', 'dynwid_term_tree');
@@ -692,7 +693,7 @@
 	 * @since 1.2
 	 */
 	function dynwid_save_postdata($post_id) {
-	  $DW = &$GLOBALS['DW'];
+		global $DW;
 
 	  if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] != 'autosave' ) {
 	  	$post_id = ( isset($_POST['post_ID']) && ! empty($_POST['post_ID']) ) ? intval($_POST['post_ID']) : 0;
@@ -813,9 +814,8 @@
 	 * @return void
 	 */
 	function dynwid_term_tree() {
+		global $DW;
 		include_once(DW_MODULES . 'custompost_module.php');
-
-		$DW = &$GLOBALS['DW'];
 
 		$id = ( isset($_POST['id']) && ! empty($_POST['id']) ) ? sanitize_text_field( $_POST['id'] ) : 0;
 		$name = ( isset($_POST['name']) && ! empty($_POST['name']) ) ? sanitize_text_field( $_POST['name'] ) : '';
@@ -840,7 +840,8 @@
 	 * @since 1.0
 	 */
 	function dynwid_uninstall() {
-		$wpdb = $GLOBALS['wpdb'];
+		global $wpdb;
+
 		$dbtable = $wpdb->prefix . DW_DB_TABLE;
 
 		// Housekeeping
@@ -861,12 +862,16 @@
       die();
 	}
 
+	function dynwid_widgets_admin_page() {
+		add_thickbox();
+	}
+
 	/**
 	 * dynwid_widget_callback() Callback function for hooking into WP widgets admin
 	 * @since 1.2
 	 */
 	function dynwid_widget_callback() {
-		$DW = &$GLOBALS['DW'];
+		global $DW;
 
 		$DW->loadModules();
 		$DW->getModuleName();
@@ -883,6 +888,7 @@
 
 		if ( array_key_exists($widget_id, $DW->registered_widgets) ) {
 			echo '<a style="text-decoration:none;" title="' . __('Edit Dynamic Widgets Options', DW_L10N_DOMAIN) . '" href="themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&returnurl=widgets.php' . '">';
+			// echo '<a style="text-decoration:none;" title="' . __('Edit Dynamic Widgets Options', DW_L10N_DOMAIN) . '" href="' . admin_url( 'themes.php?page=dynwid-config&action=edit&id=' . $widget_id . '&TB_iframe=true&width=&height=' ) . '" class="thickbox">';
 			echo ( $DW->hasOptions($widget_id) ) ? __('Dynamic', DW_L10N_DOMAIN) : __('Static', DW_L10N_DOMAIN);
 			echo '</a>';
 
