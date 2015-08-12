@@ -50,7 +50,7 @@
 
 			if ( self::detect(FALSE) ) {
 				$qtlang = get_option('qtranslate_default_language');
-				$curlang = qtrans_getLanguage();
+				$curlang = qtranxf_getLanguage();
 				$DW->message('QT language: ' . $curlang);
 
 				if ( $qtlang != $curlang ) {

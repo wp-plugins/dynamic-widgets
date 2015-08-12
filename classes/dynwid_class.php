@@ -158,6 +158,25 @@
 			$this->wpdb->query($query);
 		}
 
+		public function addShortcode($widget_id, $default, $value, $match, $operator) {
+			$value = array( 'value' => $value, 'match' => $match, 'operator' => $operator );
+			$value = serialize($value);
+
+			if ( $default == 'no' ) {
+				$query = "INSERT INTO " . $this->dbtable . "
+										(widget_id, maintype, name, value)
+									VALUES
+										('" . esc_sql($widget_id) . "', 'shortcode', 'default', '0')";
+				$this->wpdb->query($query);
+			}
+
+			$query = "INSERT INTO " . $this->dbtable . "
+										(widget_id, maintype, name, value)
+									VALUES
+										('" . esc_sql($widget_id) . "', 'shortcode', 'shortcode', '" . $value . "')";
+			$this->wpdb->query($query);
+		}
+
 		/**
 		 * dynWid::addUrls() Saves url options
 		 *
@@ -511,6 +530,7 @@
 			DWModule::registerOption(DW_QT::$option);
 			DWModule::registerOption(DW_Role::$option);
 			DWModule::registerOption(DW_Search::$option);
+			DWModule::registerOption(DW_Shortcode::$option);
 			DWModule::registerOption(DW_Single::$option);
 			DWModule::registerOption(DW_Tag::$option);
 			DWModule::registerOption(DW_Tpl::$option);
@@ -843,15 +863,18 @@
 			include_once(DW_MODULES . 'day_module.php');
 			include_once(DW_MODULES . 'week_module.php');
 			include_once(DW_MODULES . 'role_module.php');
+			include_once(DW_MODULES . 'shortcode_module.php');
 			include_once(DW_MODULES . 'tpl_module.php');
 			include_once(DW_MODULES . 'url_module.php');
 			include_once(DW_MODULES . 'device_module.php');
 			include_once(DW_MODULES . 'ip_module.php');
+
 			DW_Browser::checkOverrule('DW_Browser');
 			DW_Date::checkOverrule('DW_Date');
 			DW_Day::checkOverrule('DW_Day');
 			DW_Week::checkOverrule('DW_Week');
 			DW_Role::checkOverrule('DW_Role');
+			DW_Shortcode::checkOverrule('DW_Shortcode');
 			DW_Tpl::checkOverrule('DW_Tpl');
 			DW_URL::checkOverrule('DW_URL');
 			DW_URL::checkOverrule('DW_Device');

@@ -5,7 +5,7 @@
  * @version $Id$
  * @copyright 2011 Jacco Drabbe
  */
- 
+
 	defined('ABSPATH') or die("No script kiddies please!");
 
 	// Plugins support
@@ -381,16 +381,16 @@ div.settingbox {
 		$DW_Browser = new DW_Browser();
 		$DW_Browser->admin();
 	}
-	
+
 	if ( array_key_exists('ip', $DW->dwoptions) ) {
 		$DW_IP = new DW_IP();
 		$DW_IP->admin();
-	}	
+	}
 
 	if ( array_key_exists('device', $DW->dwoptions) ) {
 		$DW_Device = new DW_Device();
 		$DW_Device->admin();
-	}	
+	}
 
 	if ( array_key_exists('tpl', $DW->dwoptions) ) {
 		$DW_Tpl = new DW_Tpl();
@@ -399,6 +399,11 @@ div.settingbox {
 
 	if ( array_key_exists('url', $DW->dwoptions) ) {
 		$DW_URL = new DW_URL();
+		$DW_URL->admin();
+	}
+
+	if ( array_key_exists('shortcode', $DW->dwoptions) ) {
+		$DW_URL = new DW_Shortcode();
 		$DW_URL->admin();
 	}
 

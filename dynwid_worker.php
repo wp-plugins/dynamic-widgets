@@ -227,12 +227,31 @@
           			$other_ip = ( $ip ) ? FALSE : TRUE;
 
           			foreach ( $ips as $range ) {
-						if ( $DW->IPinRange($DW->ip_address, $range) ) {
-							$ip_tmp = $other_ip;
-							break;
+							if ( $DW->IPinRange($DW->ip_address, $range) ) {
+								$ip_tmp = $other_ip;
+								break;
+							}
 						}
+	            } else if ( $condition->maintype == 'shortcode' && $condition->name == 'shortcode' ) {
+						$shortcode_match = unserialize($condition->value);
+						$other_shortcode = ( $shortcode ) ? FALSE : TRUE;
+
+						$return = do_shortcode( $shortcode_match['value'] );
+
+		            switch ( $shortcode_match['operator'] ) {
+			            case '!=':
+				            if ( $return != $shortcode_match['match'] ) {
+					            $shortcode_tmp = $other_shortcode;
+				            }
+				            break;
+
+			            default:
+				            if ( $return == $shortcode_match['match'] ) {
+					            $shortcode_tmp = $other_shortcode;
+				            }
+		            }
+
 					}
-          		}
           	}
 
           	if ( isset($browser_tmp) && $browser_tmp != $browser ) {
@@ -276,6 +295,12 @@
           		$ip = $ip_tmp;
           	}
           	unset($ip_tmp, $other_ip);
+
+			if ( isset($shortcode_tmp) && $shortcode_tmp != $shortcode ) {
+          		$DW->message('Exception triggered for shortcode, sets display to ' . ( ($shortcode_tmp) ? 'TRUE' : 'FALSE' ) . ' (rule ESTC1)');
+          		$shortcode = $shortcode_tmp;
+          	}
+          	unset($shortcode_tmp);
 
             // For debug messages
             $e = ( isset($other) && $other ) ? 'TRUE' : 'FALSE';
@@ -494,7 +519,7 @@
 								$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES4)');
 							}
 						}
-						
+
 						/* Posts */
 						if ( count($act_post) > 0 ) {
 							if ( in_array($post->ID, $act_post) ) {
@@ -613,7 +638,7 @@
 							$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP1)');
 						} else if ( count($act_childs) > 0 ) {
 							$parents = $DW->getParents('page', array(), $id);
-							
+
 							if ( (bool) array_intersect($act_childs, $parents) ) {
 								$display = $other;
 								$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule EP2)');

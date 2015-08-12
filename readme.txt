@@ -4,7 +4,7 @@ Donate link: http://www.qurl.nl/dynamic-widgets/donate/
 Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, display, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods, bbpress
 Requires at least: 3.0.0
 Tested up to: 4.2.1
-Stable tag: 1.5.10
+Stable tag: 1.5.11
 
 Dynamic Widgets gives you full control on which pages a widget will display. It lets you dynamicly show or hide widgets on WordPress pages.
 
@@ -35,6 +35,7 @@ It is very hard to continue development and support for this plugin without cont
   - Theme Templates
   - Languages (WPML or QTranslate)
   - URL
+  - Shortcode
   - Front page
   - Single post pages
   - Attachment pages
@@ -65,6 +66,7 @@ It is very hard to continue development and support for this plugin without cont
   - Theme Templates on template name
   - Languages (WPML or QTranslate) on language
   - URL on starting with URL, ending on URL or exact match
+  - Shortcode on value match
   - Front page on first page
   - Single post pages on Author, Categories (including inheritance from hierarchical parents), Tags, Custom Taxonomies and/or Individual posts
   - Pages on Page Title and Custom Taxonomies, including inheritance from hierarchical parents
@@ -185,6 +187,11 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.5.11 =
+
+* Added Shortcode matching support by request of Nathan Wright of NW Consulting who made a financial contribution to make this feature possible.
+* Fixed a possible vulnerability in the DW settings found by Mike Esptein
 
 = Version 1.5.10 =
 

@@ -4,7 +4,7 @@
  * Plugin URI: http://dynamic-widgets.com/
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
  * Author: Qurl
- * Version: 1.5.10
+ * Version: 1.5.11
  * Author URI: http://www.qurl.nl/
  * Tags: widget, widgets, dynamic, sidebar, custom, rules, logic, admin, condition, conditional tags, hide, show, wpml, qtranslate, wpec, buddypress, pods
  *
@@ -16,7 +16,7 @@
  * Released under the GPL v.2, http://www.gnu.org/copyleft/gpl.html
  *
  * @version $Id$
- * @copyright 2014 Jacco Drabbe
+ * @copyright 2015 Jacco Drabbe
  *
  * Thanks to Alexis Nomine for the contribution of the French (fr_FR) language files, several L10N fixes and change of the edit options UI.
  * Thanks to Daniel Bihler for the contribution of the German (de_DE) language files.
@@ -33,6 +33,8 @@
  * Thanks to Advancis (http://advancis.net/) for the help and financial contribution to find and fix a WPML category bug.
  * Thanks to Borisa Djuraskovic for the contribution of the Serbo-Croatian (sr_RS) languages files.
  * Thanks to Leon Juranic from DefenseCode to run it's scanner over the source code and finding a few vulnerabilities.
+ * Thanks to Nathan Wright of NW Consulting for the financial contribution to implement the shortcode filter feature.
+ * Thanks to Mike Epstein to find a vulnerability in the DW settings.
  *
  *
  * WPML Plugin support via API
@@ -64,31 +66,31 @@
 
 	defined('ABSPATH') or die("No script kiddies please!");
 
-  // Constants
-  define('DW_CLASSES', dirname(__FILE__) . '/' . 'classes/');
-  define('DW_DEBUG', FALSE);
-  define('DW_DB_TABLE', 'dynamic_widgets');
-  define('DW_L10N_DOMAIN', 'dynamic-widgets');
-  define('DW_LIST_LIMIT', 20);
-  define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
-  define('DW_OLD_METHOD', get_option('dynwid_old_method'));
-  define('DW_PAGE_LIMIT', get_option('dynwid_page_limit', 500));
-  define('DW_MINIMUM_PHP', '5.2.7');
-  define('DW_MINIMUM_WP', '3.0');
-  define('DW_MODULES', dirname(__FILE__) . '/' . 'mods/');
-  define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
-  define('DW_TIME_LIMIT', 86400);				// 1 day
-  define('DW_URL_AUTHOR', 'http://www.qurl.nl');
-  define('DW_VERSION', '1.5.10');
+	// Constants
+	define('DW_CLASSES', dirname(__FILE__) . '/' . 'classes/');
+	define('DW_DEBUG', FALSE);
+	define('DW_DB_TABLE', 'dynamic_widgets');
+	define('DW_L10N_DOMAIN', 'dynamic-widgets');
+	define('DW_LIST_LIMIT', 20);
+	define('DW_LIST_STYLE', 'style="overflow:auto;height:240px;"');
+	define('DW_OLD_METHOD', get_option('dynwid_old_method'));
+	define('DW_PAGE_LIMIT', get_option('dynwid_page_limit', 500));
+	define('DW_MINIMUM_PHP', '5.2.7');
+	define('DW_MINIMUM_WP', '3.0');
+	define('DW_MODULES', dirname(__FILE__) . '/' . 'mods/');
+	define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
+	define('DW_TIME_LIMIT', 86400);				// 1 day
+	define('DW_URL_AUTHOR', 'http://www.qurl.nl');
+	define('DW_VERSION', '1.5.11');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
 
 	// Classes - only PHP5
-  if ( version_compare(PHP_VERSION, DW_MINIMUM_PHP, '>=') ) {
-  	 require_once(dirname(__FILE__) . '/dynwid_class.php');
-  }
+	if ( version_compare(PHP_VERSION, DW_MINIMUM_PHP, '>=') ) {
+		require_once(dirname(__FILE__) . '/dynwid_class.php');
+	}
 
-  // Functions
+	// Functions
 	/**
 	 * dynwid_activate() Activate the plugin
 	 * @since 1.3.3
@@ -178,9 +180,9 @@
    */
 	function dynwid_add_admin_custom_box() {
 		$args = array(
-							'public'   => TRUE,
-							'_builtin' => FALSE
-						);
+			'public'   => TRUE,
+			'_builtin' => FALSE
+		);
 
 		$post_types = get_post_types($args, 'objects', 'and');
 		foreach ( array_keys($post_types) as $type ) {
