@@ -119,18 +119,38 @@
 		 * @param array $dates Dates
 		 */
 		public function addDate($widget_id, $dates) {
+			$fields = array(
+				'widget_id'		=> $widget_id,
+				'maintype'		=> 'date',
+				'name'			=> 'default',
+				'value'			=> '0'
+			);
+			$this->wpdb->insert($this->dbtable, $fields);
+
+			/*
 			$query = "INSERT INTO " . $this->dbtable . "
                     (widget_id, maintype, name, value)
                   VALUES
                     ('" . $widget_id . "', 'date', 'default', '0')";
 			$this->wpdb->query($query);
+			*/
 
 			foreach ( $dates as $name => $date ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> 'date',
+					'name'			=> $name,
+					'value'			=> $date
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+
+				/*
 				$query = "INSERT INTO " . $this->dbtable . "
                     (widget_id, maintype, name, value)
                   VALUES
                     ('" . esc_sql($widget_id) . "', 'date', '" . esc_sql($name) . "', '" . esc_sql($date) . "')";
 				$this->wpdb->query($query);
+				*/
 			}
 		}
 
@@ -143,19 +163,40 @@
 		 */
 		public function addIPs($widget_id, $default, $ips) {
 			$value = serialize($ips);
+
 			if ( $default == 'no' ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> 'ip',
+					'name'			=> 'default',
+					'value'			=> '0'
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+
+				/*
 				$query = "INSERT INTO " . $this->dbtable . "
 										(widget_id, maintype, name, value)
 									VALUES
 										('" . esc_sql($widget_id) . "', 'ip', 'default', '0')";
 				$this->wpdb->query($query);
+				*/
 			}
 
+			$fields = array(
+				'widget_id'		=> $widget_id,
+				'maintype'		=> 'ip',
+				'name'			=> 'ip',
+				'value'			=> $value
+			);
+			$this->wpdb->insert($this->dbtable, $fields);
+
+			/*
 			$query = "INSERT INTO " . $this->dbtable . "
 										(widget_id, maintype, name, value)
 									VALUES
 										('" . esc_sql($widget_id) . "', 'ip', 'ip', '" . $value . "')";
 			$this->wpdb->query($query);
+			*/
 		}
 
 		public function addShortcode($widget_id, $default, $value, $match, $operator) {
@@ -163,18 +204,38 @@
 			$value = serialize($value);
 
 			if ( $default == 'no' ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> 'shortcode',
+					'name'			=> 'default',
+					'value'			=> '0'
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+
+				/*
 				$query = "INSERT INTO " . $this->dbtable . "
 										(widget_id, maintype, name, value)
 									VALUES
 										('" . esc_sql($widget_id) . "', 'shortcode', 'default', '0')";
 				$this->wpdb->query($query);
+				*/
 			}
 
+			$fields = array(
+				'widget_id'		=> $widget_id,
+				'maintype'		=> 'shortcode',
+				'name'			=> 'shortcode',
+				'value'			=> $value
+			);
+			$this->wpdb->insert($this->dbtable, $fields);
+
+			/*
 			$query = "INSERT INTO " . $this->dbtable . "
 										(widget_id, maintype, name, value)
 									VALUES
 										('" . esc_sql($widget_id) . "', 'shortcode', 'shortcode', '" . $value . "')";
 			$this->wpdb->query($query);
+			*/
 		}
 
 		/**
@@ -187,18 +248,38 @@
 		public function addUrls($widget_id, $default, $urls) {
 			$value = serialize($urls);
 			if ( $default == 'no' ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> 'url',
+					'name'			=> 'default',
+					'value'			=> '0'
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+
+				/*
 				$query = "INSERT INTO " . $this->dbtable . "
 										(widget_id, maintype, name, value)
 									VALUES
 										('" . esc_sql($widget_id) . "', 'url', 'default', '0')";
 				$this->wpdb->query($query);
+				*/
 			}
 
+			$fields = array(
+				'widget_id'		=> $widget_id,
+				'maintype'		=> 'url',
+				'name'			=> 'url',
+				'value'			=> $value
+			);
+			$this->wpdb->insert($this->dbtable, $fields);
+
+			/*
 			$query = "INSERT INTO " . $this->dbtable . "
 										(widget_id, maintype, name, value)
 									VALUES
 										('" . esc_sql($widget_id) . "', 'url', 'url', '" . $value . "')";
 			$this->wpdb->query($query);
+			*/
 		}
 
 		/**
@@ -233,7 +314,8 @@
 			$post_types = array_merge( $types, array('single-post', 'single-tag') );
 
 			if ( in_array($maintype, $post_types) ) {
-				$query = "SELECT COUNT(1) AS total FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = '" . $maintype . "' AND name = 'default'";
+				$query = "SELECT COUNT(1) AS total FROM " . $this->dbtable . " WHERE widget_id = %s AND maintype = %s AND name = %s";
+				$query = $this->wpdb->prepare($query, $widget_id, $maintype, 'default');
 				$count = $this->wpdb->get_var($query);
 				if ( $count > 0 ) {
 					$insert = FALSE;
@@ -241,18 +323,38 @@
 			}
 
 			if ( $insert ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> $maintype,
+					'name'			=> 'default',
+					'value'			=> $opt_default
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+
+				/*
 				$query = "INSERT INTO " . $this->dbtable . "
                       (widget_id, maintype, name, value)
                     VALUES
                       ('" . esc_sql($widget_id) . "', '" . esc_sql($maintype) . "', 'default', '" . esc_sql($opt_default) . "')";
 				$this->wpdb->query($query);
+				*/
 			}
 			foreach ( $act as $option ) {
+				$fields = array(
+					'widget_id'		=> $widget_id,
+					'maintype'		=> $maintype,
+					'name'			=> $option,
+					'value'			=> $opt_act
+				);
+				$this->wpdb->insert($this->dbtable, $fields);
+
+				/*
 				$query = "INSERT INTO " . $this->dbtable . "
                       (widget_id, maintype, name, value)
                     VALUES
                       ('" . esc_sql($widget_id) . "', '" . esc_sql($maintype) . "', '" . esc_sql($option) . "', '" . esc_sql($opt_act) . "')";
 				$this->wpdb->query($query);
+				*/
 			}
 		}
 
@@ -264,11 +366,20 @@
 		 * @param integer $value Default setting
 		 */
 		public function addSingleOption($widget_id, $maintype, $value = '0') {
+			$fields = array(
+				'widget_id'		=> $widget_id,
+				'maintype'		=> $maintype,
+				'value'			=> $value
+			);
+			$this->wpdb->insert($this->dbtable, $fields);
+
+			/*
 			$query = "INSERT INTO " . $this->dbtable . "
                     (widget_id, maintype, value)
                   VALUES
                     ('" . esc_sql($widget_id) . "', '" . esc_sql($maintype) . "', '" . esc_sql($value) . "')";
 			$this->wpdb->query($query);
+			*/
 		}
 
 		/**
@@ -320,10 +431,14 @@
 		 * @param string $name Name of option
 		 */
 		public function deleteOption($widget_id, $maintype, $name = '') {
-			$query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "' AND maintype = '" . $maintype ."'";
+			$query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = %s AND maintype = %s";
 			if (! empty($name) ) {
-				$query .= " AND name = '" . $name . "'";
+				$query .= " AND name = %s";
+				$query = $this->wpdb->prepare($query, $widget_id, $maintype, $name);
+			} else {
+				$query = $this->wpdb->prepare($query, $widget_id, $maintype);
 			}
+
 			$this->wpdb->query($query);
 		}
 
@@ -430,7 +545,7 @@
 			}
 
 			$query = "SELECT DISTINCT widget_id FROM " . $this->dbtable . "
-                     WHERE  maintype LIKE '" . $whereami . "%'";
+                     WHERE  maintype LIKE '" . esc_sql($whereami) . "%'";
 
 			if ( count($this->overrule_maintype) > 0 ) {
 				$query .= " OR maintype IN ";
@@ -489,8 +604,8 @@
 			}
 
 			$query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
-                 WHERE widget_id LIKE '" . $widget_id . "'
-                   AND maintype LIKE '" . $maintype . "%'
+                 WHERE widget_id LIKE '" . esc_sql($widget_id) . "'
+                   AND maintype LIKE '" . esc_sql($maintype) . "%'
                  ORDER BY maintype, name";
 			$results = new DWOpts($this->wpdb->get_results($query), $maintype);
 			return $results;
@@ -588,8 +703,8 @@
 
 			if ( $admin ) {
 				$query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
-                  WHERE widget_id LIKE '" . $widget_id . "'
-                    AND maintype LIKE '" . $maintype . "%'
+                  WHERE widget_id LIKE '" . esc_sql($widget_id) . "'
+                    AND maintype LIKE '" . esc_sql($maintype) . "%'
                   ORDER BY maintype, name";
 
 			} else {
@@ -597,14 +712,14 @@
 					$maintype = 'page';
 				}
 				$query = "SELECT widget_id, maintype, name, value FROM " . $this->dbtable . "
-                  WHERE widget_id LIKE '" . $widget_id . "'
-                    AND (maintype LIKE '" . $maintype . "%'";
+                  WHERE widget_id LIKE '" . esc_sql($widget_id) . "'
+                    AND (maintype LIKE '" . esc_sql($maintype) . "%'";
 
 				if ( count($this->overrule_maintype) > 0 ) {
 					$query .= " OR maintype IN (";
 					$q = array();
 					foreach ( $this->overrule_maintype as $omt ) {
-						$q[ ] = "'" . $omt . "'";
+						$q[ ] = "'" . esc_sql($omt) . "'";
 					}
 					$query .= implode(', ', $q);
 					$query .= ")";
@@ -714,8 +829,9 @@
 		 */
 		public function hasOptions($widget_id) {
 			$query = "SELECT COUNT(1) AS total FROM " . $this->dbtable . "
-                  WHERE widget_id = '" . $widget_id . "' AND
-                        maintype != 'individual'";
+                  WHERE widget_id = %s AND
+                        maintype != %s";
+			$query = $this->wpdb->prepare($query, $widget_id, 'individual');
 			$count = $this->wpdb->get_var($query);
 
 			if ( $count > 0 ) {
@@ -895,7 +1011,8 @@
 		 * @param string $widget_id ID of the widget
 		 */
 		public function resetOptions($widget_id) {
-			$query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = '" . $widget_id . "'";
+			$query = "DELETE FROM " . $this->dbtable . " WHERE widget_id = %s";
+			$query = $this->wpdb->prepare($query, $widget_id);
 			$this->wpdb->query($query);
 		}
 	}
